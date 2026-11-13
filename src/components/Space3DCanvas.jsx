@@ -419,7 +419,9 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     const focusWorld = rig.localToWorld(focusPoint);
     const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : -0.18;
     const targetTilt = focusIndex >= 0 ? [0.1, -0.08, 0.17][focusIndex] ?? 0 : 0.015;
-    const cameraDistance = isHardwareChapter ? (hardwareOrdinal === 2 ? 3.35 : 3.7) : 4.7;
+    const cameraDistance = isHardwareChapter
+      ? (hardwareOrdinal === 2 ? 3.35 : 3.7)
+      : chapterId === 'hero' && size.width >= 1024 ? 5.25 : 4.7;
     rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, targetYaw + (autoRotate ? Math.sin(state.clock.elapsedTime * 0.32) * 0.035 : 0), 1.8, delta);
     rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, targetTilt, 1.8, delta);
     rig.position.x = THREE.MathUtils.damp(rig.position.x, targetX, 1.8, delta);

@@ -104,7 +104,7 @@ function isAboveDescentStage(mesh) {
 
 function EasepContext() {
   return (
-    <group position={[0.45, -0.46, 0.22]}>
+    <group position={[1.28, -0.46, 0.22]}>
       <mesh position={[0, 0.08, 0]} castShadow>
         <boxGeometry args={[0.23, 0.15, 0.2]} />
         <meshStandardMaterial color="#a6a89b" metalness={0.2} roughness={0.65} />
