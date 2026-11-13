@@ -259,7 +259,7 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
   return (
     <group ref={group}>
       <mesh>
-        <sphereGeometry args={[radius, 128, 128]} />
+        <sphereGeometry args={[radius, 96, 96]} />
         <meshStandardMaterial
           map={colorMap}
           bumpMap={heightMap}
@@ -477,6 +477,16 @@ function DeepSpaceOrbit({ items, onSelect, selectedRelic, language, autoRotate, 
   );
 }
 
+
+/* Shared framing maths: how far the camera must sit so the planet fills the
+   viewport without being sliced by the edges. */
+function mapDistanceFor(width, height, radius = 2.6, fov = 40) {
+  const tan = Math.tan((fov * Math.PI) / 360);
+  const narrow = width < 620;
+  const targetPx = Math.min(width * (narrow ? 0.9 : 0.72), height * (narrow ? 0.72 : 0.78));
+  return Math.min(Math.max((radius * height) / Math.max(1, targetPx * tan), 6.2), 20);
+}
+
 function MapScene({ celestialView, relics, onSelect, selectedRelic, language, autoRotate, controlsRef, archiveOpen }) {
   const { size } = useThree();
   const orbitalView = celestialView === 'Deep Space';
@@ -484,12 +494,13 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
     <>
       <color attach="background" args={['#03060C']} />
       <fog attach="fog" args={['#03060C', 28, 70]} />
+      <FitMapCamera view={celestialView} archiveOpen={archiveOpen} />
       <ambientLight intensity={1.35} color="#e2e8f0" />
       <hemisphereLight args={['#ffffff', '#3b4252', 1.2]} />
       <directionalLight position={[5, 3.5, 7]} intensity={1.8} color="#ffffff" />
       <directionalLight position={[-6, -3, -5]} intensity={1.1} color="#60a5fa" />
       <pointLight position={[2.5, -1.5, 5]} intensity={0.09} color="#EAB308" distance={15} />
-      <Stars radius={orbitalView ? 110 : 90} depth={orbitalView ? 82 : 52} count={orbitalView ? 6200 : 1700} factor={orbitalView ? 4.8 : 3.2} saturation={0.12} fade speed={0.09} />
+      <Stars radius={orbitalView ? 110 : 90} depth={orbitalView ? 82 : 52} count={orbitalView ? (size.width < 620 ? 2600 : 5200) : (size.width < 620 ? 650 : 1600)} factor={orbitalView ? 4.8 : 3.2} saturation={0.12} fade speed={0.09} />
       {celestialView === 'Moon' && <Planet body="Moon" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
       {celestialView === 'Mars' && <Planet body="Mars" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
       {orbitalView && <DeepSpaceOrbit items={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} archiveOpen={archiveOpen} />}
@@ -499,7 +510,7 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
         enablePan={false}
         rotateSpeed={0.65}
         minDistance={orbitalView ? (size.width < 620 ? 5.2 : 5.7) : 4.7}
-        maxDistance={13}
+        maxDistance={22}
         enableDamping
         dampingFactor={0.075}
       />
@@ -507,6 +518,20 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
   );
 }
 
+/* Frames the planet so it always fits the viewport instead of being sliced by
+   the edges on portrait phones. */
+function FitMapCamera({ view, radius = 2.6, archiveOpen = false }) {
+  const { camera, size } = useThree();
+  useEffect(() => {
+    if (!camera || !size?.height) return;
+    const framed = mapDistanceFor(size.width, size.height, radius, camera.fov);
+    const shift = archiveOpen && size.width > 1100 ? -0.85 : 0;
+    camera.position.set(shift, 0.1, framed);
+    camera.lookAt(0, 0, 0);
+    camera.updateProjectionMatrix();
+  }, [camera, size?.width, size?.height, radius, view, archiveOpen]);
+  return null;
+}
 function getHotspotRegion(hotspot) {
   const text = `${hotspot?.part || ''} ${hotspot?.title || ''} ${hotspot?.description || ''}`.toLowerCase();
   if (/camera|pancam|navcam|mast|photometer|telescope|rotor|blade|antenna|dish|imager|sensor/.test(text)) return 'top';
@@ -756,7 +781,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
 }
 
 function CameraFlight({ selectedId, controlsRef }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const flight = useRef(null);
 
   useEffect(() => {
@@ -766,10 +791,12 @@ function CameraFlight({ selectedId, controlsRef }) {
       duration: 0.9,
       fromPosition: camera.position.clone(),
       fromTarget: controls?.target.clone() || new THREE.Vector3(0, 0, 0),
-      toPosition: selectedId ? new THREE.Vector3(0, 1.4, 4.5) : new THREE.Vector3(0, 0.1, 8.4),
+      toPosition: selectedId
+        ? new THREE.Vector3(0, 1.4, 4.5)
+        : new THREE.Vector3(0, 0.1, mapDistanceFor(size.width, size.height, 2.6, camera.fov)),
       toTarget: new THREE.Vector3(0, 0, 0),
     };
-  }, [camera, controlsRef, selectedId]);
+  }, [camera, controlsRef, selectedId, size.width, size.height]);
 
   useFrame((_, delta) => {
     if (!flight.current) return;
@@ -789,8 +816,20 @@ function CameraFlight({ selectedId, controlsRef }) {
   return null;
 }
 
+function useCompactViewport() {
+  const [compact, setCompact] = useState(() => (typeof window === 'undefined' ? false : window.innerWidth < 760));
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 760px)');
+    const update = () => setCompact(query.matches);
+    query.addEventListener?.('change', update);
+    return () => query.removeEventListener?.('change', update);
+  }, []);
+  return compact;
+}
+
 export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot, storyProgress, archiveOpen = true }) {
   const [autoRotate, setAutoRotate] = useState(true);
+  const compactView = useCompactViewport();
   const controlsRef = useRef(null);
   const viewFilter = selectedRelic?.body || filter;
   const isArabic = language === 'ar';
@@ -811,11 +850,11 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
   return (
     <div className="space-canvas-wrap" onPointerDownCapture={() => setAutoRotate(false)} onTouchStartCapture={() => setAutoRotate(false)}>
       <Canvas
-        shadows
-        dpr={[1, 1.75]}
+        shadows={!compactView}
+        dpr={compactView ? [1, 1.3] : [1, 1.75]}
         camera={{ position: [0, 0.1, 8.4], fov: 40, near: 0.1, far: 140 }}
-        gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
-        performance={{ min: 0.55, debounce: 350 }}
+        gl={{ antialias: !compactView, alpha: false, powerPreference: 'high-performance' }}
+        performance={{ min: compactView ? 0.4 : 0.55, debounce: 350 }}
         fallback={<div className="canvas-fallback">3D view is unavailable in this browser.</div>}
       >
         <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} compact /></Html>}>

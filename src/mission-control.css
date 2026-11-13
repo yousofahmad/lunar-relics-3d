@@ -922,3 +922,238 @@ body { color: var(--suit-white); }
   .entry-portal-eyebrow { margin-top: 16px; font-size: 8px; }
   .entry-portal-card > p:not(.entry-portal-eyebrow) { margin: 9px 0 16px; font-size: 12px; }
 }
+
+/* ==========================================================================
+   2026 polish pass — readable type, calmer layout, explorer challenge
+   ========================================================================== */
+
+/* --- Type scale: the old UI ran on 6–8px labels, which nobody can read --- */
+.brand-subtitle { font-size: 9px; letter-spacing: .1em; }
+.planet-tab span { font-size: 11px; letter-spacing: .05em; }
+.planet-tab small { font-size: 8px; letter-spacing: .09em; }
+.mission-drawer-toggle span,
+.audio-global-toggle .audio-label,
+.badge-label { font-size: 9.5px; letter-spacing: .05em; }
+.mission-drawer-toggle strong,
+.badge-counter strong { font-size: 10px; }
+.audio-global-toggle,
+.language-toggle { font-size: 9.5px; }
+.eyebrow { font-size: 9px; letter-spacing: .12em; }
+.archive-summary p { font-size: 11px; line-height: 1.55; }
+.archive-filter-chip { min-height: 30px; padding: 0 10px; font-size: 10px; gap: 6px; }
+.archive-filter-chip small { font-size: 8px; opacity: .72; }
+.pin-label span,
+.planet-caption span { font-size: 10px; }
+.planet-caption span { font-size: 8.5px; }
+.canvas-meta span,
+.render-state,
+.rotate-toggle span { font-size: 9.5px; }
+.map-instructions { font-size: 11px; }
+.quick-mission-pill { font-size: 11px; }
+.story-chapter-nav button { font-size: 9px; }
+
+/* Filter chips wrap instead of being sliced off the panel edge */
+.archive-category-filters {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-inline: 12px;
+  mask-image: linear-gradient(90deg, #000 0, #000 90%, transparent 100%);
+}
+.app-rtl .archive-category-filters { mask-image: linear-gradient(270deg, #000 0, #000 90%, transparent 100%); }
+
+/* Archive cards were set in 6–10px type */
+.relic-card-title { font-size: 13px; }
+.relic-card-index { font-size: 9px; }
+.relic-card-meta { font-size: 9px; }
+.relic-card-model { font-size: 8px; }
+.archive-footnote { font-size: 9px; }
+.archive-search input { font-size: 12px; }
+.archive-count { font-size: 19px; }
+.panel-title-row h2 { font-size: 20px; }
+
+/* --- Explorer challenge launcher --- */
+.challenge-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid rgba(234, 179, 8, .34);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(234,179,8,.14), rgba(252,61,33,.1));
+  color: #f6d98a;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+.challenge-toggle:hover,
+.challenge-toggle.is-active { border-color: rgba(234,179,8,.7); color: #fff8e2; box-shadow: 0 0 20px rgba(234,179,8,.18); }
+.challenge-toggle svg { color: var(--kapton-gold); flex: 0 0 auto; }
+.challenge-toggle .challenge-label { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .06em; }
+.challenge-toggle strong { font-family: var(--font-mono); font-size: 10px; font-weight: 600; color: var(--suit-white); }
+.challenge-toggle strong em { color: #8d7a45; font-style: normal; font-size: 8px; }
+.challenge-toggle small { color: #b7a064; font-family: var(--font-mono); font-size: 7.5px; letter-spacing: .1em; }
+
+/* --- Explorer challenge panel --- */
+.explorer-challenge {
+  position: fixed;
+  z-index: 34;
+  left: 18px;
+  bottom: 74px;
+  width: min(330px, calc(100vw - 36px));
+  padding: 16px 16px 15px;
+  border: 1px solid rgba(234, 179, 8, .3);
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(12,18,28,.95), rgba(5,9,15,.95));
+  box-shadow: 0 22px 60px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter: blur(22px) saturate(130%);
+  color: var(--suit-white);
+  animation: explorer-in 260ms ease-out;
+}
+@keyframes explorer-in { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+.explorer-challenge.is-hit { border-color: rgba(74, 222, 128, .6); box-shadow: 0 0 40px rgba(74,222,128,.22); }
+.explorer-challenge.is-miss,
+.explorer-challenge.is-time { border-color: rgba(252, 61, 33, .6); }
+.explorer-close { position: absolute; top: 9px; inset-inline-end: 9px; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 50%; background: rgba(255,255,255,.06); color: #9aa4b0; cursor: pointer; }
+.explorer-close:hover { background: rgba(255,255,255,.14); color: #fff; }
+.explorer-kicker { display: inline-flex; align-items: center; gap: 6px; color: var(--kapton-gold); font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; }
+.explorer-challenge h2 { margin: 8px 0 0; font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: .04em; line-height: 1.25; }
+.explorer-challenge p { margin: 8px 0 0; color: #a9b3bf; font-size: 12px; line-height: 1.55; }
+.explorer-intro p { color: #b6c0cb; }
+.explorer-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.explorer-stats span { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border: 1px solid rgba(248,250,252,.1); border-radius: 999px; background: rgba(255,255,255,.04); color: #cfd6de; font-family: var(--font-mono); font-size: 10px; }
+.explorer-primary { width: 100%; min-height: 42px; margin-top: 14px; border: 0; border-radius: 12px; background: linear-gradient(135deg, var(--kapton-gold), #f97316); color: #1a1206; cursor: pointer; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+.explorer-primary:hover { filter: brightness(1.08); }
+.explorer-secondary { width: 100%; min-height: 36px; margin-top: 8px; border: 1px solid rgba(248,250,252,.14); border-radius: 12px; background: transparent; color: #b6c0cb; cursor: pointer; font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; }
+.explorer-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.explorer-score { display: inline-flex; align-items: center; gap: 5px; color: #e7c96a; font-family: var(--font-mono); font-size: 10px; }
+.explorer-ask { color: #8d99a7 !important; font-family: var(--font-mono); font-size: 9px !important; letter-spacing: .12em; text-transform: uppercase; }
+.explorer-target { font-size: 19px !important; color: #fff; }
+.explorer-hint b { color: var(--kapton-gold); font-family: var(--font-mono); font-size: 8px; letter-spacing: .12em; }
+.explorer-timer { position: relative; height: 8px; margin-top: 12px; overflow: hidden; border-radius: 999px; background: rgba(248,250,252,.09); }
+.explorer-timer i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #22d3ee, var(--kapton-gold)); transition: width 120ms linear; }
+.explorer-timer span { position: absolute; top: -20px; inset-inline-end: 0; color: #cfd6de; font-family: var(--font-mono); font-size: 10px; }
+.explorer-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 20px; margin-top: 18px; }
+.explorer-foot > span { display: inline-flex; align-items: center; gap: 5px; color: #8d99a7; font-family: var(--font-mono); font-size: 10px; }
+.explorer-foot > span.is-hot { color: #ff9d5c; }
+.explorer-flash { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; }
+.explorer-flash.is-good { color: #4ade80; }
+.explorer-flash.is-bad { color: #ff7a63; }
+
+/* --- Mobile layout fixes --- */
+@media (max-width: 760px) {
+  .planet-caption { display: none !important; }
+  .quick-mission-carousel { bottom: max(10px, env(safe-area-inset-bottom)); height: 68px; }
+  .map-instructions { bottom: 86px; }
+  .challenge-toggle { padding-inline: 8px; }
+  .challenge-toggle .challenge-label,
+  .challenge-toggle strong em,
+  .challenge-toggle small { display: none; }
+  .explorer-challenge { left: 10px; right: 10px; bottom: auto; top: 88px; width: auto; padding: 15px 15px 14px; }
+  .explorer-challenge h2 { font-size: 16px; }
+  .explorer-target { font-size: 17px !important; }
+  .archive-category-filters { flex-wrap: nowrap; overflow-x: auto; }
+  .archive-panel { width: min(100vw - 20px, 420px); }
+}
+@media (max-width: 400px) {
+  .challenge-toggle strong { display: none; }
+  .topbar-actions { gap: 3px; }
+}
+
+/* --- Story reading experience -------------------------------------------- */
+.story-hook {
+  max-width: 30rem;
+  margin: 16px 0 0;
+  padding-inline-start: 13px;
+  border-inline-start: 2px solid rgba(234, 179, 8, .62);
+  color: #eadcb9;
+  font-size: clamp(15px, 1.5vw, 19px);
+  font-style: italic;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.app-rtl .story-hook { font-family: var(--font-arabic); font-style: normal; font-size: clamp(15px, 1.5vw, 20px); }
+.story-transcript { max-height: none; overflow: visible; }
+.first-person-story { margin: 0 0 15px; font-size: clamp(14px, 1.15vw, 16.5px) !important; line-height: 1.85; color: #dde3ea; }
+.first-person-story:last-child { margin-bottom: 0; }
+.first-person-story.has-dropcap::first-letter {
+  float: inline-start;
+  margin-inline-end: 9px;
+  padding-block-start: 4px;
+  color: var(--kapton-gold);
+  font-family: var(--font-display);
+  font-size: 2.7em;
+  line-height: .82;
+}
+.story-fun-fact {
+  margin-top: 16px;
+  padding: 13px 15px;
+  border: 1px solid rgba(234, 179, 8, .26);
+  border-radius: 14px;
+  background: linear-gradient(140deg, rgba(234, 179, 8, .1), rgba(252, 61, 33, .05));
+}
+.story-fun-fact > span { display: block; margin-bottom: 6px; color: var(--kapton-gold); font-family: var(--font-mono); font-size: 9px; letter-spacing: .16em; }
+.story-fun-fact p { margin: 0; color: #f0e6d2; font-size: clamp(13px, 1vw, 15px); line-height: 1.65; }
+@media (max-width: 760px) {
+  .first-person-story { font-size: 14.5px !important; line-height: 1.8; }
+  .story-hook { margin-top: 12px; font-size: 15px; }
+  .story-fun-fact { padding: 11px 12px; }
+  .story-fun-fact p { font-size: 13.5px; }
+  .story-transcript { max-height: none; }
+}
+
+/* --- Story legibility: keep copy readable over the 3D model --------------- */
+@media (min-width: 761px) {
+  .story-hero-copy,
+  .chapter-copy {
+    padding: 26px 30px 26px 26px;
+    border-radius: 20px;
+    background: linear-gradient(115deg, rgba(3,6,12,.9) 0%, rgba(3,6,12,.78) 58%, rgba(3,6,12,.12) 100%);
+    box-shadow: 0 24px 60px rgba(0,0,0,.28);
+  }
+  .app-rtl .story-hero-copy,
+  .app-rtl .chapter-copy {
+    background: linear-gradient(245deg, rgba(3,6,12,.9) 0%, rgba(3,6,12,.78) 58%, rgba(3,6,12,.12) 100%);
+  }
+}
+
+/* --- Top bar must never let its pills overlap ---------------------------- */
+.topbar { width: min(1340px, calc(100vw - 28px)); gap: 10px; }
+.topbar > * { min-width: 0; }
+.planet-tabs { flex: 0 1 auto; overflow: hidden; }
+.planet-tab { min-width: 0; }
+.topbar-actions { flex: 0 0 auto; }
+@media (max-width: 1460px) {
+  .brand-subtitle { display: none; }
+  .challenge-toggle small { display: none; }
+}
+@media (max-width: 1240px) {
+  .challenge-toggle .challenge-label,
+  .challenge-toggle strong em { display: none; }
+  .planet-tab small { display: none; }
+  .planet-tab { grid-template-rows: 1fr; }
+}
+.story-mode .challenge-toggle,
+.story-mode .whats-new-trigger { display: none; }
+
+/* Mobile top bar: two clean rows (brand + actions, then the planet tabs) */
+@media (max-width: 760px) {
+  .topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 34px 32px;
+    gap: 2px 5px;
+    width: calc(100vw - 14px);
+    min-height: 74px;
+    padding: 3px 7px;
+  }
+  .planet-tabs { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
+  .planet-tab { display: flex; align-items: center; justify-content: center; width: 100%; gap: 6px; min-height: 28px; padding: 0 8px; }
+  .planet-tab svg { flex: 0 0 auto; width: 13px; height: 13px; }
+  .planet-tab span { display: block; font-size: 7.5px; letter-spacing: .04em; }
+  .planet-tab small { display: none; }
+  .brand-lockup { min-width: 0; overflow: hidden; }
+  .brand-title { font-size: 9px; letter-spacing: .1em; }
+  .topbar-actions { grid-column: 2; grid-row: 1; gap: 4px; }
+}

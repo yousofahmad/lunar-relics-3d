@@ -2,11 +2,12 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react
 import { BadgeCheck, Crosshair, Info, RadioTower } from 'lucide-react';
 import { fetchRelics, LOCAL_RELICS } from './services/api.js';
 import BadgeModal from './components/BadgeModal.jsx';
+import ExplorerChallenge from './components/ExplorerChallenge.jsx';
 import TopNav from './components/TopNav.jsx';
 import StoryAndArchivePanel from './components/StoryAndArchivePanel.jsx';
 import WhatsNewDialog from './components/WhatsNewDialog.jsx';
 import SpaceLoader from './components/SpaceLoader.jsx';
-import { initializeAudioEngine, playUiChirp, setAudioMuted, setSoundscape, subscribeAudioEngine } from './utils/audioEngine.js';
+import { initializeAudioEngine, playHoverTick, playSelectSweep, setAudioMuted, setSoundscape, subscribeAudioEngine } from './utils/audioEngine.js';
 import { getModelHonestyLabel, getRelicModelInfo } from './utils/relicModelMap.js';
 
 const Space3DCanvas = lazy(() => import('./components/Space3DCanvas.jsx'));
@@ -75,6 +76,12 @@ export default function App() {
   const [hotspot, setHotspot] = useState(null);
   const [apiState, setApiState] = useState('local');
   const [isInitialLoading, setIsInitialLoading] = useState(() => Boolean(import.meta.env.VITE_API_URL?.trim()));
+  const [challengeOpen, setChallengeOpen] = useState(false);
+  const [challengePick, setChallengePick] = useState(null);
+  const [xp, setXp] = useState(() => {
+    const saved = Number(localStorage.getItem('lunar-relics-xp') || 0);
+    return Number.isFinite(saved) ? saved : 0;
+  });
 
   useEffect(() => {
     let active = true;
@@ -101,6 +108,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('lunar-relics-badges', JSON.stringify([...badges]));
   }, [badges]);
+
+  useEffect(() => {
+    localStorage.setItem('lunar-relics-xp', String(xp));
+  }, [xp]);
 
   const displayRelics = useMemo(() => relics.map(presentRelic), [relics]);
   const selectedRelic = useMemo(() => displayRelics.find((item) => item.id === selectedId) || null, [displayRelics, selectedId]);
@@ -146,12 +157,31 @@ export default function App() {
 
   const openRelic = (item) => {
     setBadgeModalOpen(false);
+    if (challengeOpen) {
+      setChallengePick({ id: item.id, nonce: Date.now() });
+      return;
+    }
     setCelestialView(item.body || 'Moon');
-    setAutoPilotOn(true);
+    // Never auto-start the narrated tour: it used to fire a chapter every
+    // second and yanked the page down before anyone could read it.
+    setAutoPilotOn(false);
     setHotspot(null);
     setStoryProgress({ index: 0, total: 1 });
     setSelectedId(item.id);
   };
+
+  const openChallenge = () => {
+    setBadgeModalOpen(false);
+    setWhatsNewOpen(false);
+    setSelectedId(null);
+    setAutoPilotOn(false);
+    setArchiveOpen(false);
+    setChallengeOpen(true);
+  };
+
+  const addXp = useCallback((amount) => {
+    setXp((current) => current + Math.max(0, Math.round(amount)));
+  }, []);
 
   const backToMap = () => {
     setAutoPilotOn(false);
@@ -184,7 +214,8 @@ export default function App() {
     const control = target?.closest('button, a, [role="button"]');
     if (!control) return;
     if (hover && event.relatedTarget instanceof Node && control.contains(event.relatedTarget)) return;
-    playUiChirp();
+    if (hover) playHoverTick();
+    else playSelectSweep();
   };
 
   return (
@@ -202,6 +233,9 @@ export default function App() {
         badges={badges}
         onOpenBadges={() => setBadgeModalOpen(true)}
         badgesOpen={badgeModalOpen}
+        onOpenChallenge={openChallenge}
+        challengeOpen={challengeOpen}
+        xp={xp}
         onOpenWhatsNew={() => setWhatsNewOpen(true)}
         whatsNewOpen={whatsNewOpen}
         storyMode={storyMode}
@@ -311,6 +345,17 @@ export default function App() {
           />
         </aside>
       </main>
+
+      {challengeOpen && (
+        <ExplorerChallenge
+          relics={displayRelics}
+          language={language}
+          pick={challengePick}
+          onClose={() => setChallengeOpen(false)}
+          onXp={addXp}
+          onViewChange={changeCelestialView}
+        />
+      )}
 
       <footer className="app-footer">
         <span>SPACE APPS CAIRO 2026 <i /> LUNAR RELICS 3D</span>

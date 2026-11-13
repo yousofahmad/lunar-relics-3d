@@ -17,8 +17,8 @@
       "lng": 23.47314
     },
     "story": {
-      "en": "I began as Eagle’s silent foundation, launched from Earth on July 16, 1969, and descended toward Mare Tranquillitatis with the Lunar Module. At 20:17:40 UT on July 20, I touched the Moon; when the ascent stage lifted off on July 21, I became the part of Apollo 11 that stayed behind. NASA later imaged my resting place from lunar orbit, turning my stillness into a lasting witness to the mission.",
-      "ar": "بدأتُ كأساس Eagle الصامت، وانطلقتُ من الأرض في 16 يوليو 1969، ثم هبطتُ بوحدة Lunar Module نحو Mare Tranquillitatis. عند 20:17:40 بالتوقيت العالمي في 20 يوليو، لامستُ القمر؛ وعندما أقلعت مرحلة الصعود في 21 يوليو، أصبحتُ الجزء من Apollo 11 الذي بقي خلفها. لاحقًا صوّرت NASA موضع استقراري من المدار القمري، فتحوّل سكوني إلى شاهد باقٍ على المهمة."
+      "en": "I touch the Moon beneath Eagle. Above me rests the lander; below me is the ground at Mare Tranquillitatis, the Sea of Tranquility. I am Eagle’s descent stage, its lower part, built to help it reach the surface and support it there. I launched from Earth aboard Apollo 11 on July 16, 1969. Now it is July 20, 20:17:40 Universal Time, the time standard used in this record.\n\nFor 21 hours and 36 minutes, we remain on the surface. Then, on July 21, comes the separation. Eagle’s ascent stage is built to lift off. I am not the part that leaves. It rises away, and the lander’s foundation stays on the Moon.\n\nOn July 24, Apollo 11 ends with its crew’s splashdown in the Pacific Ocean. I remain at the landing site. In 2009, NASA’s Lunar Reconnaissance Orbiter circles the Moon and photographs the site and me. Look up: the foundation is still there.",
+      "ar": "ألامس أرض القمر، وإيغل يستند إليّ. أنا مرحلة هبوطه، جزؤه السفلي الذي يساعده على بلوغ السطح ويثبّته هناك. حولي موقع الهبوط في «ماري ترانكويليتاتيس»، أي بحر السكون. انطلقتُ من الأرض مع أبولو 11 في السادس عشر من يوليو عام 1969. والآن، في ذاكرتي، يحلّ العشرون من يوليو: الساعة 20:17:40 بالتوقيت العالمي، معيار الوقت المستخدم في هذا السجل.\n\nنمكث على السطح إحدى وعشرين ساعة وستًا وثلاثين دقيقة. ثم يأتي الحادي والعشرون من يوليو، وتفترق أجزاؤنا. مرحلة الصعود مخصّصة للإقلاع؛ ترتفع عن القمر. أما أنا فأبقى. ما كان يحمل المركبة عند هبوطها لا يرافقها عند رحيلها.\n\nفي الرابع والعشرين من يوليو، تنتهي مهمة أبولو 11 بهبوط طاقمها في مياه المحيط الهادئ. أبقى في موضع الهبوط. وفي عام 2009، تصوّرني مركبة ناسا لاستطلاع القمر، وهي تدور حوله، مع الموقع. ارفع عينيك إلى القمر؛ هناك ما زالت قاعدة إيغل."
     },
     "hotspots": [
       {
@@ -106,7 +106,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Sea of Tranquility Pioneer",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1969-059C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C; https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo11info.html; https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html; https://www.nasa.gov/missions/apollo/apollo-11/apollo-11-mission-overview/; https://science.nasa.gov/earth/earth-observatory/apollo-11-landing-site-39408/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1969-059C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C; https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo11info.html; https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html; https://www.nasa.gov/missions/apollo/apollo-11/apollo-11-mission-overview/; https://science.nasa.gov/earth/earth-observatory/apollo-11-landing-site-39408/",
+    "hook": {
+      "en": "What remains when the upper half of a lunar lander flies away?",
+      "ar": "يرتفع نصف إيغل، وتبقى قاعدته؛ أيّ جزء أنا؟"
+    },
+    "storyOriginal": {
+      "en": "I began as Eagle’s silent foundation, launched from Earth on July 16, 1969, and descended toward Mare Tranquillitatis with the Lunar Module. At 20:17:40 UT on July 20, I touched the Moon; when the ascent stage lifted off on July 21, I became the part of Apollo 11 that stayed behind. NASA later imaged my resting place from lunar orbit, turning my stillness into a lasting witness to the mission.",
+      "ar": "بدأتُ كأساس Eagle الصامت، وانطلقتُ من الأرض في 16 يوليو 1969، ثم هبطتُ بوحدة Lunar Module نحو Mare Tranquillitatis. عند 20:17:40 بالتوقيت العالمي في 20 يوليو، لامستُ القمر؛ وعندما أقلعت مرحلة الصعود في 21 يوليو، أصبحتُ الجزء من Apollo 11 الذي بقي خلفها. لاحقًا صوّرت NASA موضع استقراري من المدار القمري، فتحوّل سكوني إلى شاهد باقٍ على المهمة."
+    },
+    "funFact": {
+      "en": "NASA’s Lunar Reconnaissance Orbiter photographed me in 2009, forty years after my landing.",
+      "ar": "صوّرتني مركبة ناسا لاستطلاع القمر من المدار عام 2009، بعد أربعين عامًا من هبوطي."
+    },
+    "narration": {
+      "en": "/audio/narration/apollo-11-eagle-descent-stage-en.mp3",
+      "ar": "/audio/narration/apollo-11-eagle-descent-stage-ar.mp3"
+    }
   },
   {
     "id": "apollo-15-lrv",
@@ -126,8 +142,8 @@
       "lng": 3.6333
     },
     "story": {
-      "en": "I was folded inside Falcon until the Apollo 15 crew unfolded me onto the Moon on July 31, 1971. With David Scott and Jim Irwin aboard, I crossed Hadley-Apennine terrain on three traverses totaling 27.8 kilometers, extending the astronauts’ scientific reach beyond their landing site. When Falcon lifted off on August 2, I remained where the journeys had ended: on the lunar surface.",
-      "ar": "كنتُ مطويًا داخل Falcon حتى فردني طاقم Apollo 15 على القمر في 31 يوليو 1971. حملتُ ديفيد سكوت وجيم إروين عبر تضاريس Hadley-Apennine في ثلاث جولات بلغ مجموعها 27.8 كيلومترًا، فوسّعتُ مجال عملهما العلمي إلى ما وراء موقع الهبوط. وعندما أقلعت Falcon في 2 أغسطس، بقيتُ حيث انتهت الرحلات: على سطح القمر."
+      "en": "I am folded inside Falcon, a rover waiting to carry astronauts across the Moon. This is how my journey begins in 1971. I am the Apollo 15 Moon Buggy. On July 30, we land at Hadley-Apennine. The next day, the crew unfolds me. What was folded for the journey is now ready to travel.\n\nDavid Scott and Jim Irwin climb aboard. How far can their scientific work reach beyond the landing site? On three journeys, we cover 27.8 kilometers, carrying that work farther than their feet alone could take them. On our second journey, I carry them 12.5 kilometers southeast along the Apennine Mountains and back to the site of their science equipment. I can take them out. I cannot take them home.\n\nOur third journey covers 5.1 kilometers. Then, on August 2, 1971, Falcon lifts off the Moon. They leave; I stay at Hadley-Apennine. My journeys end where theirs must continue.",
+      "ar": "أنا مطوية داخل فالكون. هكذا تبدأ رحلتي عام 1971: عربة أبولو 15 القمرية، صُنعت لأحمل رواد الفضاء عبر سطح القمر. نصل إلى هادلي–أبينين يوم 30 يوليو. وفي اليوم التالي، يفردني الطاقم. ينتهي انتظاري داخل المركبة، ويبدأ دوري على السطح. الآن أستطيع أن أحمل راكبيّ إلى ما وراء موقع الهبوط.\n\nيصعد ديفيد سكوت وجيم إروين على متني. إلى أين يمكن أن يصل عملهما العلمي؟ في ثلاث جولات نقطع 27.8 كيلومترًا، فلا تبقى أقدامهما وحدها مقياسًا لمدى وصولهما. وفي الجولة الثانية، أحملهما 12.5 كيلومترًا نحو الجنوب الشرقي بمحاذاة جبال أبينين، ثم نعود إلى موقع الأجهزة العلمية. أحملهما عبر القمر، لا إلى الوطن.\n\nتمتد جولتنا الثالثة 5.1 كيلومترًا. ثم يأتي موعد رحلة لا مكان لي فيها. في 2 أغسطس 1971، تقلع فالكون عن سطح القمر. يغادر الرائدان، وأبقى في هادلي–أبينين. هنا تنتهي جولاتي، فيما تستمر رحلتهما من دوني."
     },
     "hotspots": [
       {
@@ -219,7 +235,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Hadley-Apennine Trailblazer",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1971-063C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_lrv.html; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C; https://www.nasa.gov/missions/apollo/apollo-15-mission-details/; https://www.nasa.gov/gallery/apollo-15/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1971-063C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_lrv.html; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C; https://www.nasa.gov/missions/apollo/apollo-15-mission-details/; https://www.nasa.gov/gallery/apollo-15/",
+    "hook": {
+      "en": "What happens to a Moon buggy when its riders leave?",
+      "ar": "كيف تنتهي رحلة عربة قمرية حين يغادر راكباها؟"
+    },
+    "storyOriginal": {
+      "en": "I was folded inside Falcon until the Apollo 15 crew unfolded me onto the Moon on July 31, 1971. With David Scott and Jim Irwin aboard, I crossed Hadley-Apennine terrain on three traverses totaling 27.8 kilometers, extending the astronauts’ scientific reach beyond their landing site. When Falcon lifted off on August 2, I remained where the journeys had ended: on the lunar surface.",
+      "ar": "كنتُ مطويًا داخل Falcon حتى فردني طاقم Apollo 15 على القمر في 31 يوليو 1971. حملتُ ديفيد سكوت وجيم إروين عبر تضاريس Hadley-Apennine في ثلاث جولات بلغ مجموعها 27.8 كيلومترًا، فوسّعتُ مجال عملهما العلمي إلى ما وراء موقع الهبوط. وعندما أقلعت Falcon في 2 أغسطس، بقيتُ حيث انتهت الرحلات: على سطح القمر."
+    },
+    "funFact": {
+      "en": "On our second journey, I carried David Scott and Jim Irwin 12.5 kilometers southeast along the Apennine Mountains and back.",
+      "ar": "في الجولة الثانية، حملتُ ديفيد سكوت وجيم إروين 12.5 كيلومترًا نحو الجنوب الشرقي بمحاذاة جبال أبينين، ثم عدنا إلى موقع الأجهزة العلمية."
+    },
+    "narration": {
+      "en": "/audio/narration/apollo-15-lrv-en.mp3",
+      "ar": "/audio/narration/apollo-15-lrv-ar.mp3"
+    }
   },
   {
     "id": "alsep-scientific-packages",
@@ -239,8 +271,8 @@
       "lng": -23.4246
     },
     "story": {
-      "en": "I was not one spacecraft but a network of instruments—the Apollo Lunar Surface Experiments Package. On Apollo 12, astronauts placed one of my instrument sets at Oceanus Procellarum and linked it to a central station. For years, my measurements carried news of lunar activity and the environment back to Earth; on September 30, 1977, NASA shut down the ALSEP stations while the hardware remained on the Moon.",
-      "ar": "لم أكن مركبة واحدة، بل شبكة من الأجهزة: Apollo Lunar Surface Experiments Package. في Apollo 12 وضع الرواد إحدى مجموعاتي في Oceanus Procellarum ووصلوها بمحطة مركزية. لسنوات حملت قياساتي إلى الأرض أخبارًا عن نشاط القمر وبيئته؛ وفي 30 سبتمبر 1977 أوقفت NASA محطات ALSEP، بينما بقيت المعدات على القمر."
+      "en": "My instruments rest on lunar ground at Oceanus Procellarum. It is November 19, 1969. Astronauts place me here and link me to a central station: my communications and control hub. I am Apollo 12 ALSEP, the Apollo Lunar Surface Experiments Package. Not a spacecraft. A set of scientific instruments, studying the Moon beneath me.\n\nMy story reaches back to a NASA idea in 1963: gather more science while keeping weight and complexity down. Apollo 12 launched on November 14, 1969, carrying that purpose toward the Moon. Now one of my instruments senses movements in the lunar ground, while my measurements carry news of lunar activity and the Moon’s environment back to Earth. For years, I send what I measure.\n\nI belong to a family of packages deployed by five Apollo missions. On September 30, 1977, NASA shuts down our stations. My messages stop. My hardware remains on the Moon. Look up: the silence does not mean I am gone.",
+      "ar": "أجهزتي على أرض القمر في أوشيانوس بروسيلاروم. اليوم هو 19 نوفمبر 1969. يضعني الرواد هنا، ويربطون أجهزتي بمحطة مركزية للاتصال والتحكم. أنا «ألسيب» التابعة لأبولو 12؛ اسمي يعني حزمة تجارب أبولو على سطح القمر. لست مركبة فضائية، بل مجموعة أدوات علمية تدرس القمر من سطحه.\n\nوراء وجودي سؤال عملي حملته فكرة لناسا عام 1963: كيف نجمع مزيدًا من المعرفة العلمية ونحدّ من الوزن والتعقيد؟ انطلقت أبولو 12 في 14 نوفمبر 1969. والآن يرصد أحد أجهزتي حركة أرض القمر، فيما تنقل قياساتي أخبار نشاطه وبيئته إلى الأرض. أواصل إرسالها سنوات، من السطح الذي جئت لدراسته.\n\nأنتمي إلى عائلة نشرتها خمس بعثات من أبولو. في 30 سبتمبر 1977، توقف ناسا محطاتنا عن العمل. تنقطع رسائلي، لكن أجهزتي تبقى على القمر. ارفع عينيك إليه؛ صمتي لا يعني أنني رحلت."
     },
     "hotspots": [
       {
@@ -332,7 +364,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Lunar Science Networker",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1969-099C, 1971-008C, 1971-063C, 1972-031C, 1972-096C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-099C; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-008C; https://nssdc.gsfc.nasa.gov/nmc/spacecraftDisplay.do?id=1971-063C; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1972-031C; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1972-096C; https://nssdc.gsfc.nasa.gov/planetary/lunar/apolloloc.html; https://www.nasa.gov/history/50-years-ago-first-apollo-lunar-surface-experiment-package-accepted/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1969-099C, 1971-008C, 1971-063C, 1972-031C, 1972-096C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-099C; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-008C; https://nssdc.gsfc.nasa.gov/nmc/spacecraftDisplay.do?id=1971-063C; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1972-031C; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1972-096C; https://nssdc.gsfc.nasa.gov/planetary/lunar/apolloloc.html; https://www.nasa.gov/history/50-years-ago-first-apollo-lunar-surface-experiment-package-accepted/",
+    "hook": {
+      "en": "What remains on the Moon when its messages fall silent?",
+      "ar": "ماذا يبقى على القمر حين تصمت رسائله؟"
+    },
+    "storyOriginal": {
+      "en": "I was not one spacecraft but a network of instruments—the Apollo Lunar Surface Experiments Package. On Apollo 12, astronauts placed one of my instrument sets at Oceanus Procellarum and linked it to a central station. For years, my measurements carried news of lunar activity and the environment back to Earth; on September 30, 1977, NASA shut down the ALSEP stations while the hardware remained on the Moon.",
+      "ar": "لم أكن مركبة واحدة، بل شبكة من الأجهزة: Apollo Lunar Surface Experiments Package. في Apollo 12 وضع الرواد إحدى مجموعاتي في Oceanus Procellarum ووصلوها بمحطة مركزية. لسنوات حملت قياساتي إلى الأرض أخبارًا عن نشاط القمر وبيئته؛ وفي 30 سبتمبر 1977 أوقفت NASA محطات ALSEP، بينما بقيت المعدات على القمر."
+    },
+    "funFact": {
+      "en": "I was one of five ALSEP deployments carried by Apollo 12, 14, 15, 16, and 17.",
+      "ar": "حملت بعثات أبولو 12 و14 و15 و16 و17 مجموعات ألسيب الخمس إلى القمر."
+    },
+    "narration": {
+      "en": "/audio/narration/alsep-scientific-packages-en.mp3",
+      "ar": "/audio/narration/alsep-scientific-packages-ar.mp3"
+    }
   },
   {
     "id": "surveyor-3",
@@ -352,8 +400,8 @@
       "lng": -23.418
     },
     "story": {
-      "en": "I arrived at the Moon as Surveyor 3, one of NASA’s early tests of the surface before Apollo. After several bounces, I finally settled in southeast Oceanus Procellarum on April 20, 1967, sending 6,326 pictures while my sampler dug trenches and tested the soil. Lunar night ended my signals, but in 1969 Apollo 12 astronauts returned to recover some of my parts—a later human touch to a once-remote experiment.",
-      "ar": "وصلتُ إلى القمر بصفتي Surveyor 3، أحد اختبارات NASA المبكرة للسطح قبل Apollo. بعد عدة ارتدادات استقررت أخيرًا في جنوب شرق Oceanus Procellarum في 20 أبريل 1967، وأرسلت 6326 صورة بينما حفرت أداة أخذ العينات الخنادق واختبرت التربة. أنهى الليل القمري إشاراتي، لكن رواد Apollo 12 عادوا في 1969 ليستعيدوا بعض أجزائي؛ لمسة بشرية لاحقة لتجربة كانت بعيدة ونائية."
+      "en": "The lunar surface meets me, then falls away. I bounce twice before finally settling. It is April 20, 1967, in southeast Oceanus Procellarum. I am Surveyor 3. I launched from Cape Canaveral that year aboard an Atlas-Centaur rocket, sent to test the Moon’s surface before Apollo. Now the ground is within reach of my scoop.\n\nWhat can this soil tell us? My camera sends back 6,326 pictures, while my sampling arm and scoop dig trenches and test the ground directly: images reveal the surface, but digging lets me examine what they show. I work through the lunar day and beyond local sunset. My last contact comes on May 4, 1967. After the lunar night, I do not start again.\n\nIn 1969, Apollo 12 astronauts visit me. They remove about 10 kilograms of my parts, including my television camera, for examination on Earth. The rest of me remains inactive on the Moon. Look up: part of me is still there.",
+      "ar": "ألامسُ سطح القمر، ثم يبتعد عني من جديد. أرتدّ مرتين قبل أن أستقر أخيرًا. إنه 20 أبريل 1967، وأنا سيرفيور 3، في جنوب شرق محيط العواصف. انطلقتُ في ذلك العام من كيب كانافيرال على صاروخ أطلس سنتور، لاختبار سطح القمر قبل أبولو. الآن صارت الأرض في متناول مغرفتي.\n\nماذا تكشف هذه التربة؟ ترسل كاميرتي 6326 صورة، وتحفر ذراع أخذ العينات ومغرفتها خنادق لاختبار التربة مباشرة؛ فالصور تُظهر السطح، والحفر يتيح لي فحصه. أواصل العمل طوال النهار القمري، وحتى بعد الغروب في موقعي. يأتي آخر اتصال في 4 مايو 1967. يمرّ الليل القمري، ولا أعود إلى العمل.\n\nفي عام 1969، يزورني رواد أبولو 12. يأخذون نحو عشرة كيلوغرامات من أجزائي، بينها كاميرا التلفزيون، لفحصها على الأرض. أما بقيتي فتظلّ بلا نشاط على القمر. حين ترفعون أعينكم إليه، تذكّروا أن شيئًا مني ما زال هناك."
     },
     "hotspots": [
       {
@@ -445,7 +493,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Lunar Soil Tester",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1967-035A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1967-035A; https://science.nasa.gov/mission/surveyor-3/; https://www.nasa.gov/missions/lunar-reconnaissance-orbiter-looks-at-apollo-12-surveyor-3-landing-sites/; https://www.jpl.nasa.gov/missions/surveyor-3/; https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1967-035A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1967-035A; https://science.nasa.gov/mission/surveyor-3/; https://www.nasa.gov/missions/lunar-reconnaissance-orbiter-looks-at-apollo-12-surveyor-3-landing-sites/; https://www.jpl.nasa.gov/missions/surveyor-3/; https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html",
+    "hook": {
+      "en": "I bounced across the Moon before I finally stayed put.",
+      "ar": "ارتديتُ على سطح القمر أكثر من مرة قبل أن أستقر."
+    },
+    "storyOriginal": {
+      "en": "I arrived at the Moon as Surveyor 3, one of NASA’s early tests of the surface before Apollo. After several bounces, I finally settled in southeast Oceanus Procellarum on April 20, 1967, sending 6,326 pictures while my sampler dug trenches and tested the soil. Lunar night ended my signals, but in 1969 Apollo 12 astronauts returned to recover some of my parts—a later human touch to a once-remote experiment.",
+      "ar": "وصلتُ إلى القمر بصفتي Surveyor 3، أحد اختبارات NASA المبكرة للسطح قبل Apollo. بعد عدة ارتدادات استقررت أخيرًا في جنوب شرق Oceanus Procellarum في 20 أبريل 1967، وأرسلت 6326 صورة بينما حفرت أداة أخذ العينات الخنادق واختبرت التربة. أنهى الليل القمري إشاراتي، لكن رواد Apollo 12 عادوا في 1969 ليستعيدوا بعض أجزائي؛ لمسة بشرية لاحقة لتجربة كانت بعيدة ونائية."
+    },
+    "funFact": {
+      "en": "Apollo 12 astronauts recovered about 10 kilograms of my parts, including my television camera, for examination on Earth.",
+      "ar": "ارتددتُ مرتين عند الهبوط، ثم أرسلتُ 6326 صورة لسطح القمر."
+    },
+    "narration": {
+      "en": "/audio/narration/surveyor-3-en.mp3",
+      "ar": "/audio/narration/surveyor-3-ar.mp3"
+    }
   },
   {
     "id": "sojourner-rover",
@@ -465,8 +529,8 @@
       "lng": -33.55
     },
     "story": {
-      "en": "I was Sojourner, a small rover carried to Mars by Mars Pathfinder, and my first steps at Ares Vallis came on July 6, 1997. With my cameras and APXS, I examined nearby rocks and soil while Pathfinder relayed my data to Earth as I moved beyond the lander. The last Pathfinder data arrived in September; my exploration ended not with a return journey, but with me and the mission hardware remaining on Mars.",
-      "ar": "كنتُ Sojourner، عربة جوالة صغيرة حملتها Mars Pathfinder إلى المريخ، وكانت خطواتي الأولى في Ares Vallis في 6 يوليو 1997. فحصتُ الصخور والتربة القريبة بكاميراتي وجهاز APXS، بينما نقل Pathfinder بياناتي إلى الأرض وأنا أبتعد عن المسبار الهابط. وصل آخر بيانات Pathfinder في سبتمبر؛ ولم تنتهِ رحلتي بعودة، بل ببقائي مع معدات المهمة على المريخ."
+      "en": "My wheels roll onto Mars, with rocks and soil ahead and Pathfinder behind me. I am Sojourner, a small rover, and it is July 6, 1997. Mars Pathfinder carried me from Cape Canaveral on December 4, 1996, then landed in Ares Vallis on July 4, 1997. Two days later, I leave the craft that brought me here.\n\nI work close to the ground. My cameras examine the scene; another instrument examines what the rocks and soils are made of. What do they hold? As I move beyond Pathfinder, my discoveries must travel through the craft before they can reach Earth. I can explore on my own wheels, but I cannot send my data home alone.\n\nThe last Pathfinder data reaches Earth on September 27, 1997. For five months, people try to restore communication. NASA formally ends the broader Pathfinder mission on March 10, 1998. I remain on Mars with the mission hardware. There is no return journey. My discoveries travel home; I stay.",
+      "ar": "تلامس عجلاتي سطح المريخ. أمامي الصخور والتربة، وخلفي المركبة التي حملتني إلى هنا. أنا سوجورنر، عربة صغيرة، أغادر مارس باثفايندر في 6 يوليو 1997. انطلقتُ معها من كيب كانافيرال في 4 ديسمبر 1996، وهبطت هي في آريس فاليس يوم 4 يوليو 1997. انتظرتُ يومين، ثم بدأت استكشاف المريخ من دون رحلة عودة.\n\nعملي هنا قريب من الأرض، بين صخرة وتربة وأسئلة عن مكوناتهما. أستخدم كاميراتي وجهازاً يفحص المواد التي تتكون منها الصخور والتربة. أبتعد عن باثفايندر على عجلاتي، لكن بياناتي تحتاج إليه كي تصل إلى الأرض؛ فهو ينقلها عني. أستطيع التحرك، ولا أستطيع إرسال اكتشافاتي إلى الوطن وحدي.\n\nتصل آخر بيانات باثفايندر إلى الأرض في 27 سبتمبر 1997. يحاول الناس استعادة الاتصال خمسة أشهر. وفي 10 مارس 1998، تنهي ناسا مهمة باثفايندر الأوسع رسمياً. أبقى على المريخ مع معدات المهمة. تصل اكتشافاتي إلى الأرض، أما عجلاتي فتبقى هنا."
     },
     "hotspots": [
       {
@@ -554,7 +618,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Ares Vallis Pathfinder",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1996-068A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1996-068A; https://science.nasa.gov/mission/mars-pathfinder/; https://www.jpl.nasa.gov/missions/mars-pathfinder-sojourner-rover/; https://www-robotics.jpl.nasa.gov/what-we-do/flight-projects/pathfinder/; https://nssdc.gsfc.nasa.gov/planetary/marsland.html; https://science.nasa.gov/resource/sojourner-rover-near-the-dice/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1996-068A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1996-068A; https://science.nasa.gov/mission/mars-pathfinder/; https://www.jpl.nasa.gov/missions/mars-pathfinder-sojourner-rover/; https://www-robotics.jpl.nasa.gov/what-we-do/flight-projects/pathfinder/; https://nssdc.gsfc.nasa.gov/planetary/marsland.html; https://science.nasa.gov/resource/sojourner-rover-near-the-dice/",
+    "hook": {
+      "en": "My wheels reached Mars. My discoveries still needed a way home.",
+      "ar": "عجلاتي على المريخ، لكن كيف تعود اكتشافاتي إلى الأرض؟"
+    },
+    "storyOriginal": {
+      "en": "I was Sojourner, a small rover carried to Mars by Mars Pathfinder, and my first steps at Ares Vallis came on July 6, 1997. With my cameras and APXS, I examined nearby rocks and soil while Pathfinder relayed my data to Earth as I moved beyond the lander. The last Pathfinder data arrived in September; my exploration ended not with a return journey, but with me and the mission hardware remaining on Mars.",
+      "ar": "كنتُ Sojourner، عربة جوالة صغيرة حملتها Mars Pathfinder إلى المريخ، وكانت خطواتي الأولى في Ares Vallis في 6 يوليو 1997. فحصتُ الصخور والتربة القريبة بكاميراتي وجهاز APXS، بينما نقل Pathfinder بياناتي إلى الأرض وأنا أبتعد عن المسبار الهابط. وصل آخر بيانات Pathfinder في سبتمبر؛ ولم تنتهِ رحلتي بعودة، بل ببقائي مع معدات المهمة على المريخ."
+    },
+    "funFact": {
+      "en": "I rolled onto Mars two days after Pathfinder landed: it arrived July 4, and I followed July 6, 1997.",
+      "ar": "تحركتُ على سطح المريخ بعد هبوط باثفايندر بيومين: هبط في 4 يوليو، وتبعته في 6 يوليو 1997."
+    },
+    "narration": {
+      "en": "/audio/narration/sojourner-rover-en.mp3",
+      "ar": "/audio/narration/sojourner-rover-ar.mp3"
+    }
   },
   {
     "id": "spirit-rover",
@@ -574,8 +654,8 @@
       "lng": 175.4729
     },
     "story": {
-      "en": "I was Spirit, sent to Gusev Crater to search for rocks altered by water. I landed on January 4, 2004 UTC, at the site later named Columbia Memorial Station, climbed hills, and studied rocks until soft soil and a failed wheel made me stationary. When my silence began after March 22, 2010, NASA reshaped the mission around a stationary science platform and ended recovery efforts on May 25, 2011.",
-      "ar": "كنتُ Spirit، وأُرسلت إلى Gusev Crater بحثًا عن صخور غيّرتها المياه. هبطتُ في 4 يناير 2004 بالتوقيت العالمي في الموقع الذي سُمّي لاحقًا Columbia Memorial Station، وصعدتُ التلال ودرستُ الصخور حتى جعلتني التربة الرخوة وتعطل إحدى العجلات ثابتة. وعندما بدأ صمتي بعد 22 مارس 2010، أعادت NASA صياغة المهمة حول منصة علمية ثابتة، ثم أنهت محاولات الاستعادة في 25 مايو 2011."
+      "en": "A rock’s surface wears away beneath my Rock Abrasion Tool. I am Spirit, beside a rock called Adirondack, performing the first operation of its kind on Mars. My journey begins at Cape Canaveral on June 10, 2003. I land in Gusev Crater on January 4, 2004; my landing site later receives the name Columbia Memorial Station.\n\nI am here to search for rocks changed by water. What traces can their surfaces reveal? On September 29, 2005, I reach the summit of Husband Hill. I take true-color pictures covering a full circle. From that summit, my view stretches all around me. But on May 1, 2009, soft soil holds me still. In November, my right-rear wheel stops working.\n\nMy mission becomes studying from one place. After March 22, 2010, controllers cannot regain contact with me. NASA ends recovery efforts on May 25, 2011. My mission is complete. I am still Spirit, on Mars: the rover that once pictures an entire horizon, now silent beneath it.",
+      "ar": "يتآكل سطح صخرة أديرونداك تحت أداة كشط الصخور التي أحملها. أنا سبيريت، أنفّذ أول عملية من نوعها على المريخ؛ وأمام هذه الصخرة أتذكر رحلتي من كيب كانافيرال، حيث انطلقتُ في 10 يونيو 2003، إلى فوهة غوسيف، حيث هبطتُ في 4 يناير 2004. لاحقًا، يحمل موقع هبوطي اسم محطة كولومبيا التذكارية.\n\nأبحث عن صخور غيّرتها المياه. أيّ أثر تركته فيها؟ في 29 سبتمبر 2005، أصل إلى قمة تل هازباند. ألتقط صورًا بألوان حقيقية تغطي دائرة كاملة حولي. الأفق يحيط بي. ثم، في 1 مايو 2009، تحتجزني تربة رخوة. وفي نوفمبر، تتوقف عجلتي الخلفية اليمنى عن العمل.\n\nأواصل الدراسة، لكن من مكان ثابت. بعد 22 مارس 2010، يعجز فريق التحكم عن استعادة الاتصال بي. وفي 25 مايو 2011، تنهي ناسا محاولات الاستعادة. تكتمل مهمتي. أبقى هنا، على المريخ، صامتةً تحت الأفق الذي التقطتُه كاملًا ذات يوم."
     },
     "hotspots": [
       {
@@ -675,7 +755,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Gusev Crater Geologist",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2003-028A. NASA/NSSDCA source pages: https://science.nasa.gov/mission/mer-spirit/; https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/; https://nssdc.gsfc.nasa.gov/planetary/mars/mars_exploration_rovers/mera_images.html; https://nssdc.gsfc.nasa.gov/planetary/chronology_mars.html"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2003-028A. NASA/NSSDCA source pages: https://science.nasa.gov/mission/mer-spirit/; https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/; https://nssdc.gsfc.nasa.gov/planetary/mars/mars_exploration_rovers/mera_images.html; https://nssdc.gsfc.nasa.gov/planetary/chronology_mars.html",
+    "hook": {
+      "en": "A whole Martian horizon in my pictures. Soft soil around my wheels.",
+      "ar": "صوّرتُ أفق المريخ كاملًا، ثم احتجزت التربة عجلاتي."
+    },
+    "storyOriginal": {
+      "en": "I was Spirit, sent to Gusev Crater to search for rocks altered by water. I landed on January 4, 2004 UTC, at the site later named Columbia Memorial Station, climbed hills, and studied rocks until soft soil and a failed wheel made me stationary. When my silence began after March 22, 2010, NASA reshaped the mission around a stationary science platform and ended recovery efforts on May 25, 2011.",
+      "ar": "كنتُ Spirit، وأُرسلت إلى Gusev Crater بحثًا عن صخور غيّرتها المياه. هبطتُ في 4 يناير 2004 بالتوقيت العالمي في الموقع الذي سُمّي لاحقًا Columbia Memorial Station، وصعدتُ التلال ودرستُ الصخور حتى جعلتني التربة الرخوة وتعطل إحدى العجلات ثابتة. وعندما بدأ صمتي بعد 22 مارس 2010، أعادت NASA صياغة المهمة حول منصة علمية ثابتة، ثم أنهت محاولات الاستعادة في 25 مايو 2011."
+    },
+    "funFact": {
+      "en": "I took true-color pictures covering a full 360-degree circle from the summit of Husband Hill.",
+      "ar": "التقطتُ من قمة تل هازباند صورًا بألوان حقيقية تغطي دائرة كاملة، أي 360 درجة."
+    },
+    "narration": {
+      "en": "/audio/narration/spirit-rover-en.mp3",
+      "ar": "/audio/narration/spirit-rover-ar.mp3"
+    }
   },
   {
     "id": "opportunity-rover",
@@ -695,8 +791,8 @@
       "lng": 354.47417
     },
     "story": {
-      "en": "I was Opportunity, and in January 2004 I reached Meridiani Planum with a question written into every observation: what did water once leave behind? I examined rocks and soil and traveled far beyond my planned 90-sol mission. A planet-wide dust storm dimmed the sunlight my panels needed; Earth received my last signal on June 10, 2018, and NASA declared the mission complete the following February.",
-      "ar": "كنتُ Opportunity، وفي يناير 2004 وصلتُ إلى Meridiani Planum حاملاً سؤالًا في كل رصد: ماذا تركت المياه القديمة وراءها؟ فحصتُ الصخور والتربة وقطعتُ مسافة تجاوزت كثيرًا مهمتي المخططة ذات التسعين يومًا مريخيًا. حجبت عاصفة غبار شملت الكوكب ضوء الشمس الذي تحتاج إليه ألواحي؛ استقبلت الأرض آخر إشارة مني في 10 يونيو 2018، وأعلنت NASA اكتمال المهمة في فبراير التالي."
+      "en": "Rocks and soil surround me inside Eagle crater on Meridiani Planum. I am Opportunity, nicknamed Oppy. I launch from Cape Canaveral, Florida, on July 7, 2003, and land here in January 2004. My landing area is later named Challenger Memorial Station. Before me lies a question written in rocks and soil: what has water left behind?\n\nMy planned mission is ninety sols, or Martian days. I keep traveling. In 2005, sand traps me for about six weeks before NASA controllers free me. That same year, I find an iron-and-nickel meteorite, later called Heat Shield Rock. By 2015, I have traveled a marathon distance on another world: 42.195 kilometers.\n\nThen dust darkens the sky. In 2018, a storm spreads across Mars, reducing the sunlight my solar panels need. Earth receives my final signal on June 10. On February 13, 2019, NASA declares my mission complete. My story ends with a signal crossing the distance to Earth. Look up, and think of the rocks that kept me searching.",
+      "ar": "صخور وتربة تحيط بي داخل فوهة إيغل، في سهل ميريدياني بلانوم. أنا أوبورتيونيتي، ويلقبونني «أوبي»، عربة استكشاف المريخ. أنطلق من كيب كانافيرال في فلوريدا يوم 7 يوليو 2003، وأهبط هنا في يناير 2004. تُسمّى منطقة هبوطي لاحقًا محطة تشالنجر التذكارية. أفحص الصخور والتربة، وأتتبع سؤالًا: ماذا تركت المياه القديمة وراءها؟\n\nخطّطوا لمهمتي تسعين يومًا مريخيًا، لكنني أواصل السير سنوات. في 2005، تمسكني الرمال نحو ستة أسابيع، ثم يحررني فريق التحكم في ناسا. وفي العام نفسه أجد نيزكًا من الحديد والنيكل، يُسمّى لاحقًا «صخرة الدرع الحراري». وبحلول 2015، أقطع مسافة ماراثون على عالم آخر: 42.195 كيلومترًا.\n\nثم يعتم الغبار السماء. في 2018، تجتاح المريخ عاصفة، فيقل ضوء الشمس الذي تحتاج إليه ألواحي الشمسية. تتلقى الأرض آخر إشارة مني يوم 10 يونيو. وفي 13 فبراير 2019، تعلن ناسا اكتمال مهمتي. تنتهي حكايتي بإشارة تصل إلى الأرض. ارفع عينيك إلى السماء، وتذكّر سؤالًا حملني بين الصخور."
     },
     "hotspots": [
       {
@@ -800,7 +896,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Meridiani Marathoner",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2003-032A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2003-032A; https://science.nasa.gov/mission/mer-opportunity/; https://www.jpl.nasa.gov/missions/mars-exploration-rover-opportunity-mer/; https://www.jpl.nasa.gov/news/nasas-opportunity-rover-mission-on-mars-comes-to-end/; https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/; https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/science-instruments/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2003-032A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2003-032A; https://science.nasa.gov/mission/mer-opportunity/; https://www.jpl.nasa.gov/missions/mars-exploration-rover-opportunity-mer/; https://www.jpl.nasa.gov/news/nasas-opportunity-rover-mission-on-mars-comes-to-end/; https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/; https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/science-instruments/",
+    "hook": {
+      "en": "What does a rover find when ninety Martian days become years?",
+      "ar": "ماذا يجد مستكشف حين تصبح تسعون يومًا مريخيًا سنوات؟"
+    },
+    "storyOriginal": {
+      "en": "I was Opportunity, and in January 2004 I reached Meridiani Planum with a question written into every observation: what did water once leave behind? I examined rocks and soil and traveled far beyond my planned 90-sol mission. A planet-wide dust storm dimmed the sunlight my panels needed; Earth received my last signal on June 10, 2018, and NASA declared the mission complete the following February.",
+      "ar": "كنتُ Opportunity، وفي يناير 2004 وصلتُ إلى Meridiani Planum حاملاً سؤالًا في كل رصد: ماذا تركت المياه القديمة وراءها؟ فحصتُ الصخور والتربة وقطعتُ مسافة تجاوزت كثيرًا مهمتي المخططة ذات التسعين يومًا مريخيًا. حجبت عاصفة غبار شملت الكوكب ضوء الشمس الذي تحتاج إليه ألواحي؛ استقبلت الأرض آخر إشارة مني في 10 يونيو 2018، وأعلنت NASA اكتمال المهمة في فبراير التالي."
+    },
+    "funFact": {
+      "en": "I reached Victoria Crater in September 2006 after a journey lasting twenty-one months.",
+      "ar": "وصلتُ إلى فوهة فيكتوريا في سبتمبر 2006 بعد رحلة استمرت واحدًا وعشرين شهرًا."
+    },
+    "narration": {
+      "en": "/audio/narration/opportunity-rover-en.mp3",
+      "ar": "/audio/narration/opportunity-rover-ar.mp3"
+    }
   },
   {
     "id": "viking-1-lander",
@@ -820,8 +932,8 @@
       "lng": 312.05
     },
     "story": {
-      "en": "I was Viking 1 Lander, the first spacecraft to operate successfully on Mars. I touched down in Chryse Planitia on July 20, 1976, returned images, and sent soil gathered by my arm into biology experiments that found no clear evidence of life while revealing complex chemistry. A faulty command ended communication in November 1982; I remained at my Martian site, with the unanswered questions still attached to the ground around me.",
-      "ar": "كنتُ Viking 1 Lander، أول مركبة تعمل بنجاح على سطح المريخ. لامستُ Chryse Planitia في 20 يوليو 1976، وأرسلت صورًا، ودفعت ذراعي عينات التربة إلى تجارب بيولوجية لم تجد دليلًا واضحًا على الحياة، لكنها كشفت كيمياء معقدة. أنهى أمر معيب الاتصالات في نوفمبر 1982؛ وبقيتُ في موقعي المريخي، وبقيت الأسئلة التي لم تُحسم مرتبطة بالأرض من حولي."
+      "en": "My sampling arm reaches into Martian soil. It is July 28, and these are my first samples from Chryse Planitia, the Golden Plain. I am Viking 1 Lander, the first spacecraft to operate successfully on Mars. My journey begins at Cape Canaveral on August 20, 1975; after entering Mars orbit, I separate from the spacecraft that carries me and land on July 20, 1976.\n\nI send back pictures. But I am here to do more than look. I deliver the soil to experiments that test its chemistry and search for signs of life. The samples reveal complex chemistry, but no clear evidence of life. I can gather soil from another world. A clear answer stays beyond my reach.\n\nIn 1981, I become Thomas Mutch Memorial Station, honoring the Viking imaging-team leader. A faulty command ends contact in November 1982. I remain on the Golden Plain, silent beside the soil. My instruments fall quiet; the question does not.",
+      "ar": "تمتد ذراعي إلى تربة المريخ. إنه 28 يوليو، وهذه أول عيناتي من كرايس بلانيتيا، السهل الذهبي. أنا مركبة الهبوط فايكنغ 1، أول مركبة تعمل بنجاح على المريخ. تبدأ رحلتي من كيب كانافيرال في 20 أغسطس 1975، ثم أدخل مدار المريخ، وأنفصل عن المركبة التي تحملني، وأهبط في 20 يوليو 1976.\n\nأرسل الصور، لكن النظر وحده لا يكفي لمهمتي. أنقل التربة إلى تجارب تفحص تركيبها الكيميائي وتبحث عن علامات الحياة. تكشف العينات كيمياء معقدة، ولا تقدم دليلًا واضحًا على وجود حياة. صار بين أدواتي تراب من عالم آخر؛ أما الجواب الواضح، فلا أستطيع جمعه كما أجمع التربة.\n\nفي عام 1981، أصبح محطة توماس ماتش التذكارية، تكريمًا لقائد فريق التصوير في فايكنغ. ينهي أمر معيب اتصالي بالأرض في نوفمبر 1982. أبقى على السهل الذهبي، صامتة بجوار التربة التي فحصتها. تصمت أدواتي، ولا يصمت السؤال."
     },
     "hotspots": [
       {
@@ -913,7 +1025,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Chryse Planitia Pioneer",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1975-075C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1975-075C; https://nssdc.gsfc.nasa.gov/planetary/viking.html; https://science.nasa.gov/mission/viking-1/; https://science.nasa.gov/mission/viking/; https://science.nasa.gov/mission/viking/spacecraft-and-science/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1975-075C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1975-075C; https://nssdc.gsfc.nasa.gov/planetary/viking.html; https://science.nasa.gov/mission/viking-1/; https://science.nasa.gov/mission/viking/; https://science.nasa.gov/mission/viking/spacecraft-and-science/",
+    "hook": {
+      "en": "Martian soil reaches my instruments. Why does the answer remain out of reach?",
+      "ar": "بلغت تربة المريخ أدواتي، وبقي الجواب بعيدًا."
+    },
+    "storyOriginal": {
+      "en": "I was Viking 1 Lander, the first spacecraft to operate successfully on Mars. I touched down in Chryse Planitia on July 20, 1976, returned images, and sent soil gathered by my arm into biology experiments that found no clear evidence of life while revealing complex chemistry. A faulty command ended communication in November 1982; I remained at my Martian site, with the unanswered questions still attached to the ground around me.",
+      "ar": "كنتُ Viking 1 Lander، أول مركبة تعمل بنجاح على سطح المريخ. لامستُ Chryse Planitia في 20 يوليو 1976، وأرسلت صورًا، ودفعت ذراعي عينات التربة إلى تجارب بيولوجية لم تجد دليلًا واضحًا على الحياة، لكنها كشفت كيمياء معقدة. أنهى أمر معيب الاتصالات في نوفمبر 1982؛ وبقيتُ في موقعي المريخي، وبقيت الأسئلة التي لم تُحسم مرتبطة بالأرض من حولي."
+    },
+    "funFact": {
+      "en": "I collected my first Martian soil samples on July 28, just eight days after landing.",
+      "ar": "جمعتُ أول عينات تربة المريخ في 28 يوليو، بعد ثمانية أيام فقط من هبوطي."
+    },
+    "narration": {
+      "en": "/audio/narration/viking-1-lander-en.mp3",
+      "ar": "/audio/narration/viking-1-lander-ar.mp3"
+    }
   },
   {
     "id": "viking-2-lander",
@@ -933,8 +1061,8 @@
       "lng": 134.2809
     },
     "story": {
-      "en": "I was Viking 2 Lander, sent toward the plain of Utopia Planitia. After landing on September 3, 1976, I photographed the terrain and delivered soil to chemistry and biology experiments, but my results offered no definitive evidence of living microorganisms. When my batteries eventually failed and my last data arrived in April 1980, the work of my instruments remained at the landing site.",
-      "ar": "كنتُ Viking 2 Lander، وأُرسلت نحو سهل Utopia Planitia. بعد هبوطي في 3 سبتمبر 1976، صوّرتُ التضاريس وقدّمتُ التربة إلى تجارب كيميائية وبيولوجية، لكن نتائجي لم تقدّم دليلًا حاسمًا على وجود كائنات دقيقة حية. وعندما تعطلت بطارياتي في النهاية ووصلت آخر بياناتي في أبريل 1980، بقي عمل أجهزتي حاضرًا في موقع الهبوط."
+      "en": "The terrain of Utopia Planitia fills my photographs. I am Viking 2 Lander, on Mars, about 200 kilometres west of Mie Crater. I remember the journey: departure from Cape Canaveral on September 9, 1975; Viking 2 entering Mars orbit on August 7, 1976; then my separation and landing on September 3. Now the ground is within reach of my experiments.\n\nI deliver soil for testing. Some experiments examine its chemistry. Others search for living microorganisms, too small to see without instruments. The soil in front of me is not merely a landscape to photograph, but material that might answer the question behind my search. Yet my biology experiments yield no definitive evidence of those organisms. Searching is not proving.\n\nMy last data arrive on April 11, 1980. Battery failure ends my work, and I am turned off. I remain here, inactive. In July 2001, I receive another name: Gerald Soffen Memorial Station. My work ends; the question remains.",
+      "ar": "تملأ تضاريس يوتوبيا بلانيتيا صوري. أنا مركبة الهبوط فايكينغ 2، على المريخ، على مسافة نحو 200 كيلومتر غرب فوهة مي. أستعيد رحلتي: أغادر كيب كانافيرال في 9 سبتمبر 1975، وتدخل فايكينغ 2 مدار المريخ في 7 أغسطس 1976، ثم أنفصل عنها وأهبط في 3 سبتمبر. تصبح التربة أمامي مادة للاختبار.\n\nأقدّم التربة إلى تجاربي. بعضها يفحص تركيبها الكيميائي، وبعضها يبحث عن كائنات حية دقيقة لا تُرى من دون أدوات. ما أصوّره ليس مجرد مشهد؛ إنه مادة أختبرها بحثًا عن دليل على الحياة. لكن تجاربي البيولوجية لا تقدّم دليلًا حاسمًا على وجود تلك الكائنات. بين البحث والإثبات، يبقى السؤال مفتوحًا.\n\nتصل آخر بياناتي في 11 أبريل 1980. ينتهي عملي بتعطل البطاريات، وأُوقَف عن العمل. أبقى في موقع هبوطي، بلا نشاط. وفي يوليو 2001، أحمل اسمًا آخر: محطة جيرالد سوفن التذكارية. يتوقف عملي، ولا يتوقف السؤال."
     },
     "hotspots": [
       {
@@ -1026,7 +1154,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Utopia Planitia Explorer",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1975-083C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1975-083C; https://nssdc.gsfc.nasa.gov/planetary/viking.html; https://science.nasa.gov/mission/viking-2/; https://science.nasa.gov/astrobiology/missions/viking-project/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1975-083C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1975-083C; https://nssdc.gsfc.nasa.gov/planetary/viking.html; https://science.nasa.gov/mission/viking-2/; https://science.nasa.gov/astrobiology/missions/viking-project/",
+    "hook": {
+      "en": "I held Martian soil, but could I find evidence of life?",
+      "ar": "تربة المريخ أمامي؛ هل تحمل ما يثبت وجود الحياة؟"
+    },
+    "storyOriginal": {
+      "en": "I was Viking 2 Lander, sent toward the plain of Utopia Planitia. After landing on September 3, 1976, I photographed the terrain and delivered soil to chemistry and biology experiments, but my results offered no definitive evidence of living microorganisms. When my batteries eventually failed and my last data arrived in April 1980, the work of my instruments remained at the landing site.",
+      "ar": "كنتُ Viking 2 Lander، وأُرسلت نحو سهل Utopia Planitia. بعد هبوطي في 3 سبتمبر 1976، صوّرتُ التضاريس وقدّمتُ التربة إلى تجارب كيميائية وبيولوجية، لكن نتائجي لم تقدّم دليلًا حاسمًا على وجود كائنات دقيقة حية. وعندما تعطلت بطارياتي في النهاية ووصلت آخر بياناتي في أبريل 1980، بقي عمل أجهزتي حاضرًا في موقع الهبوط."
+    },
+    "funFact": {
+      "en": "I landed about 200 kilometres west of Mie Crater on Mars.",
+      "ar": "هبطتُ على المريخ على مسافة نحو 200 كيلومتر غرب فوهة مي."
+    },
+    "narration": {
+      "en": "/audio/narration/viking-2-lander-en.mp3",
+      "ar": "/audio/narration/viking-2-lander-ar.mp3"
+    }
   },
   {
     "id": "phoenix-lander",
@@ -1046,8 +1190,8 @@
       "lng": -125.9
     },
     "story": {
-      "en": "I was NASA’s Phoenix lander, built to reach the icy northern plains of Mars. In 2008 my robotic arm dug into soil and ice-rich material, and TEGA heated a sample that helped confirm water ice beneath the surface; other tests detected perchlorate. Martian winter reduced the power from my solar panels, and Earth received my final signal on November 2, 2008, leaving the evidence I gathered with the lander at Mars.",
-      "ar": "كنتُ مسبار Phoenix الهابط التابع لـNASA، وبُنيتُ للوصول إلى السهول الشمالية الجليدية للمريخ. في عام 2008 حفرت ذراعي الروبوتية التربة ومواد غنية بالجليد، وسخّن TEGA عينة ساعدت في تأكيد وجود جليد مائي تحت السطح؛ كما كشفت اختبارات أخرى البركلورات. خفّض شتاء المريخ الطاقة القادمة من ألواحي الشمسية، واستقبلت الأرض آخر إشارة مني في 2 نوفمبر 2008، وبقيت الأدلة التي جمعتها مع المسبار على المريخ."
+      "en": "My robotic arm digs into Martian ground. Beneath the soil, ice waits out of sight. I gather soil and material rich in ice: a piece of the hidden ground. I am Phoenix, NASA’s lander on Mars’s icy northern plains. I launched from Cape Canaveral in 2007 aboard a Delta II rocket. On May 25, 2008, I landed in Green Valley, in the region called Vastitas Borealis.\n\nNow I bring that buried material to a test. My instrument called TEGA heats a sample and studies the gases it releases, turning what lies beneath the surface into evidence that helps confirm water ice. In 2008, NASA announced that I had found water on Mars. But every part of my work depends on power from solar panels. Winter is coming.\n\nAs Martian winter arrives, my solar power falls. Earth receives my final signal on November 2, 2008. My mission ends. I remain on Mars with the evidence I gathered. Look up: the ground I touched is still there.",
+      "ar": "تغوص ذراعي الآلية في أرض المريخ. أجمع تربة ومواد غنية بالجليد؛ ما كان مستترًا تحت السطح صار عينة لديّ. أنا فينيكس، مركبة ناسا على السهول الشمالية الجليدية للمريخ. انطلقتُ من كيب كانافيرال عام 2007 على متن صاروخ دلتا 2، وهبطتُ في 25 مايو 2008 في الوادي الأخضر، بمنطقة فاستيتاس بورياليس.\n\nأسخّن العينة بجهازي المسمى «تيغا»، وأفحص الغازات التي تنطلق منها. ليس الجليد المدفون ظاهرًا فوق الأرض، لكن هذا الاختبار يساعد في تأكيد وجود جليد مائي تحت السطح. وفي عام 2008، أعلنت ناسا أنني وجدتُ ماءً على المريخ. صار ما جمعته دليلًا. غير أن عملي كله يحتاج إلى طاقة ألواحي الشمسية، وشتاء المريخ يقترب.\n\nمع مجيء الشتاء، تنخفض الطاقة. تستقبل الأرض آخر إشارة مني في 2 نوفمبر 2008. تنتهي مهمتي، وأبقى على المريخ مع الأدلة التي جمعتُها. ارفع عينيك إلى السماء؛ هناك أرض لمستُها، وما زلتُ عليها."
     },
     "hotspots": [
       {
@@ -1139,7 +1283,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Arctic Ice Finder",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2007-034A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-034A; https://science.nasa.gov/mission/mars-phoenix/; https://www.jpl.nasa.gov/missions/phoenix/; https://nssdc.gsfc.nasa.gov/planetary/mars_2003_05.html"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2007-034A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-034A; https://science.nasa.gov/mission/mars-phoenix/; https://www.jpl.nasa.gov/missions/phoenix/; https://nssdc.gsfc.nasa.gov/planetary/mars_2003_05.html",
+    "hook": {
+      "en": "What does buried Martian ice reveal when I turn up the heat?",
+      "ar": "ماذا يكشف جليد المريخ المدفون حين أسخّن عينة من أرضه؟"
+    },
+    "storyOriginal": {
+      "en": "I was NASA’s Phoenix lander, built to reach the icy northern plains of Mars. In 2008 my robotic arm dug into soil and ice-rich material, and TEGA heated a sample that helped confirm water ice beneath the surface; other tests detected perchlorate. Martian winter reduced the power from my solar panels, and Earth received my final signal on November 2, 2008, leaving the evidence I gathered with the lander at Mars.",
+      "ar": "كنتُ مسبار Phoenix الهابط التابع لـNASA، وبُنيتُ للوصول إلى السهول الشمالية الجليدية للمريخ. في عام 2008 حفرت ذراعي الروبوتية التربة ومواد غنية بالجليد، وسخّن TEGA عينة ساعدت في تأكيد وجود جليد مائي تحت السطح؛ كما كشفت اختبارات أخرى البركلورات. خفّض شتاء المريخ الطاقة القادمة من ألواحي الشمسية، واستقبلت الأرض آخر إشارة مني في 2 نوفمبر 2008، وبقيت الأدلة التي جمعتها مع المسبار على المريخ."
+    },
+    "funFact": {
+      "en": "My TEGA instrument heated a sample and studied its released gases to help confirm water ice beneath Mars’s surface.",
+      "ar": "سخّن جهازي «تيغا» عينة وفحص الغازات المنطلقة منها، للمساعدة في تأكيد وجود جليد مائي تحت سطح المريخ."
+    },
+    "narration": {
+      "en": "/audio/narration/phoenix-lander-en.mp3",
+      "ar": "/audio/narration/phoenix-lander-ar.mp3"
+    }
   },
   {
     "id": "insight-lander",
@@ -1159,8 +1319,8 @@
       "lng": 135.9
     },
     "story": {
-      "en": "I was InSight, a stationary lander sent to listen for Mars’s interior. I reached Elysium Planitia on November 26, 2018; SEIS recorded marsquakes and other ground vibrations, while HP3 struggled against unexpectedly clumpy soil but still gathered important thermal and soil data. NASA received my final transmission on December 15, 2022, and declared the mission over six days later.",
-      "ar": "كنتُ InSight، مسبارًا هابطًا ثابتًا أُرسل للإصغاء إلى باطن المريخ. وصلتُ إلى Elysium Planitia في 26 نوفمبر 2018؛ فسجّل SEIS الزلازل المريخية واهتزازات الأرض الأخرى، بينما واجه HP3 تربة متكتلة على نحو غير متوقع، لكنه جمع مع ذلك بيانات مهمة عن الحرارة وخصائص التربة. استقبلت NASA آخر إرسال مني في 15 ديسمبر 2022، وأعلنت انتهاء المهمة بعد ستة أيام."
+      "en": "The ground beneath me trembles. I stay still and record its movements. I am InSight, a lander listening beneath Mars’s surface. In 2018, I launched from Vandenberg Air Force Base aboard an Atlas V-401 rocket. On November 26, I landed in western Elysium Planitia. Here, my work is not to roam.\n\nMy instrument SEIS measures marsquakes and other ground vibrations, letting me listen to the planet’s interior while my instrument HP3 studies heat and the soil’s physical properties. But the soil is unexpectedly clumpy. HP3’s work becomes difficult. The ground I came to study is also an obstacle. Even so, HP3 gathers important information about heat and soil. Not every task goes as planned.\n\nMy original mission was scheduled to end after about two Earth years. NASA extended it. Earth received my final transmission on December 15, 2022. After two unsuccessful attempts to contact me, NASA declared my mission over on December 21. I remain where I listened. My listening days are finished; beneath me lies the world I worked to understand.",
+      "ar": "تهتزّ الأرض تحتي، وأبقى في مكاني أسجّل حركتها. أنا إنسايت، مسبار هابط يصغي إلى باطن المريخ. انطلقتُ عام 2018 من قاعدة فاندنبرغ الجوية على متن صاروخ أطلس V-401. وفي 26 نوفمبر، هبطتُ في غرب إليسيوم بلانيتيا. هنا لا أتجوّل؛ عملي أن أصغي إلى ما يتحرّك تحت السطح.\n\nيقيس جهازي «SEIS» الزلازل المريخية واهتزازات الأرض الأخرى، فأصغي عبرها إلى داخل الكوكب، بينما يدرس جهازي «HP3» الحرارة وخصائص التربة الفيزيائية. لكن التربة متكتلة على نحو غير متوقّع. يصعب عمله. ما جئتُ لدراسته يصبح عقبة أمامي. ومع ذلك، يجمع «HP3» معلومات مهمة عن الحرارة والتربة. لا تسير كل المهام كما خُطّط لها.\n\nكان مقرّرًا أن تنتهي مهمتي الأصلية بعد نحو سنتين أرضيتين، لكن ناسا مدّدتها. وصل إرسالي الأخير إلى الأرض في 15 ديسمبر 2022. وبعد محاولتين فاشلتين للاتصال بي، أعلنت ناسا انتهاء مهمتي في 21 ديسمبر. أبقى حيث أصغيتُ. انتهت أيام إصغائي، وتحت موضعي عالمٌ عملتُ على فهمه."
     },
     "hotspots": [
       {
@@ -1252,7 +1412,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Marsquake Listener",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2018-042A. NASA/NSSDCA source pages: https://science.nasa.gov/mission/insight/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2018-042A; https://science.nasa.gov/mission/insight/science-instruments/; https://www.jpl.nasa.gov/news/nasa-retires-insight-mars-lander-mission-after-years-of-science/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2018-042A. NASA/NSSDCA source pages: https://science.nasa.gov/mission/insight/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2018-042A; https://science.nasa.gov/mission/insight/science-instruments/; https://www.jpl.nasa.gov/news/nasa-retires-insight-mars-lander-mission-after-years-of-science/",
+    "hook": {
+      "en": "I never roamed Mars. What moved beneath me?",
+      "ar": "أنا ثابت على المريخ، لكن الأرض تحتي تتحرّك."
+    },
+    "storyOriginal": {
+      "en": "I was InSight, a stationary lander sent to listen for Mars’s interior. I reached Elysium Planitia on November 26, 2018; SEIS recorded marsquakes and other ground vibrations, while HP3 struggled against unexpectedly clumpy soil but still gathered important thermal and soil data. NASA received my final transmission on December 15, 2022, and declared the mission over six days later.",
+      "ar": "كنتُ InSight، مسبارًا هابطًا ثابتًا أُرسل للإصغاء إلى باطن المريخ. وصلتُ إلى Elysium Planitia في 26 نوفمبر 2018؛ فسجّل SEIS الزلازل المريخية واهتزازات الأرض الأخرى، بينما واجه HP3 تربة متكتلة على نحو غير متوقع، لكنه جمع مع ذلك بيانات مهمة عن الحرارة وخصائص التربة. استقبلت NASA آخر إرسال مني في 15 ديسمبر 2022، وأعلنت انتهاء المهمة بعد ستة أيام."
+    },
+    "funFact": {
+      "en": "NASA recorded my Mars landing down to the second: 11:52:59 a.m. Pacific Time.",
+      "ar": "سجّلت ناسا وقت هبوطي على المريخ بالثانية: 11:52:59 صباحًا بتوقيت المحيط الهادئ."
+    },
+    "narration": {
+      "en": "/audio/narration/insight-lander-en.mp3",
+      "ar": "/audio/narration/insight-lander-ar.mp3"
+    }
   },
   {
     "id": "ingenuity-helicopter",
@@ -1272,8 +1448,8 @@
       "lng": 77.45
     },
     "story": {
-      "en": "I was Ingenuity, carried beneath Perseverance to Jezero Crater. On April 19, 2021, I made the first powered, controlled flight on another planet; five planned flights became 72, and I scouted routes and features for the rover. During my final flight on January 18, 2024, rotor damage ended my ability to fly, and NASA closed my mission on January 25, leaving me grounded on Mars.",
-      "ar": "كنتُ Ingenuity، وحملتني Perseverance تحتها إلى فوهة Jezero. في 19 أبريل 2021 نفّذت أول رحلة طيران مضبوطة ومزوّدة بالطاقة على كوكب آخر؛ وتحولت الرحلات الخمس المخططة إلى 72 رحلة، ساعدت خلالها في استطلاع المسارات والمعالم للمركبة الجوالة. خلال رحلتي الأخيرة في 18 يناير 2024 أنهى تلف الدوّار قدرتي على الطيران، وأغلقت NASA مهمتي في 25 يناير، فبقيتُ على المريخ بلا تحليق."
+      "en": "Above me is Perseverance; beneath me, Jezero Crater. I am Ingenuity, nicknamed Ginny, a helicopter arriving on Mars attached beneath a rover. It is February 18, 2021. Our journey began on July 30, 2020, when Mars 2020 launched with both of us aboard. On April 4, I am placed on the Martian surface. My travelling companion no longer carries me.\n\nCan an aircraft fly here under its own power and control? On April 19, I answer with the first powered, controlled flight on another planet. That is my original job: show that it can work. Five test flights are planned, but after my fifth, on May 7, my work changes, and I begin scouting routes and features for Perseverance.\n\nFive planned flights become 72. On January 18, 2024, contact is lost near touchdown during my final flight. My rotor blades are damaged. I can no longer fly. NASA announces my mission complete on January 25. I remain grounded on Mars, beneath the sky I once flew through.",
+      "ar": "فوقي بيرسيفيرانس، وتحتي فوهة جيزيرو. أنا إنجينويتي، ولقبي جيني، أصل إلى المريخ مثبتةً تحت المركبة الجوالة في 18 فبراير 2021. بدأت رحلتنا في 30 يوليو 2020، حين انطلقت مهمة المريخ 2020 حاملةً كلتينا. وفي 4 أبريل، أُوضَع على سطح المريخ. لم أعد معلقةً تحت رفيقة السفر؛ صار السطح موضعي.\n\nهل تستطيع آلة أن تطير هنا بقوتها الذاتية وتحت التحكم؟ في 19 أبريل، أجيب بأول طيران من هذا النوع على كوكب آخر. مهمتي الأصلية إثبات إمكان ذلك. الخطة خمس رحلات اختبارية، لكن بعد رحلتي الخامسة، في 7 مايو، يتغير دوري، فأبدأ استطلاع المسارات والمعالم لمساعدة بيرسيفيرانس.\n\nتصير الرحلات الخمس اثنتين وسبعين. في 18 يناير 2024، ينقطع الاتصال بي قرب ملامسة الأرض خلال رحلتي الأخيرة، وتتضرر شفرات دوّاري. لم أعد أستطيع التحليق. وفي 25 يناير، تعلن ناسا اكتمال مهمتي. أبقى على المريخ، والسماء فوقي؛ كنت أطير فيها، والآن أبقى تحتها."
     },
     "hotspots": [
       {
@@ -1373,7 +1549,23 @@
       "correctAnswer": 0
     },
     "badgeName": "First Flight on Mars",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2020-052A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2020-052A; https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/; https://www.nasa.gov/news-release/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/; https://www.jpl.nasa.gov/missions/ingenuity/; https://science.nasa.gov/mission/mars-2020-perseverance/; https://mars.nasa.gov/technology/helicopter/; https://www.giss.nasa.gov/tools/mars24/help/landers.html"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2020-052A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2020-052A; https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/; https://www.nasa.gov/news-release/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/; https://www.jpl.nasa.gov/missions/ingenuity/; https://science.nasa.gov/mission/mars-2020-perseverance/; https://mars.nasa.gov/technology/helicopter/; https://www.giss.nasa.gov/tools/mars24/help/landers.html",
+    "hook": {
+      "en": "What remains when a helicopter on Mars can no longer fly?",
+      "ar": "كيف تبدو السماء لمروحية لم تعد قادرة على الطيران؟"
+    },
+    "storyOriginal": {
+      "en": "I was Ingenuity, carried beneath Perseverance to Jezero Crater. On April 19, 2021, I made the first powered, controlled flight on another planet; five planned flights became 72, and I scouted routes and features for the rover. During my final flight on January 18, 2024, rotor damage ended my ability to fly, and NASA closed my mission on January 25, leaving me grounded on Mars.",
+      "ar": "كنتُ Ingenuity، وحملتني Perseverance تحتها إلى فوهة Jezero. في 19 أبريل 2021 نفّذت أول رحلة طيران مضبوطة ومزوّدة بالطاقة على كوكب آخر؛ وتحولت الرحلات الخمس المخططة إلى 72 رحلة، ساعدت خلالها في استطلاع المسارات والمعالم للمركبة الجوالة. خلال رحلتي الأخيرة في 18 يناير 2024 أنهى تلف الدوّار قدرتي على الطيران، وأغلقت NASA مهمتي في 25 يناير، فبقيتُ على المريخ بلا تحليق."
+    },
+    "funFact": {
+      "en": "I arrived on Mars attached beneath Perseverance, then flew 72 times instead of the five flights originally planned.",
+      "ar": "وصلتُ مثبتةً تحت بيرسيفيرانس، ثم نفذت اثنتين وسبعين رحلة بدلًا من الرحلات الخمس المخططة."
+    },
+    "narration": {
+      "en": "/audio/narration/ingenuity-helicopter-en.mp3",
+      "ar": "/audio/narration/ingenuity-helicopter-ar.mp3"
+    }
   },
   {
     "id": "dawn-spacecraft",
@@ -1393,8 +1585,8 @@
       "lng": null
     },
     "story": {
-      "en": "I was Dawn, a deep-space explorer driven by xenon ion propulsion. I orbited Vesta, then crossed onward to dwarf planet Ceres, studying its bright deposits and geology from orbit rather than landing. When my hydrazine supply ran out in November 2018, NASA ended my mission; I remained an inert spacecraft circling Ceres, a silent traveler at the end of a long route.",
-      "ar": "كنتُ Dawn، مستكشفة للفضاء العميق يدفعها الدفع الأيوني بالزينون. دُرت حول Vesta، ثم تابعت إلى الكوكب القزم Ceres، ودرست رواسبه اللامعة وجيولوجيته من المدار بدل الهبوط. عندما نفد مخزون الهيدرازين في نوفمبر 2018، أنهت NASA مهمتي؛ وبقيتُ مركبة خاملة تدور حول Ceres، مسافرة صامتة في نهاية طريق طويل."
+      "en": "Bright deposits mark the landscape beneath my orbit. I am Dawn, a deep-space probe, circling the dwarf planet Ceres without touching its surface. My memory reaches back to Cape Canaveral in Florida, where I launch in 2007. In 2009, the pull of Mars helps me along my route around the Sun, toward the asteroid Vesta.\n\nI reach Vesta in 2011 and begin orbiting. There is another world ahead. I leave in 2012 and reach Ceres in 2015, where I study those bright deposits and its geology: the materials and features that form its landscape. I never land on either destination. My primary mission ends in 2016, but I keep working. How long can I keep my gaze steady?\n\nThen my hydrazine fuel runs out. I can no longer point myself properly. My radio signal is lost on October 31, 2018; NASA ends my mission the next day. I remain inert, still orbiting Ceres. My voice is gone. My journey around this world continues.",
+      "ar": "رواسب لامعة على تضاريس سيريس، وأنا أدور فوقها من دون أن ألمس السطح. أنا داون، مركبة لاستكشاف الفضاء العميق. أستعيد رحلتي: أنطلق عام 2007 من كيب كانافيرال في فلوريدا، وتساعدني جاذبية المريخ عام 2009 على مواصلة طريقي حول الشمس. أمامي الكويكب فيستا، أول وجهتيّ.\n\nأصل إلى فيستا عام 2011 وأدور حوله، ثم أغادره عام 2012. أصل إلى الكوكب القزم سيريس عام 2015، وأدرس من مداري رواسبه اللامعة وجيولوجيته، أي المواد والمعالم التي تكوّن تضاريسه. لا أهبط على أي من العالمين. تنتهي مهمتي الأساسية عام 2016، لكن عملي يستمر. إلى متى أستطيع الحفاظ على اتجاهي؟\n\nينفد وقود الهيدرازين، فلا أعود قادرة على توجيه نفسي كما ينبغي. تنقطع إشارتي اللاسلكية في 31 أكتوبر 2018، وتنهي ناسا مهمتي في اليوم التالي. أبقى حول سيريس، صامتة لا أعمل. لا يصل صوتي، لكن دوراني لم ينته."
     },
     "hotspots": [
       {
@@ -1498,7 +1690,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Vesta-Ceres Voyager",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2007-043A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-043A; https://science.nasa.gov/mission/dawn/; https://science.nasa.gov/mission/dawn/toolkit/end-of-mission/; https://science.nasa.gov/mission/dawn/mission-status/; https://science.nasa.gov/mission/dawn/technology/spacecraft/; https://science.nasa.gov/mission/dawn/science/overview/; https://science.nasa.gov/mission/dawn/faq/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2007-043A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-043A; https://science.nasa.gov/mission/dawn/; https://science.nasa.gov/mission/dawn/toolkit/end-of-mission/; https://science.nasa.gov/mission/dawn/mission-status/; https://science.nasa.gov/mission/dawn/technology/spacecraft/; https://science.nasa.gov/mission/dawn/science/overview/; https://science.nasa.gov/mission/dawn/faq/",
+    "hook": {
+      "en": "What remains of a spacecraft when its voice disappears?",
+      "ar": "ينقطع صوتي، لكن هل تنتهي رحلتي؟"
+    },
+    "storyOriginal": {
+      "en": "I was Dawn, a deep-space explorer driven by xenon ion propulsion. I orbited Vesta, then crossed onward to dwarf planet Ceres, studying its bright deposits and geology from orbit rather than landing. When my hydrazine supply ran out in November 2018, NASA ended my mission; I remained an inert spacecraft circling Ceres, a silent traveler at the end of a long route.",
+      "ar": "كنتُ Dawn، مستكشفة للفضاء العميق يدفعها الدفع الأيوني بالزينون. دُرت حول Vesta، ثم تابعت إلى الكوكب القزم Ceres، ودرست رواسبه اللامعة وجيولوجيته من المدار بدل الهبوط. عندما نفد مخزون الهيدرازين في نوفمبر 2018، أنهت NASA مهمتي؛ وبقيتُ مركبة خاملة تدور حول Ceres، مسافرة صامتة في نهاية طريق طويل."
+    },
+    "funFact": {
+      "en": "I orbited two different worlds: the asteroid Vesta and the dwarf planet Ceres, without landing on either.",
+      "ar": "درت حول عالمين مختلفين، الكويكب فيستا والكوكب القزم سيريس، من دون أن أهبط على أي منهما."
+    },
+    "narration": {
+      "en": "/audio/narration/dawn-spacecraft-en.mp3",
+      "ar": "/audio/narration/dawn-spacecraft-ar.mp3"
+    }
   },
   {
     "id": "near-shoemaker",
@@ -1518,8 +1726,8 @@
       "lng": null
     },
     "story": {
-      "en": "I was NEAR Shoemaker, sent to investigate asteroid 433 Eros. I became the first spacecraft to orbit an asteroid, then—though never designed as a lander—touched down gently in Eros’s saddle region in February 2001. From the surface I continued returning images and gamma-ray measurements for about two weeks, until surface cold overcame my operations and my last contact came on February 28.",
-      "ar": "كنتُ NEAR Shoemaker، وأُرسلت لدراسة الكويكب 433 Eros. أصبحتُ أول مركبة تدور حول كويكب، ثم—مع أنني لم أُصمّم كمسبار هبوط—لامستُ بلطف منطقة السرج على Eros في فبراير 2001. واصلتُ من السطح إرسال الصور وقياسات أشعة غاما لنحو أسبوعين، حتى تغلب برد السطح على عملي وانتهى اتصالي في 28 فبراير."
+      "en": "The surface of asteroid 433 Eros meets me gently. It is February 12, 2001. I am NEAR Shoemaker, a deep-space probe, and I have never been designed to land. Yet here I rest. My journey begins on February 17, 1996, as the first mission in NASA’s Discovery program.\n\nBefore arriving, I pass within about 1,200 kilometres of asteroid 253 Mathilde, fly past Earth to let its gravity shape my path, and later pass Eros. On February 14, 2000, I begin circling Eros. No spacecraft has orbited an asteroid before. My camera studies the surface; my other instruments investigate its minerals and the elements that make it up. Then comes that gentle touchdown—the first on an asteroid, by a probe never built for landing.\n\nFor about two weeks, I keep sending images and measurements of gamma rays, a form of high-energy light. Cold eventually overcomes my operations. My final contact is February 28, 2001. I remain in Eros’s saddle region, just south of Himeros. My journey ends with ground beneath me.",
+      "ar": "يلامسني سطح الكويكب 433 إيروس برفق. إنه 12 فبراير 2001. أنا نير شوميكر، مسبار للفضاء البعيد، ولم أُصمَّم للهبوط، لكنني أستقر هنا الآن. أستعيد بداية رحلتي في 17 فبراير 1996، حين انطلقت في أول مهمة ضمن برنامج ديسكفري التابع لناسا.\n\nأمرّ على مسافة نحو 1200 كيلومتر من الكويكب 253 ماتيلد، ثم قرب الأرض مستفيدًا من جاذبيتها لتعديل مساري، وبعدها أمرّ بإيروس. في 14 فبراير 2000، أبدأ الدوران حوله. لم تسبقني مركبة إلى مدار حول كويكب. تدرس كاميرتي سطحه، وتبحث أجهزتي الأخرى في معادنه والعناصر المكوِّنة له. ثم تأتي الخطوة التي لم أُصمَّم لها: أول هبوط على كويكب.\n\nأواصل إرسال الصور وقياسات أشعة غاما، وهي ضوء عالي الطاقة، لنحو أسبوعين. أخيرًا يتغلب البرد على عملي. آخر اتصال لي في 28 فبراير 2001. أبقى في منطقة السرج بإيروس، جنوب هيميروس مباشرة. تنتهي رحلتي، ويظل السطح يحملني."
     },
     "hotspots": [
       {
@@ -1611,7 +1819,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Eros Orbiter and Touchdown",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1996-008A. NASA/NSSDCA source pages: https://science.nasa.gov/mission/near-shoemaker/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1996-008A; https://nssdc.gsfc.nasa.gov/planetary/near.html; https://science.nasa.gov/solar-system/jpl-navigators-guide-near-to-historic-landing-on-asteroid-eros/; https://science.nasa.gov/solar-system/near-shoemakers-historic-landing-on-eros-exceeds-science-engineering-expectations/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1996-008A. NASA/NSSDCA source pages: https://science.nasa.gov/mission/near-shoemaker/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1996-008A; https://nssdc.gsfc.nasa.gov/planetary/near.html; https://science.nasa.gov/solar-system/jpl-navigators-guide-near-to-historic-landing-on-asteroid-eros/; https://science.nasa.gov/solar-system/near-shoemakers-historic-landing-on-eros-exceeds-science-engineering-expectations/",
+    "hook": {
+      "en": "What happens when a probe never built to land touches an asteroid?",
+      "ar": "كيف يلامس مسبار سطح كويكب وهو لم يُصمَّم للهبوط؟"
+    },
+    "storyOriginal": {
+      "en": "I was NEAR Shoemaker, sent to investigate asteroid 433 Eros. I became the first spacecraft to orbit an asteroid, then—though never designed as a lander—touched down gently in Eros’s saddle region in February 2001. From the surface I continued returning images and gamma-ray measurements for about two weeks, until surface cold overcame my operations and my last contact came on February 28.",
+      "ar": "كنتُ NEAR Shoemaker، وأُرسلت لدراسة الكويكب 433 Eros. أصبحتُ أول مركبة تدور حول كويكب، ثم—مع أنني لم أُصمّم كمسبار هبوط—لامستُ بلطف منطقة السرج على Eros في فبراير 2001. واصلتُ من السطح إرسال الصور وقياسات أشعة غاما لنحو أسبوعين، حتى تغلب برد السطح على عملي وانتهى اتصالي في 28 فبراير."
+    },
+    "funFact": {
+      "en": "I made the first asteroid touchdown even though I had never been designed as a lander.",
+      "ar": "كنت أول مركبة تلامس سطح كويكب، رغم أنني لم أُصمَّم للهبوط."
+    },
+    "narration": {
+      "en": "/audio/narration/near-shoemaker-en.mp3",
+      "ar": "/audio/narration/near-shoemaker-ar.mp3"
+    }
   },
   {
     "id": "pioneer-10-11",
@@ -1631,8 +1855,8 @@
       "lng": null
     },
     "story": {
-      "en": "I am Pioneer 10, joined in this archive by my sister spacecraft Pioneer 11. I crossed the asteroid belt and explored Jupiter, while Pioneer 11 used a Jupiter flyby to continue to Saturn. Our radioisotope generators and antennas carried science outward until Pioneer 11 fell silent in 1995 and Pioneer 10 sent its last detected signal in 2003; both continue along paths escaping the Solar System.",
-      "ar": "أنا Pioneer 10، وترافقني في هذا الأرشيف مركبتنا الشقيقة Pioneer 11. عبرتُ حزام الكويكبات واستكشفتُ المشتري، بينما استخدمت Pioneer 11 مرورها قرب المشتري لتتابع إلى زحل. حملت مولداتنا بالنظائر المشعة وهوائياتنا العلم إلى الخارج، حتى صمتت Pioneer 11 في 1995 وأرسلت Pioneer 10 آخر إشارة مرصودة في 2003؛ وما زلنا نتابع مسارين للخروج من النظام الشمسي."
+      "en": "The asteroid belt surrounds my path. It is July, and I am passing through toward Jupiter. I am Pioneer 10, one of the Pioneer twins, launched from Cape Canaveral on March 2, 1972. Ahead lies a planet, not a landing place. On December 4, 1973, I reach my closest approach to Jupiter.\n\nMy sister, Pioneer 11, takes another route: Jupiter’s gravity turns her toward Saturn, where she makes the planet’s first close exploration on September 1, 1979, returning 440 images. Neither of us lands. We pass close, gather observations, and send them home by radio. Then we keep moving outward. How far can a journey carry us?\n\nOn June 13, 1983, I become the first human-made object to cross Neptune’s orbit. My sister crosses in 1990 and stops science operations in 1995. Earth receives my last weak signal on January 23, 2003. Our signals have ended. We still follow paths escaping the Solar System. Look up: silence does not mean we have stopped.",
+      "ar": "حزام الكويكبات حول مساري، والمشتري أمامي. إنه يوليو، وأنا أعبر الحزام لا لأهبط، بل لأمرّ قريبًا وأستكشف. أنا بايونير 10، أحد توأمي بايونير. انطلقت من كيب كانافيرال في 2 مارس 1972، وأبلغ أقرب نقطة إلى المشتري في 4 ديسمبر 1973. وجهتي ليست أرضًا أستقر عليها.\n\nشقيقتي بايونير 11 تسلك طريقًا آخر. جاذبية المشتري تحوّل مسارها نحو زحل، وفي 1 سبتمبر 1979 تجري أول استكشاف قريب له، وترسل 440 صورة. لا يهبط أيّ منا. نمرّ قرب الكواكب، ونرسل مشاهداتنا إلى الأرض بإشارات الراديو، ثم نواصل الابتعاد. إلى أين يحملنا هذا الطريق؟\n\nفي 13 يونيو 1983، أصبح أول جسم صنعه البشر يعبر مدار نبتون. تعبره شقيقتي في 1990، وتتوقف عملياتها العلمية في 1995. تستقبل الأرض آخر إشارة ضعيفة مني في 23 يناير 2003. تنتهي إشاراتنا، لكن مسارينا يظلان يقوداننا إلى خارج النظام الشمسي. ارفع عينيك إلى السماء؛ صمتنا ليس توقفًا."
     },
     "hotspots": [
       {
@@ -1736,7 +1960,23 @@
       "correctAnswer": 0
     },
     "badgeName": "Outer Solar System Scouts",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1972-012A, 1973-019A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1972-012A; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-019A; https://science.nasa.gov/mission/pioneer-10/; https://science.nasa.gov/mission/pioneer-11/; https://science.nasa.gov/missions/pioneer/pioneer-10-sends-last-signal/; https://www.nasa.gov/solar-system/planets/saturn/40-years-ago-pioneer-11-first-to-explore-saturn/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1972-012A, 1973-019A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1972-012A; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-019A; https://science.nasa.gov/mission/pioneer-10/; https://science.nasa.gov/mission/pioneer-11/; https://science.nasa.gov/missions/pioneer/pioneer-10-sends-last-signal/; https://www.nasa.gov/solar-system/planets/saturn/40-years-ago-pioneer-11-first-to-explore-saturn/",
+    "hook": {
+      "en": "What happens to a journey when its last signal fades?",
+      "ar": "هل تنتهي الرحلة حين تصمت آخر إشارة؟"
+    },
+    "storyOriginal": {
+      "en": "I am Pioneer 10, joined in this archive by my sister spacecraft Pioneer 11. I crossed the asteroid belt and explored Jupiter, while Pioneer 11 used a Jupiter flyby to continue to Saturn. Our radioisotope generators and antennas carried science outward until Pioneer 11 fell silent in 1995 and Pioneer 10 sent its last detected signal in 2003; both continue along paths escaping the Solar System.",
+      "ar": "أنا Pioneer 10، وترافقني في هذا الأرشيف مركبتنا الشقيقة Pioneer 11. عبرتُ حزام الكويكبات واستكشفتُ المشتري، بينما استخدمت Pioneer 11 مرورها قرب المشتري لتتابع إلى زحل. حملت مولداتنا بالنظائر المشعة وهوائياتنا العلم إلى الخارج، حتى صمتت Pioneer 11 في 1995 وأرسلت Pioneer 10 آخر إشارة مرصودة في 2003؛ وما زلنا نتابع مسارين للخروج من النظام الشمسي."
+    },
+    "funFact": {
+      "en": "Pioneer 11 returned 440 images while passing about 13,000 miles from Saturn’s cloud tops.",
+      "ar": "أرسلت بايونير 11 عددًا بلغ 440 صورة، أثناء مرورها على مسافة نحو 13,000 ميل من قمم سحب زحل."
+    },
+    "narration": {
+      "en": "/audio/narration/pioneer-10-11-en.mp3",
+      "ar": "/audio/narration/pioneer-10-11-ar.mp3"
+    }
   },
   {
     "id": "kepler-space-telescope",
@@ -1756,8 +1996,8 @@
       "lng": null
     },
     "story": {
-      "en": "I was Kepler, a space telescope that watched stars for the tiny dimmings caused when planets crossed in front of them. My observations revealed thousands of possible worlds, and the extended K2 mission continued even after reaction-wheel failures. When my fuel ran out in 2018, NASA retired me in my Earth-trailing solar orbit; final communication commands followed in November, and I now travel silently around the Sun.",
-      "ar": "كنتُ Kepler، تلسكوبًا فضائيًا راقب النجوم بحثًا عن الخفوت الطفيف الذي يحدث عندما تمر الكواكب أمامها. كشفت ملاحظاتي آلاف العوالم المحتملة، واستمرت مهمة K2 الموسعة حتى بعد تعطل عجلات رد الفعل. عندما نفد وقودي في 2018، أحالتني NASA إلى التقاعد في مداري الشمسي الذي يتبع الأرض؛ وتبعت ذلك أوامر الاتصال الأخيرة في نوفمبر، وأواصل الآن رحلتي بصمت حول الشمس."
+      "en": "A star’s light dims just a little. I watch for that small dip, the trace of a planet crossing in front of its star. I am Kepler. In 2009, I launch from Cape Canaveral aboard a Delta II rocket to search for worlds this way. My observations reveal thousands of possible worlds through those tiny changes in starlight.\n\nThen the machinery that holds my gaze begins to fail. In 2013, a second reaction wheel, a device that helps control my direction, fails, ending the planned precise pointing and new data collection of my original mission. I can no longer keep watching as planned. Yet my work continues through an extended mission called K2.\n\nEventually, my fuel runs out. NASA retires me on October 30, 2018, and sends my final communications-disconnect commands on November 15. I remain in orbit around the Sun, trailing Earth. My messages stop. Above you, my journey continues.",
+      "ar": "يخفت ضوء نجم قليلًا. أراقب هذا النقص الصغير، أثر كوكب يمر أمام نجمه. أنا كبلر، تلسكوب فضائي أبحث عن العوالم بمراقبة النجوم. في عام 2009، أنطلق من كيب كانافيرال على متن صاروخ دلتا 2. لا أحتاج إلى رؤية الكواكب نفسها؛ فمن تلك التغيرات الضئيلة في الضوء، تكشف ملاحظاتي آلاف العوالم المحتملة.\n\nثم تتعطل الآلية التي تحفظ اتجاه نظري. في عام 2013، تتعطل عجلة ثانية من عجلات التحكم بالاتجاه، وهي أجهزة تساعدني على توجيه نفسي بدقة. ينتهي التوجيه الدقيق وجمع البيانات الجديدة وفق خطة مهمتي الأصلية. لكن عملي لا ينتهي معها؛ أواصل الرصد عبر المهمة الموسعة «كيه 2».\n\nأخيرًا، ينفد وقودي. تحيلني ناسا إلى التقاعد في 30 أكتوبر 2018، وترسل أوامر فصل اتصالاتي في 15 نوفمبر. أبقى في مدار حول الشمس، أتبع فيه الأرض. تصمت رسائلي، لكن رحلتي مستمرة فوقكم."
     },
     "hotspots": [
       {
@@ -1853,6 +2093,22 @@
       "correctAnswer": 0
     },
     "badgeName": "Planet Transit Finder",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2009-011A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2009-011A; https://science.nasa.gov/mission/kepler/; https://science.nasa.gov/mission/kepler/in-depth/; https://science.nasa.gov/universe/exoplanets/goodnight-kepler-final-commands-for-space-telescope/; https://science.nasa.gov/resource/kepler-space-telescope/; https://www.nasa.gov/history/10-years-ago-kepler-planet-finder-is-launched/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2009-011A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2009-011A; https://science.nasa.gov/mission/kepler/; https://science.nasa.gov/mission/kepler/in-depth/; https://science.nasa.gov/universe/exoplanets/goodnight-kepler-final-commands-for-space-telescope/; https://science.nasa.gov/resource/kepler-space-telescope/; https://www.nasa.gov/history/10-years-ago-kepler-planet-finder-is-launched/",
+    "hook": {
+      "en": "A star’s light dips. Is a world crossing in front of it?",
+      "ar": "ضوء نجم يخفت قليلًا؛ هل يعبر أمامه عالم؟"
+    },
+    "storyOriginal": {
+      "en": "I was Kepler, a space telescope that watched stars for the tiny dimmings caused when planets crossed in front of them. My observations revealed thousands of possible worlds, and the extended K2 mission continued even after reaction-wheel failures. When my fuel ran out in 2018, NASA retired me in my Earth-trailing solar orbit; final communication commands followed in November, and I now travel silently around the Sun.",
+      "ar": "كنتُ Kepler، تلسكوبًا فضائيًا راقب النجوم بحثًا عن الخفوت الطفيف الذي يحدث عندما تمر الكواكب أمامها. كشفت ملاحظاتي آلاف العوالم المحتملة، واستمرت مهمة K2 الموسعة حتى بعد تعطل عجلات رد الفعل. عندما نفد وقودي في 2018، أحالتني NASA إلى التقاعد في مداري الشمسي الذي يتبع الأرض؛ وتبعت ذلك أوامر الاتصال الأخيرة في نوفمبر، وأواصل الآن رحلتي بصمت حول الشمس."
+    },
+    "funFact": {
+      "en": "I revealed thousands of possible worlds by watching for tiny dips in starlight.",
+      "ar": "كشفتُ آلاف العوالم المحتملة بمراقبة خفوت ضئيل في ضوء النجوم حين تمر الكواكب أمامها."
+    },
+    "narration": {
+      "en": "/audio/narration/kepler-space-telescope-en.mp3",
+      "ar": "/audio/narration/kepler-space-telescope-ar.mp3"
+    }
   }
 ]

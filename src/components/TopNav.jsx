@@ -1,4 +1,4 @@
-import { Clapperboard, Globe2, Languages, List, Moon, Orbit, Pause, Sparkles, Trophy, Volume2, VolumeX } from 'lucide-react';
+import { Clapperboard, Globe2, Languages, List, Moon, Orbit, Pause, Sparkles, Target, Trophy, Volume2, VolumeX } from 'lucide-react';
 
 const CELESTIAL_VIEWS = [
   { id: 'Moon', icon: Moon, en: 'MOON', ar: 'القمر', subEn: 'OUR MOON', subAr: 'قمرنا' },
@@ -6,8 +6,15 @@ const CELESTIAL_VIEWS = [
   { id: 'Deep Space', icon: Orbit, en: 'DEEP SPACE / ORBIT', ar: 'الفضاء العميق / المدار', subEn: '4 MISSIONS', subAr: '٤ مهمات' },
 ];
 
-export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, onOpenWhatsNew = () => {}, whatsNewOpen = false, audioEnabled = true, audioStarted = false, soundscape = 'Moon', onToggleAudio = () => {}, autoPilotOn = false, onToggleAutoPilot = () => {} }) {
+export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, onOpenWhatsNew = () => {}, whatsNewOpen = false, audioEnabled = true, audioStarted = false, soundscape = 'Moon', onToggleAudio = () => {}, autoPilotOn = false, onToggleAutoPilot = () => {}, onOpenChallenge = () => {}, challengeOpen = false, xp = 0 }) {
   const unlockedCount = relics.filter((item) => badges.has(item.id)).length;
+  const rank = xp >= 1500
+    ? { en: 'COMMANDER', ar: 'قائد' }
+    : xp >= 800
+      ? { en: 'NAVIGATOR', ar: 'ملاح' }
+      : xp >= 300
+        ? { en: 'EXPLORER', ar: 'مستكشف' }
+        : { en: 'CADET', ar: 'مبتدئ' };
   const soundscapeLabels = soundscape === 'Mars'
     ? { full: language === 'ar' ? 'رياح المريخ' : 'Mars wind', compact: language === 'ar' ? 'المريخ' : 'Mars' }
     : soundscape === 'Deep Space'
@@ -98,6 +105,19 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
           <span className={language === 'en' ? 'language-current' : ''}>EN</span>
           <i />
           <span className={language === 'ar' ? 'language-current arabic-label' : 'arabic-label'}>عربي</span>
+        </button>
+        <button
+          type="button"
+          className={`challenge-toggle ${challengeOpen ? 'is-active' : ''}`}
+          onClick={onOpenChallenge}
+          aria-pressed={challengeOpen}
+          aria-label={language === 'ar' ? 'تحدي المستكشف: ابحث عن الأثر الصحيح' : 'Explorer challenge: hunt for the right relic'}
+          title={language === 'ar' ? `تحدي المستكشف · ${xp} نقطة` : `Explorer challenge · ${xp} XP`}
+        >
+          <Target size={15} />
+          <span className="challenge-label">{language === 'ar' ? 'تحدي' : 'PLAY'}</span>
+          <strong dir="ltr">{xp}<em> XP</em></strong>
+          <small>{language === 'ar' ? rank.ar : rank.en}</small>
         </button>
         <button
           type="button"
