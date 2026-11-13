@@ -104,7 +104,7 @@ function EasepContext() {
   );
 }
 
-export default function GltfModel({ modelPath, onBoundsReady, descentStageOnly = false }) {
+export default function GltfModel({ modelPath, onBoundsReady, descentStageOnly = false, preserveMaterials = false }) {
   const { scene } = useGLTF(modelPath);
   const prepared = useMemo(() => {
     const model = scene.clone(true);
@@ -124,8 +124,8 @@ export default function GltfModel({ modelPath, onBoundsReady, descentStageOnly =
       child.receiveShadow = true;
       const current = child.material;
       child.material = Array.isArray(current)
-        ? current.map((material) => descentStageOnly ? keepOriginalMaterial(material) : upgradeMaterial(material, child.name, meshIndex++))
-        : descentStageOnly ? keepOriginalMaterial(current) : upgradeMaterial(current, child.name, meshIndex++);
+        ? current.map((material) => (descentStageOnly || preserveMaterials) ? keepOriginalMaterial(material) : upgradeMaterial(material, child.name, meshIndex++))
+        : (descentStageOnly || preserveMaterials) ? keepOriginalMaterial(current) : upgradeMaterial(current, child.name, meshIndex++);
     });
 
     model.updateMatrixWorld(true);
@@ -150,7 +150,7 @@ export default function GltfModel({ modelPath, onBoundsReady, descentStageOnly =
       maxDimension: Math.max(normalizedSize.x, normalizedSize.y, normalizedSize.z),
     };
     return { model: normalizedModel, info };
-  }, [descentStageOnly, scene]);
+  }, [descentStageOnly, preserveMaterials, scene]);
 
   useEffect(() => {
     onBoundsReady?.(prepared.info);

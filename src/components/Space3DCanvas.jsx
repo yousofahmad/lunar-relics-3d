@@ -12,7 +12,7 @@ const PLANET_ASSETS = {
   Moon: { color: '/textures/moon-color.jpg', height: '/textures/moon-height.jpg' },
   Mars: { color: '/textures/mars-color.jpg', height: '/textures/mars-height.jpg' },
 };
-const EAGLE_RELIC_ID = 'apollo-11-eagle-descent-stage';
+const APOLLO_LM_ID = 'apollo-11-eagle-descent-stage';
 
 const RIM_VERTEX_SHADER = `
   varying vec3 vNormal;
@@ -228,13 +228,19 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
   );
 }
 
-function buildHotspotPositions(item, modelBounds, isEagle) {
-  if (isEagle) return [[0, 0.48, 0.68], [1.12, 0.06, 0.2]];
+function buildHotspotPositions(item, modelBounds, isApolloLunarModule) {
   if (modelBounds?.size) {
     const [width, height, depth] = modelBounds.size;
     const [minX, minY, minZ] = modelBounds.min;
     const centerX = minX + width / 2;
     const centerZ = minZ + depth / 2;
+    if (isApolloLunarModule) {
+      return [
+        [centerX, minY + height * 0.78, centerZ],
+        [centerX, minY + height * 0.43, centerZ],
+        [minX + width * 0.14, minY + height * 0.2, centerZ],
+      ];
+    }
     return [
       [centerX, minY + height * 0.84, centerZ],
       [minX + width * 0.9, minY + height * 0.5, centerZ + depth * 0.08],
@@ -263,13 +269,13 @@ function HotspotNode({ hotspot, index, position, onClick, selected, language }) 
 }
 
 function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef, storyProgress }) {
-  const isEagle = item.id === EAGLE_RELIC_ID;
-  const isRealModel = !isEagle && item.has3DModel && item.model3dFile;
+  const isApolloLunarModule = item.id === APOLLO_LM_ID;
+  const isRealModel = item.has3DModel && item.model3dFile;
   const modelPath = item.model3dFile;
   const storyRig = useRef(null);
   const [modelBounds, setModelBounds] = useState(null);
   const onModelBoundsReady = useMemo(() => (bounds) => setModelBounds(bounds), []);
-  const hotspotPositions = useMemo(() => buildHotspotPositions(item, modelBounds, isEagle), [item, modelBounds, isEagle]);
+  const hotspotPositions = useMemo(() => buildHotspotPositions(item, modelBounds, isApolloLunarModule), [item, modelBounds, isApolloLunarModule]);
 
   useEffect(() => {
     setModelBounds(null);
@@ -301,9 +307,11 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
       </mesh>
       <group ref={storyRig}>
         {isRealModel ? (
-          <ModelErrorBoundary fallback={<HoloRelic item={item} />}>
+          <ModelErrorBoundary fallback={isApolloLunarModule
+            ? <Html center transform={false}><span className="model-load-error">{language === 'ar' ? 'تعذّر تحميل نموذج ناسا الكامل' : 'NASA lunar module model could not be loaded'}</span></Html>
+            : <HoloRelic item={item} />}>
             <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} kind="model" compact /></Html>}>
-              <GltfModel modelPath={modelPath} onBoundsReady={onModelBoundsReady} />
+              <GltfModel modelPath={modelPath} onBoundsReady={onModelBoundsReady} preserveMaterials={isApolloLunarModule} />
             </Suspense>
           </ModelErrorBoundary>
         ) : <HoloRelic item={item} />}
@@ -415,7 +423,7 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
         </Suspense>
       </Canvas>
       <div className="canvas-tools">
-        <span className="render-state"><Activity size={13} />{selectedRelic ? (selectedRelic.id === EAGLE_RELIC_ID ? (isArabic ? 'مجسم توضيحي إجرائي' : 'PROCEDURAL RECONSTRUCTION') : selectedRelic.has3DModel ? (isArabic ? 'نموذج ناسا ثلاثي الأبعاد' : 'NASA 3D MODEL') : (isArabic ? 'مركبة إجرائية ثلاثية الأبعاد' : 'PROCEDURAL 3D SPACECRAFT')) : (isArabic ? 'عرض كوكبي واقعي' : 'PLANETARY SURFACE VIEW')}</span>
+        <span className="render-state"><Activity size={13} />{selectedRelic ? (selectedRelic.has3DModel ? (isArabic ? 'نموذج ناسا ثلاثي الأبعاد' : 'NASA 3D MODEL') : (isArabic ? 'مركبة إجرائية ثلاثية الأبعاد' : 'PROCEDURAL 3D SPACECRAFT')) : (isArabic ? 'عرض كوكبي واقعي' : 'PLANETARY SURFACE VIEW')}</span>
         <div className="viewer-control-group" role="group" aria-label={isArabic ? 'أدوات عرض المجسم' : '3D viewer controls'}>
           <button type="button" className="viewer-control-button" onClick={() => adjustZoom('out')} aria-label={isArabic ? 'تصغير المجسم' : 'Zoom out'} title={isArabic ? 'تصغير' : 'Zoom out'}><Minus size={14} /></button>
           <button type="button" className="viewer-control-button" onClick={() => adjustZoom('in')} aria-label={isArabic ? 'تكبير المجسم' : 'Zoom in'} title={isArabic ? 'تكبير' : 'Zoom in'}><Plus size={14} /></button>

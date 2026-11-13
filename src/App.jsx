@@ -17,6 +17,40 @@ function readBadges() {
   }
 }
 
+const APOLLO_LM_ID = 'apollo-11-eagle-descent-stage';
+const APOLLO_LM_PRESENTATION = {
+  name: 'Apollo 11 Lunar Module (Eagle)',
+  nickname: 'Apollo 11 Lunar Module',
+  has3DModel: true,
+  model3dFile: '/models/apollo_lunar_module.glb',
+  status: 'Eagle landed in Mare Tranquillitatis on July 20, 1969. Its descent stage remained on the Moon after the ascent stage lifted off the next day. After docking with Columbia, the Lunar Module was jettisoned in lunar orbit; NASA reports that its later fate is unknown.',
+  story: {
+    en: 'I am Eagle, the Apollo 11 Lunar Module. Launched from Earth on July 16, 1969, I carried Neil Armstrong and Buzz Aldrin down to Mare Tranquillitatis on July 20. My descent stage set us down and stayed behind on the Moon. The ascent stage carried the astronauts back to lunar orbit the next day. After rejoining Columbia, I was jettisoned; NASA does not know what happened to me afterward.',
+    ar: 'أنا Eagle، وحدة Apollo 11 القمرية. انطلقت من الأرض في 16 يوليو 1969 حاملةً نيل أرمسترونغ وباز ألدرن إلى Mare Tranquillitatis يوم 20 يوليو. أنزلتنا مرحلة الهبوط إلى السطح، ثم بقيت هناك. وفي اليوم التالي، حملت مرحلة الصعود الرائدين إلى المدار القمري. بعد الالتحام بمركبة Columbia، تخلّص الطاقم من الوحدة القمرية؛ ولا تعرف NASA ما حدث لها بعد ذلك.',
+  },
+  hotspots: [
+    {
+      part: 'Ascent stage & crew cabin',
+      title: 'Crew cabin and lunar-orbit return stage',
+      description: 'The upper stage housed the astronauts and its ascent engine. It lifted Armstrong and Aldrin from the lunar surface into orbit on July 21, 1969, then rejoined Columbia.',
+    },
+    {
+      part: 'Descent stage',
+      title: 'Landing platform and descent propulsion',
+      description: 'The lower stage carried the descent propulsion system, propellant tanks, and surface equipment. It brought Eagle down to Mare Tranquillitatis and remained on the Moon when the ascent stage departed.',
+    },
+    {
+      part: 'Landing legs & footpads',
+      title: 'Lunar touchdown supports',
+      description: 'Four extendable legs and broad footpads supported the Lunar Module at touchdown and kept the crew cabin clear of the lunar surface.',
+    },
+  ],
+};
+
+function presentRelic(item) {
+  return item.id === APOLLO_LM_ID ? { ...item, ...APOLLO_LM_PRESENTATION } : item;
+}
+
 export default function App() {
   const [relics, setRelics] = useState(LOCAL_RELICS);
   const [celestialView, setCelestialView] = useState('Moon');
@@ -52,11 +86,12 @@ export default function App() {
     localStorage.setItem('lunar-relics-badges', JSON.stringify([...badges]));
   }, [badges]);
 
-  const selectedRelic = useMemo(() => relics.find((item) => item.id === selectedId) || null, [relics, selectedId]);
+  const displayRelics = useMemo(() => relics.map(presentRelic), [relics]);
+  const selectedRelic = useMemo(() => displayRelics.find((item) => item.id === selectedId) || null, [displayRelics, selectedId]);
   const storyMode = Boolean(selectedRelic);
   const visibleRelics = useMemo(
-    () => relics.filter((item) => item.body === celestialView),
-    [celestialView, relics],
+    () => displayRelics.filter((item) => item.body === celestialView),
+    [celestialView, displayRelics],
   );
 
   const unlockBadge = (relicId) => {
@@ -113,13 +148,13 @@ export default function App() {
         setCelestialView={changeCelestialView}
         language={language}
         setLanguage={setLanguage}
-        relics={relics}
+        relics={displayRelics}
         badges={badges}
         onOpenBadges={() => setBadgeModalOpen(true)}
         badgesOpen={badgeModalOpen}
       />
       {badgeModalOpen && (
-        <BadgeModal relics={relics} badges={badges} language={language} onClose={closeBadgeModal} onSelect={openRelic} />
+        <BadgeModal relics={displayRelics} badges={badges} language={language} onClose={closeBadgeModal} onSelect={openRelic} />
       )}
 
       <main className={`workspace-grid ${storyMode ? 'story-mode' : ''}`}>
@@ -172,7 +207,7 @@ export default function App() {
 
         <aside className="archive-panel glass-panel">
           <StoryAndArchivePanel
-            relics={relics}
+            relics={displayRelics}
             archiveFilter={archiveFilter}
             setArchiveFilter={setArchiveFilter}
             selectedRelic={selectedRelic}
