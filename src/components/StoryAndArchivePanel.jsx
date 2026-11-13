@@ -248,6 +248,9 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const isArabic = language === 'ar';
   const storyLanguage = item.story?.[language] ? language : 'en';
   const storyText = item.story?.[storyLanguage] || '';
+  const narrationUrl = item.narration?.[storyLanguage] || item.narration?.en || null;
+  const narrationRatioRef = useRef(0);
+  const advanceTimerRef = useRef(0);
   const storyBeats = splitStoryBeats(storyText);
   const storyParagraphs = useMemo(() => toParagraphs(storyText), [storyText]);
   const questions = item.interactiveQA || [];
@@ -481,6 +484,52 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
 
     const runTour = async () => {
       const startIndex = Math.min(Math.max(0, activeBeatRef.current), tourSteps.length - 1);
+      // When the mission has a recorded voice, the whole journey is narrated:
+      // the clip runs start to finish and the camera/story advance with it,
+      // so nobody sits through a silent step.
+      if (narrationUrl && startIndex <= 1) {
+        const words = storyText.split(/\s+/).filter(Boolean);
+        const ids = new Set(storyChapters.map((chapter) => chapter.id));
+        const marks = [
+          [0, 'transmission'],
+          [0.4, 'hardware-0'],
+          [0.58, 'hardware-1'],
+          [0.74, 'hardware-2'],
+          [0.9, 'timeline'],
+        ].filter(([, id]) => ids.has(id));
+        scrollToChapter('hero');
+        await wait(900);
+        if (!isCurrentRun()) return;
+        let stage = -1;
+        setNarrationOn(true);
+        setIsTransmitting(true);
+        await new Promise((resolve) => {
+          playNarration(narrationUrl, {
+            onProgress: (time, duration) => {
+              if (!duration || !isCurrentRun()) return;
+              const ratio = Math.min(1, time / duration);
+              narrationRatioRef.current = ratio;
+              setSubtitleText(words.slice(0, Math.round(ratio * words.length)).join(' '));
+              const nextStage = marks.reduce((acc, [, id], i) => (ratio >= marks[i][0] ? i : acc), -1);
+              if (nextStage > stage) {
+                stage = nextStage;
+                scrollToChapter(marks[stage][1]);
+                setActiveBeat(storyChapters.findIndex((chapter) => chapter.id === marks[stage][1]));
+              }
+            },
+            onEnded: () => resolve(),
+            onError: () => resolve(),
+          });
+        });
+        if (!isCurrentRun()) return;
+        setNarrationOn(false);
+        setIsTransmitting(false);
+        setSubtitleText(storyText);
+        subtitleTimerRef.current = window.setTimeout(() => setSubtitleText(''), 2600);
+        if (ids.has('quiz')) scrollToChapter('quiz');
+        setAutoPilotOn(false);
+        return;
+      }
       for (let index = startIndex; index < tourSteps.length; index += 1) {
         if (!isCurrentRun()) return;
         const step = tourSteps[index];
@@ -502,7 +551,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       tourDelayCancelRef.current = null;
       stopAudio(false);
     };
-  }, [autoPilotOn, language, playAudio, scrollToChapter, setAutoPilotOn, stopAudio, tourRestartToken, tourSteps]);
+  }, [autoPilotOn, language, playAudio, playNarration, scrollToChapter, setAutoPilotOn, stopAudio, tourRestartToken, tourSteps, narrationUrl, storyText, storyChapters]);
 
   useEffect(() => {
     if (!autoPilotOn) return undefined;
@@ -531,9 +580,6 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     else setAutoPilotOn(true);
   };
 
-  const narrationUrl = item.narration?.[storyLanguage] || item.narration?.en || null;
-  const narrationRatioRef = useRef(0);
-  const advanceTimerRef = useRef(0);
 
   // While the voice is talking, the page walks with it: the story pane keeps
   // the spoken paragraph in view instead of making people scroll by hand.
