@@ -4,19 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        void: '#060a12',
-        panel: '#0b1320',
-        cyan: '#69e8ff',
+        void: '#020617',
+        panel: '#020617',
+        cyan: '#06b6d4',
         lime: '#c8ff6b',
-        amber: '#ffbf69',
+        amber: '#f59e0b',
       },
       fontFamily: {
-        display: ['Space Grotesk', 'sans-serif'],
+        sans: ['Inter', 'Cairo', 'sans-serif'],
+        display: ['Orbitron', 'Inter', 'sans-serif'],
         mono: ['DM Mono', 'monospace'],
-        arabic: ['IBM Plex Sans Arabic', 'sans-serif'],
+        arabic: ['Cairo', 'Inter', 'sans-serif'],
       },
       boxShadow: {
-        glow: '0 0 28px rgba(105, 232, 255, 0.18)',
+        glow: '0 0 28px rgba(6, 182, 212, 0.18)',
       },
     },
   },
