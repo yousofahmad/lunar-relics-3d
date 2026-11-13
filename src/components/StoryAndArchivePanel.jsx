@@ -26,7 +26,7 @@ const COPY = {
     badge: 'EXPLORER BADGE', citation: 'NASA SOURCES', nssdca: 'NASA MISSION ID', nasa: 'NASA SOURCE', sources: 'MORE NASA SOURCES',
     launch: 'LAUNCH', landing: 'LANDED', end: 'MISSION ENDED', site: 'MISSION PLACE',
     category: 'MISSION TYPE', details: 'MISSION DETAILS', time: 'MISSION JOURNEY', quizHint: 'Choose an answer below.',
-    open: 'OPEN MISSION STORY', deep: 'SPACE', moon: 'MOON', mars: 'MARS', lander: 'LANDING CRAFT', rover: 'ROVER', scientific: 'SCIENCE TOOLS', probe: 'SPACE PROBE', rotorcraft: 'HELICOPTER', orbiter: 'ORBITER', impact: 'IMPACT PROBE',
+    open: 'OPEN MISSION STORY', deep: 'ORBIT', moon: 'MOON', mars: 'MARS', lander: 'LANDING CRAFT', rover: 'ROVER', scientific: 'SCIENCE TOOLS', probe: 'SPACE PROBE', rotorcraft: 'HELICOPTER', orbiter: 'ORBITER', impact: 'IMPACT PROBE',
   },
   ar: {
     archive: 'مهمات لاستكشافها', count: 'المهمات في الأرشيف', hint: 'اختر مهمة لتشاهد قصتها.',
@@ -43,7 +43,7 @@ const COPY = {
     badge: 'شارة المستكشف', citation: 'مصادر ناسا', nssdca: 'رقم المهمة', nasa: 'مصدر ناسا', sources: 'مصادر أخرى',
     launch: 'الإطلاق', landing: 'الهبوط', end: 'نهاية المهمة', site: 'مكان المهمة',
     category: 'نوع المهمة', details: 'معلومات المهمة', time: 'رحلة المهمة', quizHint: 'اختر إجابة بالأسفل.',
-    open: 'افتح قصة المهمة', deep: 'الفضاء', moon: 'القمر', mars: 'المريخ', lander: 'مركبة هبوط', rover: 'عربة استكشاف', scientific: 'أدوات علمية', probe: 'مسبار فضائي', rotorcraft: 'مروحية', orbiter: 'مركبة مدارية', impact: 'مسبار اصطدام',
+    open: 'افتح قصة المهمة', deep: 'مداري', moon: 'القمر', mars: 'المريخ', lander: 'مركبة هبوط', rover: 'عربة استكشاف', scientific: 'أدوات علمية', probe: 'مسبار فضائي', rotorcraft: 'مروحية', orbiter: 'مركبة مدارية', impact: 'مسبار اصطدام',
   },
 };
 
@@ -147,6 +147,7 @@ const ARCHIVE_FILTERS = [
   { id: 'All', icon: ListFilter, en: 'ALL', ar: 'الكل' },
   { id: 'Moon', icon: Moon, en: 'MOON', ar: 'القمر' },
   { id: 'Mars', icon: Globe2, en: 'MARS', ar: 'المريخ' },
+  { id: 'Deep Space', icon: Orbit, en: 'ORBIT', ar: 'المدار' },
   { id: '3D', icon: Box, en: '3D MODELS', ar: 'نماذج 3D' },
 ];
 

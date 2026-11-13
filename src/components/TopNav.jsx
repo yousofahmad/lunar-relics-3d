@@ -3,7 +3,7 @@ import { Clapperboard, Globe2, Languages, List, Moon, Orbit, Pause, Sparkles, Tr
 const CELESTIAL_VIEWS = [
   { id: 'Moon', icon: Moon, en: 'MOON', ar: 'القمر', subEn: 'OUR MOON', subAr: 'قمرنا' },
   { id: 'Mars', icon: Globe2, en: 'MARS', ar: 'المريخ', subEn: 'RED PLANET', subAr: 'الكوكب الأحمر' },
-  { id: 'Deep Space', icon: Orbit, en: 'SPACE', ar: 'الفضاء', subEn: 'MOON + MARS', subAr: 'القمر + المريخ' },
+  { id: 'Deep Space', icon: Orbit, en: 'DEEP SPACE / ORBIT', ar: 'الفضاء العميق / المدار', subEn: '4 MISSIONS', subAr: '٤ مهمات' },
 ];
 
 export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, onOpenWhatsNew = () => {}, whatsNewOpen = false, audioEnabled = true, audioStarted = false, soundscape = 'Moon', onToggleAudio = () => {}, autoPilotOn = false, onToggleAutoPilot = () => {} }) {

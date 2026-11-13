@@ -11,8 +11,8 @@ import { getRelicModelInfo } from '../utils/relicModelMap.js';
 const GltfModel = lazy(() => import('./GltfModel.jsx'));
 
 const PLANET_ASSETS = {
-  Moon: { color: '/textures/moon-color-seamless.webp', height: '/textures/moon-height-seamless.webp' },
-  Mars: { color: '/textures/mars-color-seamless.webp', height: '/textures/mars-height-seamless.webp' },
+  Moon: { color: '/textures/moon-color-seamfix.webp', height: '/textures/moon-height-seamfix.webp' },
+  Mars: { color: '/textures/mars-color-seamfix.webp', height: '/textures/mars-height-seamfix.webp' },
 };
 const APOLLO_LM_ID = 'apollo-11-eagle-descent-stage';
 
@@ -233,18 +233,23 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
   const rimColor = useMemo(() => new THREE.Color(body === 'Mars' ? '#f2aa77' : '#60a5fa'), [body]);
   const bumpScale = body === 'Moon' ? 0.06 : 0.025;
 
-  useMemo(() => {
+  useEffect(() => {
     colorMap.colorSpace = THREE.SRGBColorSpace;
     colorMap.anisotropy = 8;
     colorMap.wrapS = THREE.RepeatWrapping;
     colorMap.wrapT = THREE.ClampToEdgeWrapping;
+    colorMap.generateMipmaps = false;
+    colorMap.minFilter = THREE.LinearFilter;
+    colorMap.magFilter = THREE.LinearFilter;
     colorMap.needsUpdate = true;
     heightMap.colorSpace = THREE.NoColorSpace;
     heightMap.anisotropy = 8;
     heightMap.wrapS = THREE.RepeatWrapping;
     heightMap.wrapT = THREE.ClampToEdgeWrapping;
+    heightMap.generateMipmaps = false;
+    heightMap.minFilter = THREE.LinearFilter;
+    heightMap.magFilter = THREE.LinearFilter;
     heightMap.needsUpdate = true;
-    return null;
   }, [colorMap, heightMap]);
 
   useFrame((_, delta) => {
@@ -300,30 +305,172 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
   );
 }
 
-function DeepSpaceMap({ items, onSelect, selectedRelic, language, autoRotate, archiveOpen }) {
+function createOrbitTrajectory(radius) {
+  const points = Array.from({ length: 129 }, (_, index) => {
+    const angle = (index / 128) * Math.PI * 2;
+    return new THREE.Vector3(
+      Math.cos(angle) * radius,
+      Math.sin(angle) * radius * 0.48,
+      Math.sin(angle * 2) * radius * 0.12,
+    );
+  });
+  const curve = new THREE.CatmullRomCurve3(points, true, 'centripetal');
+  return new THREE.TubeGeometry(curve, 256, Math.max(0.004, radius * 0.0032), 6, true);
+}
+
+function OrbitTrajectory({ radius, opacity = 0.25 }) {
+  const geometry = useMemo(() => createOrbitTrajectory(radius), [radius]);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return (
+    <mesh geometry={geometry}>
+      <meshBasicMaterial color="#60a5fa" transparent opacity={opacity} depthWrite={false} />
+    </mesh>
+  );
+}
+
+function OrbitMissionPin({ item, position, onSelect, language, labelSide = 'right' }) {
+  const pointerDownPos = useRef(null);
+  const lastPointerUp = useRef(0);
+  const lastActivation = useRef(0);
+  const title = missionPinLabel(item);
+
+  const activate = () => {
+    const now = performance.now();
+    if (now - lastActivation.current < 350) return;
+    lastActivation.current = now;
+    onSelect(item);
+  };
+  const handlePointerDown = (event) => {
+    event.stopPropagation();
+    pointerDownPos.current = { x: event.clientX, y: event.clientY };
+  };
+  const handlePointerUp = (event) => {
+    event.stopPropagation();
+    const origin = pointerDownPos.current;
+    pointerDownPos.current = null;
+    const moved = Boolean(origin && Math.hypot(event.clientX - origin.x, event.clientY - origin.y) >= 12);
+    lastPointerUp.current = performance.now();
+    if (!moved) activate();
+  };
+  const handleClick = (event) => {
+    event.stopPropagation();
+    if (event.detail === 0) {
+      activate();
+      return;
+    }
+    if (performance.now() - lastPointerUp.current < 500) return;
+    const origin = pointerDownPos.current;
+    pointerDownPos.current = null;
+    if (!origin || Math.hypot(event.clientX - origin.x, event.clientY - origin.y) < 12) activate();
+  };
+  const buttonProps = {
+    onPointerDown: handlePointerDown,
+    onPointerUp: handlePointerUp,
+    onPointerCancel: (event) => { event.stopPropagation(); pointerDownPos.current = null; },
+    onTouchStart: (event) => event.stopPropagation(),
+    onTouchEnd: (event) => event.stopPropagation(),
+    onClick: handleClick,
+  };
+
+  return (
+    <Html center position={position} zIndexRange={[30, 0]} className="orbit-pin-html" pointerEvents="auto">
+      <div className={`orbit-pin-overlay label-${labelSide}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <button
+          className="orbit-pin-target"
+          type="button"
+          aria-label={language === 'ar' ? `افتح مهمة ${title}` : `Open ${title} mission`}
+          title={title}
+          {...buttonProps}
+        />
+        <button className="orbit-pin-label" type="button" {...buttonProps}>
+          <span className="orbit-pin-label-dot" aria-hidden="true" />
+          <span dir="auto">{title}</span>
+        </button>
+      </div>
+    </Html>
+  );
+}
+
+function OrbitalCraft({ item, position, onSelect, selectedRelic, language, autoRotate }) {
+  const group = useRef();
+  const presentation = getRelicModelInfo(item);
+  const isSelected = selectedRelic?.id === item.id;
+
+  useFrame((_, delta) => {
+    if (autoRotate && group.current) group.current.rotation.y += delta * 0.13;
+  }, [autoRotate]);
+
+  return (
+    <group ref={group} position={position}>
+      <pointLight position={[0, 0.2, 0.75]} intensity={0.34} color="#9fcaff" distance={3.2} />
+      <group scale={0.31} rotation={[0.16, 0.42 + item.id.length * 0.12, -0.12]}>
+        {presentation.modelPath ? (
+          <ModelErrorBoundary fallback={<HoloRelic item={item} />}>
+            <Suspense fallback={<HoloRelic item={item} />}>
+              <GltfModel modelPath={presentation.modelPath} item={item} />
+            </Suspense>
+          </ModelErrorBoundary>
+        ) : <HoloRelic item={item} />}
+      </group>
+      <mesh position={[0, 0.53, 0]}>
+        <sphereGeometry args={[isSelected ? 0.055 : 0.04, 16, 12]} />
+        <meshBasicMaterial color={isSelected ? '#FC3D21' : '#EAB308'} />
+      </mesh>
+      <OrbitMissionPin
+        item={item}
+        position={[0, 0.53, 0]}
+        onSelect={onSelect}
+        language={language}
+        labelSide={position[0] > 0 ? 'left' : 'right'}
+      />
+    </group>
+  );
+}
+
+function DeepSpaceOrbit({ items, onSelect, selectedRelic, language, autoRotate, archiveOpen }) {
   const { size } = useThree();
   const compact = size.width < 620;
   const tablet = !compact && size.width < 1200;
   const sidebarDocked = archiveOpen && size.width > 760;
   const centerShift = sidebarDocked ? (language === 'ar' ? 1.05 : -1.05) : 0;
-  const planetRadius = compact ? 0.55 : tablet ? 0.82 : 1.38;
-  const moonPosition = compact ? [-0.68, 0.38, 0] : tablet ? [0, 1, 0] : [-1.72, 0, 0];
-  const marsPosition = compact ? [0.68, 0.38, 0] : tablet ? [0, -1, 0] : [1.72, 0, 0];
-  const moonItems = items.filter((item) => item.body === 'Moon');
-  const marsItems = items.filter((item) => item.body === 'Mars');
+  const orbitRadius = compact ? 1.18 : tablet ? 1.95 : 2.5;
+  const orbitalItems = items.filter((item) => item.body === 'Deep Space');
+  const craftPositions = orbitalItems.map((_, index) => {
+    const angle = orbitalItems.length < 2
+      ? 0
+      : -Math.PI * 0.75 + (index / (orbitalItems.length - 1)) * Math.PI * 1.5;
+    return [
+      Math.cos(angle) * orbitRadius,
+      Math.sin(angle) * orbitRadius * 0.48,
+      Math.sin(angle * 2) * orbitRadius * 0.12,
+    ];
+  });
 
   return (
     <group position={[centerShift, 0, 0]}>
-      <group position={moonPosition}>
-        <Planet body="Moon" items={moonItems} radius={planetRadius} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} showCaption={false} />
+      <group rotation={[0.08, 0.02, -0.04]}>
+        <OrbitTrajectory radius={orbitRadius} opacity={0.34} />
+        <OrbitTrajectory radius={orbitRadius * 0.66} opacity={0.12} />
+        <pointLight position={[0, 0, 0]} intensity={0.48} color="#3b82f6" distance={7} />
+        <mesh>
+          <sphereGeometry args={[0.075, 20, 16]} />
+          <meshBasicMaterial color="#dbeafe" />
+        </mesh>
+        {orbitalItems.map((item, index) => (
+          <OrbitalCraft
+            key={item.id}
+            item={item}
+            position={craftPositions[index]}
+            onSelect={onSelect}
+            selectedRelic={selectedRelic}
+            language={language}
+            autoRotate={autoRotate}
+          />
+        ))}
       </group>
-      <group position={marsPosition}>
-        <Planet body="Mars" items={marsItems} radius={planetRadius} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} showCaption={false} />
-      </group>
-      <Html fullscreen zIndexRange={[2, 2]}>
-        <div className={`dual-map-captions ${compact ? 'is-compact' : ''} ${tablet ? 'is-tablet' : ''}`} role="group" aria-label={language === 'ar' ? 'القمر والمريخ معًا' : 'Moon and Mars together'}>
-          <span>{language === 'ar' ? 'القمر · LUNA' : 'THE MOON · LUNA'}</span>
-          <span>{language === 'ar' ? 'المريخ · MARS' : 'MARS'}</span>
+      <Html fullscreen zIndexRange={[5, 0]}>
+        <div className={`orbit-scene-caption ${compact ? 'is-compact' : ''}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
+          <span>{language === 'ar' ? 'الفضاء العميق · ٤ مهمات مدارية' : 'DEEP SPACE · 4 ORBITAL MISSIONS'}</span>
         </div>
       </Html>
     </group>
@@ -332,7 +479,7 @@ function DeepSpaceMap({ items, onSelect, selectedRelic, language, autoRotate, ar
 
 function MapScene({ celestialView, relics, onSelect, selectedRelic, language, autoRotate, controlsRef, archiveOpen }) {
   const { size } = useThree();
-  const dualPlanetView = celestialView === 'Deep Space';
+  const orbitalView = celestialView === 'Deep Space';
   return (
     <>
       <color attach="background" args={['#03060C']} />
@@ -342,16 +489,16 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
       <directionalLight position={[5, 3.5, 7]} intensity={1.8} color="#ffffff" />
       <directionalLight position={[-6, -3, -5]} intensity={1.1} color="#60a5fa" />
       <pointLight position={[2.5, -1.5, 5]} intensity={0.09} color="#EAB308" distance={15} />
-      <Stars radius={dualPlanetView ? 100 : 90} depth={dualPlanetView ? 70 : 52} count={dualPlanetView ? 5000 : 1700} factor={dualPlanetView ? 4 : 3.2} saturation={0.12} fade speed={0.09} />
+      <Stars radius={orbitalView ? 110 : 90} depth={orbitalView ? 82 : 52} count={orbitalView ? 6200 : 1700} factor={orbitalView ? 4.8 : 3.2} saturation={0.12} fade speed={0.09} />
       {celestialView === 'Moon' && <Planet body="Moon" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
       {celestialView === 'Mars' && <Planet body="Mars" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
-      {dualPlanetView && <DeepSpaceMap items={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} archiveOpen={archiveOpen} />}
+      {orbitalView && <DeepSpaceOrbit items={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} archiveOpen={archiveOpen} />}
       <OrbitControls
         ref={controlsRef}
         makeDefault
         enablePan={false}
         rotateSpeed={0.65}
-        minDistance={dualPlanetView ? (size.width < 620 ? 4.8 : 5.7) : 4.7}
+        minDistance={orbitalView ? (size.width < 620 ? 5.2 : 5.7) : 4.7}
         maxDistance={13}
         enableDamping
         dampingFactor={0.075}
@@ -695,7 +842,7 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
           <span className="quick-mission-heading">{isArabic ? 'مهمات سريعة' : 'QUICK MISSIONS'}</span>
           <div className="quick-mission-track">
             {relics.map((item) => (
-              <button className={`quick-mission-pill ${item.body === 'Mars' ? 'is-mars' : 'is-moon'}`} type="button" key={item.id} onClick={() => onSelect(item)}>
+              <button className={`quick-mission-pill ${item.body === 'Mars' ? 'is-mars' : item.body === 'Moon' ? 'is-moon' : 'is-orbit'}`} type="button" key={item.id} onClick={() => onSelect(item)}>
                 <span aria-hidden="true">{item.body === 'Mars' ? '🔴' : item.body === 'Moon' ? '🌕' : '✦'}</span>
                 <span dir="auto">{missionPinLabel(item)}</span>
               </button>
@@ -704,7 +851,7 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
         </div>
       )}
       <div className="canvas-tools">
-        <span className="render-state"><Activity size={13} />{selectedRelic ? (isArabic ? 'نموذج تفاعلي ثلاثي الأبعاد' : '3D INTERACTIVE MODEL') : (isArabic ? 'مشهد الكوكب' : 'Planet view')}</span>
+        <span className="render-state"><Activity size={13} />{selectedRelic ? (isArabic ? 'نموذج تفاعلي ثلاثي الأبعاد' : '3D INTERACTIVE MODEL') : celestialView === 'Deep Space' ? (isArabic ? 'مشهد مداري' : 'ORBITAL MISSION SCENE') : (isArabic ? 'مشهد الكوكب' : 'Planet view')}</span>
         <div className="viewer-control-group" role="group" aria-label={isArabic ? 'أدوات تكبير وتدوير المجسم' : 'Model size and view controls'}>
           <button type="button" className="viewer-control-button" onClick={() => adjustZoom('out')} aria-label={isArabic ? 'تصغير المجسم' : 'Zoom out'} title={isArabic ? 'تصغير' : 'Zoom out'}><Minus size={14} /></button>
           <button type="button" className="viewer-control-button" onClick={() => adjustZoom('in')} aria-label={isArabic ? 'تكبير المجسم' : 'Zoom in'} title={isArabic ? 'تكبير' : 'Zoom in'}><Plus size={14} /></button>
