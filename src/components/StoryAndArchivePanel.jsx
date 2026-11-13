@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import confetti from 'canvas-confetti';
 import {
@@ -19,7 +19,7 @@ const COPY = {
     telemetry: 'MISSION FACTS', record: 'NASA MISSION ID', coordinates: 'WHERE IT LANDED', orbit: 'LOCATION', positionUnavailable: 'Location not listed',
     hotspots: 'PARTS TO EXPLORE', hotspotHint: 'Tap a glowing point to learn what that part does.', hotspotDetail: 'ABOUT THIS PART', locked: 'NOT EARNED', unlocked: 'EARNED',
     mission: 'MISSION INFO', active: 'IN THE ARCHIVE', story: 'Story & questions', timeline: 'Mission journey', quiz: 'Quick quiz',
-    transmit: 'Listen to the story', transmitting: 'PLAYING…', stop: 'Stop audio', voice: 'SPACECRAFT VOICE', subtitleLoading: 'PLAYING THE STORY…',
+    transmit: 'PLAY GUIDED MISSION', transmitting: 'PLAYING…', stop: 'Stop audio', voice: 'SPACECRAFT VOICE', subtitleLoading: 'STARTING THE MISSION TOUR…',
     fieldNote: 'A STORY FROM SPACE', qa: 'QUESTIONS & ANSWERS', answer: 'ANSWER',
     milestones: 'STEPS IN THE JOURNEY', quizTitle: 'WHAT DID YOU LEARN?', choose: 'Choose the right answer to earn this badge.',
     submit: 'CHECK ANSWER', correct: 'CORRECT — BADGE EARNED', already: 'BADGE ALREADY EARNED', wrong: 'NOT QUITE — TRY AGAIN',
@@ -36,7 +36,7 @@ const COPY = {
     telemetry: 'معلومات المهمة', record: 'رقم المهمة', coordinates: 'مكان الهبوط', orbit: 'الموقع', positionUnavailable: 'الموقع غير مذكور',
     hotspots: 'أجزاء لاستكشافها', hotspotHint: 'اضغط على نقطة مضيئة لتعرف وظيفة هذا الجزء.', hotspotDetail: 'عن هذا الجزء', locked: 'لم تحصل عليها', unlocked: 'حصلت عليها',
     mission: 'معلومات المهمة', active: 'في الأرشيف', story: 'القصة والأسئلة', timeline: 'رحلة المهمة', quiz: 'سؤال سريع',
-    transmit: 'استمع إلى القصة', transmitting: 'جارٍ التشغيل…', stop: 'إيقاف الصوت', voice: 'صوت المركبة', subtitleLoading: 'جارٍ تشغيل القصة…',
+    transmit: 'ابدأ الجولة الموجّهة', transmitting: 'جارٍ التشغيل…', stop: 'إيقاف الجولة', voice: 'صوت المركبة', subtitleLoading: 'جارٍ بدء جولة المهمة…',
     fieldNote: 'حكاية من الفضاء', qa: 'أسئلة وأجوبة', answer: 'الإجابة',
     milestones: 'خطوات الرحلة', quizTitle: 'ماذا تعلمت؟', choose: 'اختر الإجابة الصحيحة لتحصل على هذه الشارة.',
     submit: 'تحقق من الإجابة', correct: 'إجابة صحيحة — حصلت على الشارة', already: 'حصلت على الشارة من قبل', wrong: 'ليست الإجابة الصحيحة — حاول مرة أخرى',
@@ -203,7 +203,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
   );
 }
 
-function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHotspot, onStoryProgress, audioEnabled = true }) {
+function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHotspot, onStoryProgress, audioEnabled = true, autoPilotOn = false, setAutoPilotOn = () => {} }) {
   const copy = COPY[language] || COPY.en;
   const [activeQuestion, setActiveQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -211,20 +211,25 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const [isTransmitting, setIsTransmitting] = useState(false);
   const [subtitleText, setSubtitleText] = useState('');
   const [activeBeat, setActiveBeat] = useState(0);
+  const [tourRestartToken, setTourRestartToken] = useState(0);
   const transmissionRef = useRef(null);
   const playbackTokenRef = useRef(0);
   const subtitleTimerRef = useRef(0);
+  const tourRunRef = useRef(0);
+  const tourDelayCancelRef = useRef(null);
+  const activeBeatRef = useRef(0);
   const isArabic = language === 'ar';
-  const storyText = item.story?.[language] || item.story?.en || '';
+  const storyLanguage = item.story?.[language] ? language : 'en';
+  const storyText = item.story?.[storyLanguage] || '';
   const storyBeats = splitStoryBeats(storyText);
   const questions = item.interactiveQA || [];
-  const timeline = item.timeline || [];
+  const timeline = useMemo(() => item.timeline || [], [item.timeline]);
   const quiz = item.quiz || {};
   const options = quiz.options?.[language] || quiz.options?.en || [];
   const { idText, urls } = getSources(item.nasaSource);
   const siteName = item.location?.siteName || copy.noLocation;
   const position = getTelemetryPosition(item, copy);
-  const hardwareHotspots = (item.hotspots || []).slice(0, 3);
+  const hardwareHotspots = useMemo(() => (item.hotspots || []).slice(0, 3), [item.hotspots]);
   const activeHotspot = hardwareHotspots.find((spot) => sameHotspot(hotspot, spot));
 
   useEffect(() => {
@@ -234,12 +239,19 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     setSubtitleText('');
     setActiveBeat(0);
     return () => {
+      tourRunRef.current += 1;
+      tourDelayCancelRef.current?.();
+      tourDelayCancelRef.current = null;
       playbackTokenRef.current += 1;
       window.clearTimeout(subtitleTimerRef.current);
       transmissionRef.current?.();
       transmissionRef.current = null;
     };
   }, [item.id]);
+
+  useEffect(() => {
+    activeBeatRef.current = activeBeat;
+  }, [activeBeat]);
 
   useEffect(() => {
     const chapters = [...(document.querySelectorAll('.story-mode .story-chapter[data-story-chapter]'))];
@@ -286,21 +298,31 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     };
   }, [hardwareHotspots.length, item.id, onStoryProgress, setHotspot]);
 
-  const stopAudio = useCallback(() => {
+  const stopAudio = useCallback((pauseTour = false) => {
     playbackTokenRef.current += 1;
     transmissionRef.current?.();
     transmissionRef.current = null;
     setIsTransmitting(false);
     setSubtitleText('');
     window.clearTimeout(subtitleTimerRef.current);
-  }, []);
+    if (pauseTour) {
+      tourRunRef.current += 1;
+      tourDelayCancelRef.current?.();
+      tourDelayCancelRef.current = null;
+      setAutoPilotOn(false);
+    }
+  }, [setAutoPilotOn]);
 
   useEffect(() => {
-    if (!audioEnabled) stopAudio();
+    if (!audioEnabled) stopAudio(false);
   }, [audioEnabled, stopAudio]);
 
-  const playAudio = (text) => {
-    if (!audioEnabled || !text) return;
+  useEffect(() => {
+    if (!autoPilotOn && isTransmitting) stopAudio(false);
+  }, [autoPilotOn, isTransmitting, stopAudio]);
+
+  const playAudio = useCallback((text, speechLanguage = language) => {
+    if (!audioEnabled || !text) return Promise.resolve();
     const token = playbackTokenRef.current + 1;
     playbackTokenRef.current = token;
     transmissionRef.current?.();
@@ -308,20 +330,28 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     window.clearTimeout(subtitleTimerRef.current);
     setSubtitleText('');
     setIsTransmitting(true);
-    transmissionRef.current = transmitText(
-      text,
-      language,
-      () => {
-        if (playbackTokenRef.current !== token) return;
-        setIsTransmitting(false);
-        transmissionRef.current = null;
-        subtitleTimerRef.current = window.setTimeout(() => setSubtitleText(''), 2800);
-      },
-      (visibleText) => {
-        if (playbackTokenRef.current === token) setSubtitleText(visibleText);
-      },
-    );
-  };
+    return new Promise((resolve) => {
+      let settled = false;
+      const complete = () => {
+        if (settled) return;
+        settled = true;
+        if (playbackTokenRef.current === token) {
+          setIsTransmitting(false);
+          transmissionRef.current = null;
+          subtitleTimerRef.current = window.setTimeout(() => setSubtitleText(''), 2800);
+        }
+        resolve();
+      };
+      transmissionRef.current = transmitText(
+        text,
+        speechLanguage,
+        complete,
+        (visibleText) => {
+          if (playbackTokenRef.current === token) setSubtitleText(visibleText);
+        },
+      );
+    });
+  }, [audioEnabled, language]);
 
   const submitQuiz = () => {
     if (selectedAnswer === null) return;
@@ -337,14 +367,136 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     }
   };
 
-  const storyChapters = [
+  const storyChapters = useMemo(() => [
     { id: 'hero', label: isArabic ? 'البداية' : 'START' },
     { id: 'transmission', label: isArabic ? 'القصة' : 'STORY' },
     ...hardwareHotspots.map((spot, index) => ({ id: `hardware-${index}`, label: isArabic ? `الجزء ${['الأول', 'الثاني', 'الثالث'][index] || index + 1}` : `PART ${index + 1}`, title: spot.part || spot.title, hotspotIndex: index })),
     { id: 'timeline', label: isArabic ? 'الرحلة' : 'JOURNEY' },
     { id: 'quiz', label: isArabic ? 'سؤال سريع' : 'QUICK QUIZ' },
-  ];
-  const scrollToChapter = (chapterId) => document.getElementById(`mission-chapter-${chapterId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  ], [hardwareHotspots, isArabic]);
+  const scrollToChapter = useCallback((chapterId) => {
+    document.getElementById(`mission-chapter-${chapterId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
+
+  const tourSteps = useMemo(() => {
+    const localized = (value, preferredLanguage = language) => typeof value === 'string' ? value : value?.[preferredLanguage] || value?.en || '';
+    const missionName = item.nickname || item.name;
+    const launchYear = item.launchYear ? String(item.launchYear) : '';
+    const intro = isArabic
+      ? `نبدأ جولتنا مع ${missionName}${launchYear ? `، التي انطلقت عام ${launchYear}` : ''}. سنتعرف إلى قصتها وأجزائها ومراحل رحلتها.`
+      : `Welcome to ${missionName}${launchYear ? `, launched in ${launchYear}` : ''}. We will explore its story, key hardware, and mission timeline.`;
+    const timelineLanguage = isArabic && timeline.some((step) => typeof step.event === 'string' || !step.event?.ar) ? 'en' : language;
+    const timelineText = timeline
+      .map((step) => `${step.year ? `${step.year}: ` : ''}${localized(step.event, timelineLanguage)}`.trim().replace(/[.。]+$/, ''))
+      .filter((text) => text && !/^\d+:?$/.test(text))
+      .join('. ');
+    const timelineIntro = timelineLanguage === 'ar' ? 'والآن نستعرض أهم مراحل الرحلة.' : 'Now, let us follow the mission timeline.';
+    const quizLanguage = isArabic && !quiz.question?.ar ? 'en' : language;
+    const question = localized(quiz.question, quizLanguage) || (quizLanguage === 'ar' ? 'ما الذي تعلمته عن هذه المهمة؟' : 'What did you learn about this mission?');
+
+    return [
+      { id: 'hero', text: intro },
+      { id: 'transmission', text: storyText, speechLanguage: storyLanguage },
+      ...hardwareHotspots.map((spot, index) => {
+        const hardwareHasArabic = Boolean(spot.partAr || spot.titleAr)
+          && typeof spot.description === 'object'
+          && Boolean(spot.description?.ar);
+        const speechLanguage = isArabic && !hardwareHasArabic ? 'en' : language;
+        const part = speechLanguage === 'ar'
+          ? spot.partAr || spot.titleAr || localized(spot.part, speechLanguage) || localized(spot.title, speechLanguage)
+          : localized(spot.part, 'en') || localized(spot.title, 'en');
+        const detail = localized(spot.description, speechLanguage);
+        return {
+          id: `hardware-${index}`,
+          text: speechLanguage === 'ar' ? `نركّز الآن على ${part}. ${detail}` : `Now examining ${part}. ${detail}`,
+          speechLanguage,
+        };
+      }),
+      { id: 'timeline', text: `${timelineIntro} ${timelineText}`.trim(), speechLanguage: timelineLanguage },
+      { id: 'quiz', text: quizLanguage === 'ar' ? `وصلنا إلى السؤال السريع. ${question}` : `We have reached the quick quiz. ${question}`, speechLanguage: quizLanguage },
+    ];
+  }, [hardwareHotspots, isArabic, item.launchYear, item.name, item.nickname, language, quiz.question, storyLanguage, storyText, timeline]);
+
+  useEffect(() => {
+    if (!autoPilotOn || tourSteps.length === 0) return undefined;
+    const runId = ++tourRunRef.current;
+    let active = true;
+    const isCurrentRun = () => active && tourRunRef.current === runId;
+    const wait = (duration) => new Promise((resolve) => {
+      let timer = 0;
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        if (tourDelayCancelRef.current === cancel) tourDelayCancelRef.current = null;
+        resolve();
+      };
+      const cancel = () => finish();
+      timer = window.setTimeout(finish, duration);
+      tourDelayCancelRef.current = cancel;
+    });
+
+    const runTour = async () => {
+      const startIndex = Math.min(Math.max(0, activeBeatRef.current), tourSteps.length - 1);
+      for (let index = startIndex; index < tourSteps.length; index += 1) {
+        if (!isCurrentRun()) return;
+        const step = tourSteps[index];
+        scrollToChapter(step.id);
+        await wait(720);
+        if (!isCurrentRun()) return;
+        if (step.text) await playAudio(step.text, step.speechLanguage || language);
+        else await wait(700);
+        if (!isCurrentRun()) return;
+      }
+      if (isCurrentRun()) setAutoPilotOn(false);
+    };
+
+    runTour();
+    return () => {
+      active = false;
+      if (tourRunRef.current === runId) tourRunRef.current += 1;
+      tourDelayCancelRef.current?.();
+      tourDelayCancelRef.current = null;
+      stopAudio(false);
+    };
+  }, [autoPilotOn, language, playAudio, scrollToChapter, setAutoPilotOn, stopAudio, tourRestartToken, tourSteps]);
+
+  useEffect(() => {
+    if (!autoPilotOn) return undefined;
+    const pauseForManualInput = (event) => {
+      const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+      if (target?.closest('.story-scroll-cue, .transmit-button')) return;
+      if (!target?.closest('.mission-story-scroll, .space-canvas-wrap')) return;
+      setAutoPilotOn(false);
+      stopAudio(false);
+    };
+    window.addEventListener('wheel', pauseForManualInput, { capture: true, passive: true });
+    window.addEventListener('touchstart', pauseForManualInput, { capture: true, passive: true });
+    window.addEventListener('pointerdown', pauseForManualInput, { capture: true, passive: true });
+    return () => {
+      window.removeEventListener('wheel', pauseForManualInput, true);
+      window.removeEventListener('touchstart', pauseForManualInput, true);
+      window.removeEventListener('pointerdown', pauseForManualInput, true);
+    };
+  }, [autoPilotOn, setAutoPilotOn, stopAudio]);
+
+  const startTourFrom = (chapterId) => {
+    const chapterIndex = storyChapters.findIndex((chapter) => chapter.id === chapterId);
+    activeBeatRef.current = chapterIndex >= 0 ? chapterIndex : 0;
+    scrollToChapter(chapterId);
+    if (autoPilotOn) setTourRestartToken((token) => token + 1);
+    else setAutoPilotOn(true);
+  };
+
+  const handleGuidedMission = () => {
+    if (isTransmitting) {
+      stopAudio(true);
+      return;
+    }
+    if (autoPilotOn) setTourRestartToken((token) => token + 1);
+    else setAutoPilotOn(true);
+  };
 
   return (
     <div className="memory-room">
@@ -362,6 +514,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
             type="button"
             className={activeBeat === storyChapters.findIndex((chapter) => chapter.id === id) ? 'is-active' : ''}
             onClick={() => {
+              setAutoPilotOn(false);
               if (hotspotIndex != null) setHotspot?.(hardwareHotspots[hotspotIndex]);
               scrollToChapter(id);
             }}
@@ -385,7 +538,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               <span><small>{isArabic ? 'رقم المهمة' : 'NASA MISSION ID'}</small><strong dir="ltr">{idText}</strong></span>
               <span><small>{isArabic ? 'موقع المهمة' : 'MISSION SITE'}</small><strong dir="auto">{siteName}</strong></span>
             </div>
-            <button type="button" className="story-scroll-cue" onClick={() => scrollToChapter('transmission')}>
+            <button type="button" className="story-scroll-cue" onClick={() => startTourFrom('transmission')}>
               <span>{isArabic ? 'ابدأ القصة' : 'START THE STORY'}</span><i aria-hidden="true" />
             </button>
           </div>
@@ -401,7 +554,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               {storyBeats.map((beat, index) => <p className="first-person-story" key={`${item.id}-transcript-${index}`}>“{beat}”</p>)}
             </div>
             <div className="transmit-row">
-              <button type="button" className={`transmit-button ${isTransmitting ? 'transmitting' : ''}`} onClick={() => isTransmitting ? stopAudio() : playAudio(storyText)} aria-pressed={isTransmitting} disabled={!audioEnabled}>
+              <button type="button" className={`transmit-button ${isTransmitting ? 'transmitting' : ''}`} onClick={handleGuidedMission} aria-pressed={autoPilotOn} disabled={!audioEnabled}>
                 {isTransmitting ? <VolumeX size={15} /> : <Volume2 size={15} />}
                 <span>{isTransmitting ? copy.stop : copy.transmit}</span>
                 <span className="transmit-frequency" dir="auto">{copy.voice}</span>
@@ -523,7 +676,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
 
 export default function StoryAndArchivePanel(props) {
   if (props.selectedRelic) {
-    return <MemoryRoom key={props.selectedRelic.id} item={props.selectedRelic} language={props.language} badges={props.badges} onBack={props.onBack} onUnlock={props.onUnlock} hotspot={props.hotspot} setHotspot={props.setHotspot} onStoryProgress={props.onStoryProgress} audioEnabled={props.audioEnabled} />;
+    return <MemoryRoom key={props.selectedRelic.id} item={props.selectedRelic} language={props.language} badges={props.badges} onBack={props.onBack} onUnlock={props.onUnlock} hotspot={props.hotspot} setHotspot={props.setHotspot} onStoryProgress={props.onStoryProgress} audioEnabled={props.audioEnabled} autoPilotOn={props.autoPilotOn} setAutoPilotOn={props.setAutoPilotOn} />;
   }
   return <ArchiveList relics={props.relics} language={props.language} onSelect={props.onSelect} archiveFilter={props.archiveFilter} setArchiveFilter={props.setArchiveFilter} />;
 }

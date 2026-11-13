@@ -45,8 +45,9 @@ export function transmitText(text, language, onDone = () => {}, onWordBoundary =
     cancelled = true;
     window.clearInterval(wordTimer);
     window.clearTimeout(voiceTimer);
-    onDone();
-    if (voiceSession) finishVoiceCue(voiceSession);
+    const afterRadioTail = () => onDone();
+    if (voiceSession) Promise.resolve(finishVoiceCue(voiceSession)).then(afterRadioTail, afterRadioTail);
+    else afterRadioTail();
   };
 
   if (!('speechSynthesis' in window)) {

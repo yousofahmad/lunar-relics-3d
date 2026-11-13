@@ -1,4 +1,4 @@
-import { Globe2, Languages, List, Moon, Orbit, Trophy, Volume2, VolumeX } from 'lucide-react';
+import { Clapperboard, Globe2, Languages, List, Moon, Orbit, Pause, Trophy, Volume2, VolumeX } from 'lucide-react';
 
 const CELESTIAL_VIEWS = [
   { id: 'Moon', icon: Moon, en: 'MOON', ar: 'القمر', subEn: 'OUR MOON', subAr: 'قمرنا' },
@@ -6,7 +6,7 @@ const CELESTIAL_VIEWS = [
   { id: 'Deep Space', icon: Orbit, en: 'SPACE', ar: 'الفضاء', subEn: 'MOON + MARS', subAr: 'القمر + المريخ' },
 ];
 
-export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, audioEnabled = true, audioStarted = false, soundscape = 'Moon', onToggleAudio = () => {} }) {
+export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, audioEnabled = true, audioStarted = false, soundscape = 'Moon', onToggleAudio = () => {}, autoPilotOn = false, onToggleAutoPilot = () => {} }) {
   const unlockedCount = relics.filter((item) => badges.has(item.id)).length;
   const soundscapeLabels = soundscape === 'Mars'
     ? { full: language === 'ar' ? 'رياح المريخ' : 'Mars wind', compact: language === 'ar' ? 'المريخ' : 'Mars' }
@@ -58,6 +58,20 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
           <span>{language === 'ar' ? 'المهمات' : 'MISSIONS'}</span>
           <strong dir="ltr">{relics.length}</strong>
         </button>
+        {storyMode && (
+          <button
+            type="button"
+            className={`auto-pilot-toggle ${autoPilotOn ? 'is-active' : ''}`}
+            onClick={onToggleAutoPilot}
+            aria-pressed={autoPilotOn}
+            aria-label={language === 'ar' ? `الجولة الصوتية الآلية ${autoPilotOn ? 'مفعّلة' : 'متوقفة'}` : `Guided auto-pilot tour ${autoPilotOn ? 'on' : 'off'}`}
+            title={language === 'ar' ? 'تشغيل أو إيقاف الجولة الموجّهة' : 'Start or pause the guided mission tour'}
+          >
+            {autoPilotOn ? <Pause size={14} /> : <Clapperboard size={14} />}
+            <span>{language === 'ar' ? `جولة آلية · ${autoPilotOn ? 'تعمل' : 'متوقفة'}` : `AUTO-PILOT · ${autoPilotOn ? 'ON' : 'OFF'}`}</span>
+            <i className="auto-pilot-wave" aria-hidden="true"><b /><b /><b /><b /></i>
+          </button>
+        )}
         <button
           type="button"
           className="audio-global-toggle"
