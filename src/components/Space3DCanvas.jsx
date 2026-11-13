@@ -660,7 +660,7 @@ function HardwareCallout({ position, rigRef, active }) {
 
   if (!active) return null;
   return (
-    <Html fullscreen zIndexRange={[4, 4]}>
+    <Html fullscreen zIndexRange={[9, 9]}>
       <svg className="hardware-callout-svg" width={size.width} height={size.height} viewBox={`0 0 ${size.width} ${size.height}`} aria-hidden="true">
         <path ref={pathRef} className="hardware-callout-line" d="" />
         <circle ref={pulseRef} className="hardware-callout-pulse" cx="0" cy="0" r="0" />
@@ -689,6 +689,15 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   const chapterIndex = storyProgress?.index ?? 0;
   const chapterHotspotIndex = chapterId.startsWith('hardware-') ? Number(chapterId.slice('hardware-'.length)) : -1;
   const focusIndex = chapterHotspotIndex >= 0 ? chapterHotspotIndex : selectedIndex;
+  const copySideRef = useRef('left');
+  useEffect(() => {
+    const chapter = document.getElementById(`mission-chapter-${chapterId}`);
+    const copy = chapter?.querySelector('.chapter-copy');
+    if (!copy) return;
+    const rect = copy.getBoundingClientRect();
+    if (!rect.width) return;
+    copySideRef.current = (rect.left + rect.width / 2) > window.innerWidth / 2 ? 'right' : 'left';
+  }, [chapterId, item.id]);
   const previousMotionRef = useRef({ chapterId, focusIndex, chapterIndex });
 
   useEffect(() => {
@@ -715,28 +724,30 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     // lander (Apollo) must not share one hardcoded camera distance.
     const modelSpan = modelBounds ? Math.max(modelBounds.size[0], modelBounds.size[1], modelBounds.size[2]) : 2.2;
     const modelWidth = modelBounds ? Math.max(modelBounds.size[0], modelBounds.size[2]) : 2.2;
-    const slide = compactLayout ? 0.24 : Math.min(1.65, Math.max(0.85, modelWidth * 0.5));
-    let targetX = 0;
-    if (chapterId === 'hero') targetX = compactLayout ? 0 : size.width >= 1024 ? 1.35 : 0.72;
-    else if (chapterId === 'transmission') targetX = compactLayout ? 0.12 : slide;
-    else if (isHardwareChapter) targetX = compactLayout ? 0 : (hardwareOrdinal === 2 ? -slide : (hardwareOrdinal % 2 === 0 ? -slide : slide));
-    // Arabic layout puts the copy on the right, so the hardware moves the other way.
-    if (language === 'ar') targetX = -targetX * 1.45;
     const mobileLift = compactLayout ? 0.55 : 0;
     const focusPoint = focusIndex >= 0 && hotspotPositions[focusIndex] ? new THREE.Vector3(...hotspotPositions[focusIndex]) : new THREE.Vector3(0, 0, 0);
     const focusWorld = rig.localToWorld(focusPoint);
     const rigCenter = rig.getWorldPosition(new THREE.Vector3());
-    const cameraFocus = compactLayout ? rigCenter : focusWorld;
+    const cameraFocus = compactLayout ? rigCenter : new THREE.Vector3(0, focusWorld.y, 0);
     const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : -0.18;
     const targetTilt = focusIndex >= 0 ? [0.1, -0.08, 0.17][focusIndex] ?? 0 : 0.015;
     const fitDistance = (modelSpan / 2) / Math.tan((camera.fov * Math.PI) / 360);
     const cameraDistance = compactLayout
       ? Math.max(6.4, fitDistance * 2.1)
       : isHardwareChapter
-        ? Math.max(3.35, fitDistance * 1.32)
+        ? Math.max(4.6, fitDistance * 1.75)
         : chapterId === 'hero' && size.width >= 1024
           ? Math.max(5.25, fitDistance * 2.05)
           : Math.max(4.7, fitDistance * 1.85);
+    // Park the hardware in the empty column next to the copy. The offset is
+    // solved in screen space, so the model can never drift under the text.
+    const halfWidth = Math.tan((camera.fov * Math.PI) / 360) * cameraDistance * (size.width / Math.max(1, size.height));
+    const modelHalf = Math.min(modelWidth, modelSpan) * 0.5;
+    const safeFraction = copySideRef.current === 'right' ? 0.27 : 0.73;
+    const ndcX = safeFraction * 2 - 1;
+    const limit = Math.max(0.2, halfWidth - modelHalf * 1.15 - 0.16);
+    let targetX = compactLayout ? 0 : Math.max(-limit, Math.min(limit, ndcX * halfWidth));
+    if (isHardwareChapter && !compactLayout) targetX *= 1.04;
     rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, targetYaw + (autoRotate ? Math.sin(state.clock.elapsedTime * 0.32) * 0.035 : 0), 1.8, delta);
     rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, targetTilt, 1.8, delta);
     rig.position.x = THREE.MathUtils.damp(rig.position.x, targetX, 1.8, delta);
