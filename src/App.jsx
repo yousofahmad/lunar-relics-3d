@@ -158,7 +158,7 @@ export default function App() {
             {hotspot && (
               <div className="hotspot-readout" role="status">
                 <button className="hotspot-close" type="button" onClick={() => setHotspot(null)} aria-label={isArabic ? 'إغلاق نقطة الفحص' : 'Close hotspot'}>×</button>
-                <span className="hotspot-kicker">{isArabic ? 'نقطة فحص الجهاز' : 'HARDWARE HOTSPOT'}</span>
+                <span className="hotspot-kicker">{isArabic ? 'نقطة فحص' : 'INSPECTION POINT'}</span>
                 <strong dir="auto">{hotspot.title || hotspot.part}</strong>
                 <p dir="auto">{hotspot.description}</p>
               </div>

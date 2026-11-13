@@ -178,88 +178,87 @@ function LanderModel() {
   );
 }
 
+function EASEPPackageModel() {
+  return (
+    <group position={[0.98, -0.72, 0.2]} scale={1.12}>
+      <mesh position={[0, 0.15, 0]} castShadow>
+        <boxGeometry args={[0.38, 0.3, 0.34]} />
+        <meshPhysicalMaterial color="#c5c8c2" metalness={0.38} roughness={0.52} clearcoat={0.14} />
+      </mesh>
+      <mesh position={[0, 0.32, 0]}>
+        <boxGeometry args={[0.31, 0.045, 0.29]} />
+        <meshStandardMaterial color="#c59d4e" metalness={0.48} roughness={0.4} />
+      </mesh>
+      <SolarWing position={[0.38, 0.23, 0]} width={0.44} height={0.38} columns={3} rows={2} />
+      <SolarWing position={[-0.38, 0.23, 0]} width={0.44} height={0.38} columns={3} rows={2} />
+      <Strut start={[-0.08, 0.32, 0]} end={[-0.08, 0.68, 0]} radius={0.014} color="#b9c1c4" metalness={0.62} />
+      <mesh position={[-0.08, 0.71, 0]}>
+        <sphereGeometry args={[0.052, 16, 12]} />
+        <meshStandardMaterial color="#c8c2ab" metalness={0.3} roughness={0.5} />
+      </mesh>
+      {[-1, 1].map((side) => (
+        <Strut key={side} start={[0, 0.08, 0]} end={[side * 0.19, 0.015, side * 0.13]} radius={0.012} color="#aeb7b9" metalness={0.55} />
+      ))}
+    </group>
+  );
+}
+
 function EagleDescentStageModel() {
   const legs = [-1, 1].flatMap((x) => [-1, 1].map((z) => ({
-    upper: [x * 0.36, 0.34, z * 0.34],
-    foot: [x * 0.84, -0.72, z * 0.72],
+    upper: [x * 0.4, 0.4, z * 0.4],
+    brace: [x * 0.35, 0.08, z * 0.35],
+    braceFoot: [x * 0.72, -0.48, z * 0.72],
+    foot: [x * 0.94, -0.76, z * 0.94],
   })));
-  const facePanels = Array.from({ length: 8 }, (_, index) => {
-    const angle = ((index + 0.5) / 8) * Math.PI * 2;
-    const radius = 0.674;
-    return {
-      key: `foil-panel-${index}`,
-      position: [Math.sin(angle) * radius, 0.54, Math.cos(angle) * radius],
-      rotation: angle,
-      color: index % 2 ? '#bb985d' : '#c8a66b',
-    };
-  });
-  const frameCorners = Array.from({ length: 8 }, (_, index) => {
+  const foilPanels = Array.from({ length: 8 }, (_, index) => {
     const angle = (index / 8) * Math.PI * 2;
-    return [Math.sin(angle) * 0.7, Math.cos(angle) * 0.7];
+    return {
+      key: `descent-foil-${index}`,
+      position: [Math.sin(angle) * 0.626, 0.48, Math.cos(angle) * 0.626],
+      rotation: angle,
+      color: index % 2 ? '#b58e4c' : '#d0ad67',
+    };
   });
 
   return (
     <group>
-      <mesh position={[0, 0.54, 0]} castShadow>
-        <cylinderGeometry args={[0.62, 0.72, 0.52, 8]} />
-        <meshPhysicalMaterial color="#b99152" metalness={0.38} roughness={0.48} clearcoat={0.16} clearcoatRoughness={0.42} />
+      <mesh position={[0, 0.47, 0]} castShadow>
+        <cylinderGeometry args={[0.57, 0.68, 0.58, 8]} />
+        <meshPhysicalMaterial color="#c6a15c" metalness={0.28} roughness={0.52} clearcoat={0.12} clearcoatRoughness={0.48} />
       </mesh>
-      {facePanels.map((panel) => (
-        <mesh key={panel.key} position={panel.position} rotation={[0, panel.rotation, 0]}>
-          <boxGeometry args={[0.35, 0.27, 0.012]} />
-          <meshStandardMaterial color={panel.color} metalness={0.28} roughness={0.52} />
+      {foilPanels.map((panel) => (
+        <mesh key={panel.key} position={panel.position} rotation={[0, panel.rotation, 0]} castShadow>
+          <boxGeometry args={[0.34, 0.4, 0.014]} />
+          <meshStandardMaterial color={panel.color} metalness={0.26} roughness={0.5} />
         </mesh>
       ))}
-      {frameCorners.map(([x, z], index) => (
-        <Strut key={`frame-${index}`} start={[x * 0.94, 0.29, z * 0.94]} end={[x * 0.88, 0.79, z * 0.88]} radius={0.018} color="#d4c08f" metalness={0.48} />
-      ))}
-      {[0.29, 0.79].map((y) => (
-        <mesh key={`deck-ring-${y}`} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[y === 0.29 ? 0.69 : 0.61, 0.018, 8, 48]} />
-          <meshStandardMaterial color="#d2b77c" metalness={0.52} roughness={0.4} />
-        </mesh>
-      ))}
-      <mesh position={[0, 0.82, 0]} castShadow>
-        <cylinderGeometry args={[0.62, 0.62, 0.075, 8]} />
-        <meshStandardMaterial color="#9fa8a9" metalness={0.42} roughness={0.48} />
+      <mesh position={[0, 0.78, 0]} castShadow>
+        <cylinderGeometry args={[0.56, 0.56, 0.055, 8]} />
+        <meshStandardMaterial color="#c4a365" metalness={0.34} roughness={0.48} />
       </mesh>
-      {[-1, 1].flatMap((x) => [-1, 1].map((z) => (
-        <mesh key={`deck-equipment-${x}-${z}`} position={[x * 0.23, 0.88, z * 0.2]} castShadow>
-          <boxGeometry args={[0.16, 0.07, 0.13]} />
-          <meshStandardMaterial color="#777b73" metalness={0.32} roughness={0.56} />
-        </mesh>
-      )))}
-      {legs.map(({ upper, foot }, index) => (
-        <group key={`landing-leg-${index}`}>
-          <Strut start={upper} end={foot} radius={0.032} color="#aeb7b9" metalness={0.54} />
-          <Strut
-            start={[upper[0] * 0.9, upper[1] - 0.05, upper[2] * 0.9]}
-            end={[foot[0] * 0.94, foot[1] + 0.12, foot[2] * 0.94]}
-            radius={0.014}
-            color="#c9ac6a"
-            metalness={0.42}
-          />
+      <mesh position={[0, 0.16, 0]}>
+        <cylinderGeometry args={[0.64, 0.64, 0.08, 8]} />
+        <meshStandardMaterial color="#a68a56" metalness={0.36} roughness={0.5} />
+      </mesh>
+      {legs.map(({ upper, brace, braceFoot, foot }, index) => (
+        <group key={`landing-gear-${index}`}>
+          <Strut start={upper} end={foot} radius={0.043} color="#b9c2c5" metalness={0.62} />
+          <Strut start={brace} end={braceFoot} radius={0.022} color="#c3a55f" metalness={0.56} />
           <mesh position={foot} castShadow>
-            <cylinderGeometry args={[0.145, 0.17, 0.06, 24]} />
-            <meshStandardMaterial color="#8f999b" metalness={0.4} roughness={0.52} />
+            <cylinderGeometry args={[0.16, 0.18, 0.065, 24]} />
+            <meshStandardMaterial color="#aeb6b7" metalness={0.5} roughness={0.48} />
           </mesh>
         </group>
       ))}
-      <mesh position={[0, 0.17, 0]} rotation={[Math.PI, 0, 0]} castShadow>
-        <cylinderGeometry args={[0.13, 0.22, 0.25, 12, 1, true]} />
-        <meshStandardMaterial color="#747b7c" metalness={0.56} roughness={0.42} side={THREE.DoubleSide} />
+      <mesh position={[0, -0.005, 0]} castShadow>
+        <cylinderGeometry args={[0.105, 0.2, 0.27, 12, 1, true]} />
+        <meshStandardMaterial color="#636b6c" metalness={0.55} roughness={0.42} side={THREE.DoubleSide} />
       </mesh>
-      <mesh position={[0, -0.43, 0.95]} castShadow>
-        <boxGeometry args={[0.25, 0.17, 0.2]} />
-        <meshStandardMaterial color="#92978d" metalness={0.25} roughness={0.62} />
+      <mesh position={[0, -0.075, 0]}>
+        <cylinderGeometry args={[0.07, 0.13, 0.12, 12]} />
+        <meshStandardMaterial color="#30383b" metalness={0.38} roughness={0.52} />
       </mesh>
-      <mesh position={[0, -0.32, 0.95]}>
-        <boxGeometry args={[0.22, 0.035, 0.17]} />
-        <meshStandardMaterial color="#c6a960" metalness={0.34} roughness={0.54} />
-      </mesh>
-      <Strut start={[0, -0.34, 0.95]} end={[0, -0.16, 0.95]} radius={0.012} color="#b8bdb7" metalness={0.36} />
-      <SolarWing position={[0.18, -0.31, 1.06]} rotation={[0, 0, 0]} width={0.3} height={0.18} columns={3} rows={2} />
-      <SolarWing position={[-0.18, -0.31, 1.06]} rotation={[0, 0, 0]} width={0.3} height={0.18} columns={3} rows={2} />
+      <EASEPPackageModel />
     </group>
   );
 }
