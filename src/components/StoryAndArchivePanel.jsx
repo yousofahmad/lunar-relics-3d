@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import {
-  Activity, ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, CalendarDays, Check,
-  CircleHelp, Clock3, MapPin, Play, Radio, RadioTower, RotateCcw, Sparkles,
-  Volume2, VolumeX,
+  Activity, ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, Box, CalendarDays,
+  Check, CircleHelp, Clock3, MapPin, Play, Radio, RadioTower, RotateCcw, Search,
+  Sparkles, Volume2, VolumeX, X,
 } from 'lucide-react';
 import { transmitText } from '../utils/radio.js';
 
 const COPY = {
   en: {
     archive: 'MISSION ARCHIVE', count: 'RELICS IN DATABASE', hint: 'Select an artifact to open its memory room.',
+    search: 'Search by name, mission, type or year', noMatches: 'No relics match your search.', clearSearch: 'Clear search',
+    realModel: 'NASA 3D MODEL', hologram: 'HOLOGRAM',
     noLocation: 'Location coordinates unavailable', memory: 'MEMORY ROOM', back: 'BACK TO MAP',
     telemetry: 'MISSION TELEMETRY', record: 'RECORD ID(S)', coordinates: 'SURFACE COORDINATES', orbit: 'ORBIT / POSITION', positionUnavailable: 'Position not specified in the archive',
     hotspots: 'HARDWARE HOTSPOTS', hotspotHint: 'Select a point to inspect its function and fate.', hotspotDetail: 'ENGINEERING FUNCTION & FATE', locked: 'LOCKED', unlocked: 'UNLOCKED',
@@ -25,6 +27,8 @@ const COPY = {
   },
   ar: {
     archive: 'أرشيف المهمات', count: 'أثر في قاعدة البيانات', hint: 'اختر أثرًا لفتح غرفة ذاكرته.',
+    search: 'ابحث بالاسم أو المهمة أو النوع أو السنة', noMatches: 'لا توجد آثار تطابق البحث.', clearSearch: 'مسح البحث',
+    realModel: 'نموذج ناسا ثلاثي الأبعاد', hologram: 'مجسم هولوغرافي',
     noLocation: 'إحداثيات الموقع غير متاحة', memory: 'غرفة الذاكرة', back: 'العودة إلى الخريطة',
     telemetry: 'بيانات المهمة', record: 'معرّف/معرّفات سجل', coordinates: 'إحداثيات السطح', orbit: 'المدار / الموقع', positionUnavailable: 'الموقع غير محدد في الأرشيف',
     hotspots: 'نقاط العتاد', hotspotHint: 'اختر نقطة لفحص وظيفتها ومصيرها.', hotspotDetail: 'الوظيفة الهندسية والمصير', locked: 'مقفلة', unlocked: 'مفتوحة',
@@ -84,11 +88,19 @@ function getTypeLabel(type, language, copy) {
 
 function RelicCard({ item, language, onSelect }) {
   const copy = COPY[language] || COPY.en;
+  const AssetIcon = item.has3DModel ? Box : Sparkles;
+  const assetLabel = item.has3DModel ? copy.realModel : copy.hologram;
   return (
-    <button type="button" className="relic-card" onClick={() => onSelect(item)}>
-      <span className="relic-card-index">{String(item.launchYear).slice(-2)} <i /> {item.type.toUpperCase()}</span>
-      <span className="relic-card-title">{item.nickname || item.name}</span>
-      <span className="relic-card-meta"><span>{getBodyLabel(item, language, copy)}</span><span>{item.landingDate ? dateLabel(item.landingDate, language) : item.launchYear}</span></span>
+    <button type="button" className="relic-card" onClick={() => onSelect(item)} aria-label={`${item.nickname || item.name} — ${assetLabel}`}>
+      <span className={`relic-card-art ${item.has3DModel ? 'has-model' : 'is-hologram'}`} aria-hidden="true"><AssetIcon size={21} strokeWidth={1.6} /></span>
+      <span className="relic-card-copy">
+        <span className="relic-card-index">{String(item.launchYear).slice(-2)} <i /> {item.type.toUpperCase()}</span>
+        <span className="relic-card-title">{item.nickname || item.name}</span>
+        <span className="relic-card-meta">
+          <span>{getBodyLabel(item, language, copy)} · {item.landingDate ? dateLabel(item.landingDate, language) : item.launchYear}</span>
+          <span className={`relic-card-model ${item.has3DModel ? 'has-model' : 'is-hologram'}`}><AssetIcon size={10} />{assetLabel}</span>
+        </span>
+      </span>
       <span className="relic-card-arrow"><ArrowUpRight size={15} /></span>
     </button>
   );
@@ -96,6 +108,17 @@ function RelicCard({ item, language, onSelect }) {
 
 function ArchiveList({ relics, language, onSelect }) {
   const copy = COPY[language] || COPY.en;
+  const [query, setQuery] = useState('');
+  const normalizedQuery = query.trim().toLocaleLowerCase(language === 'ar' ? 'ar' : 'en');
+  const filteredRelics = normalizedQuery
+    ? relics.filter((item) => {
+      const searchableText = [
+        item.id, item.name, item.nickname, item.type, getTypeLabel(item.type, language, copy), item.body, getBodyLabel(item, language, copy),
+        item.launchYear, item.landingDate, item.location?.siteName,
+      ].filter(Boolean).join(' ').toLocaleLowerCase(language === 'ar' ? 'ar' : 'en');
+      return searchableText.includes(normalizedQuery);
+    })
+    : relics;
   return (
     <div className="archive-list-view">
       <div className="panel-title-row">
@@ -103,14 +126,27 @@ function ArchiveList({ relics, language, onSelect }) {
           <span className="eyebrow">{copy.archive}</span>
           <h2>{language === 'ar' ? 'سجلّ الاستكشاف' : 'EXPLORER LOG'}</h2>
         </div>
-        <span className="archive-count">{String(relics.length).padStart(2, '0')} <i>/ 16</i></span>
+        <span className="archive-count" aria-live="polite">{String(filteredRelics.length).padStart(2, '0')} <i>/ {relics.length}</i></span>
       </div>
       <div className="archive-summary">
         <span className="summary-line" />
         <p>{copy.hint}</p>
       </div>
+      <div className="archive-search" role="search">
+        <Search size={15} aria-hidden="true" />
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={copy.search}
+          aria-label={copy.search}
+          dir={language === 'ar' ? 'rtl' : 'ltr'}
+        />
+        {query && <button type="button" onClick={() => setQuery('')} aria-label={copy.clearSearch} title={copy.clearSearch}><X size={14} /></button>}
+      </div>
       <div className="relic-list" role="list" aria-label={copy.archive}>
-        {relics.map((item) => <RelicCard key={item.id} item={item} language={language} onSelect={onSelect} />)}
+        {filteredRelics.map((item) => <div role="listitem" key={item.id}><RelicCard item={item} language={language} onSelect={onSelect} /></div>)}
+        {filteredRelics.length === 0 && <div className="archive-empty"><Search size={18} /><span>{copy.noMatches}</span></div>}
       </div>
       <div className="archive-footnote"><span className="live-dot" />{copy.count}</div>
     </div>

@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Html, OrbitControls, Stars, Torus } from '@react-three/drei';
-import { Activity, RotateCcw } from 'lucide-react';
+import { Activity, LocateFixed, Minus, Plus, RotateCcw } from 'lucide-react';
 import * as THREE from 'three';
 import HoloRelic from './HoloRelic.jsx';
 import SpaceLoader from './SpaceLoader.jsx';
@@ -172,7 +172,7 @@ function AllSystem({ relics, onSelect, selectedRelic, language }) {
   );
 }
 
-function MapScene({ filter, relics, onSelect, selectedRelic, language, autoRotate }) {
+function MapScene({ filter, relics, onSelect, selectedRelic, language, autoRotate, controlsRef }) {
   return (
     <>
       <color attach="background" args={['#07101a']} />
@@ -185,7 +185,7 @@ function MapScene({ filter, relics, onSelect, selectedRelic, language, autoRotat
       {filter === 'Mars' && <Planet body="Mars" items={relics} radius={1.48} onSelect={onSelect} selectedRelic={selectedRelic} language={language} />}
       {filter === 'Deep Space' && <DeepSpaceMap items={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} />}
       {filter === 'All' && <AllSystem relics={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} />}
-      <OrbitControls makeDefault enablePan={false} minDistance={3.1} maxDistance={9.2} enableDamping dampingFactor={0.075} autoRotate={autoRotate} autoRotateSpeed={0.42} />
+      <OrbitControls ref={controlsRef} makeDefault enablePan={false} minDistance={3.1} maxDistance={9.2} enableDamping dampingFactor={0.075} autoRotate={autoRotate} autoRotateSpeed={0.42} />
     </>
   );
 }
@@ -204,7 +204,7 @@ function HotspotNode({ hotspot, index, position, onClick, selected, language }) 
   );
 }
 
-function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate }) {
+function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef }) {
   const isRealModel = item.has3DModel && item.model3dFile;
   return (
     <>
@@ -233,14 +233,27 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
         ) : <HoloRelic item={item} />}
       </group>
       {(item.hotspots || []).slice(0, 3).map((spot, index) => <HotspotNode key={`${item.id}-spot-${index}`} hotspot={spot} index={index} position={HOTSPOT_POSITIONS[index]} onClick={setHotspot} selected={Boolean(selectedHotspot && ((selectedHotspot.part && selectedHotspot.part === spot.part) || (!selectedHotspot.part && selectedHotspot.title === spot.title)))} language={language} />)}
-      <OrbitControls makeDefault enablePan={false} minDistance={2.3} maxDistance={8} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.42} />
+      <OrbitControls ref={controlsRef} makeDefault enablePan={false} minDistance={2.3} maxDistance={8} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.42} />
     </>
   );
 }
 
 export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot }) {
   const [autoRotate, setAutoRotate] = useState(true);
+  const controlsRef = useRef(null);
   const viewFilter = selectedRelic?.body || filter;
+  const isArabic = language === 'ar';
+
+  const adjustZoom = (direction) => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    if (direction === 'in') controls.dollyIn(1.2);
+    else controls.dollyOut(1.2);
+    controls.update();
+  };
+
+  const resetView = () => controlsRef.current?.reset();
+
   return (
     <div className="space-canvas-wrap">
       <Canvas
@@ -252,14 +265,19 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
       >
         <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} compact /></Html>}>
           {selectedRelic ? (
-            <InspectionScene item={selectedRelic} language={language} setHotspot={setHotspot} selectedHotspot={hotspot} autoRotate={autoRotate} />
+            <InspectionScene item={selectedRelic} language={language} setHotspot={setHotspot} selectedHotspot={hotspot} autoRotate={autoRotate} controlsRef={controlsRef} />
           ) : (
-            <MapScene filter={viewFilter} relics={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />
+            <MapScene filter={viewFilter} relics={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} controlsRef={controlsRef} />
           )}
         </Suspense>
       </Canvas>
       <div className="canvas-tools">
-        <span className="render-state"><Activity size={13} />{selectedRelic ? (selectedRelic.has3DModel ? 'NASA MODEL' : 'PROCEDURAL HOLOGRAM') : (language === 'ar' ? 'رسم إجرائي مباشر' : 'PROCEDURAL LIVE RENDER')}</span>
+        <span className="render-state"><Activity size={13} />{selectedRelic ? (selectedRelic.has3DModel ? (isArabic ? 'نموذج ناسا ثلاثي الأبعاد' : 'NASA 3D MODEL') : (isArabic ? 'مجسم هولوغرافي إجرائي' : 'PROCEDURAL HOLOGRAM')) : (isArabic ? 'رسم إجرائي مباشر' : 'PROCEDURAL LIVE RENDER')}</span>
+        <div className="viewer-control-group" role="group" aria-label={isArabic ? 'أدوات عرض المجسم' : '3D viewer controls'}>
+          <button type="button" className="viewer-control-button" onClick={() => adjustZoom('out')} aria-label={isArabic ? 'تصغير المجسم' : 'Zoom out'} title={isArabic ? 'تصغير' : 'Zoom out'}><Minus size={14} /></button>
+          <button type="button" className="viewer-control-button" onClick={() => adjustZoom('in')} aria-label={isArabic ? 'تكبير المجسم' : 'Zoom in'} title={isArabic ? 'تكبير' : 'Zoom in'}><Plus size={14} /></button>
+          <button type="button" className="viewer-control-button" onClick={resetView} aria-label={isArabic ? 'إعادة ضبط زاوية العرض' : 'Reset view'} title={isArabic ? 'إعادة ضبط العرض' : 'Reset view'}><LocateFixed size={14} /></button>
+        </div>
         <button type="button" className={`rotate-toggle ${autoRotate ? 'on' : ''}`} onClick={() => setAutoRotate((current) => !current)} title={language === 'ar' ? 'تبديل الدوران التلقائي' : 'Toggle auto rotation'}>
           <RotateCcw size={13} /><span>{language === 'ar' ? 'دوران تلقائي' : 'AUTO ROTATE'}</span><i />
         </button>
