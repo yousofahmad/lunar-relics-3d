@@ -189,12 +189,12 @@ export default function App() {
             {!selectedRelic && (
               <div className="map-instructions">
                 <Crosshair size={14} />
-                <span>{isArabic ? 'اختر نقطة مضيئة أو أثرًا من الأرشيف' : 'SELECT A LIT SURFACE BEACON OR A RELIC FROM THE ARCHIVE'}</span>
+                <span>{isArabic ? 'اضغط على نقطة مضيئة أو مهمة لتستكشفها' : 'Tap a glowing dot or mission to explore it'}</span>
               </div>
             )}
             <div className="canvas-meta">
-              <span><RadioTower size={12} /> {isArabic ? 'اتصال حي' : 'SIGNAL LINK'}</span>
-              <span>{celestialView === 'Deep Space' ? 'DEEP SPACE' : celestialView.toUpperCase()}</span>
+              <span><RadioTower size={12} /> {isArabic ? 'عرض حي' : 'LIVE VIEW'}</span>
+              <span>{celestialView === 'Deep Space' ? (isArabic ? 'الفضاء' : 'SPACE') : celestialView.toUpperCase()}</span>
             </div>
             {selectedRelic && (
               <div className="story-scene-hud" aria-live="polite">
@@ -214,7 +214,7 @@ export default function App() {
             )}
           </div>
           <div className="viewport-footer">
-            <div className="control-hint"><span className="mouse-glyph">◎</span>{isArabic ? 'اسحب للتدوير' : 'DRAG TO ORBIT'} <i /> {isArabic ? 'مرّر للتقريب' : 'SCROLL TO ZOOM'}</div>
+            <div className="control-hint"><span className="mouse-glyph">◎</span>{isArabic ? 'اسحب لتدوير المجسم' : 'DRAG TO TURN'} <i /> {isArabic ? 'مرّر للتقريب' : 'SCROLL TO GET CLOSER'}</div>
             <div className="data-source-tag"><Info size={12} /> {isArabic ? <>بيانات <bdi dir="ltr">NASA NSSDCA</bdi></> : <bdi dir="ltr">NASA NSSDCA DATA</bdi>}</div>
           </div>
         </section>

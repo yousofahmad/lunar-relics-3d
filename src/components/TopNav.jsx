@@ -1,9 +1,9 @@
 import { Globe2, Languages, List, Moon, Orbit, Trophy, Volume2, VolumeX } from 'lucide-react';
 
 const CELESTIAL_VIEWS = [
-  { id: 'Moon', icon: Moon, en: 'THE MOON', ar: 'القمر', subEn: 'LUNA', subAr: 'LUNA' },
-  { id: 'Mars', icon: Globe2, en: 'MARS', ar: 'المريخ', subEn: 'SURFACE', subAr: 'السطح' },
-  { id: 'Deep Space', icon: Orbit, en: 'DEEP SPACE / ORBIT', ar: 'الفضاء العميق / المدار', subEn: 'MISSIONS', subAr: 'المهمات' },
+  { id: 'Moon', icon: Moon, en: 'MOON', ar: 'القمر', subEn: 'OUR MOON', subAr: 'قمرنا' },
+  { id: 'Mars', icon: Globe2, en: 'MARS', ar: 'المريخ', subEn: 'RED PLANET', subAr: 'الكوكب الأحمر' },
+  { id: 'Deep Space', icon: Orbit, en: 'SPACE', ar: 'الفضاء', subEn: 'MORE MISSIONS', subAr: 'مهمات أخرى' },
 ];
 
 export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, audioEnabled = true, onToggleAudio = () => {} }) {
@@ -15,7 +15,7 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
         <div className="brand-emblem" aria-hidden="true"><span /><span /><span /></div>
         <div>
           <div className="brand-title">LUNAR <b>RELICS</b> <span>3D</span></div>
-          <div className="brand-subtitle">MISSION MEMORY ARCHIVE <i /> NSSDCA VERIFIED</div>
+          <div className="brand-subtitle">EXPLORE SPACE MISSIONS</div>
         </div>
       </div>
 
@@ -57,7 +57,7 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
           title={audioEnabled ? (language === 'ar' ? 'كتم الصوت' : 'Mute audio') : (language === 'ar' ? 'تشغيل الصوت' : 'Enable audio')}
         >
           {audioEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-          <span className="audio-label">{audioEnabled ? (language === 'ar' ? 'الصوت يعمل' : 'AUDIO ON') : (language === 'ar' ? 'مكتوم' : 'MUTED')}</span>
+          <span className="audio-label">{audioEnabled ? (language === 'ar' ? 'الصوت يعمل' : 'SOUND ON') : (language === 'ar' ? 'الصوت مغلق' : 'SOUND OFF')}</span>
         </button>
         <button
           type="button"

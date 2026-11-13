@@ -565,3 +565,92 @@ body { color: var(--suit-white); }
     pointer-events: none;
   }
 }
+
+/* Plain-language legibility and comfortable touch targets. */
+.brand-subtitle { font-size: 8px; letter-spacing: .06em; }
+.planet-tab span { font-size: 10px; letter-spacing: .035em; }
+.planet-tab small { font-size: 7px; letter-spacing: .04em; }
+.mission-drawer-toggle span, .audio-global-toggle .audio-label, .badge-label { font-size: 8px; letter-spacing: .025em; }
+.mission-drawer-toggle strong, .badge-counter strong { font-size: 10px; }
+.audio-global-toggle, .language-toggle { font-size: 9px; }
+.archive-summary p { font-size: 12px; line-height: 1.55; }
+.archive-category-filters { gap: 6px; }
+.archive-filter-chip { min-height: 34px; padding-inline: 10px; font-size: 8px; }
+.archive-filter-chip small { font-size: 7px; }
+.archive-search input { font-size: 12px; }
+.relic-card-title { font-size: 12px; }
+.relic-card-index { font-size: 7px; }
+.relic-card-meta { font-size: 7px; }
+.relic-card-model { font-size: 6px; }
+.archive-footnote { font-size: 8px; }
+.back-button { min-height: 38px; font-size: 9px; }
+.memory-status { font-size: 8px; }
+.story-chapter-nav button { min-height: 32px; padding-inline: 11px; font-size: 8px; letter-spacing: .015em; }
+.memory-classification { font-size: 9px; letter-spacing: .07em; }
+.story-eyebrow { font-size: 9px; letter-spacing: .08em; }
+.story-hero-location { font-size: 13px; }
+.mission-hero-meta small { font-size: 8px; letter-spacing: .05em; }
+.mission-hero-meta strong { font-size: 11px; }
+.story-scroll-cue { font-size: 9px; letter-spacing: .05em; }
+.story-hero-record { font-size: 8px; letter-spacing: .06em; }
+.story-kicker, .hardware-kicker { font-size: 9px; letter-spacing: .06em; }
+.chapter-lede { font-size: 14px; line-height: 1.65; }
+.first-person-story { font-size: clamp(13px, 1.1vw, 15px); line-height: 1.75; }
+.transmit-button { min-height: 44px; font-size: 9px; letter-spacing: .02em; }
+.transmit-frequency { font-size: 8px; }
+.audio-live, .section-label, .qa-answer > span { font-size: 8px; letter-spacing: .04em; }
+.qa-question { min-height: 44px; font-size: 12px; }
+.qa-answer p { font-size: 12px; line-height: 1.6; }
+.hardware-copy h3 { font-size: 17px; }
+.hardware-copy p { font-size: 14px; line-height: 1.7; }
+.hardware-focus-button { min-height: 42px; font-size: 8px; letter-spacing: .03em; }
+.mission-facts span { font-size: 8px; }
+.mission-facts strong { font-size: 11px; }
+.timeline-year { font-size: 10px; }
+.timeline-item p { font-size: 12px; }
+.quiz-hint { font-size: 13px; }
+.quiz-option { min-height: 48px; font-size: 12px; }
+.quiz-submit { min-height: 46px; font-size: 9px; letter-spacing: .04em; }
+.quiz-success, .quiz-error { font-size: 9px; }
+.badge-reward small, .badge-status, .citation-id { font-size: 8px; }
+.citation-heading > span:first-child, .citation-links a, .citation-missing { font-size: 8px; }
+
+@media (max-width: 760px) {
+  .mission-drawer-toggle span { display: inline; font-size: 7px; letter-spacing: 0; }
+  .mission-drawer-toggle strong { font-size: 8px; }
+  .planet-tab span { font-size: 8px; }
+  .planet-tab small { font-size: 6px; }
+  .story-chapter-nav button { min-height: 30px; padding-inline: 9px; font-size: 7px; }
+  .back-button { min-height: 36px; font-size: 8px; }
+  .memory-status { font-size: 7px; }
+  .memory-classification, .story-eyebrow { font-size: 8px; }
+  .mission-hero-meta small { font-size: 7px; }
+  .mission-hero-meta strong { font-size: 9px; }
+  .chapter-lede, .first-person-story, .hardware-copy p { font-size: 12px; }
+  .qa-question, .qa-answer p { font-size: 11px; }
+  .transmit-button { min-height: 42px; font-size: 8px; }
+  .hardware-copy h3 { font-size: 15px; }
+  .hardware-focus-button { min-height: 40px; font-size: 7px; }
+  .mission-facts span { font-size: 7px; }
+  .timeline-item p { font-size: 11px; }
+  .quiz-hint { font-size: 12px; }
+  .quiz-option { min-height: 44px; font-size: 11px; }
+  .quiz-submit { min-height: 44px; font-size: 8px; }
+}
+
+@media (max-width: 760px) {
+  .brand-title { font-size: 8px; letter-spacing: .07em; }
+  .language-toggle { gap: 3px; padding-inline: 5px; }
+  .language-toggle .language-current, .language-toggle i { display: none; }
+  .map-instructions { font-size: 9px; letter-spacing: .02em; }
+}
+.map-instructions { font-size: 10px; letter-spacing: .02em; }
+
+@media (max-width: 760px) {
+  .topbar { width: calc(100vw - 16px); }
+}
+
+@media (max-width: 760px) {
+  .story-chapter-nav { min-height: 40px; gap: 4px; padding: 4px; }
+  .story-chapter-nav button { min-height: 34px; flex: 0 0 auto; gap: 6px; padding-inline: 10px; font-size: 9px; letter-spacing: 0; }
+}

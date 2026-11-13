@@ -332,9 +332,10 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     if (!rig) return;
     const isHardwareChapter = chapterId.startsWith('hardware-');
     const hardwareOrdinal = chapterHotspotIndex >= 0 ? chapterHotspotIndex : Math.max(selectedIndex, 0);
-    const slide = size.width < 720 ? 0.24 : 1.52;
-    const side = chapterId === 'transmission' ? 1 : isHardwareChapter ? (hardwareOrdinal % 2 === 0 ? -1 : 1) : 0;
-    const targetX = side * (isHardwareChapter && hardwareOrdinal === 2 ? slide * 0.9 : slide);
+    const slide = size.width < 720 ? 0.24 : 1.65;
+    let targetX = 0;
+    if (chapterId === 'transmission') targetX = slide;
+    else if (isHardwareChapter) targetX = hardwareOrdinal === 2 ? -1.4 : (hardwareOrdinal % 2 === 0 ? -slide : slide);
     const focusPoint = focusIndex >= 0 && hotspotPositions[focusIndex] ? new THREE.Vector3(...hotspotPositions[focusIndex]) : new THREE.Vector3(0, 0, 0);
     const focusWorld = rig.localToWorld(focusPoint);
     const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : -0.18;
@@ -487,14 +488,14 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
         </Suspense>
       </Canvas>
       <div className="canvas-tools">
-        <span className="render-state"><Activity size={13} />{selectedRelic ? (selectedRelic.has3DModel ? (isArabic ? 'نموذج ناسا ثلاثي الأبعاد' : 'NASA 3D MODEL') : (isArabic ? 'مركبة إجرائية ثلاثية الأبعاد' : 'PROCEDURAL 3D SPACECRAFT')) : (isArabic ? 'عرض كوكبي واقعي' : 'PLANETARY SURFACE VIEW')}</span>
-        <div className="viewer-control-group" role="group" aria-label={isArabic ? 'أدوات عرض المجسم' : '3D viewer controls'}>
+        <span className="render-state"><Activity size={13} />{selectedRelic ? (selectedRelic.has3DModel ? (isArabic ? 'مجسم ناسا ثلاثي الأبعاد' : 'NASA 3D model') : (isArabic ? 'مجسم ثلاثي الأبعاد' : '3D mission model')) : (isArabic ? 'مشهد الكوكب' : 'Planet view')}</span>
+        <div className="viewer-control-group" role="group" aria-label={isArabic ? 'أدوات تكبير وتدوير المجسم' : 'Model size and view controls'}>
           <button type="button" className="viewer-control-button" onClick={() => adjustZoom('out')} aria-label={isArabic ? 'تصغير المجسم' : 'Zoom out'} title={isArabic ? 'تصغير' : 'Zoom out'}><Minus size={14} /></button>
           <button type="button" className="viewer-control-button" onClick={() => adjustZoom('in')} aria-label={isArabic ? 'تكبير المجسم' : 'Zoom in'} title={isArabic ? 'تكبير' : 'Zoom in'}><Plus size={14} /></button>
           <button type="button" className="viewer-control-button" onClick={resetView} aria-label={isArabic ? 'إعادة ضبط زاوية العرض' : 'Reset view'} title={isArabic ? 'إعادة ضبط العرض' : 'Reset view'}><LocateFixed size={14} /></button>
         </div>
-        <button type="button" className={`rotate-toggle ${autoRotate ? 'on' : ''}`} onClick={() => setAutoRotate((current) => !current)} title={isArabic ? 'تبديل الدوران التلقائي' : 'Toggle auto rotation'}>
-          <RotateCcw size={13} /><span>{isArabic ? 'دوران تلقائي' : 'AUTO ROTATE'}</span><i />
+        <button type="button" className={`rotate-toggle ${autoRotate ? 'on' : ''}`} onClick={() => setAutoRotate((current) => !current)} title={isArabic ? 'تبديل دوران المجسم' : 'Spin the model'}>
+          <RotateCcw size={13} /><span>{isArabic ? 'دوّر المجسم' : 'SPIN MODEL'}</span><i />
         </button>
       </div>
     </div>
