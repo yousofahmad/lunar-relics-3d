@@ -102,12 +102,15 @@ function Pin({ item, position, onSelect, selected = false, language = 'en' }) {
   );
 }
 
-function Planet({ body, items, position = [0, 0, 0], radius = 1.32, onSelect, selectedRelic, language, compact = false }) {
+function Planet({ body, items, position = [0, 0, 0], radius = 1.32, onSelect, selectedRelic, language, compact = false, journeyRef }) {
   const group = useRef();
   const texture = useMemo(() => makePlanetTexture(body), [body]);
   const geometry = useMemo(() => new THREE.SphereGeometry(radius, compact ? 36 : 64, compact ? 28 : 48), [radius, compact]);
-  useFrame((_, delta) => {
-    if (group.current) group.current.rotation.y += delta * (compact ? 0.035 : 0.018);
+  useFrame(({ clock }) => {
+    if (group.current) {
+      const scrollRotation = (journeyRef?.current?.exploreProgress || 0) * 0.22;
+      group.current.rotation.y = clock.elapsedTime * (compact ? 0.035 : 0.018) + scrollRotation;
+    }
   });
   React.useEffect(() => () => { geometry.dispose(); texture.dispose(); }, [geometry, texture]);
   return (
@@ -156,14 +159,14 @@ function DeepSpaceMap({ items, onSelect, selectedRelic, language, showLabels = t
   );
 }
 
-function AllSystem({ relics, onSelect, selectedRelic, language }) {
+function AllSystem({ relics, onSelect, selectedRelic, language, journeyRef }) {
   const moonItems = relics.filter((item) => item.body === 'Moon');
   const marsItems = relics.filter((item) => item.body === 'Mars');
   const deepItems = relics.filter((item) => item.body === 'Deep Space');
   return (
     <group scale={0.82}>
-      <Planet body="Moon" items={moonItems} position={[-2.32, 0.05, 0]} radius={0.84} compact onSelect={onSelect} selectedRelic={selectedRelic} language={language} />
-      <Planet body="Mars" items={marsItems} position={[0, 0.08, 0]} radius={1.0} compact onSelect={onSelect} selectedRelic={selectedRelic} language={language} />
+      <Planet body="Moon" items={moonItems} position={[-2.32, 0.05, 0]} radius={0.84} compact onSelect={onSelect} selectedRelic={selectedRelic} language={language} journeyRef={journeyRef} />
+      <Planet body="Mars" items={marsItems} position={[0, 0.08, 0]} radius={1.0} compact onSelect={onSelect} selectedRelic={selectedRelic} language={language} journeyRef={journeyRef} />
       <group position={[2.52, 0.02, 0]} scale={0.69}>
         <DeepSpaceMap items={deepItems} onSelect={onSelect} selectedRelic={selectedRelic} language={language} showLabels={false} />
       </group>
@@ -172,7 +175,7 @@ function AllSystem({ relics, onSelect, selectedRelic, language }) {
   );
 }
 
-function MapScene({ filter, relics, onSelect, selectedRelic, language, autoRotate, controlsRef }) {
+function MapScene({ filter, relics, onSelect, selectedRelic, language, autoRotate, controlsRef, journeyRef }) {
   return (
     <>
       <color attach="background" args={['#07101a']} />
@@ -181,11 +184,11 @@ function MapScene({ filter, relics, onSelect, selectedRelic, language, autoRotat
       <pointLight position={[3, 4, 5]} intensity={26} color="#a7f5ff" distance={12} />
       <pointLight position={[-4, -1, -2]} intensity={18} color="#287bd1" distance={10} />
       <Stars radius={65} depth={48} count={900} factor={3.1} saturation={0.2} fade speed={0.12} />
-      {filter === 'Moon' && <Planet body="Moon" items={relics} radius={1.48} onSelect={onSelect} selectedRelic={selectedRelic} language={language} />}
-      {filter === 'Mars' && <Planet body="Mars" items={relics} radius={1.48} onSelect={onSelect} selectedRelic={selectedRelic} language={language} />}
+      {filter === 'Moon' && <Planet body="Moon" items={relics} radius={1.48} onSelect={onSelect} selectedRelic={selectedRelic} language={language} journeyRef={journeyRef} />}
+      {filter === 'Mars' && <Planet body="Mars" items={relics} radius={1.48} onSelect={onSelect} selectedRelic={selectedRelic} language={language} journeyRef={journeyRef} />}
       {filter === 'Deep Space' && <DeepSpaceMap items={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} />}
-      {filter === 'All' && <AllSystem relics={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} />}
-      <OrbitControls ref={controlsRef} makeDefault enablePan={false} minDistance={3.1} maxDistance={9.2} enableDamping dampingFactor={0.075} autoRotate={autoRotate} autoRotateSpeed={0.42} />
+      {filter === 'All' && <AllSystem relics={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} journeyRef={journeyRef} />}
+      <OrbitControls ref={controlsRef} makeDefault enablePan={false} enableZoom={false} minDistance={3.1} maxDistance={9.2} enableDamping dampingFactor={0.075} autoRotate={autoRotate} autoRotateSpeed={0.42} />
     </>
   );
 }
@@ -204,15 +207,35 @@ function HotspotNode({ hotspot, index, position, onClick, selected, language }) 
   );
 }
 
-function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef }) {
+function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef, journeyRef }) {
   const isRealModel = item.has3DModel && item.model3dFile;
+  const keyLightRef = useRef();
+  const fillLightRef = useRef();
+  useFrame((_, delta) => {
+    const phase = journeyRef?.current?.timelineIndex || 0;
+    const presets = [
+      { key: '#ffd29b', fill: '#b9794c', keyIntensity: 31, fillIntensity: 16 },
+      { key: '#b5f7ff', fill: '#166ea3', keyIntensity: 38, fillIntensity: 24 },
+      { key: '#91a9e8', fill: '#1a366f', keyIntensity: 22, fillIntensity: 12 },
+    ];
+    const preset = presets[Math.min(phase, presets.length - 1)];
+    const easing = 1 - Math.exp(-delta * 1.8);
+    if (keyLightRef.current) {
+      keyLightRef.current.color.lerp(new THREE.Color(preset.key), easing);
+      keyLightRef.current.intensity += (preset.keyIntensity - keyLightRef.current.intensity) * easing;
+    }
+    if (fillLightRef.current) {
+      fillLightRef.current.color.lerp(new THREE.Color(preset.fill), easing);
+      fillLightRef.current.intensity += (preset.fillIntensity - fillLightRef.current.intensity) * easing;
+    }
+  });
   return (
     <>
       <color attach="background" args={['#07101a']} />
       <fog attach="fog" args={['#07101a', 9, 22]} />
       <ambientLight intensity={0.7} />
-      <pointLight position={[4, 5, 5]} intensity={34} color="#b5f7ff" distance={15} />
-      <pointLight position={[-4, 0, -2]} intensity={24} color="#166ea3" distance={12} />
+      <pointLight ref={keyLightRef} position={[4, 5, 5]} intensity={31} color="#ffd29b" distance={15} />
+      <pointLight ref={fillLightRef} position={[-4, 0, -2]} intensity={16} color="#b9794c" distance={12} />
       <spotLight position={[0, 7, 1]} angle={0.55} penumbra={0.8} intensity={12} color="#69e8ff" />
       <Stars radius={60} depth={46} count={720} factor={2.8} saturation={0.18} fade speed={0.08} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.54, 0]}>
@@ -233,43 +256,106 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
         ) : <HoloRelic item={item} />}
       </group>
       {(item.hotspots || []).slice(0, 3).map((spot, index) => <HotspotNode key={`${item.id}-spot-${index}`} hotspot={spot} index={index} position={HOTSPOT_POSITIONS[index]} onClick={setHotspot} selected={Boolean(selectedHotspot && ((selectedHotspot.part && selectedHotspot.part === spot.part) || (!selectedHotspot.part && selectedHotspot.title === spot.title)))} language={language} />)}
-      <OrbitControls ref={controlsRef} makeDefault enablePan={false} minDistance={2.3} maxDistance={8} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.42} />
+      <OrbitControls ref={controlsRef} makeDefault enablePan={false} enableZoom={false} minDistance={2.3} maxDistance={8} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.42} />
     </>
   );
 }
 
-function CameraFlight({ selectedId, controlsRef }) {
-  const { camera } = useThree();
-  const flight = useRef(null);
+function focusForMission(item, filter, progress) {
+  if (!item) return { target: new THREE.Vector3(0, 0, 0), position: new THREE.Vector3(0, 0.2, 5.2) };
+  let center = new THREE.Vector3(0, 0, 0);
+  let radius = 1.48;
+  let scale = 1;
+  const all = filter === 'All';
+  if (all) {
+    scale = 0.82;
+    if (item.body === 'Moon') { center.set(-2.32, 0.05, 0); radius = 0.84; }
+    else if (item.body === 'Mars') { center.set(0, 0.08, 0); radius = 1; }
+    else { center.set(2.52, 0.02, 0); radius = 1.2; }
+  }
+  if (item.body === 'Deep Space' || item.location?.lat == null || item.location?.lng == null) {
+    const target = center;
+    return { target, position: target.clone().add(new THREE.Vector3(0.4, 0.35, 3.6)) };
+  }
+  const localPoint = new THREE.Vector3(...toSpherePoint(item.location.lat, item.location.lng, radius));
+  localPoint.applyAxisAngle(new THREE.Vector3(0, 1, 0), progress * 0.22);
+  const offset = localPoint.clone().multiplyScalar(scale);
+  const target = center.clone().add(offset);
+  const normal = localPoint.normalize();
+  const position = target.clone().add(normal.multiplyScalar(all ? 3.15 : 3.25));
+  position.y += 0.16;
+  return { target, position };
+}
 
-  React.useEffect(() => {
-    const controls = controlsRef.current;
-    const fromPosition = camera.position.clone();
-    const fromTarget = controls?.target.clone() || new THREE.Vector3(0, 0, 0);
-    const toPosition = new THREE.Vector3(0, 0.2, selectedId ? 4.45 : 5.2);
-    const toTarget = new THREE.Vector3(0, 0, 0);
-    flight.current = { elapsed: 0, duration: 1.15, fromPosition, fromTarget, toPosition, toTarget };
-  }, [camera, controlsRef, selectedId]);
+function cameraForMemory(journey) {
+  const chapter = journey.chapter || 0;
+  if (chapter === 2 && journey.hotspotIndex >= 0) {
+    const positions = HOTSPOT_POSITIONS;
+    const hotspotPosition = new THREE.Vector3(...positions[Math.min(journey.hotspotIndex, positions.length - 1)]);
+    const outward = hotspotPosition.clone().normalize();
+    const position = hotspotPosition.clone().add(outward.multiplyScalar(2.25));
+    position.y += 0.28;
+    return { target: hotspotPosition, position };
+  }
+  const zoom = chapter === 1 ? 4.15 : chapter === 3 ? 3.95 : chapter === 4 ? 4.15 : 4.45;
+  return { target: new THREE.Vector3(0, 0, 0), position: new THREE.Vector3(0, 0.2, zoom) };
+}
+
+function CameraFlight({ selectedId, filter, relics, journeyRef, controlsRef, autoRotate }) {
+  const { camera } = useThree();
+  const moving = useRef(false);
+  const lastKey = useRef('');
 
   useFrame((_, delta) => {
-    if (!flight.current) return;
-    const current = flight.current;
-    current.elapsed = Math.min(current.duration, current.elapsed + delta);
-    const linear = current.elapsed / current.duration;
-    const eased = linear * linear * (3 - 2 * linear);
-    camera.position.lerpVectors(current.fromPosition, current.toPosition, eased);
+    const journey = journeyRef?.current || {};
+    const chapter = journey.chapter || 0;
+    const hotspotIndex = journey.hotspotIndex ?? -1;
+    const timelineIndex = journey.timelineIndex || 0;
+    const progress = journey.exploreProgress || 0;
+    const exploring = Boolean(journey.exploreEnabled);
+    const key = selectedId
+      ? `relic:${selectedId}:${chapter}:${hotspotIndex}:${timelineIndex}`
+      : exploring ? `map:${Math.floor(progress)}:${Math.round((progress % 1) * 10)}` : 'map:orbit';
+    const scrolling = Boolean(journey.isScrolling);
+    if (key !== lastKey.current || (!selectedId && exploring && scrolling)) moving.current = true;
+    lastKey.current = key;
+    if (!moving.current) return;
+
+    let desired;
+    if (selectedId) {
+      desired = cameraForMemory(journey);
+    } else if (!exploring) {
+      desired = { target: new THREE.Vector3(0, 0, 0), position: new THREE.Vector3(0, 0.2, 5.2) };
+    } else {
+      const targets = journey.cameraItems?.length ? journey.cameraItems : relics;
+      const maximum = Math.max(0, targets.length - 1);
+      const safeProgress = THREE.MathUtils.clamp(progress, 0, maximum);
+      const firstIndex = Math.floor(safeProgress);
+      const secondIndex = Math.min(maximum, firstIndex + 1);
+      const blend = THREE.MathUtils.smoothstep(safeProgress - firstIndex, 0, 1);
+      const first = focusForMission(targets[firstIndex], filter, safeProgress);
+      const second = focusForMission(targets[secondIndex], filter, safeProgress);
+      desired = {
+        target: first.target.clone().lerp(second.target, blend),
+        position: first.position.clone().lerp(second.position, blend),
+      };
+    }
+
+    const easing = 1 - Math.exp(-delta * (scrolling ? 3.8 : 2.4));
+    camera.position.lerp(desired.position, easing);
     const controls = controlsRef.current;
     if (controls) {
-      controls.target.lerpVectors(current.fromTarget, current.toTarget, eased);
+      controls.autoRotate = scrolling ? false : autoRotate;
+      controls.target.lerp(desired.target, easing);
       controls.update();
     }
-    if (linear >= 1) flight.current = null;
+    if (!scrolling && camera.position.distanceTo(desired.position) < 0.035 && (!controls || controls.target.distanceTo(desired.target) < 0.025)) moving.current = false;
   });
 
   return null;
 }
 
-export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot }) {
+export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot, journeyRef }) {
   const [autoRotate, setAutoRotate] = useState(true);
   const controlsRef = useRef(null);
   const viewFilter = selectedRelic?.body || filter;
@@ -296,11 +382,11 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
       >
         <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} compact /></Html>}>
           {selectedRelic ? (
-            <InspectionScene item={selectedRelic} language={language} setHotspot={setHotspot} selectedHotspot={hotspot} autoRotate={autoRotate} controlsRef={controlsRef} />
+            <InspectionScene item={selectedRelic} language={language} setHotspot={setHotspot} selectedHotspot={hotspot} autoRotate={autoRotate} controlsRef={controlsRef} journeyRef={journeyRef} />
           ) : (
-            <MapScene filter={viewFilter} relics={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} controlsRef={controlsRef} />
+            <MapScene filter={viewFilter} relics={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} controlsRef={controlsRef} journeyRef={journeyRef} />
           )}
-          <CameraFlight selectedId={selectedRelic?.id || null} controlsRef={controlsRef} />
+          <CameraFlight selectedId={selectedRelic?.id || null} filter={viewFilter} relics={relics} journeyRef={journeyRef} controlsRef={controlsRef} autoRotate={autoRotate} />
         </Suspense>
       </Canvas>
       <div className="canvas-tools">

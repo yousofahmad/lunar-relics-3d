@@ -3,6 +3,12 @@ let ambientOscillator;
 let ambientFilter;
 let ambientGain;
 let ambientCloseTimer;
+let telemetryContext;
+let telemetryMuted = false;
+
+export function setTelemetryMuted(muted) {
+  telemetryMuted = Boolean(muted);
+}
 
 const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
 
@@ -98,7 +104,7 @@ export function transmitText(text, language, onDone = () => {}, options = {}) {
       window.speechSynthesis.cancel();
       utterance = new SpeechSynthesisUtterance(safeText);
       utterance.lang = language === 'ar' ? 'ar-EG' : 'en-US';
-      utterance.pitch = language === 'ar' ? 1 : 0.92;
+      utterance.pitch = 0.92;
       utterance.rate = 0.95;
       utterance.volume = 0.82;
       const voice = chooseVoice(voices, language);
@@ -107,7 +113,14 @@ export function transmitText(text, language, onDone = () => {}, options = {}) {
         if (Number.isFinite(event.charIndex)) reportProgress(event.charIndex + (event.charLength || 1));
       };
       utterance.onend = finish;
-      utterance.onerror = finish;
+      utterance.onerror = () => {
+        if (cancelled) return;
+        window.clearTimeout(fallbackTimer);
+        speechStarted = true;
+        startedAt = Date.now();
+        const remaining = Math.max(650, estimatedDuration * (1 - lastProgress / Math.max(1, safeText.length)));
+        fallbackTimer = window.setTimeout(finish, remaining);
+      };
       try {
         startedAt = Date.now();
         speechStarted = true;
@@ -177,4 +190,36 @@ export async function setAmbientEnabled(enabled) {
   ambientGain.gain.cancelScheduledValues(ambientContext.currentTime);
   ambientGain.gain.setTargetAtTime(0.03, ambientContext.currentTime, 0.8);
   return true;
+}
+
+/** Tiny, optional UI cue for chapter and hardware transitions. Peak gain stays below 0.005. */
+export async function playTelemetryTick(kind = 'tick') {
+  if (telemetryMuted) return false;
+  const AudioContextClass = getAudioContextClass();
+  if (!AudioContextClass) return false;
+
+  try {
+    if (!telemetryContext || telemetryContext.state === 'closed') telemetryContext = new AudioContextClass();
+    if (telemetryContext.state === 'suspended') await telemetryContext.resume();
+    const context = telemetryContext;
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    const now = context.currentTime;
+    const duration = kind === 'whoosh' ? 0.13 : 0.055;
+    const peak = kind === 'whoosh' ? 0.0035 : 0.0045;
+    oscillator.type = kind === 'whoosh' ? 'triangle' : 'sine';
+    oscillator.frequency.setValueAtTime(kind === 'whoosh' ? 520 : 880, now);
+    oscillator.frequency.exponentialRampToValueAtTime(kind === 'whoosh' ? 150 : 660, now + duration);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(peak, now + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+    oscillator.start(now);
+    oscillator.stop(now + duration + 0.01);
+    oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+    return true;
+  } catch {
+    return false;
+  }
 }
