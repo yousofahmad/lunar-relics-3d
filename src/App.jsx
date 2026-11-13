@@ -1,16 +1,12 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Headphones, Mic2, Pause, Play, VolumeX, Waves,
-} from 'lucide-react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { Crosshair, Info, RadioTower } from 'lucide-react';
 import { fetchRelics, LOCAL_RELICS } from './services/api.js';
 import BadgeModal from './components/BadgeModal.jsx';
 import TopNav from './components/TopNav.jsx';
-import ScrollytellingExperience from './components/ScrollytellingExperience.jsx';
+import StoryAndArchivePanel from './components/StoryAndArchivePanel.jsx';
 import SpaceLoader from './components/SpaceLoader.jsx';
-import { setAmbientEnabled as updateAmbientPad, setTelemetryMuted, transmitText } from './utils/radio.js';
 
 const Space3DCanvas = lazy(() => import('./components/Space3DCanvas.jsx'));
-const CINEMA_WAVE_HEIGHTS = [6, 11, 15, 8, 19, 12, 22, 9, 17, 7, 14, 20, 10];
 
 function readBadges() {
   try {
@@ -21,58 +17,53 @@ function readBadges() {
   }
 }
 
-function CinemaBar({ selectedRelic, activeMission, language, caption, isTransmitting, onPlay, onStop, voiceEnabled, onToggleVoice, ambientEnabled, onToggleAmbient }) {
-  const isArabic = language === 'ar';
-  const current = selectedRelic || activeMission;
-  const title = current ? (current.nickname || current.name) : (isArabic ? 'اختر مهمة لبدء الإرسال' : 'Select a mission to begin transmission');
-  return (
-    <section className={`cinema-bar glass-panel ${isTransmitting ? 'is-speaking' : ''}`} aria-label={isArabic ? 'مشغل الإرسال الصوتي' : 'Mission transmission player'}>
-      <button className="cinema-play" type="button" onClick={isTransmitting ? onStop : onPlay} disabled={!current} aria-label={isTransmitting ? (isArabic ? 'إيقاف الإرسال' : 'Stop transmission') : (isArabic ? 'تشغيل إرسال المهمة' : 'Play mission transmission')}>
-        {isTransmitting ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
-      </button>
-      <div className="cinema-copy">
-        <div className="cinema-meta"><span className="cinema-kicker"><Headphones size={12} />{isArabic ? 'إرسال المركبة' : 'SPACECRAFT TRANSMISSION'}</span><span className="cinema-title" dir="auto">{title}</span></div>
-        <div className="cinema-subtitle" aria-live="polite" aria-atomic="true" dir="auto">{caption || (isTransmitting ? '' : (isArabic ? 'النص الحي سيظهر هنا أثناء الإرسال.' : 'Live captions appear here during the transmission.'))}{isTransmitting && <span className="subtitle-caret" aria-hidden="true" />}</div>
-      </div>
-      <div className={`cinema-waveform ${isTransmitting ? 'active' : ''}`} aria-hidden="true">{Array.from({ length: 13 }, (_, index) => <i key={index} style={{ '--bar': index, '--bar-height': `${CINEMA_WAVE_HEIGHTS[index % CINEMA_WAVE_HEIGHTS.length]}px` }} />)}</div>
-      <div className="cinema-controls">
-        <button className={`audio-toggle ${voiceEnabled ? 'active' : ''}`} type="button" onClick={onToggleVoice} aria-pressed={voiceEnabled} title={voiceEnabled ? (isArabic ? 'كتم الصوت' : 'Mute voice') : (isArabic ? 'تشغيل الصوت' : 'Enable voice')}>
-          {voiceEnabled ? <Mic2 size={14} /> : <VolumeX size={14} />}<span>{voiceEnabled ? (isArabic ? 'الصوت' : 'Voice') : (isArabic ? 'مكتوم' : 'Muted')}</span>
-        </button>
-        <button className={`audio-toggle ambient-toggle ${ambientEnabled ? 'active' : ''}`} type="button" onClick={onToggleAmbient} disabled={!voiceEnabled} aria-pressed={ambientEnabled} title={isArabic ? 'خلفية فضائية هادئة' : 'Subtle ambient space pad'}>
-          <Waves size={14} /><span>{isArabic ? 'الأجواء' : 'Ambient'}</span>
-        </button>
-      </div>
-    </section>
-  );
+const APOLLO_LM_ID = 'apollo-11-eagle-descent-stage';
+const APOLLO_LM_PRESENTATION = {
+  name: 'Apollo 11 Lunar Module (Eagle)',
+  nickname: 'Apollo 11 Lunar Module',
+  has3DModel: true,
+  model3dFile: '/models/apollo_lunar_module.glb',
+  status: 'Eagle landed in Mare Tranquillitatis on July 20, 1969. Its descent stage remained on the Moon after the ascent stage lifted off the next day. After docking with Columbia, the Lunar Module was jettisoned in lunar orbit; NASA reports that its later fate is unknown.',
+  story: {
+    en: 'I am Eagle, the Apollo 11 Lunar Module. Launched from Earth on July 16, 1969, I carried Neil Armstrong and Buzz Aldrin down to Mare Tranquillitatis on July 20. My descent stage set us down and stayed behind on the Moon. The ascent stage carried the astronauts back to lunar orbit the next day. After rejoining Columbia, I was jettisoned; NASA does not know what happened to me afterward.',
+    ar: 'أنا Eagle، وحدة Apollo 11 القمرية. انطلقت من الأرض في 16 يوليو 1969 حاملةً نيل أرمسترونغ وباز ألدرن إلى Mare Tranquillitatis يوم 20 يوليو. أنزلتنا مرحلة الهبوط إلى السطح، ثم بقيت هناك. وفي اليوم التالي، حملت مرحلة الصعود الرائدين إلى المدار القمري. بعد الالتحام بمركبة Columbia، تخلّص الطاقم من الوحدة القمرية؛ ولا تعرف NASA ما حدث لها بعد ذلك.',
+  },
+  hotspots: [
+    {
+      part: 'Ascent stage & crew cabin',
+      title: 'Crew cabin and lunar-orbit return stage',
+      description: 'The upper stage housed the astronauts and its ascent engine. It lifted Armstrong and Aldrin from the lunar surface into orbit on July 21, 1969, then rejoined Columbia.',
+    },
+    {
+      part: 'Descent stage',
+      title: 'Landing platform and descent propulsion',
+      description: 'The lower stage carried the descent propulsion system, propellant tanks, and surface equipment. It brought Eagle down to Mare Tranquillitatis and remained on the Moon when the ascent stage departed.',
+    },
+    {
+      part: 'Landing legs & footpads',
+      title: 'Lunar touchdown supports',
+      description: 'Four extendable legs and broad footpads supported the Lunar Module at touchdown and kept the crew cabin clear of the lunar surface.',
+    },
+  ],
+};
+
+function presentRelic(item) {
+  return item.id === APOLLO_LM_ID ? { ...item, ...APOLLO_LM_PRESENTATION } : item;
 }
 
 export default function App() {
   const [relics, setRelics] = useState(LOCAL_RELICS);
-  const [filter, setFilter] = useState('All');
+  const [celestialView, setCelestialView] = useState('Moon');
+  const [archiveFilter, setArchiveFilter] = useState('All');
   const [selectedId, setSelectedId] = useState(null);
-  const [activeMission, setActiveMission] = useState(null);
   const [language, setLanguage] = useState(() => localStorage.getItem('lunar-relics-language') || 'en');
+  const [audioEnabled, setAudioEnabled] = useState(true);
   const [badges, setBadges] = useState(readBadges);
+  const [storyProgress, setStoryProgress] = useState({ index: 0, total: 1 });
   const [badgeModalOpen, setBadgeModalOpen] = useState(false);
   const [hotspot, setHotspot] = useState(null);
   const [apiState, setApiState] = useState('local');
   const [isInitialLoading, setIsInitialLoading] = useState(() => Boolean(import.meta.env.VITE_API_URL?.trim()));
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [ambientEnabled, setAmbientEnabled] = useState(false);
-  const [isTransmitting, setIsTransmitting] = useState(false);
-  const [caption, setCaption] = useState('');
-  const audioTokenRef = useRef(0);
-  const stopAudioRef = useRef(null);
-  const journeyRef = useRef({
-    exploreProgress: 0,
-    cameraItems: LOCAL_RELICS,
-    activeMissionId: null,
-    chapter: 0,
-    hotspotIndex: -1,
-    timelineIndex: 0,
-    isScrolling: false,
-  });
 
   useEffect(() => {
     let active = true;
@@ -80,8 +71,9 @@ export default function App() {
       if (!active) return;
       setRelics(records);
       setApiState(records === LOCAL_RELICS ? 'local' : 'online');
-      journeyRef.current.cameraItems = records;
-    }).finally(() => { if (active) setIsInitialLoading(false); });
+    }).finally(() => {
+      if (active) setIsInitialLoading(false);
+    });
     return () => { active = false; };
   }, []);
 
@@ -91,148 +83,154 @@ export default function App() {
     localStorage.setItem('lunar-relics-language', language);
   }, [language]);
 
-  useEffect(() => { localStorage.setItem('lunar-relics-badges', JSON.stringify([...badges])); }, [badges]);
-
-  const stopTransmission = useCallback(() => {
-    audioTokenRef.current += 1;
-    const stop = stopAudioRef.current;
-    stopAudioRef.current = null;
-    stop?.();
-    setIsTransmitting(false);
-  }, []);
-
-  const startTransmission = useCallback((text) => {
-    const safeText = String(text || '').trim();
-    if (!safeText) return;
-    const token = audioTokenRef.current + 1;
-    audioTokenRef.current = token;
-    stopAudioRef.current?.();
-    setCaption('');
-    setIsTransmitting(true);
-    stopAudioRef.current = transmitText(safeText, language, () => {
-      if (audioTokenRef.current !== token) return;
-      stopAudioRef.current = null;
-      setIsTransmitting(false);
-      setCaption(safeText);
-    }, {
-      voiceEnabled,
-      onProgress: (index) => { if (audioTokenRef.current === token) setCaption(safeText.slice(0, index)); },
-    });
-  }, [language, voiceEnabled]);
-
-  useEffect(() => () => {
-    stopAudioRef.current?.();
-    void updateAmbientPad(false);
-  }, []);
   useEffect(() => {
-    stopTransmission();
-    setCaption('');
-    setHotspot(null);
-    journeyRef.current.chapter = 0;
-    journeyRef.current.hotspotIndex = -1;
-    journeyRef.current.timelineIndex = 0;
-  }, [selectedId, language, stopTransmission]);
+    localStorage.setItem('lunar-relics-badges', JSON.stringify([...badges]));
+  }, [badges]);
 
-  const selectedRelic = useMemo(() => relics.find((item) => item.id === selectedId) || null, [relics, selectedId]);
-  const visibleRelics = useMemo(() => {
-    if (filter === 'All') return relics;
-    if (filter === '3D Models') return relics.filter((item) => item.has3DModel);
-    return relics.filter((item) => item.body === filter);
-  }, [filter, relics]);
-  const sceneFilter = filter === '3D Models' ? 'All' : filter;
-  const isArabic = language === 'ar';
-  const activeStory = selectedRelic?.story?.[language] || selectedRelic?.story?.en || activeMission?.story?.[language] || activeMission?.story?.en || '';
+  const displayRelics = useMemo(() => relics.map(presentRelic), [relics]);
+  const selectedRelic = useMemo(() => displayRelics.find((item) => item.id === selectedId) || null, [displayRelics, selectedId]);
+  const storyMode = Boolean(selectedRelic);
+  const visibleRelics = useMemo(
+    () => displayRelics.filter((item) => item.body === celestialView),
+    [celestialView, displayRelics],
+  );
 
-  const openRelic = useCallback((item) => {
-    setBadgeModalOpen(false);
-    setHotspot(null);
-    setSelectedId(item.id);
-    journeyRef.current.chapter = 0;
-    journeyRef.current.hotspotIndex = -1;
-    journeyRef.current.timelineIndex = 0;
-    journeyRef.current.isScrolling = false;
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, []);
-  const backToMap = useCallback(() => {
-    setHotspot(null);
-    setSelectedId(null);
-    journeyRef.current.chapter = 0;
-    journeyRef.current.isScrolling = false;
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, []);
-  const unlockBadge = useCallback((relicId) => {
+  const unlockBadge = (relicId) => {
     setBadges((current) => {
       if (current.has(relicId)) return current;
       const next = new Set(current);
       next.add(relicId);
       return next;
     });
-  }, []);
-  const toggleVoice = useCallback(() => {
-    const nextEnabled = !voiceEnabled;
-    setTelemetryMuted(!nextEnabled);
-    if (!nextEnabled) {
-      if (isTransmitting) stopTransmission();
-      if (ambientEnabled) {
-        setAmbientEnabled(false);
-        void updateAmbientPad(false);
-      }
-    }
-    setVoiceEnabled((value) => !value);
-  }, [ambientEnabled, isTransmitting, stopTransmission, voiceEnabled]);
-  const toggleAmbient = async () => {
-    if (!voiceEnabled) return;
-    const next = !ambientEnabled;
-    const available = await updateAmbientPad(next);
-    if (next && !available) return;
-    setAmbientEnabled(next);
   };
-  const handleActiveMissionChange = useCallback((item) => setActiveMission(item), []);
-  const handleSetHotspot = useCallback((nextSpot) => {
-    setHotspot(nextSpot);
-    const index = nextSpot ? (selectedRelic?.hotspots || []).findIndex((spot) => (spot.part && spot.part === nextSpot.part) || spot.title === nextSpot.title) : -1;
-    journeyRef.current.hotspotIndex = index;
-  }, [selectedRelic]);
+
+  const closeBadgeModal = useCallback(() => setBadgeModalOpen(false), []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('story-scroll-page', storyMode);
+    document.body.classList.toggle('story-scroll-page', storyMode);
+    window.scrollTo(0, 0);
+    return () => {
+      document.documentElement.classList.remove('story-scroll-page');
+      document.body.classList.remove('story-scroll-page');
+    };
+  }, [storyMode]);
+
+  const openRelic = (item) => {
+    setBadgeModalOpen(false);
+    setCelestialView(item.body || 'Moon');
+    setHotspot(null);
+    setStoryProgress({ index: 0, total: 1 });
+    setSelectedId(item.id);
+  };
+
+  const backToMap = () => {
+    setHotspot(null);
+    setStoryProgress({ index: 0, total: 1 });
+    setSelectedId(null);
+  };
+
+  const changeCelestialView = (nextView) => {
+    setCelestialView(nextView);
+    setHotspot(null);
+    setSelectedId(null);
+  };
+
+  const isArabic = language === 'ar';
 
   return (
-    <div className={`app-shell cinematic-shell scrolly-app ${isArabic ? 'app-rtl' : ''}`} id="mission-control" dir={isArabic ? 'rtl' : 'ltr'}>
-      <div className="scene-backdrop" aria-label={isArabic ? 'مشهد فضائي ثلاثي الأبعاد تفاعلي' : 'Interactive 3D space scene'}>
-        <Suspense fallback={<div className="canvas-chunk-loader"><SpaceLoader language={language} kind="model" compact /></div>}>
-          <Space3DCanvas relics={visibleRelics} filter={sceneFilter} selectedRelic={selectedRelic} onSelect={openRelic} language={language} hotspot={hotspot} setHotspot={handleSetHotspot} journeyRef={journeyRef} />
-        </Suspense>
-        <div className="scene-vignette" aria-hidden="true" />
-        {hotspot && <div className="hotspot-readout" role="status"><button className="hotspot-close" type="button" onClick={() => handleSetHotspot(null)} aria-label={isArabic ? 'إغلاق' : 'Close'}>×</button><span className="hotspot-kicker">{isArabic ? 'نقطة فحص الجهاز' : 'HARDWARE HOTSPOT'}</span><strong dir="auto">{hotspot.title || hotspot.part}</strong><p dir="auto">{hotspot.description}</p></div>}
-      </div>
+    <div className={`app-shell ${storyMode ? 'story-mode' : ''} ${isArabic ? 'app-rtl' : ''}`} dir={isArabic ? 'rtl' : 'ltr'}>
+      <div className="ambient-grid" aria-hidden="true" />
+      <div className="ambient-glow glow-one" aria-hidden="true" />
+      <div className="ambient-glow glow-two" aria-hidden="true" />
 
-      <div className="mission-hud">
-        <TopNav filter={filter} language={language} setLanguage={setLanguage} relics={relics} badges={badges} onOpenBadges={() => setBadgeModalOpen(true)} badgesOpen={badgeModalOpen} voiceEnabled={voiceEnabled} onToggleVoice={toggleVoice} apiState={apiState} />
-        <div className="scrolly-content">
-          <ScrollytellingExperience
-            relics={visibleRelics}
+      <TopNav
+        celestialView={celestialView}
+        setCelestialView={changeCelestialView}
+        language={language}
+        setLanguage={setLanguage}
+        relics={displayRelics}
+        badges={badges}
+        onOpenBadges={() => setBadgeModalOpen(true)}
+        badgesOpen={badgeModalOpen}
+        audioEnabled={audioEnabled}
+        onToggleAudio={() => setAudioEnabled((enabled) => !enabled)}
+      />
+      {badgeModalOpen && (
+        <BadgeModal relics={displayRelics} badges={badges} language={language} onClose={closeBadgeModal} onSelect={openRelic} />
+      )}
+
+      <main className={`workspace-grid ${storyMode ? 'story-mode' : ''}`}>
+        <section className={`viewport-panel glass-panel ${selectedRelic ? 'inspection-mode' : ''}`} aria-label={isArabic ? 'المشهد ثلاثي الأبعاد' : '3D scene'}>
+          <div className="canvas-stage">
+            <Suspense fallback={<div className="canvas-chunk-loader"><SpaceLoader language={language} kind="model" compact /></div>}>
+              <Space3DCanvas
+                relics={visibleRelics}
+                filter={celestialView}
+                selectedRelic={selectedRelic}
+                onSelect={openRelic}
+                language={language}
+                hotspot={hotspot}
+                setHotspot={setHotspot}
+                storyProgress={storyProgress}
+              />
+            </Suspense>
+            {!selectedRelic && (
+              <div className="map-instructions">
+                <Crosshair size={14} />
+                <span>{isArabic ? 'اختر نقطة مضيئة أو أثرًا من الأرشيف' : 'SELECT A LIT SURFACE BEACON OR A RELIC FROM THE ARCHIVE'}</span>
+              </div>
+            )}
+            <div className="canvas-meta">
+              <span><RadioTower size={12} /> {isArabic ? 'اتصال حي' : 'SIGNAL LINK'}</span>
+              <span>{celestialView === 'Deep Space' ? 'DEEP SPACE' : celestialView.toUpperCase()}</span>
+            </div>
+            {selectedRelic && (
+              <div className="story-scene-hud" aria-live="polite">
+                <span>{isArabic ? 'حكاية المهمة · مرّر للمتابعة' : 'MISSION STORY · SCROLL TO CONTINUE'}</span>
+                <strong dir="auto">{selectedRelic.nickname || selectedRelic.name}</strong>
+                <div className="story-scene-progress" aria-hidden="true"><i style={{ width: `${storyProgress.total > 1 ? (storyProgress.index / (storyProgress.total - 1)) * 100 : 0}%` }} /></div>
+                <small dir="ltr">{String(storyProgress.index + 1).padStart(2, '0')} / {String(storyProgress.total).padStart(2, '0')}</small>
+              </div>
+            )}
+            {hotspot && (
+              <div className="hotspot-readout" role="status">
+                <button className="hotspot-close" type="button" onClick={() => setHotspot(null)} aria-label={isArabic ? 'إغلاق نقطة الفحص' : 'Close hotspot'}>×</button>
+                <span className="hotspot-kicker">{isArabic ? 'نقطة فحص' : 'INSPECTION POINT'}</span>
+                <strong dir="auto">{hotspot.title || hotspot.part}</strong>
+                <p dir="auto">{hotspot.description}</p>
+              </div>
+            )}
+          </div>
+          <div className="viewport-footer">
+            <div className="control-hint"><span className="mouse-glyph">◎</span>{isArabic ? 'اسحب للتدوير' : 'DRAG TO ORBIT'} <i /> {isArabic ? 'مرّر للتقريب' : 'SCROLL TO ZOOM'}</div>
+            <div className="data-source-tag"><Info size={12} /> {isArabic ? <>بيانات <bdi dir="ltr">NASA NSSDCA</bdi></> : <bdi dir="ltr">NASA NSSDCA DATA</bdi>}</div>
+          </div>
+        </section>
+
+        <aside className="archive-panel glass-panel">
+          <StoryAndArchivePanel
+            relics={displayRelics}
+            archiveFilter={archiveFilter}
+            setArchiveFilter={setArchiveFilter}
             selectedRelic={selectedRelic}
             language={language}
-            filter={filter}
-            setFilter={setFilter}
-            onOpen={openRelic}
-            onBack={backToMap}
             badges={badges}
+            onSelect={openRelic}
+            onBack={backToMap}
             onUnlock={unlockBadge}
             hotspot={hotspot}
-            setHotspot={handleSetHotspot}
-            journeyRef={journeyRef}
-            onActiveMissionChange={handleActiveMissionChange}
-            isTransmitting={isTransmitting}
-            onTransmit={startTransmission}
-            onStopAudio={stopTransmission}
-            voiceEnabled={voiceEnabled}
-            caption={caption}
+            setHotspot={setHotspot}
+            onStoryProgress={setStoryProgress}
+            audioEnabled={audioEnabled}
           />
-        </div>
-        {!selectedRelic && <footer className="app-footer"><span>SPACE APPS CAIRO 2026 <i /> LUNAR RELICS</span><span className={`api-indicator ${apiState === 'online' ? 'is-online' : ''}`}><span />{apiState === 'online' ? (isArabic ? 'مزامنة بيانات عن بُعد' : 'REMOTE DATA SYNCED') : (isArabic ? 'الأرشيف المحلي جاهز' : 'LOCAL ARCHIVE READY')}</span></footer>}
-        <CinemaBar selectedRelic={selectedRelic} activeMission={activeMission} language={language} caption={caption} isTransmitting={isTransmitting} onPlay={() => startTransmission(activeStory)} onStop={stopTransmission} voiceEnabled={voiceEnabled} onToggleVoice={toggleVoice} ambientEnabled={ambientEnabled} onToggleAmbient={toggleAmbient} />
-      </div>
+        </aside>
+      </main>
 
-      {badgeModalOpen && <BadgeModal relics={relics} badges={badges} language={language} onClose={() => setBadgeModalOpen(false)} onSelect={openRelic} />}
+      <footer className="app-footer">
+        <span>SPACE APPS CAIRO 2026 <i /> LUNAR RELICS 3D</span>
+        <span className={`api-indicator ${apiState === 'online' ? 'is-online' : ''}`}><span />{apiState === 'online' ? (isArabic ? 'بيانات متصلة' : 'REMOTE DATA SYNCED') : (isArabic ? 'أرشيف محلي' : 'LOCAL ARCHIVE READY')}</span>
+      </footer>
       {isInitialLoading && <SpaceLoader language={language} overlay />}
     </div>
   );

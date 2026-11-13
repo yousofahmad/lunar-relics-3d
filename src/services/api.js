@@ -17,7 +17,26 @@ export async function fetchRelics() {
     const payload = await response.json();
     const records = Array.isArray(payload) ? payload : payload?.data;
     if (!Array.isArray(records) || records.length === 0) throw new Error('Relics API returned no records');
-    return records;
+    const localByKey = new Map();
+    for (const item of LOCAL_RELICS) {
+      for (const key of [item.id, item.name, item.nickname]) {
+        if (key) localByKey.set(String(key).trim().toLocaleLowerCase(), item);
+      }
+    }
+    return records.map((record) => {
+      const local = [record.id, record.name, record.nickname]
+        .filter(Boolean)
+        .map((key) => localByKey.get(String(key).trim().toLocaleLowerCase()))
+        .find(Boolean);
+      if (!local) return record;
+      const model3dFile = local.model3dFile || record.model3dFile || '';
+      return {
+        ...local,
+        ...record,
+        model3dFile,
+        has3DModel: Boolean(model3dFile),
+      };
+    });
   } catch {
     return LOCAL_RELICS;
   } finally {

@@ -27,14 +27,9 @@
         "title": "Landing and surface-support stage"
       },
       {
-        "description": "The upper LM stage housed Armstrong and Aldrin and used its ascent engine to leave the Moon at 17:54:01 UT on 21 July 1969. It rendezvoused and docked with Columbia, was jettisoned into lunar orbit on 22 July, and its later fate is not known according to NSSDCA.",
-        "part": "Ascent stage",
-        "title": "Crew return stage"
-      },
-      {
-        "description": "EASEP included a passive seismometer, lunar dust detector, solar panels, antenna, and communications equipment. It was deployed near the LM; NSSDCA says transmissions were stopped on 3 August 1969, it operated again on the next lunar day, and the experiment was terminated on 27 August 1969 when it no longer accepted commands.",
+        "description": "EASEP was a separate scientific package deployed on the lunar surface near the Lunar Module, not a component of Eagle's descent stage. It carried instruments for studying the lunar environment; the NSSDCA record notes that transmissions stopped on 3 August 1969, resumed during the next lunar day, and the experiment was terminated on 27 August 1969.",
         "part": "Early Apollo Scientific Experiment Package (EASEP)",
-        "title": "Surface science package"
+        "title": "Nearby lunar science package"
       }
     ],
     "timeline": [
