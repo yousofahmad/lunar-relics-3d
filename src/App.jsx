@@ -5,7 +5,7 @@ import BadgeModal from './components/BadgeModal.jsx';
 import TopNav from './components/TopNav.jsx';
 import StoryAndArchivePanel from './components/StoryAndArchivePanel.jsx';
 import SpaceLoader from './components/SpaceLoader.jsx';
-import { initializeAudioEngine, setAudioMuted, setSoundscape, subscribeAudioEngine } from './utils/audioEngine.js';
+import { initializeAudioEngine, playUiChirp, setAudioMuted, setSoundscape, subscribeAudioEngine } from './utils/audioEngine.js';
 
 const Space3DCanvas = lazy(() => import('./components/Space3DCanvas.jsx'));
 
@@ -61,6 +61,7 @@ export default function App() {
   const [language, setLanguage] = useState(() => localStorage.getItem('lunar-relics-language') || 'en');
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [audioStarted, setAudioStarted] = useState(false);
+  const [autoPilotOn, setAutoPilotOn] = useState(false);
   const [badges, setBadges] = useState(readBadges);
   const [storyProgress, setStoryProgress] = useState({ index: 0, total: 1 });
   const [badgeModalOpen, setBadgeModalOpen] = useState(false);
@@ -131,27 +132,37 @@ export default function App() {
   const openRelic = (item) => {
     setBadgeModalOpen(false);
     setCelestialView(item.body || 'Moon');
+    setAutoPilotOn(true);
     setHotspot(null);
     setStoryProgress({ index: 0, total: 1 });
     setSelectedId(item.id);
   };
 
   const backToMap = () => {
+    setAutoPilotOn(false);
     setHotspot(null);
     setStoryProgress({ index: 0, total: 1 });
     setSelectedId(null);
   };
 
   const changeCelestialView = (nextView) => {
+    setAutoPilotOn(false);
     setCelestialView(nextView);
     setHotspot(null);
     setSelectedId(null);
   };
 
   const isArabic = language === 'ar';
+  const emitUiCue = (event, hover = false) => {
+    const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+    const control = target?.closest('button, a, [role="button"]');
+    if (!control) return;
+    if (hover && event.relatedTarget instanceof Node && control.contains(event.relatedTarget)) return;
+    playUiChirp();
+  };
 
   return (
-    <div className={`app-shell ${storyMode ? 'story-mode' : ''} ${isArabic ? 'app-rtl' : ''}`} dir={isArabic ? 'rtl' : 'ltr'}>
+    <div className={`app-shell ${storyMode ? 'story-mode' : ''} ${isArabic ? 'app-rtl' : ''}`} dir={isArabic ? 'rtl' : 'ltr'} onClickCapture={(event) => emitUiCue(event)} onPointerOverCapture={(event) => emitUiCue(event, true)}>
       <div className="ambient-grid" aria-hidden="true" />
       <div className="ambient-glow glow-one" aria-hidden="true" />
       <div className="ambient-glow glow-two" aria-hidden="true" />
@@ -178,6 +189,8 @@ export default function App() {
           }
         }}
         audioEnabled={audioEnabled}
+        autoPilotOn={autoPilotOn}
+        onToggleAutoPilot={() => setAutoPilotOn((current) => !current)}
         onToggleAudio={() => {
           if (!audioStarted && audioEnabled) {
             setAudioMuted(false, { startIfUnmuting: true });
@@ -256,6 +269,8 @@ export default function App() {
             setHotspot={setHotspot}
             onStoryProgress={setStoryProgress}
             audioEnabled={audioEnabled}
+            autoPilotOn={autoPilotOn}
+            setAutoPilotOn={setAutoPilotOn}
           />
         </aside>
       </main>

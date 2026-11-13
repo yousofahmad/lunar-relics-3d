@@ -380,9 +380,10 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   const dataHotspots = (item.hotspots || []).slice(0, 3);
   const selectedIndex = dataHotspots.findIndex((spot) => selectedHotspot && ((selectedHotspot.part && selectedHotspot.part === spot.part) || (!selectedHotspot.part && selectedHotspot.title === spot.title)));
   const chapterId = storyProgress?.chapter || 'hero';
+  const chapterIndex = storyProgress?.index ?? 0;
   const chapterHotspotIndex = chapterId.startsWith('hardware-') ? Number(chapterId.slice('hardware-'.length)) : -1;
   const focusIndex = chapterHotspotIndex >= 0 ? chapterHotspotIndex : selectedIndex;
-  const previousMotionRef = useRef({ chapterId, focusIndex });
+  const previousMotionRef = useRef({ chapterId, focusIndex, chapterIndex });
 
   useEffect(() => {
     setModelBounds(null);
@@ -396,10 +397,11 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
       || chapterId.startsWith('hardware-')
       || previous.chapterId === 'transmission'
       || previous.chapterId.startsWith('hardware-');
-    if (chapterChanged && cameraGlides) playScrollWhoosh();
+    const travelDirection = chapterIndex >= previous.chapterIndex ? 1 : -1;
+    if (chapterChanged && cameraGlides) playScrollWhoosh(travelDirection);
     if (focusIndex >= 0 && (focusChanged || (chapterChanged && chapterId.startsWith('hardware-')))) playSonarLock();
-    previousMotionRef.current = { chapterId, focusIndex };
-  }, [chapterId, focusIndex]);
+    previousMotionRef.current = { chapterId, focusIndex, chapterIndex };
+  }, [chapterId, chapterIndex, focusIndex]);
 
   useFrame((state, delta) => {
     const rig = storyRig.current;
