@@ -1,11 +1,11 @@
 import React, { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
-import { Html, OrbitControls, Stars } from '@react-three/drei';
+import { Environment, Html, Lightformer, OrbitControls, Stars } from '@react-three/drei';
 import { Activity, LocateFixed, Minus, Plus, RotateCcw } from 'lucide-react';
 import * as THREE from 'three';
-import HoloRelic from './HoloRelic.jsx';
 import SpaceLoader from './SpaceLoader.jsx';
 import { playScrollWhoosh, playSonarLock } from '../utils/audioEngine.js';
+import { getRelicModelPath } from '../utils/relicModelMap.js';
 
 const GltfModel = lazy(() => import('./GltfModel.jsx'));
 
@@ -32,7 +32,7 @@ const RIM_FRAGMENT_SHADER = `
   varying vec3 vNormal;
   varying vec3 vViewDirection;
   void main() {
-    float fresnel = pow(1.0 - max(dot(normalize(vNormal), normalize(vViewDirection)), 0.0), 3.1);
+    float fresnel = pow(1.0 - max(dot(normalize(vNormal), normalize(vViewDirection)), 0.0), 2.6);
     gl_FragColor = vec4(rimColor, fresnel * rimStrength);
   }
 `;
@@ -48,6 +48,16 @@ class ModelErrorBoundary extends React.Component {
   render() {
     return this.state.failed ? this.props.fallback : this.props.children;
   }
+}
+
+function SpaceStudioEnvironment() {
+  return (
+    <Environment resolution={128} background={false}>
+      <Lightformer form="rect" intensity={2.4} color="#ffffff" position={[0, 5, 5]} scale={[9, 5, 1]} />
+      <Lightformer form="rect" intensity={1.35} color="#60a5fa" position={[-5, 1, 2]} rotation={[0, Math.PI / 3, 0]} scale={[6, 4, 1]} />
+      <Lightformer form="rect" intensity={0.9} color="#EAB308" position={[4, -3, -4]} rotation={[0, -Math.PI / 4, 0]} scale={[5, 3, 1]} />
+    </Environment>
+  );
 }
 
 function toSpherePoint(lat, lng, radius) {
@@ -88,16 +98,16 @@ function Pin({ item, position, onSelect, selected = false, language = 'en' }) {
           onPointerOver={(event) => { event.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
           onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }}
         >
-          <sphereGeometry args={[selected ? 0.085 : 0.065, 24, 20]} />
+          <sphereGeometry args={[selected ? 0.065 : 0.048, 24, 20]} />
           <meshBasicMaterial color={beaconColor} />
         </mesh>
         <mesh position={[0, 0.065, 0]}>
-          <cylinderGeometry args={[0.008, 0.018, 0.13, 10]} />
+          <cylinderGeometry args={[0.007, 0.014, 0.115, 10]} />
           <meshBasicMaterial color={beaconColor} transparent opacity={0.68} />
         </mesh>
         <mesh position={[0, 0.07, 0]}>
-          <sphereGeometry args={[0.15, 18, 14]} />
-          <meshBasicMaterial color={beaconColor} transparent opacity={0.12} depthWrite={false} />
+          <sphereGeometry args={[0.105, 18, 14]} />
+          <meshBasicMaterial color={beaconColor} transparent opacity={0.09} depthWrite={false} />
         </mesh>
       </group>
       {(hovered || selected) && (
@@ -109,11 +119,11 @@ function Pin({ item, position, onSelect, selected = false, language = 'en' }) {
   );
 }
 
-function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, autoRotate }) {
+function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, autoRotate, showCaption = true }) {
   const group = useRef();
   const assets = PLANET_ASSETS[body];
   const [colorMap, heightMap] = useLoader(THREE.TextureLoader, [assets.color, assets.height]);
-  const rimColor = useMemo(() => new THREE.Color(body === 'Mars' ? '#f57b42' : '#e2e6e9'), [body]);
+  const rimColor = useMemo(() => new THREE.Color(body === 'Mars' ? '#f2aa77' : '#60a5fa'), [body]);
   const bumpScale = body === 'Moon' ? 0.06 : 0.025;
 
   useMemo(() => {
@@ -144,7 +154,7 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
       <mesh scale={1.018}>
         <sphereGeometry args={[radius, 96, 96]} />
         <shaderMaterial
-          uniforms={{ rimColor: { value: rimColor }, rimStrength: { value: body === 'Mars' ? 0.56 : 0.32 } }}
+          uniforms={{ rimColor: { value: rimColor }, rimStrength: { value: body === 'Mars' ? 0.28 : 0.22 } }}
           vertexShader={RIM_VERTEX_SHADER}
           fragmentShader={RIM_FRAGMENT_SHADER}
           transparent
@@ -166,66 +176,115 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
           />
         );
       })}
-      <Html center position={[0, -radius * 1.12, 0]} distanceFactor={12} className={`planet-caption ${body === 'Moon' ? 'moon-caption' : 'mars-caption'}`}>
-        <span>{body === 'Moon' ? (language === 'ar' ? 'القمر · LUNA' : 'THE MOON · LUNA') : (language === 'ar' ? 'المريخ · MARS' : 'MARS')}</span>
-      </Html>
+      {showCaption && (
+        <Html center position={[0, -radius * 1.12, 0]} distanceFactor={12} className={`planet-caption ${body === 'Moon' ? 'moon-caption' : 'mars-caption'}`}>
+          <span>{body === 'Moon' ? (language === 'ar' ? 'القمر · LUNA' : 'THE MOON · LUNA') : (language === 'ar' ? 'المريخ · MARS' : 'MARS')}</span>
+        </Html>
+      )}
     </group>
   );
 }
 
-function DeepSpaceMap({ items, onSelect, selectedRelic, language }) {
-  const points = useMemo(() => items.map((item, index) => {
-    const t = (index + 0.5) / Math.max(items.length, 1);
-    const y = 1 - 2 * t;
-    const radius = 2.05 + (index % 2) * 0.34;
-    const ring = Math.sqrt(Math.max(0, 1 - y * y));
-    const angle = index * Math.PI * (3 - Math.sqrt(5));
-    return { item, position: [Math.cos(angle) * ring * radius, y * radius, Math.sin(angle) * ring * radius] };
-  }), [items]);
+function OrbitalRelic({ item, position, onSelect, selected, language, compact }) {
+  const modelRig = useRef();
+  const [hovered, setHovered] = useState(false);
+  const modelPath = getRelicModelPath(item);
+  const title = item.nickname || item.name;
+
+  useFrame(({ clock }) => {
+    if (modelRig.current) modelRig.current.rotation.y = clock.elapsedTime * 0.24 + item.id.length * 0.08;
+  });
 
   return (
-    <group>
-      <mesh>
-        <sphereGeometry args={[0.17, 32, 24]} />
-        <meshBasicMaterial color="#ffe4ab" />
+    <group position={position}>
+      <group ref={modelRig} scale={compact ? 0.105 : 0.17}>
+        <ModelErrorBoundary fallback={null}>
+          <Suspense fallback={null}><GltfModel modelPath={modelPath} /></Suspense>
+        </ModelErrorBoundary>
+      </group>
+      <mesh
+        onClick={(event) => { event.stopPropagation(); onSelect(item); }}
+        onPointerOver={(event) => { event.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
+        onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }}
+      >
+        <sphereGeometry args={[compact ? 0.2 : 0.3, 16, 12]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
-      <mesh>
-        <sphereGeometry args={[0.34, 32, 24]} />
-        <meshBasicMaterial color="#ffbc68" transparent opacity={0.07} depthWrite={false} />
-      </mesh>
+      {(hovered || selected) && (
+        <Html center position={[0, compact ? 0.3 : 0.4, 0]} distanceFactor={compact ? 8 : 10} className="pin-label" occlude>
+          <span dir={language === 'ar' ? 'auto' : 'ltr'}>{title}</span>
+        </Html>
+      )}
+    </group>
+  );
+}
+
+function DeepSpaceMap({ items, onSelect, selectedRelic, language, autoRotate, archiveOpen }) {
+  const { size } = useThree();
+  const compact = size.width < 620;
+  const tablet = !compact && size.width < 1200;
+  const sidebarDocked = archiveOpen && size.width > 760;
+  const centerShift = sidebarDocked ? 1.2 : 0;
+  const planetRadius = compact ? 0.55 : tablet ? 0.82 : 1.38;
+  const moonPosition = compact ? [-0.68, 0.38, 0] : tablet ? [0, 1, 0] : [-1.72, 0, 0];
+  const marsPosition = compact ? [0.68, 0.38, 0] : tablet ? [0, -1, 0] : [1.72, 0, 0];
+  const points = useMemo(() => items.map((item, index) => {
+    const compactPositions = [[-0.18, 0.12, 1.12], [0.18, 0.12, 1.3], [-0.18, -0.14, 1.3], [0.18, -0.14, 1.12]];
+    if (compact) return { item, position: compactPositions[index % compactPositions.length] };
+    if (tablet) {
+      const tabletPositions = [[-0.3, 0.26, 1.18], [0.3, 0.26, 1.36], [-0.3, -0.26, 1.36], [0.3, -0.26, 1.18]];
+      return { item, position: tabletPositions[index % tabletPositions.length] };
+    }
+    const angle = (index / Math.max(items.length, 1)) * Math.PI * 2 - Math.PI / 2;
+    const orbitalRadius = 0.48;
+    return { item, position: [Math.cos(angle) * orbitalRadius, Math.sin(angle) * orbitalRadius, 1.72 + (index % 2) * 0.18] };
+  }), [items, compact, tablet]);
+
+  return (
+    <group position={[centerShift, 0, 0]}>
+      <group position={moonPosition}>
+        <Planet body="Moon" items={[]} radius={planetRadius} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} showCaption={false} />
+      </group>
+      <group position={marsPosition}>
+        <Planet body="Mars" items={[]} radius={planetRadius} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} showCaption={false} />
+      </group>
       {points.map(({ item, position }) => (
-        <Pin key={item.id} item={item} position={position} onSelect={onSelect} selected={selectedRelic?.id === item.id} language={language} />
+        <OrbitalRelic key={item.id} item={item} position={position} onSelect={onSelect} selected={selectedRelic?.id === item.id} language={language} compact={compact} />
       ))}
-      <Html center position={[0, -2.85, 0]} distanceFactor={12} className="planet-caption deep-space-caption">
-        <span>{language === 'ar' ? 'مهمات الفضاء العميق' : 'DEEP SPACE MISSIONS'}</span>
+      <Html fullscreen zIndexRange={[2, 2]}>
+        <div className={`dual-map-captions ${compact ? 'is-compact' : ''} ${tablet ? 'is-tablet' : ''}`} role="group" aria-label={language === 'ar' ? 'القمر والمريخ معًا' : 'Moon and Mars together'}>
+          <span>{language === 'ar' ? 'القمر · LUNA' : 'THE MOON · LUNA'}</span>
+          <span>{language === 'ar' ? 'المريخ · MARS' : 'MARS'}</span>
+        </div>
       </Html>
     </group>
   );
 }
 
-function MapScene({ celestialView, relics, onSelect, selectedRelic, language, autoRotate, controlsRef }) {
+function MapScene({ celestialView, relics, onSelect, selectedRelic, language, autoRotate, controlsRef, archiveOpen }) {
+  const { size } = useThree();
+  const dualPlanetView = celestialView === 'Deep Space';
   return (
     <>
-      <color attach="background" args={['#03060b']} />
-      <fog attach="fog" args={['#03060b', 28, 70]} />
-      <ambientLight intensity={0.16} color="#b9c4ce" />
-      <directionalLight position={[5, 3.5, 7]} intensity={3.4} color="#fff4e6" />
-      <pointLight position={[-5, -2, -4]} intensity={0.48} color="#0B3D91" distance={18} />
-      <pointLight position={[2.5, -1.5, 5]} intensity={0.12} color="#EAB308" distance={15} />
-      <Stars radius={90} depth={52} count={1700} factor={3.2} saturation={0.12} fade speed={0.09} />
+      <color attach="background" args={['#03060C']} />
+      <fog attach="fog" args={['#03060C', 28, 70]} />
+      <ambientLight intensity={1.35} color="#e2e8f0" />
+      <hemisphereLight args={['#ffffff', '#3b4252', 1.2]} />
+      <directionalLight position={[5, 3.5, 7]} intensity={1.8} color="#ffffff" />
+      <directionalLight position={[-6, -3, -5]} intensity={1.1} color="#60a5fa" />
+      <pointLight position={[2.5, -1.5, 5]} intensity={0.09} color="#EAB308" distance={15} />
+      <Stars radius={dualPlanetView ? 100 : 90} depth={dualPlanetView ? 70 : 52} count={dualPlanetView ? 5000 : 1700} factor={dualPlanetView ? 4 : 3.2} saturation={0.12} fade speed={0.09} />
       {celestialView === 'Moon' && <Planet body="Moon" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
       {celestialView === 'Mars' && <Planet body="Mars" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
-      {celestialView === 'Deep Space' && <DeepSpaceMap items={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} />}
+      {dualPlanetView && <DeepSpaceMap items={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} archiveOpen={archiveOpen} />}
       <OrbitControls
         ref={controlsRef}
         makeDefault
         enablePan={false}
-        minDistance={4.7}
+        minDistance={dualPlanetView ? (size.width < 620 ? 4.8 : 5.7) : 4.7}
         maxDistance={13}
         enableDamping
         dampingFactor={0.075}
-        autoRotate={autoRotate && celestialView === 'Deep Space'}
-        autoRotateSpeed={0.16}
       />
     </>
   );
@@ -312,8 +371,8 @@ function HardwareCallout({ position, rigRef, active }) {
 function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef, storyProgress }) {
   const { camera, size } = useThree();
   const isApolloLunarModule = item.id === APOLLO_LM_ID;
-  const isRealModel = item.has3DModel && item.model3dFile;
-  const modelPath = item.model3dFile;
+  const modelPath = getRelicModelPath(item);
+  const isRealModel = Boolean(modelPath);
   const storyRig = useRef(null);
   const [modelBounds, setModelBounds] = useState(null);
   const onModelBoundsReady = useMemo(() => (bounds) => setModelBounds(bounds), []);
@@ -376,11 +435,12 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     <>
       <color attach="background" args={['#03060C']} />
       <fog attach="fog" args={['#03060C', 20, 64]} />
-      <ambientLight intensity={0.28} color="#aebdce" />
-      <directionalLight position={[4, 6, 5]} intensity={2.8} color="#ffffff" />
-      <directionalLight position={[-5, 2, -4]} intensity={1.05} color="#0B3D91" />
-      <pointLight position={[0, 4, -5]} intensity={1.6} color="#EAB308" distance={18} />
-      <pointLight position={[0, 4, 4]} intensity={0.72} color="#dbe5ee" distance={18} />
+      <ambientLight intensity={1.35} color="#e2e8f0" />
+      <hemisphereLight args={['#ffffff', '#3b4252', 1.2]} />
+      <directionalLight position={[4, 6, 5]} intensity={1.9} color="#ffffff" />
+      <directionalLight position={[-6, -3, -5]} intensity={1.1} color="#60a5fa" />
+      <pointLight position={[0, 4, -5]} intensity={0.32} color="#EAB308" distance={18} />
+      <pointLight position={[0, 4, 4]} intensity={0.34} color="#dbe5ee" distance={18} />
       <Stars radius={80} depth={50} count={1400} factor={2.9} saturation={0.1} fade speed={0.06} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.52, 0]}>
         <circleGeometry args={[2.25, 80]} />
@@ -388,14 +448,15 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
       </mesh>
       <group ref={storyRig}>
         {isRealModel ? (
-          <ModelErrorBoundary fallback={isApolloLunarModule
-            ? <Html center transform={false}><span className="model-load-error">{language === 'ar' ? 'تعذّر تحميل نموذج ناسا الكامل' : 'NASA lunar module model could not be loaded'}</span></Html>
-            : <HoloRelic item={item} />}>
+          <ModelErrorBoundary
+            key={item.id}
+            fallback={<Html center transform={false}><span className="model-load-error">{language === 'ar' ? 'تعذّر تحميل النموذج ثلاثي الأبعاد' : '3D mission model could not be loaded'}</span></Html>}
+          >
             <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} kind="model" compact /></Html>}>
-              <GltfModel modelPath={modelPath} onBoundsReady={onModelBoundsReady} preserveMaterials={isApolloLunarModule} />
+              <GltfModel modelPath={modelPath} onBoundsReady={onModelBoundsReady} descentStageOnly={isApolloLunarModule} />
             </Suspense>
           </ModelErrorBoundary>
-        ) : <HoloRelic item={item} />}
+        ) : <Html center transform={false}><span className="model-load-error">{language === 'ar' ? 'لا يتوفر ملف نموذج لهذه المهمة' : 'No 3D model is available for this mission'}</span></Html>}
         {focusIndex >= 0 && dataHotspots[focusIndex] && (
           <HotspotNode
             hotspot={dataHotspots[focusIndex]}
@@ -446,7 +507,7 @@ function CameraFlight({ selectedId, controlsRef }) {
   return null;
 }
 
-export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot, storyProgress }) {
+export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot, storyProgress, archiveOpen = true }) {
   const [autoRotate, setAutoRotate] = useState(true);
   const controlsRef = useRef(null);
   const selectTimer = useRef(0);
@@ -486,6 +547,7 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
         fallback={<div className="canvas-fallback">3D view is unavailable in this browser.</div>}
       >
         <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} compact /></Html>}>
+          <SpaceStudioEnvironment />
           {selectedRelic ? (
             <InspectionScene item={selectedRelic} language={language} setHotspot={setHotspot} selectedHotspot={hotspot} autoRotate={autoRotate} controlsRef={controlsRef} storyProgress={storyProgress} />
           ) : (
@@ -497,13 +559,14 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
               language={language}
               autoRotate={autoRotate}
               controlsRef={controlsRef}
+              archiveOpen={archiveOpen}
             />
           )}
           <CameraFlight selectedId={selectedRelic?.id || null} controlsRef={controlsRef} />
         </Suspense>
       </Canvas>
       <div className="canvas-tools">
-        <span className="render-state"><Activity size={13} />{selectedRelic ? (selectedRelic.has3DModel ? (isArabic ? 'مجسم ناسا ثلاثي الأبعاد' : 'NASA 3D model') : (isArabic ? 'مجسم ثلاثي الأبعاد' : '3D mission model')) : (isArabic ? 'مشهد الكوكب' : 'Planet view')}</span>
+        <span className="render-state"><Activity size={13} />{selectedRelic ? (isArabic ? 'نموذج تفاعلي ثلاثي الأبعاد' : '3D INTERACTIVE MODEL') : (isArabic ? 'مشهد الكوكب' : 'Planet view')}</span>
         <div className="viewer-control-group" role="group" aria-label={isArabic ? 'أدوات تكبير وتدوير المجسم' : 'Model size and view controls'}>
           <button type="button" className="viewer-control-button" onClick={() => adjustZoom('out')} aria-label={isArabic ? 'تصغير المجسم' : 'Zoom out'} title={isArabic ? 'تصغير' : 'Zoom out'}><Minus size={14} /></button>
           <button type="button" className="viewer-control-button" onClick={() => adjustZoom('in')} aria-label={isArabic ? 'تكبير المجسم' : 'Zoom in'} title={isArabic ? 'تكبير' : 'Zoom in'}><Plus size={14} /></button>

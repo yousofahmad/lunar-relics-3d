@@ -133,6 +133,9 @@ body { color: var(--suit-white); }
 .planet-caption span { color: #97a2af; font-size: 7px; letter-spacing: .14em; }
 .mars-caption span { color: #d2ae9d; }
 .deep-space-caption span { color: #aebdce; }
+.dual-map-captions { position: absolute; top: 112px; left: 50%; display: flex; align-items: center; gap: 7px; width: max-content; transform: translateX(-50%); pointer-events: none; }
+.dual-map-captions span { padding: 6px 10px; border: 1px solid rgba(248,250,252,.15); border-radius: 999px; background: rgba(3,6,12,.8); color: #97a2af; font-family: var(--font-mono); font-size: 8px; letter-spacing: .12em; white-space: nowrap; backdrop-filter: blur(8px); }
+.dual-map-captions span:last-child { color: #d2ae9d; }
 .hotspot-html { pointer-events: auto !important; }
 .three-hotspot { position: relative; display: grid; place-items: center; width: 12px; height: 12px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
 .three-hotspot-dot { display: block; width: 8px; height: 8px; border: 1px solid rgba(255,255,255,.8); border-radius: 50%; background: var(--mission-red); box-shadow: 0 0 12px rgba(252,61,33,.82); }
@@ -201,7 +204,8 @@ body { color: var(--suit-white); }
 .relic-card-title { display: block; margin-top: 4px; overflow: hidden; color: #e3e7eb; font-size: 10px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
 .relic-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 5px; color: #8793a1; font-family: var(--font-mono); font-size: 6px; }
 .relic-card-meta > span:first-child { min-width: 0; overflow: hidden; color: #aeb8c2; text-overflow: ellipsis; white-space: nowrap; }
-.relic-card-model { display: inline-flex; align-items: center; gap: 3px; flex: 0 0 auto; padding: 2px 4px; border: 1px solid rgba(148,163,184,.16); border-radius: 4px; color: #aeb8c2; font-size: 5px; white-space: nowrap; }
+.relic-card-model { display: inline-flex; align-items: center; gap: 3px; flex: 0 0 auto; padding: 2px 4px; border: 1px solid rgba(148,163,184,.16); border-radius: 4px; color: #aeb8c2; font-size: 6px; white-space: nowrap; }
+.relic-card-model.has-model { border-color: rgba(148,163,184,.28); color: #d0d7df; }
 .relic-card-model.is-procedural { border-color: rgba(234,179,8,.18); color: #cfb45c; }
 .relic-card-arrow { color: #778393; }
 .relic-card:hover .relic-card-arrow { color: var(--suit-white); }
@@ -468,6 +472,8 @@ body { color: var(--suit-white); }
   .planet-tab svg { width: 12px; }
   .planet-tab span { font-size: 6px; letter-spacing: .025em; }
   .planet-tab small { font-size: 5px; }
+  .dual-map-captions { top: 235px; gap: 4px; }
+  .dual-map-captions span { padding: 5px 7px; font-size: 7px; }
   .archive-panel { top: auto; right: 8px; bottom: 8px; left: 8px; width: auto; height: min(43svh, 340px); min-height: 225px; border-radius: 16px; }
   .app-rtl .archive-panel { right: 8px; left: 8px; }
   .archive-panel.is-hidden { transform: translateY(20px); }
@@ -480,7 +486,7 @@ body { color: var(--suit-white); }
   .relic-card-art { width: 36px; height: 36px; }
   .relic-card-title { font-size: 9px; }
   .relic-card-meta { font-size: 5px; }
-  .relic-card-model { font-size: 4px; }
+  .relic-card-model { font-size: 5px; }
   .canvas-tools { top: 91px; left: 9px; gap: 5px; }
   .render-state { max-width: min(220px, calc(100vw - 18px)); min-height: 25px; font-size: 6px; }
   .viewer-control-button { width: 26px; height: 26px; }

@@ -8,12 +8,13 @@ import {
   Sparkles, Volume2, VolumeX, X,
 } from 'lucide-react';
 import { transmitText } from '../utils/radio.js';
+import { getRelicModelPath } from '../utils/relicModelMap.js';
 
 const COPY = {
   en: {
     archive: 'MISSIONS TO EXPLORE', count: 'MISSIONS IN THE ARCHIVE', hint: 'Choose a mission to explore its story.',
     search: 'Search missions by name or year', noMatches: 'No missions found. Try another word.', clearSearch: 'Clear search',
-    realModel: 'NASA 3D MODEL', proceduralModel: '3D MODEL',
+    interactiveModel: '3D INTERACTIVE MODEL',
     noLocation: 'Location not listed', memory: 'MISSION STORY', back: 'BACK TO MISSIONS',
     telemetry: 'MISSION FACTS', record: 'NASA MISSION ID', coordinates: 'WHERE IT LANDED', orbit: 'LOCATION', positionUnavailable: 'Location not listed',
     hotspots: 'PARTS TO EXPLORE', hotspotHint: 'Tap a glowing point to learn what that part does.', hotspotDetail: 'ABOUT THIS PART', locked: 'NOT EARNED', unlocked: 'EARNED',
@@ -30,7 +31,7 @@ const COPY = {
   ar: {
     archive: 'مهمات لاستكشافها', count: 'المهمات في الأرشيف', hint: 'اختر مهمة لتشاهد قصتها.',
     search: 'ابحث عن مهمة بالاسم أو السنة', noMatches: 'لم نجد مهمة بهذا البحث. جرّب كلمة أخرى.', clearSearch: 'مسح البحث',
-    realModel: 'مجسم ناسا ثلاثي الأبعاد', proceduralModel: 'مجسم ثلاثي الأبعاد',
+    interactiveModel: 'نموذج تفاعلي ثلاثي الأبعاد',
     noLocation: 'الموقع غير مذكور', memory: 'قصة المهمة', back: 'العودة للمهمات',
     telemetry: 'معلومات المهمة', record: 'رقم المهمة', coordinates: 'مكان الهبوط', orbit: 'الموقع', positionUnavailable: 'الموقع غير مذكور',
     hotspots: 'أجزاء لاستكشافها', hotspotHint: 'اضغط على نقطة مضيئة لتعرف وظيفة هذا الجزء.', hotspotDetail: 'عن هذا الجزء', locked: 'لم تحصل عليها', unlocked: 'حصلت عليها',
@@ -110,18 +111,18 @@ function getTypeIcon(type = '') {
 
 function RelicCard({ item, language, onSelect }) {
   const copy = COPY[language] || COPY.en;
-  const AssetIcon = item.has3DModel ? Box : Sparkles;
+  const AssetIcon = Box;
   const TypeIcon = getTypeIcon(item.type);
-  const assetLabel = item.has3DModel ? copy.realModel : copy.proceduralModel;
+  const assetLabel = copy.interactiveModel;
   return (
     <button type="button" className="relic-card" onClick={() => onSelect(item)} aria-label={`${item.nickname || item.name} — ${assetLabel}`}>
-      <span className={`relic-card-art ${item.has3DModel ? 'has-model' : 'is-procedural'}`} aria-hidden="true"><TypeIcon size={22} strokeWidth={1.6} /></span>
+      <span className="relic-card-art has-model" aria-hidden="true"><TypeIcon size={22} strokeWidth={1.6} /></span>
       <span className="relic-card-copy">
         <span className="relic-card-index">{item.launchYear} <i /> {getTypeLabel(item.type, language, copy)}</span>
         <span className="relic-card-title">{item.nickname || item.name}</span>
         <span className="relic-card-meta">
           <span>{getBodyLabel(item, language, copy)} · {item.landingDate ? dateLabel(item.landingDate, language) : item.launchYear}</span>
-          <span className={`relic-card-model ${item.has3DModel ? 'has-model' : 'is-procedural'}`}><AssetIcon size={10} />{assetLabel}</span>
+          <span className="relic-card-model has-model"><AssetIcon size={10} />{assetLabel}</span>
         </span>
       </span>
       <span className="relic-card-arrow"><ArrowUpRight size={15} /></span>
@@ -141,7 +142,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
   const [query, setQuery] = useState('');
   const normalizedQuery = query.trim().toLocaleLowerCase(language === 'ar' ? 'ar' : 'en');
   const scopedRelics = relics.filter((item) => {
-    if (archiveFilter === '3D') return Boolean(item.has3DModel && item.model3dFile);
+    if (archiveFilter === '3D') return Boolean(getRelicModelPath(item));
     if (archiveFilter === 'All') return true;
     return item.body === archiveFilter;
   });
@@ -172,7 +173,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
           const count = id === 'All'
             ? relics.length
             : id === '3D'
-              ? relics.filter((item) => item.has3DModel && item.model3dFile).length
+              ? relics.filter((item) => Boolean(getRelicModelPath(item))).length
               : relics.filter((item) => item.body === id).length;
           return (
             <button type="button" key={id} className={`archive-filter-chip ${archiveFilter === id ? 'active' : ''}`} onClick={() => setArchiveFilter?.(id)} aria-pressed={archiveFilter === id}>
