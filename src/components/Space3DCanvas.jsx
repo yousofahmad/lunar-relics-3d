@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useMemo, useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Html, OrbitControls, Stars, Torus } from '@react-three/drei';
 import { Activity, LocateFixed, Minus, Plus, RotateCcw } from 'lucide-react';
 import * as THREE from 'three';
@@ -238,6 +238,37 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   );
 }
 
+function CameraFlight({ selectedId, controlsRef }) {
+  const { camera } = useThree();
+  const flight = useRef(null);
+
+  React.useEffect(() => {
+    const controls = controlsRef.current;
+    const fromPosition = camera.position.clone();
+    const fromTarget = controls?.target.clone() || new THREE.Vector3(0, 0, 0);
+    const toPosition = new THREE.Vector3(0, 0.2, selectedId ? 4.45 : 5.2);
+    const toTarget = new THREE.Vector3(0, 0, 0);
+    flight.current = { elapsed: 0, duration: 1.15, fromPosition, fromTarget, toPosition, toTarget };
+  }, [camera, controlsRef, selectedId]);
+
+  useFrame((_, delta) => {
+    if (!flight.current) return;
+    const current = flight.current;
+    current.elapsed = Math.min(current.duration, current.elapsed + delta);
+    const linear = current.elapsed / current.duration;
+    const eased = linear * linear * (3 - 2 * linear);
+    camera.position.lerpVectors(current.fromPosition, current.toPosition, eased);
+    const controls = controlsRef.current;
+    if (controls) {
+      controls.target.lerpVectors(current.fromTarget, current.toTarget, eased);
+      controls.update();
+    }
+    if (linear >= 1) flight.current = null;
+  });
+
+  return null;
+}
+
 export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot }) {
   const [autoRotate, setAutoRotate] = useState(true);
   const controlsRef = useRef(null);
@@ -269,6 +300,7 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
           ) : (
             <MapScene filter={viewFilter} relics={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} controlsRef={controlsRef} />
           )}
+          <CameraFlight selectedId={selectedRelic?.id || null} controlsRef={controlsRef} />
         </Suspense>
       </Canvas>
       <div className="canvas-tools">

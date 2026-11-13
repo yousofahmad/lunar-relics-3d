@@ -1,92 +1,180 @@
-function playQuindar(context, when, duration = 0.12) {
-  const oscillator = context.createOscillator();
-  const gain = context.createGain();
-  oscillator.type = 'sine';
-  oscillator.frequency.setValueAtTime(2525, when);
-  gain.gain.setValueAtTime(0.0001, when);
-  gain.gain.linearRampToValueAtTime(0.055, when + 0.012);
-  gain.gain.setValueAtTime(0.055, when + duration - 0.018);
-  gain.gain.linearRampToValueAtTime(0.0001, when + duration);
-  oscillator.connect(gain);
-  gain.connect(context.destination);
-  oscillator.start(when);
-  oscillator.stop(when + duration + 0.01);
+let ambientContext;
+let ambientOscillator;
+let ambientFilter;
+let ambientGain;
+let ambientCloseTimer;
+
+const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
+
+function getAudioContextClass() {
+  return typeof window !== 'undefined' ? (window.AudioContext || window.webkitAudioContext) : null;
 }
 
-function addRadioStatic(context, when) {
-  const sampleRate = context.sampleRate;
-  const buffer = context.createBuffer(1, Math.floor(sampleRate * 0.22), sampleRate);
-  const channel = buffer.getChannelData(0);
-  for (let i = 0; i < channel.length; i += 1) channel[i] = (Math.random() * 2 - 1) * 0.28;
-  const source = context.createBufferSource();
-  const filter = context.createBiquadFilter();
-  const gain = context.createGain();
-  filter.type = 'lowpass';
-  filter.frequency.value = 2600;
-  gain.gain.setValueAtTime(0.0001, when);
-  gain.gain.linearRampToValueAtTime(0.018, when + 0.035);
-  gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.21);
-  source.buffer = buffer;
-  source.connect(filter);
-  filter.connect(gain);
-  gain.connect(context.destination);
-  source.start(when);
-  source.stop(when + 0.23);
+function waitForVoices(timeout = 900) {
+  const synth = window.speechSynthesis;
+  const available = synth.getVoices();
+  if (available.length) return Promise.resolve(available);
+
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      synth.removeEventListener?.('voiceschanged', finish);
+      resolve(synth.getVoices());
+    };
+    const timer = window.setTimeout(finish, timeout);
+    synth.addEventListener?.('voiceschanged', finish, { once: true });
+  });
 }
 
-export function transmitText(text, language, onDone = () => {}) {
+function chooseVoice(voices, language) {
+  const arabic = language === 'ar';
+  const priorities = arabic
+    ? [/google\s*العربية/i, /microsoft\s*hamed/i, /microsoft\s*salma/i]
+    : [/google\s*uk\s*english\s*male/i, /google\s*us\s*english/i, /microsoft.*natural/i, /\bdaniel\b/i, /\bsamantha\b/i];
+
+  for (const priority of priorities) {
+    const match = voices.find((voice) => priority.test(voice.name));
+    if (match) return match;
+  }
+
+  const localePrefix = arabic ? 'ar' : 'en';
+  const localVoices = voices.filter((voice) => voice.lang?.toLowerCase().startsWith(localePrefix));
+  const natural = localVoices.find((voice) => /natural|neural|enhanced|premium|google|microsoft/i.test(voice.name));
+  return natural || localVoices[0] || null;
+}
+
+/**
+ * Speaks a clean mission transmission while progressively revealing its caption.
+ * Returns a cancellation function. No radio static or harsh transition tones are generated.
+ */
+export function transmitText(text, language, onDone = () => {}, options = {}) {
   let cancelled = false;
-  let context;
   let utterance;
-  let startTimer = 0;
+  let progressTimer;
+  let fallbackTimer;
+  let lastProgress = 0;
+  let startedAt = Date.now();
+  const safeText = String(text || '').trim();
+  const { voiceEnabled = true, onProgress = () => {} } = options;
+  const estimatedDuration = Math.max(1600, safeText.length * (language === 'ar' ? 72 : 54));
+  let speechStarted = !voiceEnabled || !('speechSynthesis' in window);
+
+  const reportProgress = (index) => {
+    const next = clamp(Math.floor(index), 0, safeText.length);
+    if (next <= lastProgress) return;
+    lastProgress = next;
+    onProgress(next);
+  };
+
   const finish = () => {
     if (cancelled) return;
     cancelled = true;
-    if (context && context.state !== 'closed') context.close().catch(() => {});
+    window.clearInterval(progressTimer);
+    window.clearTimeout(fallbackTimer);
+    reportProgress(safeText.length);
     onDone();
   };
 
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (AudioContextClass) {
-      context = new AudioContextClass();
-      const now = context.currentTime + 0.015;
-      addRadioStatic(context, now);
-      playQuindar(context, now + 0.035, 0.12);
-    }
-  } catch {
-    context = undefined;
+  if (!safeText) {
+    finish();
+    return () => {};
   }
 
-  startTimer = window.setTimeout(() => {
-    if (cancelled) return;
-    if (!('speechSynthesis' in window)) {
-      window.setTimeout(finish, 450);
-      return;
-    }
-    window.speechSynthesis.cancel();
-    utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = language === 'ar' ? 'ar-EG' : 'en-US';
-    utterance.pitch = 0.72;
-    utterance.rate = 0.88;
-    utterance.volume = 0.96;
-    const voices = window.speechSynthesis.getVoices();
-    const preferredVoice = voices.find((voice) => voice.lang.toLowerCase().startsWith(language === 'ar' ? 'ar' : 'en'));
-    if (preferredVoice) utterance.voice = preferredVoice;
-    utterance.onend = () => {
-      if (context && context.state === 'running') playQuindar(context, context.currentTime + 0.03, 0.12);
-      window.setTimeout(finish, 240);
-    };
-    utterance.onerror = finish;
-    window.speechSynthesis.speak(utterance);
-  }, 320);
+  progressTimer = window.setInterval(() => {
+    if (!speechStarted) return;
+    const elapsed = Date.now() - startedAt;
+    reportProgress((elapsed / estimatedDuration) * safeText.length);
+  }, 72);
+
+  if (!voiceEnabled || !('speechSynthesis' in window)) {
+    fallbackTimer = window.setTimeout(finish, estimatedDuration);
+  } else {
+    (async () => {
+      const voices = await waitForVoices();
+      if (cancelled) return;
+      window.speechSynthesis.cancel();
+      utterance = new SpeechSynthesisUtterance(safeText);
+      utterance.lang = language === 'ar' ? 'ar-EG' : 'en-US';
+      utterance.pitch = language === 'ar' ? 1 : 0.92;
+      utterance.rate = 0.95;
+      utterance.volume = 0.82;
+      const voice = chooseVoice(voices, language);
+      if (voice) utterance.voice = voice;
+      utterance.onboundary = (event) => {
+        if (Number.isFinite(event.charIndex)) reportProgress(event.charIndex + (event.charLength || 1));
+      };
+      utterance.onend = finish;
+      utterance.onerror = finish;
+      try {
+        startedAt = Date.now();
+        speechStarted = true;
+        window.speechSynthesis.speak(utterance);
+      } catch {
+        startedAt = Date.now();
+        speechStarted = true;
+        fallbackTimer = window.setTimeout(finish, estimatedDuration);
+      }
+    })();
+    fallbackTimer = window.setTimeout(finish, estimatedDuration + 1800);
+  }
 
   return () => {
     if (cancelled) return;
     cancelled = true;
-    window.clearTimeout(startTimer);
+    window.clearInterval(progressTimer);
+    window.clearTimeout(fallbackTimer);
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    if (context && context.state !== 'closed') context.close().catch(() => {});
     onDone();
   };
+}
+
+/** Soft, optional sine-wave ambience capped at gain 0.03 and low-pass filtered. */
+export async function setAmbientEnabled(enabled) {
+  const AudioContextClass = getAudioContextClass();
+  if (!AudioContextClass) return false;
+
+  if (!enabled) {
+    if (!ambientContext || !ambientGain) return true;
+    window.clearTimeout(ambientCloseTimer);
+    const context = ambientContext;
+    const oscillator = ambientOscillator;
+    ambientGain.gain.cancelScheduledValues(context.currentTime);
+    ambientGain.gain.setTargetAtTime(0, context.currentTime, 0.2);
+    ambientCloseTimer = window.setTimeout(() => {
+      if (ambientContext !== context) return;
+      try { oscillator?.stop(); } catch { /* already stopped */ }
+      context.close().catch(() => {});
+      ambientContext = undefined;
+      ambientOscillator = undefined;
+      ambientFilter = undefined;
+      ambientGain = undefined;
+    }, 950);
+    return true;
+  }
+
+  if (!ambientContext || ambientContext.state === 'closed') {
+    ambientContext = new AudioContextClass();
+    ambientOscillator = ambientContext.createOscillator();
+    ambientFilter = ambientContext.createBiquadFilter();
+    ambientGain = ambientContext.createGain();
+    ambientOscillator.type = 'sine';
+    ambientOscillator.frequency.value = 65.4;
+    ambientFilter.type = 'lowpass';
+    ambientFilter.frequency.value = 180;
+    ambientFilter.Q.value = 0.35;
+    ambientGain.gain.value = 0.0001;
+    ambientOscillator.connect(ambientFilter);
+    ambientFilter.connect(ambientGain);
+    ambientGain.connect(ambientContext.destination);
+    ambientOscillator.start();
+  }
+
+  window.clearTimeout(ambientCloseTimer);
+  try { await ambientContext.resume(); } catch { return false; }
+  ambientGain.gain.cancelScheduledValues(ambientContext.currentTime);
+  ambientGain.gain.setTargetAtTime(0.03, ambientContext.currentTime, 0.8);
+  return true;
 }
