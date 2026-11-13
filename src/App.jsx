@@ -50,7 +50,7 @@ const APOLLO_LM_PRESENTATION = {
   ],
 };
 
-const WHATS_NEW_VERSION = '2026-11-13-hardware-map-accuracy';
+const WHATS_NEW_VERSION = '2026-11-13-mobile-touch-audio-story';
 const WHATS_NEW_STORAGE_KEY = 'lunar-relics-whats-new';
 
 function presentRelic(item) {
@@ -61,11 +61,12 @@ export default function App() {
   const [relics, setRelics] = useState(LOCAL_RELICS);
   const [celestialView, setCelestialView] = useState('Moon');
   const [archiveFilter, setArchiveFilter] = useState('All');
-  const [archiveOpen, setArchiveOpen] = useState(true);
+  const [archiveOpen, setArchiveOpen] = useState(() => typeof window === 'undefined' || !window.matchMedia('(max-width: 760px)').matches);
   const [selectedId, setSelectedId] = useState(null);
   const [language, setLanguage] = useState(() => localStorage.getItem('lunar-relics-language') || 'en');
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [audioStarted, setAudioStarted] = useState(false);
+  const [entryPortalOpen, setEntryPortalOpen] = useState(true);
   const [autoPilotOn, setAutoPilotOn] = useState(false);
   const [badges, setBadges] = useState(readBadges);
   const [storyProgress, setStoryProgress] = useState({ index: 0, total: 1 });
@@ -167,6 +168,17 @@ export default function App() {
   };
 
   const isArabic = language === 'ar';
+  const hotspotTitle = hotspot
+    ? isArabic ? hotspot.titleAr || hotspot.partAr || hotspot.title || hotspot.part : hotspot.title || hotspot.part
+    : '';
+  const hotspotDescription = hotspot
+    ? isArabic ? hotspot.descriptionAr || hotspot.description : hotspot.description
+    : '';
+  const enterArchive = () => {
+    setEntryPortalOpen(false);
+    setAudioEnabled(true);
+    setAudioMuted(false, { startIfUnmuting: true });
+  };
   const emitUiCue = (event, hover = false) => {
     const target = event.target instanceof Element ? event.target : event.target?.parentElement;
     const control = target?.closest('button, a, [role="button"]');
@@ -268,8 +280,8 @@ export default function App() {
               <div className="hotspot-readout" role="status">
                 <button className="hotspot-close" type="button" onClick={() => setHotspot(null)} aria-label={isArabic ? 'إغلاق نقطة الفحص' : 'Close hotspot'}>×</button>
                 <span className="hotspot-kicker">{isArabic ? 'نقطة فحص' : 'INSPECTION POINT'}</span>
-                <strong dir="auto">{hotspot.title || hotspot.part}</strong>
-                <p dir="auto">{hotspot.description}</p>
+                <strong dir="auto">{hotspotTitle}</strong>
+                <p dir="auto">{hotspotDescription}</p>
               </div>
             )}
           </div>
@@ -306,6 +318,22 @@ export default function App() {
       </footer>
       {whatsNewOpen && <WhatsNewDialog language={language} onClose={closeWhatsNew} />}
       {isInitialLoading && <SpaceLoader language={language} overlay />}
+      {entryPortalOpen && (
+        <div className="entry-portal" dir={isArabic ? 'rtl' : 'ltr'}>
+          <div className="entry-portal-card">
+            <span className="entry-portal-mark" aria-hidden="true">✦</span>
+            <p className="entry-portal-eyebrow">{isArabic ? 'أرشيف المهمات · NASA' : 'MISSION ARCHIVE · NASA'}</p>
+            <h1>{isArabic ? 'الأثر الباقي في الفضاء' : 'THE RELICS LEFT BEHIND'}</h1>
+            <p>{isArabic ? 'ادخل إلى الرحلة ثلاثية الأبعاد مع الأجواء الصوتية الفضائية.' : 'Enter the 3D mission archive with its continuous cosmic soundscape.'}</p>
+            <button type="button" className="entry-portal-button" onClick={enterArchive}>
+              <span aria-hidden="true">🚀</span>
+              {isArabic ? 'المس للدخول إلى الأرشيف' : 'TAP TO ENTER ARCHIVE'}
+              <small>{isArabic ? 'مشهد ثلاثي الأبعاد + صوت مكاني' : '3D · SPATIAL AUDIO'}</small>
+            </button>
+            <span className="entry-portal-note">{isArabic ? 'يمكنك كتم الصوت في أي وقت من الشريط العلوي.' : 'Mute any time from the top bar.'}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

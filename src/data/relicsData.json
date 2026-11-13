@@ -17,19 +17,25 @@
       "lng": 23.47314
     },
     "story": {
-      "en": "I am the descent stage of Apollo 11’s Eagle, launched from Earth on July 16, 1969. I helped slow the Lunar Module toward Mare Tranquillitatis, where it touched down on July 20. When the ascent stage lifted off the next day, I stayed behind as a quiet witness to the mission. NASA later imaged my resting place from lunar orbit.",
-      "ar": "أنا مرحلة الهبوط من Eagle، وحدة Apollo 11 القمرية التي انطلقت من الأرض في 16 يوليو 1969. ساعدتُ المركبة على التباطؤ والهبوط في Mare Tranquillitatis (بحر الهدوء) يوم 20 يوليو. عندما غادرت مرحلة الصعود في اليوم التالي، بقيتُ على القمر شاهدةً صامتةً على المهمة. ثم رصدت NASA موقعي لاحقًا من المدار القمري."
+      "en": "I began as Eagle’s silent foundation, launched from Earth on July 16, 1969, and descended toward Mare Tranquillitatis with the Lunar Module. At 20:17:40 UT on July 20, I touched the Moon; when the ascent stage lifted off on July 21, I became the part of Apollo 11 that stayed behind. NASA later imaged my resting place from lunar orbit, turning my stillness into a lasting witness to the mission.",
+      "ar": "بدأتُ كأساس Eagle الصامت، وانطلقتُ من الأرض في 16 يوليو 1969، ثم هبطتُ بوحدة Lunar Module نحو Mare Tranquillitatis. عند 20:17:40 بالتوقيت العالمي في 20 يوليو، لامستُ القمر؛ وعندما أقلعت مرحلة الصعود في 21 يوليو، أصبحتُ الجزء من Apollo 11 الذي بقي خلفها. لاحقًا صوّرت NASA موضع استقراري من المدار القمري، فتحوّل سكوني إلى شاهد باقٍ على المهمة."
     },
     "hotspots": [
       {
         "description": "The lower LM stage contained the deep-throttling descent engine, propellant tanks, landing legs, and stored surface equipment. It supported powered descent and acted as the launch platform for the ascent stage; it remained at the Apollo 11 site on the Moon after ascent-stage liftoff.",
         "part": "Descent stage",
-        "title": "Landing and surface-support stage"
+        "title": "Landing and surface-support stage",
+        "partAr": "مرحلة الهبوط",
+        "titleAr": "مرحلة الهبوط والدعم السطحي",
+        "descriptionAr": "احتوت المرحلة السفلية من LM على محرك الهبوط ذي القدرة على الخنق العميق، وخزانات الوقود الدافع، وأرجل الهبوط، ومعدات السطح المخزنة. دعمت الهبوط المزوّد بالطاقة وعملت منصة إطلاق لمرحلة الصعود، ثم بقيت في موقع Apollo 11 على القمر بعد إقلاع مرحلة الصعود."
       },
       {
         "description": "EASEP was a separate scientific package deployed on the lunar surface near the Lunar Module, not a component of Eagle's descent stage. It carried instruments for studying the lunar environment; the NSSDCA record notes that transmissions stopped on 3 August 1969, resumed during the next lunar day, and the experiment was terminated on 27 August 1969.",
         "part": "Early Apollo Scientific Experiment Package (EASEP)",
-        "title": "Nearby lunar science package"
+        "title": "Nearby lunar science package",
+        "partAr": "حزمة التجارب العلمية المبكرة لـ Apollo (EASEP)",
+        "titleAr": "حزمة علوم قمرية قريبة",
+        "descriptionAr": "كانت EASEP حزمة علمية منفصلة نُشرت على سطح القمر قرب Lunar Module، وليست جزءًا من مرحلة هبوط Eagle. حملت أجهزة لدراسة البيئة القمرية؛ ويذكر سجل NSSDCA أن الإرسالات توقفت في 3 أغسطس 1969، ثم استؤنفت خلال اليوم القمري التالي، وأن التجربة أُنهيت في 27 أغسطس 1969."
       }
     ],
     "timeline": [
@@ -120,24 +126,33 @@
       "lng": 3.6333
     },
     "story": {
-      "en": "I am the Apollo 15 lunar rover, folded aboard Falcon until the crew unloaded me on July 31, 1971. I carried David Scott and Jim Irwin on three traverses across Hadley-Apennine terrain. Together we covered 27.8 kilometers, giving the astronauts a wider scientific reach. When Falcon lifted off on August 2, I remained on the Moon.",
-      "ar": "أنا المركبة القمرية الجوالة لـ Apollo 15، وقد حُملت مطويةً داخل Falcon حتى أنزلني الطاقم في 31 يوليو 1971. حملتُ ديفيد سكوت وجيم إروين في ثلاث جولات عبر منطقة Hadley-Apennine. قطعنا معًا 27.8 كيلومترًا، فتمكّن الرائدان من استكشاف مساحة أوسع. وعندما أقلعت Falcon في 2 أغسطس، بقيتُ على القمر."
+      "en": "I was folded inside Falcon until the Apollo 15 crew unfolded me onto the Moon on July 31, 1971. With David Scott and Jim Irwin aboard, I crossed Hadley-Apennine terrain on three traverses totaling 27.8 kilometers, extending the astronauts’ scientific reach beyond their landing site. When Falcon lifted off on August 2, I remained where the journeys had ended: on the lunar surface.",
+      "ar": "كنتُ مطويًا داخل Falcon حتى فردني طاقم Apollo 15 على القمر في 31 يوليو 1971. حملتُ ديفيد سكوت وجيم إروين عبر تضاريس Hadley-Apennine في ثلاث جولات بلغ مجموعها 27.8 كيلومترًا، فوسّعتُ مجال عملهما العلمي إلى ما وراء موقع الهبوط. وعندما أقلعت Falcon في 2 أغسطس، بقيتُ حيث انتهت الرحلات: على سطح القمر."
     },
     "hotspots": [
       {
         "description": "An electric, foldable lunar vehicle used to extend the astronauts' EVA range. It was deployed from the lunar module, driven on three traverses totaling 27.8 km, and left associated with the Apollo 15 lunar surface site; NASA's reviewed pages do not state a separate disposal or last-contact date.",
         "part": "Apollo 15 LRV",
-        "title": "Lunar surface mobility vehicle"
+        "title": "Lunar surface mobility vehicle",
+        "partAr": "مركبة Apollo 15 الجوالة",
+        "titleAr": "مركبة التنقل على سطح القمر",
+        "descriptionAr": "كانت مركبة قمرية كهربائية قابلة للطي، استُخدمت لتوسيع مدى الأنشطة خارج المركبة. نُشرت من الوحدة القمرية، وقادت في ثلاث جولات بلغ مجموعها 27.8 كيلومترًا، وبقيت مرتبطة بموقع Apollo 15 السطحي؛ ولا تذكر صفحات NASA التي جرت مراجعتها تاريخًا منفصلًا للتخلص منها أو لآخر اتصال بها."
       },
       {
         "description": "Two non-rechargeable 36-volt silver-zinc potassium-hydroxide batteries powered the four wheel-drive motors, steering motors, brakes and the 36-volt utility outlet. They were surface-operation power hardware; NASA's reviewed pages do not publish a separate disposal event or end date for them.",
         "part": "LRV 36-volt silver-zinc batteries",
-        "title": "Drive, steering and utility power"
+        "title": "Drive, steering and utility power",
+        "partAr": "بطاريات LRV الفضية-الزنك بجهد 36 فولت",
+        "titleAr": "طاقة الدفع والتوجيه والاستخدامات العامة",
+        "descriptionAr": "زوّدت بطاريتان غير قابلتين لإعادة الشحن، من الفضة-الزنك وهيدروكسيد البوتاسيوم وبجهد 36 فولت، محركات الدفع الرباعي ومحركات التوجيه والفرامل ومقبس الاستخدامات العامة بجهد 36 فولت. كانتا من عتاد تشغيل السطح؛ ولا تنشر صفحات NASA التي جرت مراجعتها حدثًا منفصلًا للتخلص منهما أو تاريخ نهاية لهما."
       },
       {
         "description": "The LCRU was one of the new Apollo J-mission equipment items evaluated with the LRV and supported lunar surface communications. The reviewed NASA pages do not publish a separate LCRU disposal or last-contact record, so its individual fate is not asserted here.",
         "part": "Lunar Communications Relay Unit (LCRU)",
-        "title": "Communications relay associated with the LRV"
+        "title": "Communications relay associated with the LRV",
+        "partAr": "وحدة ترحيل الاتصالات القمرية (LCRU)",
+        "titleAr": "مرحل اتصالات مرتبط بالمركبة الجوالة",
+        "descriptionAr": "كانت LCRU إحدى معدات مهمات Apollo J الجديدة التي قُيّمت مع المركبة الجوالة ودعمت اتصالات السطح القمري. ولا تنشر صفحات NASA التي جرت مراجعتها سجلًا منفصلًا للتخلص من LCRU أو لآخر اتصال بها، لذلك لا يُثبت هنا مصيرها الفردي."
       }
     ],
     "timeline": [
@@ -224,24 +239,33 @@
       "lng": -23.4246
     },
     "story": {
-      "en": "I am the Apollo Lunar Surface Experiments Package, a network of instruments rather than a single spacecraft. On Apollo 12, astronauts deployed one set of my instruments at Oceanus Procellarum and connected them to a central station. My instruments sent measurements of lunar activity and environment back to Earth for years. NASA shut down the ALSEP stations on September 30, 1977, while the hardware remained on the Moon.",
-      "ar": "أنا حزمة تجارب سطح القمر التابعة لـ Apollo، شبكة من الأجهزة وليست مركبة واحدة. في Apollo 12 نشر الرواد مجموعة من أجهزتي في Oceanus Procellarum ووصلوها بمحطة مركزية. أرسلت أجهزتي إلى الأرض قياسات عن نشاط القمر وبيئته لسنوات. أوقفت NASA محطات ALSEP في 30 سبتمبر 1977، بينما بقيت المعدات على القمر."
+      "en": "I was not one spacecraft but a network of instruments—the Apollo Lunar Surface Experiments Package. On Apollo 12, astronauts placed one of my instrument sets at Oceanus Procellarum and linked it to a central station. For years, my measurements carried news of lunar activity and the environment back to Earth; on September 30, 1977, NASA shut down the ALSEP stations while the hardware remained on the Moon.",
+      "ar": "لم أكن مركبة واحدة، بل شبكة من الأجهزة: Apollo Lunar Surface Experiments Package. في Apollo 12 وضع الرواد إحدى مجموعاتي في Oceanus Procellarum ووصلوها بمحطة مركزية. لسنوات حملت قياساتي إلى الأرض أخبارًا عن نشاط القمر وبيئته؛ وفي 30 سبتمبر 1977 أوقفت NASA محطات ALSEP، بينما بقيت المعدات على القمر."
     },
     "hotspots": [
       {
         "part": "ALSEP central station",
         "title": "Communications and control hub",
-        "description": "The central station processed instrument data, received commands, and relayed measurements to Earth. It remained at the Apollo 12 site after the ALSEP network was shut down on September 30, 1977."
+        "description": "The central station processed instrument data, received commands, and relayed measurements to Earth. It remained at the Apollo 12 site after the ALSEP network was shut down on September 30, 1977.",
+        "partAr": "محطة ALSEP المركزية",
+        "titleAr": "مركز الاتصالات والتحكم",
+        "descriptionAr": "عالجت المحطة المركزية بيانات الأجهزة، واستقبلت الأوامر، وأعادت إرسال القياسات إلى الأرض. بقيت في موقع Apollo 12 بعد إيقاف شبكة ALSEP في 30 سبتمبر 1977."
       },
       {
         "part": "SNAP-27 radioisotope thermoelectric generator (RTG)",
         "title": "Nuclear thermal power source",
-        "description": "The SNAP-27 converted heat from plutonium-238 decay into electrical power for the ALSEP station. The generator remained with the package on the lunar surface."
+        "description": "The SNAP-27 converted heat from plutonium-238 decay into electrical power for the ALSEP station. The generator remained with the package on the lunar surface.",
+        "partAr": "مولد SNAP-27 الحراري الكهروضوئي بالنظائر المشعة (RTG)",
+        "titleAr": "مصدر طاقة حرارية نووية",
+        "descriptionAr": "حوّل SNAP-27 الحرارة الناتجة عن اضمحلال البلوتونيوم-238 إلى طاقة كهربائية لمحطة ALSEP. بقي المولد مع الحزمة على سطح القمر."
       },
       {
         "part": "Apollo 12 Passive Seismic Experiment",
         "title": "Lunar seismic instrument",
-        "description": "The experiment measured lunar seismic activity and interior properties, sending data through the central station until NASA shut down the ALSEP network."
+        "description": "The experiment measured lunar seismic activity and interior properties, sending data through the central station until NASA shut down the ALSEP network.",
+        "partAr": "تجربة Apollo 12 الزلزالية السلبية",
+        "titleAr": "جهاز قياس الزلازل القمرية",
+        "descriptionAr": "قاست التجربة النشاط الزلزالي القمري وخصائص باطن القمر، وأرسلت البيانات عبر المحطة المركزية حتى أوقفت NASA شبكة ALSEP."
       }
     ],
     "timeline": [
@@ -328,24 +352,33 @@
       "lng": -23.418
     },
     "story": {
-      "en": "I am Surveyor 3, one of NASA’s early lunar landers that tested the surface before Apollo. After several bounces, I came to rest in southeast Oceanus Procellarum on April 20, 1967. I sent 6,326 images and used my sampler to dig and test the soil. My signals ended after lunar night, and Apollo 12 astronauts later recovered some of my parts.",
-      "ar": "أنا Surveyor 3، أحد المسابير القمرية المبكرة التابعة لـ NASA التي اختبرت السطح قبل Apollo. بعد عدة ارتدادات، استقررت في جنوب شرق Oceanus Procellarum يوم 20 أبريل 1967. أرسلتُ 6326 صورة واستخدمتُ أداة أخذ العينات لحفر التربة واختبارها. انقطعت إشاراتي بعد الليل القمري، ثم استعاد رواد Apollo 12 بعض أجزائي."
+      "en": "I arrived at the Moon as Surveyor 3, one of NASA’s early tests of the surface before Apollo. After several bounces, I finally settled in southeast Oceanus Procellarum on April 20, 1967, sending 6,326 pictures while my sampler dug trenches and tested the soil. Lunar night ended my signals, but in 1969 Apollo 12 astronauts returned to recover some of my parts—a later human touch to a once-remote experiment.",
+      "ar": "وصلتُ إلى القمر بصفتي Surveyor 3، أحد اختبارات NASA المبكرة للسطح قبل Apollo. بعد عدة ارتدادات استقررت أخيرًا في جنوب شرق Oceanus Procellarum في 20 أبريل 1967، وأرسلت 6326 صورة بينما حفرت أداة أخذ العينات الخنادق واختبرت التربة. أنهى الليل القمري إشاراتي، لكن رواد Apollo 12 عادوا في 1969 ليستعيدوا بعض أجزائي؛ لمسة بشرية لاحقة لتجربة كانت بعيدة ونائية."
     },
     "hotspots": [
       {
         "description": "The camera transmitted 6,326 lunar-surface pictures. Apollo 12 astronauts removed the camera system on 20 November 1969 for examination on Earth; NSSDCA states that the camera is now displayed at the Smithsonian National Air and Space Museum.",
         "part": "Survey television camera",
-        "title": "Imaging system"
+        "title": "Imaging system",
+        "partAr": "كاميرا Surveyor التلفزيونية",
+        "titleAr": "نظام التصوير",
+        "descriptionAr": "أرسلت الكاميرا 6326 صورة لسطح القمر. أزال رواد Apollo 12 نظام الكاميرا في 20 نوفمبر 1969 لفحصه على الأرض؛ ويذكر NSSDCA أن الكاميرا معروضة الآن في Smithsonian National Air and Space Museum."
       },
       {
         "description": "A 1.5-meter pantograph arm with a 12-by-5-centimeter scoop dug trenches and performed bearing and impact tests. It operated for 18 hours 22 minutes; NASA reports that Apollo 12 recovered the soil scoop for study.",
         "part": "Surface sampler",
-        "title": "Soil-mechanics sampling arm and scoop"
+        "title": "Soil-mechanics sampling arm and scoop",
+        "partAr": "أداة أخذ العينات السطحية",
+        "titleAr": "ذراع ومغرفة أخذ عينات ميكانيكا التربة",
+        "descriptionAr": "حفرت ذراع بانتوغرافية طولها 1.5 متر، مزودة بمغرفة مقاسها 12 × 5 سنتيمترات، خنادق وأجرت اختبارات التحمل والاصطدام. عملت 18 ساعة و22 دقيقة؛ وتذكر NASA أن Apollo 12 استعاد مغرفة التربة لدراستها."
       },
       {
         "description": "The altitude-marking radar initiated terminal braking, while Doppler/altimeter radars guided the vernier engines. After firing, the main retrorocket and altitude-marking radar were jettisoned; the vernier engines continued through the first two bounces until an Earth command shut them off 34 seconds after initial touchdown.",
         "part": "Descent radar and propulsion hardware",
-        "title": "Landing guidance and braking system"
+        "title": "Landing guidance and braking system",
+        "partAr": "رادار الهبوط ومعدات الدفع",
+        "titleAr": "نظام توجيه الهبوط والكبح",
+        "descriptionAr": "بدأ رادار تحديد الارتفاع الكبح النهائي، بينما وجّهت رادارات دوبلر/الارتفاع محركات الضبط الدقيق. بعد الإطلاق تخلّصت المركبة من الصاروخ الارتجاعي الرئيسي ورادار تحديد الارتفاع؛ وواصلت محركات الضبط العمل خلال الارتدادتين الأوليين حتى أوقفها أمر من الأرض بعد 34 ثانية من اللمس الأول."
       }
     ],
     "timeline": [
@@ -432,24 +465,33 @@
       "lng": -33.55
     },
     "story": {
-      "en": "I am Sojourner, a small rover carried by Mars Pathfinder. I rolled onto the surface at Ares Vallis on July 6, 1997, and examined nearby rocks and soil with my cameras and APXS. Pathfinder relayed my data to Earth as I explored beyond the lander. The last Pathfinder data arrived in September, and I remained on Mars with the mission hardware.",
-      "ar": "أنا Sojourner، عربة جوالة صغيرة حملتها مهمة Mars Pathfinder إلى المريخ. نزلت إلى سطح منطقة Ares Vallis في 6 يوليو 1997 وفحصت الصخور والتربة القريبة بكاميراتي وجهاز APXS. نقل Pathfinder بياناتي إلى الأرض بينما استكشفتُ ما حول المسبار الهابط. وصل آخر إرسال بيانات من Pathfinder في سبتمبر، وبقيتُ على المريخ مع معدات المهمة."
+      "en": "I was Sojourner, a small rover carried to Mars by Mars Pathfinder, and my first steps at Ares Vallis came on July 6, 1997. With my cameras and APXS, I examined nearby rocks and soil while Pathfinder relayed my data to Earth as I moved beyond the lander. The last Pathfinder data arrived in September; my exploration ended not with a return journey, but with me and the mission hardware remaining on Mars.",
+      "ar": "كنتُ Sojourner، عربة جوالة صغيرة حملتها Mars Pathfinder إلى المريخ، وكانت خطواتي الأولى في Ares Vallis في 6 يوليو 1997. فحصتُ الصخور والتربة القريبة بكاميراتي وجهاز APXS، بينما نقل Pathfinder بياناتي إلى الأرض وأنا أبتعد عن المسبار الهابط. وصل آخر بيانات Pathfinder في سبتمبر؛ ولم تنتهِ رحلتي بعودة، بل ببقائي مع معدات المهمة على المريخ."
     },
     "hotspots": [
       {
         "description": "Measured the elemental composition of Martian rocks and soil. Its separate post-mission disposition is not reported; it remained with the rover when communications ended.",
         "part": "Alpha Proton X-ray Spectrometer (APXS)",
-        "title": "Rock and soil composition instrument"
+        "title": "Rock and soil composition instrument",
+        "partAr": "مطياف الأشعة السينية ألفا والبروتون (APXS)",
+        "titleAr": "جهاز تركيب الصخور والتربة",
+        "descriptionAr": "قاس التركيب العنصري لصخور المريخ وتربته. ولا يُذكر مصير منفصل له بعد المهمة؛ فقد بقي مع العربة عندما انتهت الاتصالات."
       },
       {
         "description": "Distributed vehicle load across six wheels; eleven brushed motors controlled wheels, steering, and instrument deployment. No recovery or removal is reported, so it remained on the surface with Sojourner.",
         "part": "Rocker-bogie suspension and six-wheel system",
-        "title": "Mobility and load distribution"
+        "title": "Mobility and load distribution",
+        "partAr": "نظام التعليق روكر-بوجي ونظام العجلات الست",
+        "titleAr": "الحركة وتوزيع الحمل",
+        "descriptionAr": "وزّع حمل المركبة على ست عجلات؛ وتحكمت أحد عشر محركًا بفرش كربونية في العجلات والتوجيه ونشر الأجهزة. ولا يُذكر استرداد أو إزالة، لذلك بقي على السطح مع Sojourner."
       },
       {
         "description": "Sojourner was primarily solar powered; primary batteries operated during the first three weeks and augmented solar power. NASA reports no later separate disposition.",
         "part": "Solar power system and primary batteries",
-        "title": "Electrical power"
+        "title": "Electrical power",
+        "partAr": "نظام الطاقة الشمسية والبطاريات الأساسية",
+        "titleAr": "الطاقة الكهربائية",
+        "descriptionAr": "كانت Sojourner تعمل أساسًا بالطاقة الشمسية؛ وعملت البطاريات الأساسية خلال الأسابيع الثلاثة الأولى وعزّزت الطاقة الشمسية. ولا تذكر NASA مصيرًا منفصلًا لاحقًا."
       }
     ],
     "timeline": [
@@ -532,24 +574,33 @@
       "lng": 175.4729
     },
     "story": {
-      "en": "I am Spirit, NASA’s rover sent to investigate Gusev Crater for signs of water-altered rocks. I landed on January 4, 2004 UTC, at a site later named Columbia Memorial Station. I climbed hills and studied rocks, but soft soil and a failed wheel eventually left me stationary. After my silence began in March 2010, NASA ended recovery attempts in May 2011.",
-      "ar": "أنا Spirit، عربة NASA الجوالة التي أُرسلت إلى Gusev Crater للبحث عن صخور غيّرتها المياه. هبطتُ في 4 يناير 2004 بالتوقيت العالمي، في موقع سُمّي لاحقًا Columbia Memorial Station. صعدتُ التلال ودرستُ الصخور، لكن التربة الرخوة وتعطل إحدى عجلاتي تركاني ساكنة في النهاية. وبعد أن بدأ صمتي في مارس 2010، أنهت NASA محاولات استعادتي في مايو 2011."
+      "en": "I was Spirit, sent to Gusev Crater to search for rocks altered by water. I landed on January 4, 2004 UTC, at the site later named Columbia Memorial Station, climbed hills, and studied rocks until soft soil and a failed wheel made me stationary. When my silence began after March 22, 2010, NASA reshaped the mission around a stationary science platform and ended recovery efforts on May 25, 2011.",
+      "ar": "كنتُ Spirit، وأُرسلت إلى Gusev Crater بحثًا عن صخور غيّرتها المياه. هبطتُ في 4 يناير 2004 بالتوقيت العالمي في الموقع الذي سُمّي لاحقًا Columbia Memorial Station، وصعدتُ التلال ودرستُ الصخور حتى جعلتني التربة الرخوة وتعطل إحدى العجلات ثابتة. وعندما بدأ صمتي بعد 22 مارس 2010، أعادت NASA صياغة المهمة حول منصة علمية ثابتة، ثم أنهت محاولات الاستعادة في 25 مايو 2011."
     },
     "hotspots": [
       {
         "description": "The mast carried panoramic and navigation cameras and the Miniature Thermal Emission Spectrometer for stereoscopic imaging, navigation, and mineral/thermal observations. It remained part of the stranded rover at Columbia Memorial Station when the mission ended.",
         "part": "Panoramic Mast Assembly (Pancam, Navcam, Mini-TES)",
-        "title": "Imaging and remote sensing mast"
+        "title": "Imaging and remote sensing mast",
+        "partAr": "مجموعة السارية البانورامية (Pancam وNavcam وMini-TES)",
+        "titleAr": "سارية التصوير والاستشعار عن بُعد",
+        "descriptionAr": "حملت السارية كاميرات بانورامية وملاحية ومطياف الانبعاث الحراري المصغّر للتصوير المجسّم والملاحة ورصد المعادن والحرارة. بقيت جزءًا من العربة العالقة في Columbia Memorial Station عند انتهاء المهمة."
       },
       {
         "description": "The arm placed contact instruments on rocks and soil; the Rock Abrasion Tool ground into rock surfaces, while APXS, Mössbauer, the Microscopic Imager, and magnets characterized material. NASA records Spirit using RAT on Adirondack and later exposing silica-rich soil while a failed wheel dragged across the surface; the arm and instruments remained on the rover after contact was lost.",
         "part": "Instrument Deployment Device with RAT, APXS, Mössbauer Spectrometer, Microscopic Imager, and magnets",
-        "title": "Robotic science arm"
+        "title": "Robotic science arm",
+        "partAr": "جهاز نشر الأجهزة مع RAT وAPXS ومطياف Mössbauer والمصوّر المجهري والمغناطيسات",
+        "titleAr": "ذراع علمية روبوتية",
+        "descriptionAr": "وضعت الذراع أجهزة التلامس على الصخور والتربة؛ فطحن Rock Abrasion Tool أسطح الصخور، بينما حلّلت APXS وMössbauer والمصوّر المجهري والمغناطيسات المواد. تسجل NASA استخدام Spirit لـRAT على Adirondack ثم كشف تربة غنية بالسيليكا بينما كانت عجلة معطلة تُجرّ على السطح؛ وبقيت الذراع والأجهزة على العربة بعد فقدان الاتصال."
       },
       {
         "description": "Solar panels supplied power and the six wheels enabled surface travel. Spirit became stuck in soft soil on May 1, 2009, later lost its right-rear wheel, and could not achieve the desired winter tilt; it therefore remained a stationary science platform before final contact loss on Mars.",
         "part": "Solar-panel power system and six-wheel mobility system",
-        "title": "Power and mobility hardware"
+        "title": "Power and mobility hardware",
+        "partAr": "نظام الطاقة بألواح شمسية ونظام الحركة بست عجلات",
+        "titleAr": "معدات الطاقة والحركة",
+        "descriptionAr": "زوّدت الألواح الشمسية العربة بالطاقة، وأتاحت العجلات الست الحركة على السطح. علقت Spirit في تربة رخوة في 1 مايو 2009، ثم فقدت عجلتها الخلفية اليمنى، ولم تستطع الوصول إلى الميل الشتوي المطلوب؛ لذلك بقيت منصة علمية ثابتة قبل فقدان الاتصال النهائي على المريخ."
       }
     ],
     "timeline": [
@@ -644,24 +695,33 @@
       "lng": 354.47417
     },
     "story": {
-      "en": "I am Opportunity, the Mars rover that landed in Meridiani Planum in January 2004. I examined rocks and soils for signs of ancient water and traveled far beyond my planned 90-sol mission. A planet-wide dust storm dimmed the sunlight my solar panels needed, and Earth received my last signal on June 10, 2018. NASA declared my mission complete the following February.",
-      "ar": "أنا Opportunity، عربة المريخ الجوالة التي هبطت في Meridiani Planum في يناير 2004. فحصتُ الصخور والتربة بحثًا عن آثار المياه القديمة، وواصلتُ العمل متجاوزةً كثيرًا مهمتي المخططة ذات التسعين يومًا مريخيًا. حجبت عاصفة غبار شملت الكوكب ضوء الشمس الذي تحتاج إليه ألواحي، ووصلت آخر إشارة مني إلى الأرض في 10 يونيو 2018. أعلنت NASA اكتمال مهمتي في فبراير التالي."
+      "en": "I was Opportunity, and in January 2004 I reached Meridiani Planum with a question written into every observation: what did water once leave behind? I examined rocks and soil and traveled far beyond my planned 90-sol mission. A planet-wide dust storm dimmed the sunlight my panels needed; Earth received my last signal on June 10, 2018, and NASA declared the mission complete the following February.",
+      "ar": "كنتُ Opportunity، وفي يناير 2004 وصلتُ إلى Meridiani Planum حاملاً سؤالًا في كل رصد: ماذا تركت المياه القديمة وراءها؟ فحصتُ الصخور والتربة وقطعتُ مسافة تجاوزت كثيرًا مهمتي المخططة ذات التسعين يومًا مريخيًا. حجبت عاصفة غبار شملت الكوكب ضوء الشمس الذي تحتاج إليه ألواحي؛ استقبلت الأرض آخر إشارة مني في 10 يونيو 2018، وأعلنت NASA اكتمال المهمة في فبراير التالي."
     },
     "hotspots": [
       {
         "description": "Two mast-mounted cameras produced detailed multi-wavelength, three-dimensional panoramic views of the Martian landscape. NASA states that the camera mast also acted as a periscope for Mini-TES. The instrument remained aboard the rover; NASA's cited mission pages do not publish a separate post-mission disposition for it beyond the rover's final resting location in Perseverance Valley.",
         "part": "Pancam (Panoramic Camera)",
-        "title": "Panoramic imaging system"
+        "title": "Panoramic imaging system",
+        "partAr": "Pancam (الكاميرا البانورامية)",
+        "titleAr": "نظام التصوير البانورامي",
+        "descriptionAr": "أنتجت كاميرتان مثبتتان على السارية مناظر بانورامية مفصلة ومتعددة الأطوال الموجية وثلاثية الأبعاد لمشهد المريخ. وتذكر NASA أن سارية الكاميرا عملت أيضًا منظارًا لـMini-TES. بقي الجهاز على متن العربة؛ ولا تنشر صفحات المهمة المستشهد بها مصيرًا منفصلًا بعد المهمة يتجاوز موقع استقرار العربة النهائي في Perseverance Valley."
       },
       {
         "description": "A rotating grinding wheel removed dust and weathered rock to expose fresh mineral surfaces for analysis by the rover's instruments. NASA records that Opportunity used the RAT during its mission, including to remove surface dust. The tool remained part of the rover hardware, with no separately published NASA disposition beyond the rover's final resting location in Perseverance Valley.",
         "part": "Rock Abrasion Tool (RAT)",
-        "title": "Rock-surface preparation tool"
+        "title": "Rock-surface preparation tool",
+        "partAr": "أداة كشط الصخور (RAT)",
+        "titleAr": "أداة تهيئة سطح الصخور",
+        "descriptionAr": "أزالت عجلة طحن دوارة الغبار والصخور المتجوية لكشف أسطح معدنية جديدة لتحليلها بأجهزة العربة. تسجل NASA استخدام Opportunity لـRAT خلال المهمة، بما في ذلك إزالة غبار السطح. بقيت الأداة جزءًا من معدات العربة، من دون مصير منفصل منشور من NASA يتجاوز موقع استقرارها النهائي في Perseverance Valley."
       },
       {
         "description": "The APXS measured how rocks and soils respond to alpha particles and X-rays to determine their elemental chemistry. It was mounted on the instrument turret at the end of the robotic arm. NASA does not publish a separate final disposition for the APXS; it remained part of the rover at mission end.",
         "part": "Alpha Particle X-ray Spectrometer (APXS)",
-        "title": "Elemental-composition spectrometer"
+        "title": "Elemental-composition spectrometer",
+        "partAr": "مطياف الأشعة السينية لجسيمات ألفا (APXS)",
+        "titleAr": "مطياف التركيب العنصري",
+        "descriptionAr": "قاس APXS استجابة الصخور والتربة لجسيمات ألفا والأشعة السينية لتحديد كيميائها العنصرية. ثُبّت على منصة الأجهزة في نهاية الذراع الروبوتية. ولا تنشر NASA مصيرًا نهائيًا منفصلًا له؛ فقد بقي جزءًا من العربة عند انتهاء المهمة."
       }
     ],
     "timeline": [
@@ -760,24 +820,33 @@
       "lng": 312.05
     },
     "story": {
-      "en": "I am Viking 1 Lander, the first spacecraft to operate successfully on Mars’ surface. I touched down in Chryse Planitia on July 20, 1976, and sent back images while my arm sampled the soil. My biology experiments found no clear evidence of life, even as they revealed complex chemistry. A faulty command ended communication in November 1982, leaving me at my Martian site.",
-      "ar": "أنا المسبار الهابط Viking 1، أول مركبة تعمل بنجاح على سطح المريخ. هبطتُ في Chryse Planitia يوم 20 يوليو 1976، وأرسلتُ الصور بينما جمعت ذراعي عينات من التربة. لم تجد تجاربي البيولوجية دليلًا واضحًا على الحياة، رغم كشفها كيمياءً معقدة. أنهى أمرٌ معيب الاتصالات في نوفمبر 1982، فبقيتُ في موقعي المريخي."
+      "en": "I was Viking 1 Lander, the first spacecraft to operate successfully on Mars. I touched down in Chryse Planitia on July 20, 1976, returned images, and sent soil gathered by my arm into biology experiments that found no clear evidence of life while revealing complex chemistry. A faulty command ended communication in November 1982; I remained at my Martian site, with the unanswered questions still attached to the ground around me.",
+      "ar": "كنتُ Viking 1 Lander، أول مركبة تعمل بنجاح على سطح المريخ. لامستُ Chryse Planitia في 20 يوليو 1976، وأرسلت صورًا، ودفعت ذراعي عينات التربة إلى تجارب بيولوجية لم تجد دليلًا واضحًا على الحياة، لكنها كشفت كيمياء معقدة. أنهى أمر معيب الاتصالات في نوفمبر 1982؛ وبقيتُ في موقعي المريخي، وبقيت الأسئلة التي لم تُحسم مرتبطة بالأرض من حولي."
     },
     "hotspots": [
       {
         "description": "They produced panoramic and surface photographs, including the first images returned from the landing site. NASA reports that the lander continued imaging until communications ended; the cameras remained part of the landed spacecraft, with no separate disposal event published by NASA.",
         "part": "Two 360-degree cylindrical scan cameras",
-        "title": "Surface imaging system"
+        "title": "Surface imaging system",
+        "partAr": "كاميرتا مسح أسطوانيتان بزاوية 360 درجة",
+        "titleAr": "نظام تصوير السطح",
+        "descriptionAr": "أنتجتا صورًا بانورامية وصورًا للسطح، بما فيها أول الصور المرسلة من موقع الهبوط. تذكر NASA أن المسبار واصل التصوير حتى انتهت الاتصالات؛ وبقيت الكاميرتان جزءًا من المركبة الهابطة، من دون حدث منفصل للتخلص منهما منشور من NASA."
       },
       {
         "description": "The arm collected Martian soil and delivered samples to the biology laboratory and analytical instruments; NASA records the first samples being scooped on July 28, 1976. The arm remained on the lander at Chryse Planitia when communications were lost; NASA does not report a separate end-of-life disposition.",
         "part": "Sampler arm with collector head, temperature sensor, and magnet",
-        "title": "Soil sampling arm"
+        "title": "Soil sampling arm",
+        "partAr": "ذراع أخذ العينات مع رأس التجميع وحساس الحرارة والمغناطيس",
+        "titleAr": "ذراع أخذ عينات التربة",
+        "descriptionAr": "جمعت الذراع تربة المريخ وقدمت العينات إلى مختبر الأحياء والأجهزة التحليلية؛ وتسجل NASA أن أول العينات جُمعت في 28 يوليو 1976. بقيت الذراع على المسبار في Chryse Planitia عند فقدان الاتصالات، ولا تذكر NASA مصيرًا منفصلًا لنهاية عمرها."
       },
       {
         "description": "It was intended to study Martian seismic activity, but NASA/NSSDCA records say it failed to uncage and therefore did not operate as intended. It remained installed on the lander at the site; no separate physical fate is published by NASA.",
         "part": "Seismometer",
-        "title": "Seismic detector"
+        "title": "Seismic detector",
+        "partAr": "مقياس الزلازل",
+        "titleAr": "كاشف الزلازل",
+        "descriptionAr": "صُمم لدراسة النشاط الزلزالي على المريخ، لكن سجلات NASA/NSSDCA تقول إنه فشل في التحرر من وضع التثبيت، ولذلك لم يعمل كما كان مقصودًا. بقي مثبتًا على المسبار في الموقع؛ ولا يُنشر مصير مادي منفصل له."
       }
     ],
     "timeline": [
@@ -864,24 +933,33 @@
       "lng": 134.2809
     },
     "story": {
-      "en": "I am Viking 2 Lander, sent to explore the Martian plain of Utopia Planitia. After landing on September 3, 1976, I photographed the terrain and sampled soil for chemistry and biology experiments. My results did not provide definitive evidence of living microorganisms. My batteries eventually failed, and my last data arrived in April 1980.",
-      "ar": "أنا المسبار الهابط Viking 2، أُرسلت لاستكشاف سهل Utopia Planitia على المريخ. بعد هبوطي في 3 سبتمبر 1976، صوّرت التضاريس وجمعت عينات للتجارب الكيميائية والبيولوجية. لم تقدّم نتائجي دليلًا حاسمًا على وجود كائنات دقيقة حية. تعطلت بطارياتي في النهاية، ووصلت آخر بياناتي في أبريل 1980."
+      "en": "I was Viking 2 Lander, sent toward the plain of Utopia Planitia. After landing on September 3, 1976, I photographed the terrain and delivered soil to chemistry and biology experiments, but my results offered no definitive evidence of living microorganisms. When my batteries eventually failed and my last data arrived in April 1980, the work of my instruments remained at the landing site.",
+      "ar": "كنتُ Viking 2 Lander، وأُرسلت نحو سهل Utopia Planitia. بعد هبوطي في 3 سبتمبر 1976، صوّرتُ التضاريس وقدّمتُ التربة إلى تجارب كيميائية وبيولوجية، لكن نتائجي لم تقدّم دليلًا حاسمًا على وجود كائنات دقيقة حية. وعندما تعطلت بطارياتي في النهاية ووصلت آخر بياناتي في أبريل 1980، بقي عمل أجهزتي حاضرًا في موقع الهبوط."
     },
     "hotspots": [
       {
         "description": "The cameras acquired panoramic and surface images immediately after landing. NASA's NSSDCA record describes them as mounted near one long side of the lander; no recovery or later removal is reported, so they remained part of the lander at Utopia Planitia after operations ended.",
         "part": "Two 360-degree cylindrical scan cameras",
-        "title": "Surface imaging system"
+        "title": "Surface imaging system",
+        "partAr": "كاميرتا مسح أسطوانيتان بزاوية 360 درجة",
+        "titleAr": "نظام تصوير السطح",
+        "descriptionAr": "التقطت الكاميرتان صورًا بانورامية وصورًا للسطح فور الهبوط. يصف سجل NSSDCA التابع لـNASA تثبيتهما قرب أحد الجوانب الطويلة للمسبار؛ ولا يُذكر استرداد أو إزالة لاحقة، لذلك بقيتا جزءًا من المسبار في Utopia Planitia بعد انتهاء العمليات."
       },
       {
         "description": "The arm collected Martian soil for the lander's experiments and included a temperature sensor and magnet. NASA's cited NSSDCA record places it on the lander; no post-mission recovery is reported, so it remained at the landing site with the lander.",
         "part": "Sampler arm with collector head, temperature sensor, and magnet",
-        "title": "Surface sampling and magnetic investigation arm"
+        "title": "Surface sampling and magnetic investigation arm",
+        "partAr": "ذراع أخذ العينات مع رأس التجميع وحساس الحرارة والمغناطيس",
+        "titleAr": "ذراع أخذ العينات السطحية والتحقيق المغناطيسي",
+        "descriptionAr": "جمعت الذراع تربة المريخ لتجارب المسبار، وضمت حساس حرارة ومغناطيسًا. يضعهما سجل NSSDCA المستشهد به على المسبار؛ ولا يُذكر استرداد بعد المهمة، لذلك بقيا في موقع الهبوط مع المسبار."
       },
       {
         "description": "The two plutonium-238 RTGs supplied continuous power to the lander; NSSDCA gives about 30 W per generator at 4.4 V. They were affixed to opposite sides of the base, and NASA reports no recovery or removal after shutdown, so their documented disposition is to remain with the lander at the site.",
         "part": "Two SNAP-19 radioisotope thermal generator units",
-        "title": "Long-duration electrical power"
+        "title": "Long-duration electrical power",
+        "partAr": "وحدتا مولد SNAP-19 الحراري بالنظائر المشعة",
+        "titleAr": "طاقة كهربائية طويلة الأمد",
+        "descriptionAr": "زوّدت وحدتا RTG تعملان بالبلوتونيوم-238 المسبار بالطاقة المستمرة؛ ويذكر NSSDCA نحو 30 واط لكل مولد عند 4.4 فولت. ثُبّتتا على جانبين متقابلين من القاعدة، ولا تذكر NASA استردادًا أو إزالة بعد الإيقاف، لذا فإن مصيرهما الموثق هو بقاؤهما مع المسبار في الموقع."
       }
     ],
     "timeline": [
@@ -968,24 +1046,33 @@
       "lng": -125.9
     },
     "story": {
-      "en": "I am NASA’s Phoenix lander, built to examine the icy northern plains of Mars. My robotic arm collected soil and ice-rich material for onboard analysis in 2008. A sample heated by my TEGA instrument helped confirm water ice beneath the surface, while other tests detected perchlorate. After Martian winter reduced power from my solar panels, Earth received my final signal on November 2, 2008.",
-      "ar": "أنا المسبار الهابط Phoenix التابع لـ NASA، صُممتُ لفحص السهول الشمالية الجليدية للمريخ. جمعت ذراعي الروبوتية التربة ومواد غنية بالجليد لتحليلها على متني في عام 2008. ساعدت عينة سخّنها جهاز TEGA في تأكيد وجود جليد مائي تحت السطح، وكشفت اختبارات أخرى البركلورات. وبعد أن خفّض شتاء المريخ الطاقة التي تولدها ألواحي الشمسية، وصل آخر إرسال مني في 2 نوفمبر 2008."
+      "en": "I was NASA’s Phoenix lander, built to reach the icy northern plains of Mars. In 2008 my robotic arm dug into soil and ice-rich material, and TEGA heated a sample that helped confirm water ice beneath the surface; other tests detected perchlorate. Martian winter reduced the power from my solar panels, and Earth received my final signal on November 2, 2008, leaving the evidence I gathered with the lander at Mars.",
+      "ar": "كنتُ مسبار Phoenix الهابط التابع لـNASA، وبُنيتُ للوصول إلى السهول الشمالية الجليدية للمريخ. في عام 2008 حفرت ذراعي الروبوتية التربة ومواد غنية بالجليد، وسخّن TEGA عينة ساعدت في تأكيد وجود جليد مائي تحت السطح؛ كما كشفت اختبارات أخرى البركلورات. خفّض شتاء المريخ الطاقة القادمة من ألواحي الشمسية، واستقبلت الأرض آخر إشارة مني في 2 نوفمبر 2008، وبقيت الأدلة التي جمعتها مع المسبار على المريخ."
     },
     "hotspots": [
       {
         "description": "The arm dug into the Martian soil and delivered samples to the instruments; RAC documented the trench and samples. NASA reports that the arm was deployed and operated during the surface mission, and the lander ultimately became inactive when mission communications ended.",
         "part": "Robotic arm and Robotic Arm Camera (RAC)",
-        "title": "Sampling and close-up imaging system"
+        "title": "Sampling and close-up imaging system",
+        "partAr": "الذراع الروبوتية وكاميرا الذراع الروبوتية (RAC)",
+        "titleAr": "نظام أخذ العينات والتصوير القريب",
+        "descriptionAr": "حفرت الذراع تربة المريخ وقدّمت العينات إلى الأجهزة، ووثّقت RAC الخندق والعينات. تذكر NASA أن الذراع نُشرت وعملت خلال المهمة السطحية، وأن المسبار أصبح غير نشط في النهاية عندما انتهت اتصالات المهمة."
       },
       {
         "description": "TEGA heated soil and ice samples and analyzed released volatiles. NASA states that a sample analyzed by TEGA provided the basis for the official July 31, 2008 announcement confirming water on Mars; the instrument remained on the inactive lander after the final signal.",
         "part": "Thermal and Evolved Gas Analyzer (TEGA)",
-        "title": "Thermal analysis ovens and gas analyzer"
+        "title": "Thermal analysis ovens and gas analyzer",
+        "partAr": "محلل الغازات المتطايرة والحراري (TEGA)",
+        "titleAr": "أفران التحليل الحراري ومحلل الغازات",
+        "descriptionAr": "سخّن TEGA عينات التربة والجليد وحلّل المواد المتطايرة المنطلقة. وتذكر NASA أن عينة حللها TEGA أسست لإعلان 31 يوليو 2008 الرسمي الذي أكد وجود الماء على المريخ؛ وبقي الجهاز على المسبار غير النشط بعد آخر إشارة."
       },
       {
         "description": "The two solar-panel wings supplied power after landing. NASA's JPL states that communications ended in November 2008 when the panels ceased operating in the dark Martian winter; the panels and lander hardware remained at the Mars landing site.",
         "part": "Solar-panel wings",
-        "title": "Electrical power generation"
+        "title": "Electrical power generation",
+        "partAr": "أجنحة الألواح الشمسية",
+        "titleAr": "توليد الطاقة الكهربائية",
+        "descriptionAr": "زوّدت جناحا الألواح الشمسية المسبار بالطاقة بعد الهبوط. تذكر JPL التابعة لـNASA أن الاتصالات انتهت في نوفمبر 2008 عندما توقفت الألواح عن العمل في شتاء المريخ المظلم؛ وبقيت الألواح وعتاد المسبار في موقع الهبوط."
       }
     ],
     "timeline": [
@@ -1072,24 +1159,33 @@
       "lng": 135.9
     },
     "story": {
-      "en": "I am InSight, a stationary lander sent to listen to Mars and measure the planet’s interior. I reached Elysium Planitia on November 26, 2018, and my SEIS instrument recorded marsquakes and other ground vibrations. My heat probe struggled in unexpectedly clumpy soil, but I still gathered important data. NASA received my final transmission on December 15, 2022, and declared the mission over six days later.",
-      "ar": "أنا InSight، مسبار هابط ثابت أُرسل للاستماع إلى المريخ وقياس باطنه. وصلت إلى Elysium Planitia في 26 نوفمبر 2018، وسجّل جهازي SEIS الزلازل المريخية واهتزازات أرضية أخرى. واجه مسبار الحرارة صعوبة في تربة متكتلة على نحو غير متوقع، لكنني جمعت بيانات مهمة. استقبلت NASA آخر إرسال مني في 15 ديسمبر 2022، وأعلنت انتهاء المهمة بعد ستة أيام."
+      "en": "I was InSight, a stationary lander sent to listen for Mars’s interior. I reached Elysium Planitia on November 26, 2018; SEIS recorded marsquakes and other ground vibrations, while HP3 struggled against unexpectedly clumpy soil but still gathered important thermal and soil data. NASA received my final transmission on December 15, 2022, and declared the mission over six days later.",
+      "ar": "كنتُ InSight، مسبارًا هابطًا ثابتًا أُرسل للإصغاء إلى باطن المريخ. وصلتُ إلى Elysium Planitia في 26 نوفمبر 2018؛ فسجّل SEIS الزلازل المريخية واهتزازات الأرض الأخرى، بينما واجه HP3 تربة متكتلة على نحو غير متوقع، لكنه جمع مع ذلك بيانات مهمة عن الحرارة وخصائص التربة. استقبلت NASA آخر إرسال مني في 15 ديسمبر 2022، وأعلنت انتهاء المهمة بعد ستة أيام."
     },
     "hotspots": [
       {
         "description": "A surface seismometer that measured seismic waves from marsquakes, meteorite impacts, and atmospheric or weather-driven vibrations. NASA reported that it was the last science instrument still powered as dust reduced available energy; the mission then ended after the December 15, 2022 last transmission.",
         "part": "SEIS",
-        "title": "Seismic Experiment for Interior Structure"
+        "title": "Seismic Experiment for Interior Structure",
+        "partAr": "SEIS",
+        "titleAr": "تجربة البنية الداخلية الزلزالية",
+        "descriptionAr": "قاس مقياس الزلازل السطحي موجات الزلازل المريخية واصطدامات النيازك والاهتزازات الجوية أو المرتبطة بالطقس. أفادت NASA بأنه كان آخر جهاز علمي لا يزال مزودًا بالطاقة مع خفض الغبار للطاقة المتاحة؛ ثم انتهت المهمة بعد آخر إرسال في 15 ديسمبر 2022."
       },
       {
         "description": "A self-penetrating heat-flow probe designed to reach almost 5 meters and measure heat escaping from Mars' interior. Unexpectedly clumpy soil prevented the planned depth; NASA reports that the mole reached about 40 centimeters (16 inches) and collected soil-property and thermal data.",
         "part": "HP3 mole",
-        "title": "Heat Flow and Physical Properties Package"
+        "title": "Heat Flow and Physical Properties Package",
+        "partAr": "مسبار HP3",
+        "titleAr": "حزمة تدفق الحرارة والخصائص الفيزيائية",
+        "descriptionAr": "صُمم مسبار الحرارة ذاتي الاختراق للوصول إلى ما يقارب 5 أمتار وقياس الحرارة المتسربة من باطن المريخ. منعت التربة المتكتلة على نحو غير متوقع الوصول إلى العمق المخطط؛ وتذكر NASA أن المسبار بلغ نحو 40 سنتيمترًا (16 بوصة) وجمع بيانات عن خصائص التربة والحرارة."
       },
       {
         "description": "The lander's robotic arm placed SEIS and HP3 on the Martian surface and used its scoop in attempts to help the HP3 mole and to remove or move soil on the solar panels. NASA describes these operations during the mission; the arm remained part of the landed spacecraft when communications ended.",
         "part": "IDA",
-        "title": "Instrument Deployment Arm"
+        "title": "Instrument Deployment Arm",
+        "partAr": "IDA",
+        "titleAr": "ذراع نشر الأجهزة",
+        "descriptionAr": "وضعت الذراع الروبوتية للمسبار SEIS وHP3 على سطح المريخ، واستخدمت مغرفتها في محاولات مساعدة مسبار HP3 وإزالة التربة أو تحريكها عن الألواح الشمسية. تصف NASA هذه العمليات خلال المهمة؛ وبقيت الذراع جزءًا من المركبة الهابطة عند انتهاء الاتصالات."
       }
     ],
     "timeline": [
@@ -1176,24 +1272,33 @@
       "lng": 77.45
     },
     "story": {
-      "en": "I am Ingenuity, the helicopter carried to Jezero Crater beneath Perseverance. On April 19, 2021, I made the first powered, controlled flight on another planet. I completed 72 flights instead of my planned five and helped scout routes and features for the rover. Rotor damage during my final flight ended my flying days, and NASA closed my mission on January 25, 2024.",
-      "ar": "أنا Ingenuity، المروحية التي حملتها مركبة Perseverance إلى فوهة Jezero. في 19 أبريل 2021 نفّذتُ أول رحلة طيران مضبوطة ومزوّدة بالطاقة على كوكب آخر. أكملتُ 72 رحلة بدلًا من خمس رحلات اختبار مخططة، وساعدتُ في استطلاع مسارات ومعالم للمركبة الجوالة. أنهى تلف الدوّار في رحلتي الأخيرة قدرتي على الطيران، وأغلقت NASA مهمتي في 25 يناير 2024."
+      "en": "I was Ingenuity, carried beneath Perseverance to Jezero Crater. On April 19, 2021, I made the first powered, controlled flight on another planet; five planned flights became 72, and I scouted routes and features for the rover. During my final flight on January 18, 2024, rotor damage ended my ability to fly, and NASA closed my mission on January 25, leaving me grounded on Mars.",
+      "ar": "كنتُ Ingenuity، وحملتني Perseverance تحتها إلى فوهة Jezero. في 19 أبريل 2021 نفّذت أول رحلة طيران مضبوطة ومزوّدة بالطاقة على كوكب آخر؛ وتحولت الرحلات الخمس المخططة إلى 72 رحلة، ساعدت خلالها في استطلاع المسارات والمعالم للمركبة الجوالة. خلال رحلتي الأخيرة في 18 يناير 2024 أنهى تلف الدوّار قدرتي على الطيران، وأغلقت NASA مهمتي في 25 يناير، فبقيتُ على المريخ بلا تحليق."
     },
     "hotspots": [
       {
         "description": "The two counter-rotating blades generated lift in Mars’s very thin atmosphere. During the January 18, 2024 flight, contact was lost about 1 meter above the surface; NASA later received imagery showing rotor-blade damage, and the helicopter was no longer capable of flight.",
         "part": "Twin counter-rotating rotor blades",
-        "title": "Mars-flight rotor system"
+        "title": "Mars-flight rotor system",
+        "partAr": "شفرات الدوّار المزدوجة المتعاكسة الدوران",
+        "titleAr": "نظام دوّارات الطيران على المريخ",
+        "descriptionAr": "ولّدت الشفرتان المتعاكستا الدوران قوة الرفع في الغلاف الجوي الرقيق جدًا للمريخ. خلال رحلة 18 يناير 2024 فُقد الاتصال على ارتفاع نحو متر واحد فوق السطح؛ ثم تلقت NASA صورًا أظهرت تلف شفرات الدوّار، ولم تعد المروحية قادرة على الطيران."
       },
       {
         "description": "The solar panel charged the lithium-ion batteries, providing energy for flight and survival heating. This system powered Ingenuity during its operations; NASA’s cited mission-end reports do not state a separate disposal or recovery outcome for the power hardware, and the helicopter remains on the Martian surface.",
         "part": "Solar panel and lithium-ion batteries",
-        "title": "Power system"
+        "title": "Power system",
+        "partAr": "اللوح الشمسي وبطاريات الليثيوم-أيون",
+        "titleAr": "نظام الطاقة",
+        "descriptionAr": "شحن اللوح الشمسي بطاريات الليثيوم-أيون، فوفرت الطاقة للطيران والتدفئة اللازمة للبقاء. شغّل هذا النظام Ingenuity خلال عملياتها؛ ولا تذكر تقارير نهاية المهمة المستشهد بها من NASA نتيجة منفصلة للتخلص من عتاد الطاقة أو استرداده، وتبقى المروحية على سطح المريخ."
       },
       {
         "description": "Ingenuity relied on Perseverance to relay commands and data between the helicopter and Earth because it could not be flown in real time. Communications were reestablished after the January 18 flight, but the helicopter remained grounded after the rotor damage.",
         "part": "Perseverance rover communications relay",
-        "title": "Surface communications link"
+        "title": "Surface communications link",
+        "partAr": "مرحل اتصالات المركبة الجوالة Perseverance",
+        "titleAr": "وصلة الاتصالات السطحية",
+        "descriptionAr": "اعتمدت Ingenuity على Perseverance لترحيل الأوامر والبيانات بين المروحية والأرض لأنها لم تكن تُقاد في الزمن الحقيقي. أُعيدت الاتصالات بعد رحلة 18 يناير، لكن المروحية بقيت على الأرض بعد تلف الدوّار."
       }
     ],
     "timeline": [
@@ -1288,24 +1393,33 @@
       "lng": null
     },
     "story": {
-      "en": "I am Dawn, a deep-space explorer powered by xenon ion propulsion. I orbited Vesta before traveling onward to dwarf planet Ceres, where I studied its bright deposits and geology from orbit. I was not designed to land, so I remain an inert spacecraft circling Ceres. NASA ended my mission in November 2018 after my hydrazine supply ran out.",
-      "ar": "أنا Dawn، مستكشفة فضائية عميقة تعمل بدفع أيوني باستخدام الزينون. دُرت حول Vesta ثم تابعت رحلتي إلى الكوكب القزم Ceres، ودرستُ رواسبه اللامعة وتضاريسه من المدار. لم أُصمَّم للهبوط، لذلك بقيتُ مركبة خاملة تدور حول Ceres. أنهت NASA مهمتي في نوفمبر 2018 بعد نفاد الهيدرازين."
+      "en": "I was Dawn, a deep-space explorer driven by xenon ion propulsion. I orbited Vesta, then crossed onward to dwarf planet Ceres, studying its bright deposits and geology from orbit rather than landing. When my hydrazine supply ran out in November 2018, NASA ended my mission; I remained an inert spacecraft circling Ceres, a silent traveler at the end of a long route.",
+      "ar": "كنتُ Dawn، مستكشفة للفضاء العميق يدفعها الدفع الأيوني بالزينون. دُرت حول Vesta، ثم تابعت إلى الكوكب القزم Ceres، ودرست رواسبه اللامعة وجيولوجيته من المدار بدل الهبوط. عندما نفد مخزون الهيدرازين في نوفمبر 2018، أنهت NASA مهمتي؛ وبقيتُ مركبة خاملة تدور حول Ceres، مسافرة صامتة في نهاية طريق طويل."
     },
     "hotspots": [
       {
         "description": "Two solar-array wings supplied electrical power for the spacecraft and its ion propulsion system. They remained part of the spacecraft, which became inert in Ceres orbit after hydrazine depletion prevented further pointing control.",
         "part": "Solar-array wings",
-        "title": "Power generation"
+        "title": "Power generation",
+        "partAr": "أجنحة المصفوفات الشمسية",
+        "titleAr": "توليد الطاقة",
+        "descriptionAr": "زوّدت جناحا المصفوفات الشمسية المركبة بالطاقة الكهربائية ولنظام الدفع الأيوني. بقيا جزءًا من المركبة التي أصبحت خاملة في مدار Ceres بعد أن منع نفاد الهيدرازين مواصلة التحكم في توجيهها."
       },
       {
         "description": "Three xenon ion thrusters gradually changed Dawn's heliocentric trajectory and enabled travel from Earth to Vesta and then Ceres. NASA reports that no further ion thrusting was planned in the final Ceres orbit; the system remains aboard the inert spacecraft in orbit around Ceres.",
         "part": "Xenon ion propulsion system",
-        "title": "Low-thrust interplanetary propulsion"
+        "title": "Low-thrust interplanetary propulsion",
+        "partAr": "نظام الدفع الأيوني بالزينون",
+        "titleAr": "دفع بين الكواكب منخفض الدفع",
+        "descriptionAr": "غيّرت ثلاثة محركات أيونية تعمل بالزينون مسار Dawn حول الشمس تدريجيًا، ومكّنتها من السفر من الأرض إلى Vesta ثم Ceres. تذكر NASA أن الدفع الأيوني الإضافي لم يكن مخططًا له في مدار Ceres النهائي؛ وبقي النظام على متن المركبة الخاملة في مدار Ceres."
       },
       {
         "description": "Hydrazine thrusters controlled spacecraft orientation, including pointing the solar arrays and antennas. The hydrazine was depleted on 2018-10-31, communications ceased, and Dawn could no longer be steered; the spacecraft remains in its protective Ceres orbit.",
         "part": "Hydrazine reaction-control system",
-        "title": "Orientation and attitude control"
+        "title": "Orientation and attitude control",
+        "partAr": "نظام التحكم بالتفاعل بالهيدرازين",
+        "titleAr": "التحكم في الاتجاه والوضعية",
+        "descriptionAr": "تحكمت دافعات الهيدرازين في اتجاه المركبة، بما في ذلك توجيه المصفوفات الشمسية والهوائيات. نفد الهيدرازين في 31 أكتوبر 2018، وتوقفت الاتصالات، ولم تعد Dawn قابلة للتوجيه؛ وبقيت المركبة في مدارها الآمن حول Ceres."
       }
     ],
     "timeline": [
@@ -1404,24 +1518,33 @@
       "lng": null
     },
     "story": {
-      "en": "I am NEAR Shoemaker, sent to investigate asteroid 433 Eros. I became the first spacecraft to orbit an asteroid and, although I was not designed as a lander, touched down gently in Eros’ saddle region in February 2001. I kept returning images and gamma-ray measurements from the surface for about two weeks. My last contact came on February 28, after the surface cold overcame my operations.",
-      "ar": "أنا NEAR Shoemaker، أُرسلت لدراسة الكويكب 433 Eros. أصبحتُ أول مركبة تدور حول كويكب، ثم هبطتُ بهدوء في منطقة السرج على Eros في فبراير 2001 رغم أنني لم أُصمَّم كمركبة هبوط. واصلتُ إرسال الصور وقياسات أشعة غاما من السطح لنحو أسبوعين. انتهى الاتصال بي في 28 فبراير بعدما اشتد البرد على السطح."
+      "en": "I was NEAR Shoemaker, sent to investigate asteroid 433 Eros. I became the first spacecraft to orbit an asteroid, then—though never designed as a lander—touched down gently in Eros’s saddle region in February 2001. From the surface I continued returning images and gamma-ray measurements for about two weeks, until surface cold overcame my operations and my last contact came on February 28.",
+      "ar": "كنتُ NEAR Shoemaker، وأُرسلت لدراسة الكويكب 433 Eros. أصبحتُ أول مركبة تدور حول كويكب، ثم—مع أنني لم أُصمّم كمسبار هبوط—لامستُ بلطف منطقة السرج على Eros في فبراير 2001. واصلتُ من السطح إرسال الصور وقياسات أشعة غاما لنحو أسبوعين، حتى تغلب برد السطح على عملي وانتهى اتصالي في 28 فبراير."
     },
     "hotspots": [
       {
         "part": "Multi-Spectral Imager (MSI)",
         "title": "Surface imaging camera",
-        "description": "A multispectral camera used to image Eros and Mathilde; it returned high-resolution descent images, including views from about 120 meters above Eros, and its final transmitted image was received during touchdown."
+        "description": "A multispectral camera used to image Eros and Mathilde; it returned high-resolution descent images, including views from about 120 meters above Eros, and its final transmitted image was received during touchdown.",
+        "partAr": "مصوّر متعدد الأطياف (MSI)",
+        "titleAr": "كاميرا تصوير السطح",
+        "descriptionAr": "استخدمت كاميرا متعددة الأطياف لتصوير Eros وMathilde، وأرسلت صور اقتراب عالية الدقة، منها مشاهد من ارتفاع يقارب 120 مترًا فوق Eros؛ واستُقبلت آخر صورة مرسلة منها أثناء الهبوط."
       },
       {
         "part": "X-Ray/Gamma-Ray Spectrometer (XGRS)",
         "title": "Elemental-composition spectrometer",
-        "description": "Measured X-ray and gamma-ray signatures to determine surface elemental composition; it continued collecting data from the surface for about two weeks after touchdown."
+        "description": "Measured X-ray and gamma-ray signatures to determine surface elemental composition; it continued collecting data from the surface for about two weeks after touchdown.",
+        "partAr": "مطياف الأشعة السينية/أشعة غاما (XGRS)",
+        "titleAr": "مطياف التركيب العنصري",
+        "descriptionAr": "قاس بصمات الأشعة السينية وأشعة غاما لتحديد التركيب العنصري للسطح؛ وواصل جمع البيانات من السطح لنحو أسبوعين بعد الهبوط."
       },
       {
         "part": "Near-Infrared Spectrometer (NIS)",
         "title": "Mineralogy instrument",
-        "description": "Collected near-infrared spectra for mineralogical and surface studies and helped map more than 70 percent of Eros; NASA NSSDCA records it was turned off after an excessive power surge in May 2000."
+        "description": "Collected near-infrared spectra for mineralogical and surface studies and helped map more than 70 percent of Eros; NASA NSSDCA records it was turned off after an excessive power surge in May 2000.",
+        "partAr": "مطياف الأشعة القريبة من تحت الحمراء (NIS)",
+        "titleAr": "جهاز علم المعادن",
+        "descriptionAr": "جمع أطياف قريبة من تحت الحمراء لدراسات المعادن والسطح، وساعد في رسم خريطة لأكثر من 70% من Eros؛ وتسجل NSSDCA التابعة لـNASA أنه أُوقف بعد زيادة مفرطة في الطاقة في مايو 2000."
       }
     ],
     "timeline": [
@@ -1508,24 +1631,33 @@
       "lng": null
     },
     "story": {
-      "en": "I am Pioneer 10, joined in this archive by my sister spacecraft Pioneer 11. I crossed the asteroid belt and explored Jupiter, while Pioneer 11 used a Jupiter flyby to continue to Saturn. Our radioisotope generators and antennas kept sending science home as we traveled outward. Pioneer 11 fell silent in 1995 and Pioneer 10 sent its last detected signal in 2003; both remain on Solar System escape paths.",
-      "ar": "أنا Pioneer 10، وترافقني في هذا الأرشيف المركبة الشقيقة Pioneer 11. عبرتُ حزام الكويكبات واستكشفتُ المشتري، بينما استخدمت Pioneer 11 مرورها قرب المشتري لمواصلة رحلتها إلى زحل. واصلت مولداتنا وأطباقنا إرسال البيانات العلمية إلى الأرض ونحن نبتعد. صمتت Pioneer 11 في 1995، وأرسلت Pioneer 10 آخر إشارة مرصودة في 2003؛ وما زلنا على مساري هروب من النظام الشمسي."
+      "en": "I am Pioneer 10, joined in this archive by my sister spacecraft Pioneer 11. I crossed the asteroid belt and explored Jupiter, while Pioneer 11 used a Jupiter flyby to continue to Saturn. Our radioisotope generators and antennas carried science outward until Pioneer 11 fell silent in 1995 and Pioneer 10 sent its last detected signal in 2003; both continue along paths escaping the Solar System.",
+      "ar": "أنا Pioneer 10، وترافقني في هذا الأرشيف مركبتنا الشقيقة Pioneer 11. عبرتُ حزام الكويكبات واستكشفتُ المشتري، بينما استخدمت Pioneer 11 مرورها قرب المشتري لتتابع إلى زحل. حملت مولداتنا بالنظائر المشعة وهوائياتنا العلم إلى الخارج، حتى صمتت Pioneer 11 في 1995 وأرسلت Pioneer 10 آخر إشارة مرصودة في 2003؛ وما زلنا نتابع مسارين للخروج من النظام الشمسي."
     },
     "hotspots": [
       {
         "description": "The spacecraft used radioisotope generators for electrical power during the long outer-Solar-System missions. NSSDCA records declining RTG output as the reason for instrument power sharing and eventual loss of operations; Pioneer 10's transmitter became too weak for further detection in 2003, and Pioneer 11's science operations and daily telemetry ceased in 1995 when available power was insufficient.",
         "part": "Radioisotope thermoelectric generators (RTGs)",
-        "title": "Long-duration nuclear electrical power"
+        "title": "Long-duration nuclear electrical power",
+        "partAr": "المولدات الحرارية الكهربية بالنظائر المشعة (RTGs)",
+        "titleAr": "طاقة كهربائية نووية طويلة الأمد",
+        "descriptionAr": "استخدمت المركبتان مولدات بالنظائر المشعة لتوفير الطاقة الكهربائية خلال مهمتيهما الطويلتين في النظام الشمسي الخارجي. تسجل NSSDCA انخفاض خرج RTG سببًا لتقاسم طاقة الأجهزة وفقدان العمليات في النهاية؛ أصبح مرسل Pioneer 10 ضعيفًا جدًا بحيث تعذر رصده مجددًا في 2003، وتوقفت عمليات Pioneer 11 العلمية والقياس اليومي في 1995 عندما لم تعد الطاقة المتاحة كافية."
       },
       {
         "description": "Each spacecraft carried a 2.74 m high-gain dish with redundant receivers/transmitters and communicated through NASA's Deep Space Network. Pioneer 11's antenna could no longer remain pointed toward Earth after Earth's motion carried it out of view, ending communications; Pioneer 10's final detectable signal was received on 2003-01-23.",
         "part": "High-gain parabolic antenna and S-band radio system",
-        "title": "Deep-space communication"
+        "title": "Deep-space communication",
+        "partAr": "الهوائي الطبقي عالي الكسب ونظام الراديو S-band",
+        "titleAr": "اتصالات الفضاء العميق",
+        "descriptionAr": "حملت كل مركبة طبقًا عالي الكسب قطره 2.74 مترًا مع مستقبلات ومرسلات احتياطية، وتواصلتا عبر شبكة الفضاء العميق التابعة لـNASA. لم يعد هوائي Pioneer 11 قادرًا على البقاء موجّهًا نحو الأرض بعدما أخرجتها حركة الأرض من مجال رؤيته، فانتهت الاتصالات؛ ووصلت آخر إشارة قابلة للرصد من Pioneer 10 في 23 يناير 2003."
       },
       {
         "description": "A metal plaque on each spacecraft depicts a man and a woman and indicates the location of the Sun and Earth using astronomical references. NASA states the plaques were intended to communicate information about the creators and origin if found by an intelligent civilization; the plaques remain attached to the outbound spacecraft.",
         "part": "Pioneer plaque",
-        "title": "Message identifying the spacecraft's origin"
+        "title": "Message identifying the spacecraft's origin",
+        "partAr": "لوحة Pioneer",
+        "titleAr": "رسالة تحدد أصل المركبة",
+        "descriptionAr": "تحمل كل مركبة لوحة معدنية تُظهر رجلًا وامرأة وتحدد موقع الشمس والأرض باستخدام مراجع فلكية. تقول NASA إن اللوحتين صُممتا لإيصال معلومات عن صانعيهما وأصلهما إذا عثرت عليهما حضارة ذكية؛ وما زالتا مثبتتين بالمركبتين المتجهتين إلى الخارج."
       }
     ],
     "timeline": [
@@ -1624,24 +1756,33 @@
       "lng": null
     },
     "story": {
-      "en": "I am Kepler, a space telescope built to find planets by watching stars dim as planets passed in front of them. My observations revealed thousands of possible worlds, and the extended K2 mission continued after reaction-wheel failures. When my fuel ran out in 2018, NASA retired me in my Earth-trailing solar orbit. Final communication commands followed in November, and I now travel silently around the Sun.",
-      "ar": "أنا Kepler، تلسكوب فضائي صُمم لاكتشاف الكواكب عبر رصد خفوت النجوم عندما تمر الكواكب أمامها. كشفت ملاحظاتي آلاف العوالم المحتملة، واستمرت مهمة K2 بعد تعطل عجلات ردّ الفعل. عندما نفد وقودي في 2018، أحالتني NASA إلى التقاعد في مداري الشمسي الذي يتبع الأرض. أُرسلت أوامر الاتصال الأخيرة في نوفمبر، وأواصل الآن الدوران بصمت حول الشمس."
+      "en": "I was Kepler, a space telescope that watched stars for the tiny dimmings caused when planets crossed in front of them. My observations revealed thousands of possible worlds, and the extended K2 mission continued even after reaction-wheel failures. When my fuel ran out in 2018, NASA retired me in my Earth-trailing solar orbit; final communication commands followed in November, and I now travel silently around the Sun.",
+      "ar": "كنتُ Kepler، تلسكوبًا فضائيًا راقب النجوم بحثًا عن الخفوت الطفيف الذي يحدث عندما تمر الكواكب أمامها. كشفت ملاحظاتي آلاف العوالم المحتملة، واستمرت مهمة K2 الموسعة حتى بعد تعطل عجلات رد الفعل. عندما نفد وقودي في 2018، أحالتني NASA إلى التقاعد في مداري الشمسي الذي يتبع الأرض؛ وتبعت ذلك أوامر الاتصال الأخيرة في نوفمبر، وأواصل الآن رحلتي بصمت حول الشمس."
     },
     "hotspots": [
       {
         "description": "It measured extremely small changes in stellar brightness caused by transits. NASA describes it as Kepler's essentially single scientific instrument, with an approximately 1-meter aperture and a 1.4-meter primary mirror; after retirement it remained aboard the spacecraft in its safe solar orbit.",
         "part": "Photometer / Schmidt telescope",
-        "title": "The planet-finding instrument"
+        "title": "The planet-finding instrument",
+        "partAr": "مقياس الضوء / تلسكوب شميدت",
+        "titleAr": "أداة اكتشاف الكواكب",
+        "descriptionAr": "قاس تغيّرات صغيرة جدًا في سطوع النجوم ناتجة عن عبور الكواكب. تصف NASA هذه الأداة بأنها الجهاز العلمي الأساسي تقريبًا في Kepler، بفتحة تقارب مترًا ومرآة أولية قطرها 1.4 متر؛ وبعد التقاعد بقيت على متن المركبة في مدارها الشمسي الآمن."
       },
       {
         "description": "The image-sensor array recorded the photometer's stellar measurements across Kepler's field of view. NASA describes the spacecraft as carrying the largest digital camera outfitted for space observations at that time; it was not recovered to Earth and remains with the retired spacecraft.",
         "part": "Digital image-sensor array",
-        "title": "The space camera"
+        "title": "The space camera",
+        "partAr": "مصفوفة مستشعرات الصور الرقمية",
+        "titleAr": "كاميرا الفضاء",
+        "descriptionAr": "سجلت مصفوفة مستشعرات الصور قياسات النجوم التي التقطها مقياس الضوء عبر مجال رؤية Kepler. وتصف NASA المركبة بأنها حملت آنذاك أكبر كاميرا رقمية مجهزة للرصد الفضائي؛ ولم تُسترد إلى الأرض، وما زالت مع المركبة المتقاعدة."
       },
       {
         "description": "The four gyroscope-like reaction wheels controlled the telescope's pointing. NASA reports that one failed in July 2012 and a second failed in May 2013; the two remaining wheels helped make the K2 mission possible, while solar pressure and thrusters were later used for pointing control.",
         "part": "Reaction wheels",
-        "title": "Precision-pointing actuators"
+        "title": "Precision-pointing actuators",
+        "partAr": "عجلات رد الفعل",
+        "titleAr": "مشغلات التوجيه الدقيق",
+        "descriptionAr": "تحكمت العجلات الأربع الشبيهة بالجيروسكوبات في توجيه التلسكوب. تذكر NASA أن واحدة تعطلت في يوليو 2012 وثانية في مايو 2013؛ وساعدت العجلتان المتبقيتان في إتاحة مهمة K2، ثم استُخدم ضغط ضوء الشمس والدافعات لاحقًا للتحكم في التوجيه."
       }
     ],
     "timeline": [

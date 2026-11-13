@@ -443,8 +443,11 @@ function playTelemetryEvent(forcedKind = '') {
   if (!context || !isStarted || isMuted || !spatialFxInput) return;
   if (voiceActive && !forcedKind) return;
 
-  const mars = activeSoundscape === 'Mars';
-  const kinds = mars ? ['radio', 'morse', 'chime', 'creak'] : ['radio', 'morse', 'chime', 'sweep'];
+  const kinds = activeSoundscape === 'Mars'
+    ? ['radio', 'morse', 'chime', 'creak']
+    : activeSoundscape === 'Deep Space'
+      ? ['plasma', 'radio', 'morse', 'chime', 'sweep']
+      : ['radio', 'morse', 'chime', 'sweep'];
   const kind = forcedKind || kinds[Math.floor(Math.random() * kinds.length)];
   const now = context.currentTime + 0.025;
   const pan = Math.random() * 1.5 - 0.75;
@@ -519,12 +522,13 @@ function playTelemetryEvent(forcedKind = '') {
     filter.Q.value = 5.5;
   } else {
     oscillator.type = 'sawtooth';
-    oscillator.frequency.setValueAtTime(210 + Math.random() * 230, now);
-    oscillator.frequency.exponentialRampToValueAtTime(1500 + Math.random() * 800, now + duration);
+    const plasma = kind === 'plasma';
+    oscillator.frequency.setValueAtTime(plasma ? 90 + Math.random() * 90 : 210 + Math.random() * 230, now);
+    oscillator.frequency.exponentialRampToValueAtTime(plasma ? 520 + Math.random() * 520 : 1500 + Math.random() * 800, now + duration);
     filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(480, now);
-    filter.frequency.exponentialRampToValueAtTime(2400, now + duration);
-    filter.Q.value = 5.2;
+    filter.frequency.setValueAtTime(plasma ? 180 : 480, now);
+    filter.frequency.exponentialRampToValueAtTime(plasma ? 1150 : 2400, now + duration);
+    filter.Q.value = plasma ? 1.2 : 5.2;
   }
   oscillator.connect(filter);
   filter.connect(envelope);
@@ -552,7 +556,7 @@ function scheduleProceduralEvents() {
       if (eventChance < 0.34) playCommunicationStatic();
       else if (eventChance < 0.76) playTelemetryEvent();
       scheduleProceduralEvents();
-    }, 2000 + Math.random() * 2000);
+    }, 2000 + Math.random() * 1000);
   }
 
   if (!signatureTimer) {
@@ -587,16 +591,16 @@ export function startAudioEngine() {
 export function initializeAudioEngine() {
   if (typeof document === 'undefined' || unlockListenersInstalled) return () => {};
   unlockListenersInstalled = true;
-  const events = ['pointerdown', 'click', 'wheel', 'touchstart', 'touchmove', 'keydown'];
+  const events = ['pointerdown', 'touchstart', 'keydown', 'wheel'];
   const unlock = (event) => {
     if (event.type === 'keydown' && event.repeat) return;
-    events.forEach((eventName) => document.removeEventListener(eventName, unlock, true));
+    events.forEach((eventName) => window.removeEventListener(eventName, unlock, true));
     unlockListenersInstalled = false;
     startAudioEngine();
   };
-  events.forEach((eventName) => document.addEventListener(eventName, unlock, { capture: true, passive: true }));
+  events.forEach((eventName) => window.addEventListener(eventName, unlock, { capture: true, passive: true, once: true }));
   return () => {
-    events.forEach((eventName) => document.removeEventListener(eventName, unlock, true));
+    events.forEach((eventName) => window.removeEventListener(eventName, unlock, true));
     unlockListenersInstalled = false;
   };
 }

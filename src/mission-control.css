@@ -254,6 +254,7 @@ body { color: var(--suit-white); }
 .story-chapter-nav { position: fixed; z-index: 17; top: 84px; left: 50%; display: flex; align-items: center; gap: 3px; max-width: min(850px, calc(100vw - 420px)); min-height: 36px; padding: 4px; overflow-x: auto; border: 1px solid rgba(248,250,252,.1); border-radius: 999px; background: rgba(5,9,15,.66); backdrop-filter: blur(14px); transform: translateX(-50%); scrollbar-width: none; pointer-events: auto; }
 .story-chapter-nav::-webkit-scrollbar { display: none; }
 .story-chapter-nav button { display: inline-flex; align-items: center; gap: 6px; min-width: 0; min-height: 27px; padding: 0 9px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: #8e99a6; cursor: pointer; font-family: var(--font-mono); font-size: 6px; letter-spacing: .05em; white-space: nowrap; transition: background 150ms ease, color 150ms ease; }
+.story-chapter-nav .story-nav-back { display: none; }
 .story-chapter-nav button i { width: 4px; height: 4px; flex: 0 0 4px; border-radius: 50%; background: #738091; }
 .story-chapter-nav button:hover { color: var(--suit-white); }
 .story-chapter-nav button.is-active { border-color: rgba(252,61,33,.28); background: rgba(252,61,33,.09); color: var(--suit-white); }
@@ -832,4 +833,83 @@ body { color: var(--suit-white); }
   .whats-new-list li { gap: 8px; padding: 8px; }
   .whats-new-list small { font-size: 9px; }
   .whats-new-footer { padding: 10px 12px 13px; }
+}
+
+/* DOM touch targets are intentionally larger than the rendered 3D beacon. */
+.planet-pin-html { pointer-events: auto !important; }
+.planet-pin-overlay { position: relative; width: 1px; height: 1px; pointer-events: none; }
+.planet-pin-target { position: absolute; z-index: 1; top: 0; inset-inline-start: 0; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%; background: transparent; opacity: 0; transform: translate(-50%, -50%); cursor: pointer; pointer-events: auto; touch-action: manipulation; }
+.planet-pin-target:focus-visible { opacity: .14; outline: 2px solid var(--kapton-gold); outline-offset: 2px; }
+.planet-pin-label { position: absolute; top: -19px; inset-inline-start: 25px; display: inline-flex; align-items: center; gap: 6px; min-height: 27px; max-width: min(180px, 56vw); padding: 0 9px; overflow: hidden; border: 1px solid rgba(248,250,252,.2); border-radius: 999px; background: rgba(3,6,12,.88); color: #f1f4f7; box-shadow: 0 0 18px rgba(234,179,8,.12); cursor: pointer; font-family: var(--font-mono); font-size: 8px; letter-spacing: .025em; text-overflow: ellipsis; white-space: nowrap; transform: translateY(-50%); pointer-events: auto; touch-action: manipulation; backdrop-filter: blur(9px); }
+.planet-pin-label > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.planet-pin-glow { width: 5px; height: 5px; flex: 0 0 5px; border-radius: 50%; background: var(--kapton-gold); box-shadow: 0 0 9px rgba(234,179,8,.9); }
+.planet-pin-label:hover, .planet-pin-label:focus-visible { border-color: rgba(234,179,8,.6); color: #fff4d1; }
+.quick-mission-carousel { display: none; }
+
+.entry-portal { position: fixed; z-index: 70; inset: 0; display: grid; place-items: center; padding: 20px; background: radial-gradient(ellipse at 50% 42%, rgba(11,61,145,.24), transparent 50%), rgba(2,5,10,.91); backdrop-filter: blur(18px); }
+.entry-portal-card { display: flex; align-items: center; flex-direction: column; width: min(520px, 100%); padding: 32px 28px 25px; border: 1px solid rgba(248,250,252,.14); border-radius: 24px; background: linear-gradient(150deg, rgba(12,19,29,.94), rgba(4,8,14,.94)); box-shadow: 0 30px 100px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06); text-align: center; }
+.entry-portal-mark { display: grid; place-items: center; width: 52px; height: 52px; border: 1px solid rgba(234,179,8,.36); border-radius: 50%; background: rgba(234,179,8,.08); color: var(--kapton-gold); font-size: 26px; box-shadow: 0 0 36px rgba(234,179,8,.12); }
+.entry-portal-eyebrow { margin: 22px 0 8px; color: #9aa8b8; font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; }
+.entry-portal-card h1 { margin: 0; color: var(--suit-white); font-family: var(--font-display); font-size: clamp(22px, 5vw, 34px); font-weight: 500; letter-spacing: .03em; }
+.entry-portal-card > p:not(.entry-portal-eyebrow) { max-width: 380px; margin: 12px 0 22px; color: #a9b4c0; font-size: 13px; line-height: 1.65; }
+.entry-portal-button { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; min-height: 54px; padding: 8px 18px; border: 1px solid rgba(252,61,33,.66); border-radius: 999px; background: linear-gradient(110deg, rgba(252,61,33,.27), rgba(14,18,25,.92) 72%); color: #fff4f1; box-shadow: 0 0 28px rgba(252,61,33,.2); cursor: pointer; font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; touch-action: manipulation; }
+.entry-portal-button:hover { border-color: var(--mission-red); box-shadow: 0 0 35px rgba(252,61,33,.32); }
+.entry-portal-button > span { font-size: 18px; }
+.entry-portal-button small { flex-basis: 100%; color: #d29b92; font-size: 7px; letter-spacing: .11em; }
+.entry-portal-note { margin-top: 16px; color: #7f8b99; font-size: 9px; }
+.app-rtl .entry-portal-card { font-family: var(--font-arabic); }
+
+@media (max-width: 760px) {
+  .topbar { top: 6px; left: 8px; right: 8px; display: flex; justify-content: space-between; gap: 3px; width: auto; height: 48px; min-height: 48px; padding: 3px 6px; border-radius: 14px; transform: none; }
+  .brand-lockup { flex: 0 0 auto; width: auto; gap: 4px; min-width: 0; }
+  .brand-emblem { width: 22px; height: 22px; flex: 0 0 22px; }
+  .brand-emblem::before, .brand-emblem::after { width: 15px; height: 9px; }
+  .brand-title { font-size: 7px; letter-spacing: .025em; }
+  .brand-title > span { margin-inline-start: 1px; font-size: 6px; }
+  .planet-tabs { flex: 0 0 auto; width: auto; gap: 1px; padding: 1px; }
+  .planet-tab { display: grid; place-items: center; grid-template-columns: 1fr; grid-template-rows: 1fr; width: 25px; min-width: 25px; height: 32px; min-height: 32px; padding: 0; }
+  .planet-tab svg { grid-row: auto; width: 14px; height: 14px; }
+  .planet-tab span, .planet-tab small { display: none; }
+  .topbar-actions { flex: 0 0 auto; gap: 2px; min-width: 0; }
+  .mission-drawer-toggle, .audio-global-toggle, .language-toggle, .badge-counter { width: 28px; min-width: 28px; height: 30px; min-height: 30px; gap: 2px; padding: 0; border-radius: 9px; }
+  .mission-drawer-toggle span, .audio-global-toggle .soundscape-label, .audio-global-toggle .audio-label, .badge-label, .badge-counter strong { display: none !important; }
+  .mission-drawer-toggle svg, .audio-global-toggle svg, .badge-counter svg { width: 14px; height: 14px; }
+  .language-toggle svg, .language-toggle span:not(.arabic-label), .language-toggle i { display: none !important; }
+  .language-toggle .arabic-label { display: inline !important; font-size: 8px; }
+  .whats-new-trigger { width: 27px; height: 29px; flex-basis: 27px; border-radius: 9px; }
+  .whats-new-trigger svg { width: 13px; }
+  .canvas-tools, .map-instructions, .canvas-meta { display: none !important; }
+  .dual-map-captions { top: 60px; }
+  .archive-panel { right: 8px; bottom: 8px; left: 8px; height: min(43svh, 340px); }
+  .archive-panel.is-hidden { display: none; }
+  .quick-mission-carousel { position: fixed; z-index: 10; right: 8px; bottom: max(10px, env(safe-area-inset-bottom)); left: 8px; display: flex; flex-direction: column; gap: 5px; height: 64px; padding: 6px 8px 7px; overflow: hidden; border: 1px solid rgba(248,250,252,.14); border-radius: 13px; background: rgba(5,9,15,.78); box-shadow: 0 12px 32px rgba(0,0,0,.35); backdrop-filter: blur(14px); pointer-events: auto; }
+  .quick-mission-heading { flex: 0 0 auto; color: #8491a0; font-family: var(--font-mono); font-size: 7px; letter-spacing: .1em; }
+  .quick-mission-track { display: flex; align-items: center; gap: 6px; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; touch-action: pan-x; }
+  .quick-mission-track::-webkit-scrollbar { display: none; }
+  .quick-mission-pill { display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; max-width: 210px; height: 31px; padding: 0 9px; overflow: hidden; border: 1px solid rgba(248,250,252,.12); border-radius: 999px; background: rgba(255,255,255,.045); color: #e1e6eb; cursor: pointer; font-size: 10px; white-space: nowrap; touch-action: manipulation; }
+  .quick-mission-pill > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+  .quick-mission-pill.is-moon { border-color: rgba(226,232,240,.16); }
+  .quick-mission-pill.is-mars { border-color: rgba(242,170,119,.26); }
+  .story-chapter-nav { top: 58px; right: 8px; left: 8px; display: flex; justify-content: flex-start; gap: 3px; width: auto; max-width: none; height: 36px; min-height: 36px; padding: 3px; overflow-x: auto; border-radius: 11px; transform: none; }
+  .story-chapter-nav button { flex: 0 0 auto; min-height: 28px; padding-inline: 8px; font-size: 7px; }
+  .story-nav-back { display: inline-flex !important; align-items: center; gap: 4px; min-height: 28px !important; padding-inline: 8px !important; border: 1px solid rgba(248,250,252,.1) !important; border-radius: 8px !important; background: rgba(255,255,255,.04) !important; color: #c5ced7 !important; }
+  .memory-header { display: none; }
+  .story-chapter { align-items: flex-end; min-height: 100svh; padding: 104px 12px 12px; }
+  .story-hero { align-items: flex-end; }
+  .story-hero-copy { width: 100%; max-height: 42svh; margin: 0; padding: 12px; overflow: auto; border-radius: 13px; background: rgba(4,8,14,.78); backdrop-filter: blur(14px); }
+  .story-hero h1 { font-size: clamp(1.55rem, 8vw, 2.5rem); }
+  .story-eyebrow { margin-block: 8px 5px; }
+  .mission-hero-meta { gap: 8px 12px; margin-top: 9px; }
+  .story-hero-actions { gap: 6px; margin-top: 10px; }
+  .immersive-story-button { min-height: 40px; }
+  .transmission-chapter, .hardware-chapter, .mission-timeline-chapter, .quiz-chapter { align-items: flex-end; }
+  .transmission-copy, .hardware-copy, .hardware-side-right .hardware-copy, .hardware-side-left .hardware-copy, .timeline-copy, .quiz-copy { width: 100%; max-width: none; max-height: 42svh; margin: 0; padding: 12px; overflow: auto; border: 1px solid rgba(248,250,252,.12); border-radius: 13px; background: rgba(4,8,14,.78); box-shadow: 0 12px 36px rgba(0,0,0,.3); backdrop-filter: blur(14px); }
+  .mission-timeline-chapter { align-items: flex-end; }
+  .mission-facts { gap: 7px; margin: 10px 0; padding: 8px 0; }
+  .story-progress-rail { right: 7px; }
+  .entry-portal { padding: 15px; }
+  .entry-portal-card { padding: 24px 17px 20px; border-radius: 19px; }
+  .entry-portal-mark { width: 44px; height: 44px; font-size: 22px; }
+  .entry-portal-eyebrow { margin-top: 16px; font-size: 8px; }
+  .entry-portal-card > p:not(.entry-portal-eyebrow) { margin: 9px 0 16px; font-size: 12px; }
 }

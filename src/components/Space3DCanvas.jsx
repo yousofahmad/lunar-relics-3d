@@ -71,15 +71,50 @@ function toSpherePoint(lat, lng, radius, longitudeOffset = 0) {
   ];
 }
 
-function Pin({ item, position, onSelect, onHoverChange, selected = false, language = 'en' }) {
+function missionPinLabel(item) {
+  const labels = {
+    'apollo-11-eagle-descent-stage': 'Apollo 11',
+    'apollo-15-lrv': 'Apollo 15',
+    'alsep-scientific-packages': 'Apollo 12 ALSEP',
+    'surveyor-3': 'Surveyor 3',
+    'sojourner-rover': 'Sojourner',
+    'spirit-rover': 'Spirit',
+    'opportunity-rover': 'Opportunity',
+    'viking-1-lander': 'Viking 1',
+    'viking-2-lander': 'Viking 2',
+    'phoenix-lander': 'Phoenix',
+    'insight-lander': 'InSight',
+    'ingenuity-helicopter': 'Ingenuity',
+    'dawn-spacecraft': 'Dawn',
+    'near-shoemaker': 'NEAR Shoemaker',
+    'pioneer-10-11': 'Pioneer 10 & 11',
+    'kepler-space-telescope': 'Kepler',
+  };
+  return item.pinLabel || labels[item.id] || item.nickname || item.name;
+}
+
+function Pin({ item, position, onSelect, onHoverChange, selected = false, language = 'en', planetRef }) {
   const beacon = useRef();
+  const pinGroup = useRef();
+  const pointerDownPos = useRef(null);
+  const lastPointerUp = useRef({ at: 0, moved: false });
+  const lastActivation = useRef(0);
+  const projectionVectors = useMemo(() => ({
+    pinWorld: new THREE.Vector3(),
+    planetWorld: new THREE.Vector3(),
+    normal: new THREE.Vector3(),
+    cameraDirection: new THREE.Vector3(),
+    projected: new THREE.Vector3(),
+  }), []);
   const [hovered, setHovered] = useState(false);
+  const [frontVisible, setFrontVisible] = useState(true);
+  const { camera, size } = useThree();
   const beaconColor = selected ? '#FC3D21' : '#EAB308';
   const orientation = useMemo(() => {
     const outward = new THREE.Vector3(...position).normalize();
     return new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), outward);
   }, [position]);
-  const title = item.nickname || item.name;
+  const title = missionPinLabel(item);
   const site = item.location?.siteName;
   const label = site ? `${title} · ${site}` : title;
 
@@ -88,10 +123,64 @@ function Pin({ item, position, onSelect, onHoverChange, selected = false, langua
       const pulse = 1 + Math.sin(clock.elapsedTime * 2.6 + item.id.length) * 0.12;
       beacon.current.scale.setScalar(pulse);
     }
+    if (pinGroup.current && planetRef?.current) {
+      const { pinWorld, planetWorld, normal, cameraDirection, projected } = projectionVectors;
+      pinGroup.current.getWorldPosition(pinWorld);
+      planetRef.current.getWorldPosition(planetWorld);
+      normal.subVectors(pinWorld, planetWorld).normalize();
+      cameraDirection.subVectors(camera.position, pinWorld).normalize();
+      projected.copy(pinWorld).project(camera);
+      const insetX = 48 / Math.max(1, size.width);
+      const insetY = 48 / Math.max(1, size.height);
+      const insideViewport = projected.z > -1 && projected.z < 1
+        && Math.abs(projected.x) < 1 - insetX
+        && Math.abs(projected.y) < 1 - insetY;
+      const isFrontFacing = normal.dot(cameraDirection) > 0.15 && insideViewport;
+      setFrontVisible((current) => current === isFrontFacing ? current : isFrontFacing);
+    }
   });
 
+  const activate = () => {
+    const now = performance.now();
+    if (now - lastActivation.current < 350) return;
+    lastActivation.current = now;
+    onSelect(item);
+  };
+  const handlePointerDown = (event) => {
+    event.stopPropagation();
+    pointerDownPos.current = { x: event.clientX, y: event.clientY };
+  };
+  const handlePointerUp = (event) => {
+    event.stopPropagation();
+    const origin = pointerDownPos.current;
+    pointerDownPos.current = null;
+    const moved = !origin || Math.hypot(event.clientX - origin.x, event.clientY - origin.y) >= 12;
+    lastPointerUp.current = { at: performance.now(), moved };
+    if (!moved) activate();
+  };
+  const handleClick = (event) => {
+    event.stopPropagation();
+    if (event.detail === 0) {
+      activate();
+      return;
+    }
+    const recentPointerUp = performance.now() - lastPointerUp.current.at < 500;
+    if (recentPointerUp) return;
+    const origin = pointerDownPos.current;
+    pointerDownPos.current = null;
+    if (!origin || Math.hypot(event.clientX - origin.x, event.clientY - origin.y) < 12) activate();
+  };
+  const pinButtonProps = {
+    onPointerDown: handlePointerDown,
+    onPointerUp: handlePointerUp,
+    onPointerCancel: (event) => { event.stopPropagation(); pointerDownPos.current = null; },
+    onClick: handleClick,
+    onTouchStart: (event) => event.stopPropagation(),
+    onTouchEnd: (event) => event.stopPropagation(),
+  };
+
   return (
-    <group position={position} quaternion={orientation}>
+    <group ref={pinGroup} position={position} quaternion={orientation}>
       <group ref={beacon}>
         <mesh position={[0, 0.07, 0]}>
           <sphereGeometry args={[selected ? 0.065 : 0.048, 24, 20]} />
@@ -115,9 +204,21 @@ function Pin({ item, position, onSelect, onHoverChange, selected = false, langua
           <meshBasicMaterial transparent opacity={0} depthWrite={false} />
         </mesh>
       </group>
-      {(hovered || selected) && (
-        <Html center position={[0, 0.34, 0]} distanceFactor={9} className="pin-label" occlude>
-          <span dir={language === 'ar' ? 'auto' : 'ltr'}>{label}</span>
+      {frontVisible && (
+        <Html center position={[0, 0.07, 0]} zIndexRange={[20, 0]} className="planet-pin-html" pointerEvents="auto">
+          <div className="planet-pin-overlay" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+            <button
+              className="planet-pin-target"
+              type="button"
+              aria-label={language === 'ar' ? `افتح مهمة ${title}` : `Open ${title} mission`}
+              title={label}
+              {...pinButtonProps}
+            />
+            <button className="planet-pin-label" type="button" {...pinButtonProps}>
+              <span className="planet-pin-glow" aria-hidden="true" />
+              <span dir="auto">{title}</span>
+            </button>
+          </div>
         </Html>
       )}
     </group>
@@ -186,6 +287,7 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
             onHoverChange={setHoveredPin}
             selected={selectedRelic?.id === item.id}
             language={language}
+            planetRef={group}
           />
         );
       })}
@@ -248,6 +350,7 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
         ref={controlsRef}
         makeDefault
         enablePan={false}
+        rotateSpeed={0.65}
         minDistance={dualPlanetView ? (size.width < 620 ? 4.8 : 5.7) : 4.7}
         maxDistance={13}
         enableDamping
@@ -342,7 +445,9 @@ function buildHotspotPositions(rig, hotspots) {
 }
 
 function HotspotNode({ hotspot, position, onClick, selected, language }) {
-  const part = hotspot.part || hotspot.title;
+  const part = language === 'ar'
+    ? hotspot.partAr || hotspot.titleAr || hotspot.part || hotspot.title
+    : hotspot.part || hotspot.title;
   const accessibleLabel = language === 'ar' ? `تركيز على ${part}` : `Focus on ${part}`;
   return (
     <Html position={position} center className="hotspot-html">
@@ -439,23 +544,23 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     const mobileLift = compactLayout ? 0.55 : 0;
     const focusPoint = focusIndex >= 0 && hotspotPositions[focusIndex] ? new THREE.Vector3(...hotspotPositions[focusIndex]) : new THREE.Vector3(0, 0, 0);
     const focusWorld = rig.localToWorld(focusPoint);
+    const rigCenter = rig.getWorldPosition(new THREE.Vector3());
+    const cameraFocus = compactLayout ? rigCenter : focusWorld;
     const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : -0.18;
     const targetTilt = focusIndex >= 0 ? [0.1, -0.08, 0.17][focusIndex] ?? 0 : 0.015;
-    const cameraDistance = isHardwareChapter
-      ? 2.75
-      : chapterId === 'hero' && size.width >= 1024 ? 5.25 : 4.7;
+    const cameraDistance = compactLayout ? 6.8 : isHardwareChapter ? 2.75 : chapterId === 'hero' && size.width >= 1024 ? 5.25 : 4.7;
     rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, targetYaw + (autoRotate ? Math.sin(state.clock.elapsedTime * 0.32) * 0.035 : 0), 1.8, delta);
     rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, targetTilt, 1.8, delta);
     rig.position.x = THREE.MathUtils.damp(rig.position.x, targetX, 1.8, delta);
     rig.position.y = THREE.MathUtils.damp(rig.position.y, mobileLift + (isHardwareChapter ? 0 : Math.sin(state.clock.elapsedTime * 0.42) * 0.035), 1.8, delta);
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, focusWorld.x + state.pointer.x * 0.09, 1.4, delta);
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, focusWorld.y + 0.14 + state.pointer.y * 0.07, 1.4, delta);
-    camera.position.z = THREE.MathUtils.damp(camera.position.z, focusWorld.z + cameraDistance, 1.4, delta);
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, cameraFocus.x + (compactLayout ? 0 : state.pointer.x * 0.09), 1.4, delta);
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, cameraFocus.y + 0.14 + (compactLayout ? 0 : state.pointer.y * 0.07), 1.4, delta);
+    camera.position.z = THREE.MathUtils.damp(camera.position.z, cameraFocus.z + cameraDistance, 1.4, delta);
     const controls = controlsRef.current;
     if (controls) {
-      controls.target.x = THREE.MathUtils.damp(controls.target.x, focusWorld.x + state.pointer.x * 0.035, 1.4, delta);
-      controls.target.y = THREE.MathUtils.damp(controls.target.y, focusWorld.y + state.pointer.y * 0.025, 1.4, delta);
-      controls.target.z = THREE.MathUtils.damp(controls.target.z, focusWorld.z, 1.4, delta);
+      controls.target.x = THREE.MathUtils.damp(controls.target.x, cameraFocus.x + (compactLayout ? 0 : state.pointer.x * 0.035), 1.4, delta);
+      controls.target.y = THREE.MathUtils.damp(controls.target.y, cameraFocus.y + (compactLayout ? -0.6 : state.pointer.y * 0.025), 1.4, delta);
+      controls.target.z = THREE.MathUtils.damp(controls.target.z, cameraFocus.z, 1.4, delta);
       controls.update();
     }
   });
@@ -498,7 +603,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
         )}
       </group>
       {focusIndex >= 0 && hotspotPositions[focusIndex] && <HardwareCallout position={hotspotPositions[focusIndex]} rigRef={storyRig} active />}
-      <OrbitControls ref={controlsRef} makeDefault target={[0, 0, 0]} enablePan={false} minDistance={2.05} maxDistance={9} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.34} />
+      <OrbitControls ref={controlsRef} makeDefault target={[0, 0, 0]} enablePan={false} rotateSpeed={0.65} minDistance={2.05} maxDistance={9} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.34} />
     </>
   );
 }
@@ -540,21 +645,10 @@ function CameraFlight({ selectedId, controlsRef }) {
 export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot, storyProgress, archiveOpen = true }) {
   const [autoRotate, setAutoRotate] = useState(true);
   const controlsRef = useRef(null);
-  const selectTimer = useRef(0);
   const viewFilter = selectedRelic?.body || filter;
   const isArabic = language === 'ar';
 
-  useEffect(() => () => window.clearTimeout(selectTimer.current), []);
-
-  const selectFromBeacon = (item) => {
-    window.clearTimeout(selectTimer.current);
-    const controls = controlsRef.current;
-    if (controls) {
-      controls.dollyIn(1.3);
-      controls.update();
-    }
-    selectTimer.current = window.setTimeout(() => onSelect(item), 320);
-  };
+  const selectFromBeacon = (item) => onSelect(item);
 
   const adjustZoom = (direction) => {
     const controls = controlsRef.current;
@@ -568,7 +662,7 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
   const celestialView = viewFilter === 'All' ? 'Moon' : viewFilter;
 
   return (
-    <div className="space-canvas-wrap">
+    <div className="space-canvas-wrap" onPointerDownCapture={() => setAutoRotate(false)} onTouchStartCapture={() => setAutoRotate(false)}>
       <Canvas
         shadows
         dpr={[1, 1.75]}
@@ -596,6 +690,19 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
           <CameraFlight selectedId={selectedRelic?.id || null} controlsRef={controlsRef} />
         </Suspense>
       </Canvas>
+      {!selectedRelic && relics.length > 0 && (
+        <div className="quick-mission-carousel" role="group" aria-label={isArabic ? 'مهمات سريعة لهذا المشهد' : 'Quick missions for this view'}>
+          <span className="quick-mission-heading">{isArabic ? 'مهمات سريعة' : 'QUICK MISSIONS'}</span>
+          <div className="quick-mission-track">
+            {relics.map((item) => (
+              <button className={`quick-mission-pill ${item.body === 'Mars' ? 'is-mars' : 'is-moon'}`} type="button" key={item.id} onClick={() => onSelect(item)}>
+                <span aria-hidden="true">{item.body === 'Mars' ? '🔴' : item.body === 'Moon' ? '🌕' : '✦'}</span>
+                <span dir="auto">{missionPinLabel(item)}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="canvas-tools">
         <span className="render-state"><Activity size={13} />{selectedRelic ? (isArabic ? 'نموذج تفاعلي ثلاثي الأبعاد' : '3D INTERACTIVE MODEL') : (isArabic ? 'مشهد الكوكب' : 'Planet view')}</span>
         <div className="viewer-control-group" role="group" aria-label={isArabic ? 'أدوات تكبير وتدوير المجسم' : 'Model size and view controls'}>

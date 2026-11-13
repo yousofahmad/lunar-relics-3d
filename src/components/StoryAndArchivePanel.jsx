@@ -411,14 +411,15 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       { id: 'hero', text: intro },
       { id: 'transmission', text: storyText, speechLanguage: storyLanguage },
       ...hardwareHotspots.map((spot, index) => {
-        const hardwareHasArabic = Boolean(spot.partAr || spot.titleAr)
-          && typeof spot.description === 'object'
-          && Boolean(spot.description?.ar);
+        const hardwareHasArabic = Boolean(spot.partAr || spot.titleAr || spot.descriptionAr)
+          || (typeof spot.description === 'object' && Boolean(spot.description?.ar));
         const speechLanguage = isArabic && !hardwareHasArabic ? 'en' : language;
         const part = speechLanguage === 'ar'
           ? spot.partAr || spot.titleAr || localized(spot.part, speechLanguage) || localized(spot.title, speechLanguage)
           : localized(spot.part, 'en') || localized(spot.title, 'en');
-        const detail = localized(spot.description, speechLanguage);
+        const detail = speechLanguage === 'ar'
+          ? localized(spot.descriptionAr || spot.description, speechLanguage)
+          : localized(spot.description, speechLanguage);
         return {
           id: `hardware-${index}`,
           text: speechLanguage === 'ar' ? `نركّز الآن على ${part}. ${detail}` : `Now examining ${part}. ${detail}`,
@@ -521,6 +522,10 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       </div>
 
       <nav className="story-chapter-nav" aria-label={isArabic ? 'فصول قصة المهمة' : 'Mission story chapters'}>
+        <button type="button" className="story-nav-back" onClick={onBack} aria-label={copy.back}>
+          {isArabic ? <ArrowRight size={13} /> : <ArrowLeft size={13} />}
+          <span>{isArabic ? 'رجوع' : 'BACK'}</span>
+        </button>
         {storyChapters.map(({ id, label, title, hotspotIndex }) => (
           <button
             key={id}
@@ -653,9 +658,9 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
           >
             <div className="chapter-copy hardware-copy">
               <span className="hardware-kicker"><i aria-hidden="true" />{isArabic ? 'عن هذا الجزء' : 'ABOUT THIS PART'}</span>
-              <h2 dir="auto">{spot.part || spot.title}</h2>
-              <h3 dir="auto">{spot.title || spot.part}</h3>
-              <p dir="auto">{spot.description}</p>
+              <h2 dir="auto">{isArabic ? spot.partAr || spot.titleAr || spot.part || spot.title : spot.part || spot.title}</h2>
+              <h3 dir="auto">{isArabic ? spot.titleAr || spot.title || spot.part : spot.title || spot.part}</h3>
+              <p dir="auto">{isArabic ? spot.descriptionAr || spot.description : spot.description}</p>
               <button type="button" className={`hardware-focus-button ${sameHotspot(hotspot, spot) ? 'is-active' : ''}`} onClick={() => setHotspot?.(spot)} aria-pressed={sameHotspot(hotspot, spot)}>
                 <span className="hardware-focus-dot" aria-hidden="true" />{isArabic ? 'قرّب لعرض هذا الجزء' : 'ZOOM IN ON THIS PART'}
               </button>
