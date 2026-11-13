@@ -206,7 +206,6 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
 
 function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHotspot, onStoryProgress, audioEnabled = true }) {
   const copy = COPY[language] || COPY.en;
-  const [activeTab, setActiveTab] = useState('story');
   const [activeQuestion, setActiveQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [quizResult, setQuizResult] = useState('');
@@ -230,7 +229,6 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const activeHotspot = hardwareHotspots.find((spot) => sameHotspot(hotspot, spot));
 
   useEffect(() => {
-    setActiveTab('story');
     setActiveQuestion(null);
     setSelectedAnswer(null);
     setQuizResult('');
@@ -245,10 +243,9 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   }, [item.id]);
 
   useEffect(() => {
-    if (activeTab !== 'story') return undefined;
-    const beats = [...(document.querySelectorAll('.story-scroll-beat'))];
-    if (!beats.length) return undefined;
-    const storyPane = document.querySelector('.story-mode .archive-panel');
+    const chapters = [...(document.querySelectorAll('.story-mode .story-chapter[data-story-chapter]'))];
+    if (!chapters.length) return undefined;
+    const storyPane = document.querySelector('.story-mode .mission-story-scroll');
     let animationFrame = 0;
     const updateActiveBeat = () => {
       if (animationFrame) return;
@@ -261,8 +258,8 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
           : window.innerHeight * 0.53;
         let nearestIndex = 0;
         let nearestDistance = Infinity;
-        beats.forEach((beat, index) => {
-          const rect = beat.getBoundingClientRect();
+        chapters.forEach((chapter, index) => {
+          const rect = chapter.getBoundingClientRect();
           const distance = rect.top <= focusY && rect.bottom >= focusY
             ? 0
             : Math.min(Math.abs(rect.top - focusY), Math.abs(rect.bottom - focusY));
@@ -272,7 +269,10 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
           }
         });
         setActiveBeat(nearestIndex);
-        onStoryProgress?.({ index: nearestIndex, total: beats.length });
+        const activeChapter = chapters[nearestIndex];
+        const hotspotIndex = activeChapter?.dataset.hotspotIndex;
+        setHotspot?.(hotspotIndex == null ? null : hardwareHotspots[Number(hotspotIndex)] || null);
+        onStoryProgress?.({ index: nearestIndex, total: chapters.length, chapter: activeChapter?.dataset.storyChapter || 'hero' });
       });
     };
     updateActiveBeat();
@@ -285,7 +285,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       storyPane?.removeEventListener('scroll', updateActiveBeat);
       window.removeEventListener('resize', updateActiveBeat);
     };
-  }, [activeTab, item.id, storyBeats.length, onStoryProgress]);
+  }, [hardwareHotspots.length, item.id, onStoryProgress, setHotspot]);
 
   const stopAudio = useCallback(() => {
     playbackTokenRef.current += 1;
@@ -338,11 +338,14 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     }
   };
 
-  const tabs = [
-    { id: 'story', label: copy.story, icon: Radio },
-    { id: 'timeline', label: copy.timeline, icon: Clock3 },
-    { id: 'quiz', label: copy.quiz, icon: CircleHelp },
+  const storyChapters = [
+    { id: 'hero', label: isArabic ? 'المهمة' : 'MISSION' },
+    { id: 'transmission', label: isArabic ? 'الإرسال' : 'TRANSMISSION' },
+    ...hardwareHotspots.map((spot, index) => ({ id: `hardware-${index}`, label: spot.part || spot.title, hotspotIndex: index })),
+    { id: 'timeline', label: isArabic ? 'الخط الزمني' : 'TIMELINE' },
+    { id: 'quiz', label: isArabic ? 'الاختبار' : 'QUIZ' },
   ];
+  const scrollToChapter = (chapterId) => document.getElementById(`mission-chapter-${chapterId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   return (
     <div className="memory-room">
@@ -353,83 +356,50 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         <span className="memory-status"><span />{copy.active}</span>
       </div>
 
-      <div className="memory-identity">
-        <span className="memory-classification">{getBodyLabel(item, language, copy)} <i /> {getTypeLabel(item.type, language, copy)}</span>
-        <h2 dir="auto">{item.nickname || item.name}</h2>
-        <div className="memory-location"><MapPin size={13} /><span dir="auto">{siteName}</span></div>
-      </div>
-
-      <section className="mission-telemetry" aria-label={copy.telemetry}>
-        <div className="telemetry-heading"><Activity size={13} /><span>{copy.telemetry}</span><bdi dir="ltr">NSSDCA / DATA</bdi></div>
-        <div className="telemetry-grid">
-        <div className="telemetry-item"><span dir={isArabic ? 'rtl' : 'ltr'}>{isArabic ? <>{copy.record} <bdi dir="ltr">NSSDCA</bdi></> : <><bdi dir="ltr">NSSDCA</bdi> {copy.record}</>}</span><strong dir="ltr">{idText}</strong></div>
-          <div className="telemetry-item telemetry-launch"><span>{copy.launch}</span><strong dir="ltr">{item.launchYear}</strong></div>
-          <div className="telemetry-item telemetry-position"><span>{position.label}</span><strong dir={position.coordinates ? 'ltr' : 'auto'} title={position.value}>{position.value}</strong></div>
-        </div>
-      </section>
-
-      <div className="mission-facts">
-        <div><span>{copy.launch}</span><strong>{item.launchYear}</strong></div>
-        <div><span>{copy.landing}</span><strong>{dateLabel(item.landingDate, language)}</strong></div>
-        <div><span>{copy.end}</span><strong>{dateLabel(item.endOfMission, language)}</strong></div>
-      </div>
-
-      {hardwareHotspots.length > 0 && (
-        <section className="memory-hotspots" aria-label={copy.hotspots}>
-          <div className="hotspot-section-heading"><span>{copy.hotspots}</span><small>{copy.hotspotHint}</small></div>
-          <div className="hotspot-pill-list" role="group" aria-label={copy.hotspots}>
-            {hardwareHotspots.map((spot, index) => {
-              const selected = sameHotspot(hotspot, spot);
-              const part = spot.part || spot.title;
-              return (
-                <button
-                  className={`hotspot-pill ${selected ? 'is-selected' : ''}`}
-                  type="button"
-                  key={`${item.id}-hotspot-pill-${index}`}
-                  onClick={() => setHotspot?.(spot)}
-                  aria-pressed={selected}
-                  aria-label={`${isArabic ? 'نقطة عتاد' : 'Hardware point'} ${index + 1}: ${part}`}
-                  title={spot.title || part}
-                >
-                  <span className="hotspot-pill-index" dir="ltr">{String(index + 1).padStart(2, '0')}</span>
-                  <span dir="auto">{part}</span>
-                </button>
-              );
-            })}
-          </div>
-          {activeHotspot && (
-            <div className="hotspot-detail" id="hotspot-detail" role="status" aria-live="polite">
-              <div className="hotspot-detail-heading"><span>{copy.hotspotDetail}</span><strong dir="auto">{activeHotspot.title || activeHotspot.part}</strong></div>
-              <p dir="auto">{activeHotspot.description}</p>
-            </div>
-          )}
-        </section>
-      )}
-
-      <div className="memory-tabs" role="tablist" aria-label={copy.details}>
-        {tabs.map(({ id, label, icon: Icon }) => (
-          <button type="button" role="tab" aria-selected={activeTab === id} className={activeTab === id ? 'active' : ''} onClick={() => setActiveTab(id)} key={id}>
-            <Icon size={14} /><span>{label}</span>
+      <nav className="story-chapter-nav" aria-label={isArabic ? 'فصول قصة المهمة' : 'Mission story chapters'}>
+        {storyChapters.map(({ id, label, hotspotIndex }) => (
+          <button
+            key={id}
+            type="button"
+            className={activeBeat === storyChapters.findIndex((chapter) => chapter.id === id) ? 'is-active' : ''}
+            onClick={() => {
+              if (hotspotIndex != null) setHotspot?.(hardwareHotspots[hotspotIndex]);
+              scrollToChapter(id);
+            }}
+            aria-current={activeBeat === storyChapters.findIndex((chapter) => chapter.id === id) ? 'step' : undefined}
+            title={label}
+          >
+            <i aria-hidden="true" /><span dir="auto">{label}</span>
           </button>
         ))}
-      </div>
+      </nav>
 
-      <div className="memory-content" key={`${item.id}-${activeTab}`}>
-      {activeTab === 'story' && (
-        <div className="story-view">
-            <div className="story-kicker"><span className="signal-bars"><i /><i /><i /><i /></span>{copy.fieldNote}</div>
-            <div className="story-scroll-intro">
-              <span>{isArabic ? 'حكاية تُروى مع كل خطوة' : 'A STORY IN SCROLLING CHAPTERS'}</span>
-              <p>{isArabic ? 'مرّر لتتابع الرحلة؛ المشهد ثلاثي الأبعاد يتحرك مع فصولها.' : 'Scroll through the mission. The 3D artifact shifts gently with each chapter.'}</p>
+      <main className="mission-story-scroll">
+        <section id="mission-chapter-hero" className="story-chapter story-hero" data-story-chapter="hero">
+          <div className="story-hero-copy">
+            <span className="memory-classification">{getBodyLabel(item, language, copy)} <i /> {getTypeLabel(item.type, language, copy)}</span>
+            <p className="story-eyebrow">{isArabic ? 'سجلّ الرحلة · أرشيف ناسا' : 'MISSION LOG · NASA ARCHIVE'}</p>
+            <h1 dir="auto">{item.nickname || item.name}</h1>
+            <p className="story-hero-location"><MapPin size={14} /><span dir="auto">{siteName}</span></p>
+            <div className="mission-hero-meta">
+              <span><small>{isArabic ? 'سنة الإطلاق' : 'LAUNCH YEAR'}</small><strong dir="ltr">{item.launchYear}</strong></span>
+              <span><small>{isArabic ? 'معرّف السجل' : 'NSSDCA RECORD'}</small><strong dir="ltr">{idText}</strong></span>
+              <span><small>{isArabic ? 'موقع المهمة' : 'MISSION SITE'}</small><strong dir="auto">{siteName}</strong></span>
             </div>
-            <div className="story-chapter-stack" aria-label={copy.fieldNote}>
-              {storyBeats.map((beat, index) => (
-                <article className={`story-scroll-beat ${activeBeat === index ? 'is-active' : ''}`} data-story-beat={index} key={`${item.id}-story-beat-${index}`}>
-                  <div className="story-beat-marker"><span dir="ltr">{String(index + 1).padStart(2, '0')}</span><i /></div>
-                  <p className="first-person-story" dir="auto">“{beat}”</p>
-                  <span className="story-beat-count" dir="ltr">{String(index + 1).padStart(2, '0')} / {String(storyBeats.length).padStart(2, '0')}</span>
-                </article>
-              ))}
+            <button type="button" className="story-scroll-cue" onClick={() => scrollToChapter('transmission')}>
+              <span>{isArabic ? 'ابدأ الحكاية' : 'BEGIN THE TRANSMISSION'}</span><i aria-hidden="true" />
+            </button>
+          </div>
+          <span className="story-hero-record" dir="ltr">NSSDCA / {idText}</span>
+        </section>
+
+        <section id="mission-chapter-transmission" className="story-chapter transmission-chapter" data-story-chapter="transmission">
+          <div className="chapter-copy transmission-copy">
+            <span className="story-kicker"><span className="signal-bars"><i /><i /><i /><i /></span>{copy.fieldNote}</span>
+            <h2>{isArabic ? 'صوت من قلب المهمة' : 'A VOICE FROM THE MISSION'}</h2>
+            <p className="chapter-lede">{isArabic ? 'استمع إلى الحكاية كما لو أن المركبة تروي رحلتها.' : 'Hear the journey as if the spacecraft itself were speaking.'}</p>
+            <div className="story-transcript" dir="auto">
+              {storyBeats.map((beat, index) => <p className="first-person-story" key={`${item.id}-transcript-${index}`}>“{beat}”</p>)}
             </div>
             <div className="transmit-row">
               <button type="button" className={`transmit-button ${isTransmitting ? 'transmitting' : ''}`} onClick={() => isTransmitting ? stopAudio() : playAudio(storyText)} aria-pressed={isTransmitting} disabled={!audioEnabled}>
@@ -444,34 +414,61 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
                 </span>
               )}
             </div>
-
-            <div className="qa-section">
-              <div className="section-label"><span>{copy.qa}</span><span className="section-rule" /></div>
-              <div className="qa-list">
-                {questions.map((qa, index) => {
-                  const question = qa.question?.[language] || qa.question?.en || '';
-                  const answer = qa.answer?.[language] || qa.answer?.en || '';
-                  const open = activeQuestion === index;
-                  return (
-                    <div className={`qa-item ${open ? 'open' : ''}`} key={`${item.id}-qa-${index}`}>
-                      <button type="button" className="qa-question" onClick={() => {
-                        setActiveQuestion(open ? null : index);
-                        if (!open) playAudio(answer);
-                      }}>
-                        <span dir="auto">{question}</span><span className="qa-toggle">{open ? '−' : '+'}</span>
-                      </button>
-                      {open && <div className="qa-answer"><span>{copy.answer}</span><p dir="auto">{answer}</p><button type="button" onClick={() => playAudio(answer)} aria-label={copy.transmit} disabled={!audioEnabled}><Play size={13} /></button></div>}
-                    </div>
-                  );
-                })}
+            {questions.length > 0 && (
+              <div className="qa-section">
+                <div className="section-label"><span>{copy.qa}</span><span className="section-rule" /></div>
+                <div className="qa-list">
+                  {questions.map((qa, index) => {
+                    const question = qa.question?.[language] || qa.question?.en || '';
+                    const answer = qa.answer?.[language] || qa.answer?.en || '';
+                    const open = activeQuestion === index;
+                    return (
+                      <div className={`qa-item ${open ? 'open' : ''}`} key={`${item.id}-qa-${index}`}>
+                        <button type="button" className="qa-question" onClick={() => {
+                          setActiveQuestion(open ? null : index);
+                          if (!open) playAudio(answer);
+                        }}>
+                          <span dir="auto">{question}</span><span className="qa-toggle">{open ? '−' : '+'}</span>
+                        </button>
+                        {open && <div className="qa-answer"><span>{copy.answer}</span><p dir="auto">{answer}</p><button type="button" onClick={() => playAudio(answer)} aria-label={copy.transmit} disabled={!audioEnabled}><Play size={13} /></button></div>}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
           </div>
-        )}
+        </section>
 
-        {activeTab === 'timeline' && (
-          <div className="timeline-view">
-            <div className="section-label"><span>{copy.milestones}</span><span className="section-rule" /></div>
+        {hardwareHotspots.map((spot, index) => (
+          <section
+            id={`mission-chapter-hardware-${index}`}
+            className={`story-chapter hardware-chapter hardware-side-${index % 2 === 0 ? 'right' : 'left'} ${activeBeat === index + 2 ? 'is-current' : ''}`}
+            data-story-chapter={`hardware-${index}`}
+            data-hotspot-index={index}
+            key={`${item.id}-hardware-chapter-${index}`}
+          >
+            <div className="chapter-copy hardware-copy">
+              <span className="hardware-kicker"><i aria-hidden="true" />{isArabic ? 'فحص العتاد' : 'HARDWARE DEEP-DIVE'}</span>
+              <h2 dir="auto">{spot.part || spot.title}</h2>
+              <h3 dir="auto">{spot.title || spot.part}</h3>
+              <p dir="auto">{spot.description}</p>
+              <button type="button" className={`hardware-focus-button ${sameHotspot(hotspot, spot) ? 'is-active' : ''}`} onClick={() => setHotspot?.(spot)} aria-pressed={sameHotspot(hotspot, spot)}>
+                <span className="hardware-focus-dot" aria-hidden="true" />{isArabic ? 'تركيز على هذا الجزء' : 'FOCUS THIS COMPONENT'}
+              </button>
+            </div>
+          </section>
+        ))}
+
+        <section id="mission-chapter-timeline" className="story-chapter mission-timeline-chapter" data-story-chapter="timeline">
+          <div className="chapter-copy timeline-copy">
+            <span className="story-kicker">{copy.milestones}</span>
+            <h2>{isArabic ? 'محطات في الرحلة' : 'MILESTONES IN FLIGHT'}</h2>
+            <div className="mission-facts">
+              <div><span>{copy.launch}</span><strong dir="ltr">{item.launchYear}</strong></div>
+              <div><span>{copy.landing}</span><strong>{dateLabel(item.landingDate, language)}</strong></div>
+              <div><span>{copy.end}</span><strong>{dateLabel(item.endOfMission, language)}</strong></div>
+            </div>
             <div className="mission-timeline">
               {timeline.map((step, index) => (
                 <div className="timeline-item" key={`${item.id}-timeline-${index}`}>
@@ -482,18 +479,17 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               ))}
             </div>
           </div>
-        )}
+        </section>
 
-        {activeTab === 'quiz' && (
-          <div className="quiz-view">
-            <div className="quiz-orbit" aria-hidden="true"><Sparkles size={18} /></div>
+        <section id="mission-chapter-quiz" className="story-chapter quiz-chapter" data-story-chapter="quiz">
+          <div className="chapter-copy quiz-copy">
             <span className="story-kicker">{copy.quizTitle}</span>
-            <h3 dir="auto">{quiz.question?.[language] || quiz.question?.en}</h3>
+            <h2 dir="auto">{quiz.question?.[language] || quiz.question?.en || copy.quizHint}</h2>
             <p className="quiz-hint">{copy.choose}</p>
             <div className="quiz-options">
               {options.map((option, index) => (
                 <button type="button" key={`${item.id}-option-${index}`} className={`quiz-option ${selectedAnswer === index ? 'selected' : ''} ${['unlocked', 'already'].includes(quizResult) && index === quiz.correctAnswer ? 'answer-correct' : ''}`} onClick={() => { setSelectedAnswer(index); setQuizResult(''); }}>
-                  <span className="option-index" dir="ltr">0{index + 1}</span><span dir="auto">{option}</span>{selectedAnswer === index && <Check size={15} />}
+                  <span className="option-index" dir="ltr">{String.fromCharCode(65 + index)}</span><span dir="auto">{option}</span>{selectedAnswer === index && <Check size={15} />}
                 </button>
               ))}
             </div>
@@ -504,17 +500,17 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
             {(quizResult === 'unlocked' || quizResult === 'already') && <div className="quiz-success" role="status"><BadgeCheck size={17} /><span>{quizResult === 'already' ? copy.already : copy.correct}</span></div>}
             {quizResult === 'wrong' && <div className="quiz-error">{copy.wrong}</div>}
             <div className="badge-reward"><span className="badge-reward-icon"><Sparkles size={16} /></span><span><small>{copy.badge}</small><strong dir="auto">{item.badgeName}</strong></span><span className={`badge-status ${badges.has(item.id) ? 'badge-unlocked' : 'badge-locked'}`}>{badges.has(item.id) ? copy.unlocked : copy.locked}</span></div>
+            <div className="citation-footer">
+              <div className="citation-heading"><span><RadioTower size={13} />{copy.citation}</span><span className="citation-id" dir={isArabic ? 'rtl' : 'ltr'}>{isArabic ? <>{copy.nssdca} <bdi dir="ltr">NSSDCA</bdi>: </> : `${copy.nssdca}: `}<bdi dir="ltr">{idText}</bdi></span></div>
+              <div className="citation-links">
+                {urls.slice(0, 3).map((url, index) => <a href={url} target="_blank" rel="noreferrer" key={url}>{index === 0 ? copy.nasa : `${copy.sources} ${index + 1}`}<ArrowUpRight size={11} /></a>)}
+                {urls.length === 0 && <span className="citation-missing">{copy.sources}</span>}
+              </div>
+            </div>
           </div>
-        )}
-      </div>
+        </section>
+      </main>
 
-      <div className="citation-footer">
-        <div className="citation-heading"><span><RadioTower size={13} />{copy.citation}</span><span className="citation-id" dir={isArabic ? 'rtl' : 'ltr'}>{isArabic ? <>{copy.nssdca} <bdi dir="ltr">NSSDCA</bdi>: </> : `${copy.nssdca}: `}<bdi dir="ltr">{idText}</bdi></span></div>
-        <div className="citation-links">
-          {urls.slice(0, 3).map((url, index) => <a href={url} target="_blank" rel="noreferrer" key={url}>{index === 0 ? copy.nasa : `${copy.sources} ${index + 1}`}<ArrowUpRight size={11} /></a>)}
-          {urls.length === 0 && <span className="citation-missing">{copy.sources}</span>}
-        </div>
-      </div>
       {(isTransmitting || subtitleText) && createPortal(
         <div className={`cinematic-subtitle-bar ${isTransmitting ? 'is-speaking' : ''}`} role="status" aria-live="polite" aria-atomic="false">
           <span className="subtitle-signal" aria-hidden="true"><i /><i /><i /><i /><i /></span>

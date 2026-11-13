@@ -55,6 +55,7 @@ export default function App() {
   const [relics, setRelics] = useState(LOCAL_RELICS);
   const [celestialView, setCelestialView] = useState('Moon');
   const [archiveFilter, setArchiveFilter] = useState('All');
+  const [archiveOpen, setArchiveOpen] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [language, setLanguage] = useState(() => localStorage.getItem('lunar-relics-language') || 'en');
   const [audioEnabled, setAudioEnabled] = useState(true);
@@ -153,6 +154,16 @@ export default function App() {
         badges={badges}
         onOpenBadges={() => setBadgeModalOpen(true)}
         badgesOpen={badgeModalOpen}
+        storyMode={storyMode}
+        archiveOpen={archiveOpen}
+        onOpenMissions={() => {
+          if (storyMode) {
+            backToMap();
+            setArchiveOpen(true);
+          } else {
+            setArchiveOpen((open) => !open);
+          }
+        }}
         audioEnabled={audioEnabled}
         onToggleAudio={() => setAudioEnabled((enabled) => !enabled)}
       />
@@ -208,7 +219,7 @@ export default function App() {
           </div>
         </section>
 
-        <aside className="archive-panel glass-panel">
+        <aside className={`archive-panel glass-panel ${storyMode ? 'story-experience-panel' : ''} ${!archiveOpen && !storyMode ? 'is-hidden' : ''}`}>
           <StoryAndArchivePanel
             relics={displayRelics}
             archiveFilter={archiveFilter}

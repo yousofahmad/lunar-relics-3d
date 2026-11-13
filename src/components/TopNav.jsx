@@ -1,4 +1,4 @@
-import { Globe2, Languages, Moon, Orbit, Trophy, Volume2, VolumeX } from 'lucide-react';
+import { Globe2, Languages, List, Moon, Orbit, Trophy, Volume2, VolumeX } from 'lucide-react';
 
 const CELESTIAL_VIEWS = [
   { id: 'Moon', icon: Moon, en: 'THE MOON', ar: 'القمر', subEn: 'LUNA', subAr: 'LUNA' },
@@ -6,7 +6,7 @@ const CELESTIAL_VIEWS = [
   { id: 'Deep Space', icon: Orbit, en: 'DEEP SPACE / ORBIT', ar: 'الفضاء العميق / المدار', subEn: 'MISSIONS', subAr: 'المهمات' },
 ];
 
-export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, audioEnabled = true, onToggleAudio = () => {} }) {
+export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, audioEnabled = true, onToggleAudio = () => {} }) {
   const unlockedCount = relics.filter((item) => badges.has(item.id)).length;
 
   return (
@@ -36,6 +36,18 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
       </nav>
 
       <div className="topbar-actions">
+        <button
+          type="button"
+          className={`mission-drawer-toggle ${archiveOpen && !storyMode ? 'is-open' : ''}`}
+          onClick={onOpenMissions}
+          aria-expanded={Boolean(archiveOpen && !storyMode)}
+          aria-label={language === 'ar' ? `${storyMode ? 'العودة إلى' : archiveOpen ? 'إغلاق' : 'فتح'} أرشيف المهمات، ${relics.length} مهمة` : `${storyMode ? 'Return to' : archiveOpen ? 'Close' : 'Open'} ${relics.length}-mission archive`}
+          title={language === 'ar' ? 'أرشيف المهمات' : 'Mission archive'}
+        >
+          <List size={15} />
+          <span>{language === 'ar' ? 'المهمات' : 'MISSIONS'}</span>
+          <strong dir="ltr">{relics.length}</strong>
+        </button>
         <button
           type="button"
           className="audio-global-toggle"

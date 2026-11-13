@@ -62,6 +62,7 @@ function toSpherePoint(lat, lng, radius) {
 function Pin({ item, position, onSelect, selected = false, language = 'en' }) {
   const beacon = useRef();
   const [hovered, setHovered] = useState(false);
+  const beaconColor = selected ? '#FC3D21' : '#EAB308';
   const orientation = useMemo(() => {
     const outward = new THREE.Vector3(...position).normalize();
     return new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), outward);
@@ -87,15 +88,15 @@ function Pin({ item, position, onSelect, selected = false, language = 'en' }) {
           onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }}
         >
           <sphereGeometry args={[selected ? 0.085 : 0.065, 24, 20]} />
-          <meshBasicMaterial color={selected ? '#d8f5a5' : '#a4f6ff'} />
+          <meshBasicMaterial color={beaconColor} />
         </mesh>
         <mesh position={[0, 0.065, 0]}>
           <cylinderGeometry args={[0.008, 0.018, 0.13, 10]} />
-          <meshBasicMaterial color={selected ? '#d8f5a5' : '#5fe7ff'} transparent opacity={0.68} />
+          <meshBasicMaterial color={beaconColor} transparent opacity={0.68} />
         </mesh>
         <mesh position={[0, 0.07, 0]}>
           <sphereGeometry args={[0.15, 18, 14]} />
-          <meshBasicMaterial color={selected ? '#d8f5a5' : '#5fe7ff'} transparent opacity={0.12} depthWrite={false} />
+          <meshBasicMaterial color={beaconColor} transparent opacity={0.12} depthWrite={false} />
         </mesh>
       </group>
       {(hovered || selected) && (
@@ -208,7 +209,8 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
       <fog attach="fog" args={['#03060b', 28, 70]} />
       <ambientLight intensity={0.16} color="#b9c4ce" />
       <directionalLight position={[5, 3.5, 7]} intensity={3.4} color="#fff4e6" />
-      <pointLight position={[-5, -2, -4]} intensity={0.28} color={celestialView === 'Mars' ? '#be5730' : '#b9c4d1'} distance={18} />
+      <pointLight position={[-5, -2, -4]} intensity={0.48} color="#0B3D91" distance={18} />
+      <pointLight position={[2.5, -1.5, 5]} intensity={0.12} color="#EAB308" distance={15} />
       <Stars radius={90} depth={52} count={1700} factor={3.2} saturation={0.12} fade speed={0.09} />
       {celestialView === 'Moon' && <Planet body="Moon" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
       {celestialView === 'Mars' && <Planet body="Mars" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
@@ -255,20 +257,59 @@ function buildHotspotPositions(item, modelBounds, isApolloLunarModule) {
   return [[0, 0.86, 0], [1.05, 0.16, 0.14], [0, 0.16, 0.82]];
 }
 
-function HotspotNode({ hotspot, index, position, onClick, selected, language }) {
+function HotspotNode({ hotspot, position, onClick, selected, language }) {
   const part = hotspot.part || hotspot.title;
-  const accessibleLabel = language === 'ar' ? `نقطة فحص ${index + 1}: ${part}` : `Inspection point ${index + 1}: ${part}`;
+  const accessibleLabel = language === 'ar' ? `تركيز على ${part}` : `Focus on ${part}`;
   return (
     <Html position={position} center className="hotspot-html">
       <button className={`three-hotspot ${selected ? 'is-selected' : ''}`} type="button" onClick={(event) => { event.stopPropagation(); onClick(hotspot); }} title={hotspot.title || part} aria-label={accessibleLabel} aria-pressed={selected}>
-        <span>{String(index + 1).padStart(2, '0')}</span>
         <i className="three-hotspot-dot" aria-hidden="true" />
       </button>
     </Html>
   );
 }
 
+function HardwareCallout({ position, rigRef, active }) {
+  const pathRef = useRef(null);
+  const pulseRef = useRef(null);
+  const { camera, size } = useThree();
+
+  useFrame(() => {
+    if (!active || !rigRef.current || !pathRef.current || !pulseRef.current) return;
+    const worldPoint = rigRef.current.localToWorld(new THREE.Vector3(...position));
+    const projected = worldPoint.project(camera);
+    const x1 = (projected.x * 0.5 + 0.5) * size.width;
+    const y1 = (-projected.y * 0.5 + 0.5) * size.height;
+    const chapterText = document.querySelector('.hardware-chapter.is-current .hardware-copy');
+    if (!chapterText || projected.z > 1 || x1 < 0 || x1 > size.width || y1 < 0 || y1 > size.height) {
+      pathRef.current.setAttribute('d', '');
+      pulseRef.current.setAttribute('r', '0');
+      return;
+    }
+    const bounds = chapterText.getBoundingClientRect();
+    const x2 = x1 < bounds.left ? bounds.left : x1 > bounds.right ? bounds.right : bounds.left + bounds.width / 2;
+    const y2 = bounds.top + Math.min(bounds.height * 0.42, 110);
+    const bend = Math.max(42, Math.abs(x2 - x1) * 0.34);
+    const controlX = x2 > x1 ? x1 + bend : x1 - bend;
+    pathRef.current.setAttribute('d', `M ${x1.toFixed(1)} ${y1.toFixed(1)} C ${controlX.toFixed(1)} ${y1.toFixed(1)}, ${controlX.toFixed(1)} ${y2.toFixed(1)}, ${x2.toFixed(1)} ${y2.toFixed(1)}`);
+    pulseRef.current.setAttribute('cx', x1.toFixed(1));
+    pulseRef.current.setAttribute('cy', y1.toFixed(1));
+    pulseRef.current.setAttribute('r', '4');
+  });
+
+  if (!active) return null;
+  return (
+    <Html fullscreen zIndexRange={[4, 4]}>
+      <svg className="hardware-callout-svg" width={size.width} height={size.height} viewBox={`0 0 ${size.width} ${size.height}`} aria-hidden="true">
+        <path ref={pathRef} className="hardware-callout-line" d="" />
+        <circle ref={pulseRef} className="hardware-callout-pulse" cx="0" cy="0" r="0" />
+      </svg>
+    </Html>
+  );
+}
+
 function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef, storyProgress }) {
+  const { camera, size } = useThree();
   const isApolloLunarModule = item.id === APOLLO_LM_ID;
   const isRealModel = item.has3DModel && item.model3dFile;
   const modelPath = item.model3dFile;
@@ -276,34 +317,58 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   const [modelBounds, setModelBounds] = useState(null);
   const onModelBoundsReady = useMemo(() => (bounds) => setModelBounds(bounds), []);
   const hotspotPositions = useMemo(() => buildHotspotPositions(item, modelBounds, isApolloLunarModule), [item, modelBounds, isApolloLunarModule]);
+  const dataHotspots = (item.hotspots || []).slice(0, 3);
+  const selectedIndex = dataHotspots.findIndex((spot) => selectedHotspot && ((selectedHotspot.part && selectedHotspot.part === spot.part) || (!selectedHotspot.part && selectedHotspot.title === spot.title)));
+  const chapterId = storyProgress?.chapter || 'hero';
+  const chapterHotspotIndex = chapterId.startsWith('hardware-') ? Number(chapterId.slice('hardware-'.length)) : -1;
+  const focusIndex = chapterHotspotIndex >= 0 ? chapterHotspotIndex : selectedIndex;
 
   useEffect(() => {
     setModelBounds(null);
   }, [item.id]);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     const rig = storyRig.current;
     if (!rig) return;
-    const progress = storyProgress?.total > 1 ? storyProgress.index / (storyProgress.total - 1) : 0;
-    const phase = progress * Math.PI * 2;
-    rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, -0.22 + progress * 0.42, 1.7, delta);
-    rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, Math.sin(phase) * 0.035, 1.7, delta);
-    rig.position.x = THREE.MathUtils.damp(rig.position.x, Math.sin(phase) * 0.1, 1.7, delta);
-    rig.position.y = THREE.MathUtils.damp(rig.position.y, Math.cos(phase) * 0.045, 1.7, delta);
+    const isHardwareChapter = chapterId.startsWith('hardware-');
+    const hardwareOrdinal = chapterHotspotIndex >= 0 ? chapterHotspotIndex : Math.max(selectedIndex, 0);
+    const slide = size.width < 720 ? 0.24 : 1.52;
+    const side = chapterId === 'transmission' ? 1 : isHardwareChapter ? (hardwareOrdinal % 2 === 0 ? -1 : 1) : 0;
+    const targetX = side * (isHardwareChapter && hardwareOrdinal === 2 ? slide * 0.9 : slide);
+    const focusPoint = focusIndex >= 0 && hotspotPositions[focusIndex] ? new THREE.Vector3(...hotspotPositions[focusIndex]) : new THREE.Vector3(0, 0, 0);
+    const focusWorld = rig.localToWorld(focusPoint);
+    const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : -0.18;
+    const targetTilt = focusIndex >= 0 ? [0.1, -0.08, 0.17][focusIndex] ?? 0 : 0.015;
+    const cameraDistance = isHardwareChapter ? (hardwareOrdinal === 2 ? 3.35 : 3.7) : 4.7;
+    rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, targetYaw + (autoRotate ? Math.sin(state.clock.elapsedTime * 0.32) * 0.035 : 0), 1.8, delta);
+    rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, targetTilt, 1.8, delta);
+    rig.position.x = THREE.MathUtils.damp(rig.position.x, targetX, 1.8, delta);
+    rig.position.y = THREE.MathUtils.damp(rig.position.y, isHardwareChapter ? 0 : Math.sin(state.clock.elapsedTime * 0.42) * 0.035, 1.8, delta);
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, focusWorld.x * 0.12, 1.4, delta);
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, 0.12 + focusWorld.y * 0.1, 1.4, delta);
+    camera.position.z = THREE.MathUtils.damp(camera.position.z, cameraDistance, 1.4, delta);
+    const controls = controlsRef.current;
+    if (controls) {
+      controls.target.x = THREE.MathUtils.damp(controls.target.x, focusWorld.x * 0.18, 1.4, delta);
+      controls.target.y = THREE.MathUtils.damp(controls.target.y, focusWorld.y * 0.22, 1.4, delta);
+      controls.target.z = THREE.MathUtils.damp(controls.target.z, focusWorld.z * 0.18, 1.4, delta);
+      controls.update();
+    }
   });
 
   return (
     <>
-      <color attach="background" args={['#03060b']} />
-      <fog attach="fog" args={['#03060b', 18, 58]} />
-      <ambientLight intensity={0.42} color="#d9e2e8" />
-      <directionalLight position={[4, 6, 5]} intensity={2.7} color="#fffbeb" />
-      <directionalLight position={[-5, 2, -4]} intensity={1.35} color="#53b9cf" />
-      <pointLight position={[0, 6, 2]} intensity={1.55} color="#f5fbff" distance={20} />
+      <color attach="background" args={['#03060C']} />
+      <fog attach="fog" args={['#03060C', 20, 64]} />
+      <ambientLight intensity={0.28} color="#aebdce" />
+      <directionalLight position={[4, 6, 5]} intensity={2.8} color="#ffffff" />
+      <directionalLight position={[-5, 2, -4]} intensity={1.05} color="#0B3D91" />
+      <pointLight position={[0, 4, -5]} intensity={1.6} color="#EAB308" distance={18} />
+      <pointLight position={[0, 4, 4]} intensity={0.72} color="#dbe5ee" distance={18} />
       <Stars radius={80} depth={50} count={1400} factor={2.9} saturation={0.1} fade speed={0.06} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.52, 0]}>
         <circleGeometry args={[2.25, 80]} />
-        <meshBasicMaterial color="#08141b" transparent opacity={0.42} />
+        <meshBasicMaterial color="#0B3D91" transparent opacity={0.18} />
       </mesh>
       <group ref={storyRig}>
         {isRealModel ? (
@@ -315,18 +380,17 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
             </Suspense>
           </ModelErrorBoundary>
         ) : <HoloRelic item={item} />}
-        {(item.hotspots || []).slice(0, 3).map((spot, index) => (
+        {focusIndex >= 0 && dataHotspots[focusIndex] && (
           <HotspotNode
-            key={`${item.id}-spot-${index}`}
-            hotspot={spot}
-            index={index}
-            position={hotspotPositions[index]}
+            hotspot={dataHotspots[focusIndex]}
+            position={hotspotPositions[focusIndex]}
             onClick={setHotspot}
-            selected={Boolean(selectedHotspot && ((selectedHotspot.part && selectedHotspot.part === spot.part) || (!selectedHotspot.part && selectedHotspot.title === spot.title)))}
+            selected
             language={language}
           />
-        ))}
+        )}
       </group>
+      {focusIndex >= 0 && hotspotPositions[focusIndex] && <HardwareCallout position={hotspotPositions[focusIndex]} rigRef={storyRig} active />}
       <OrbitControls ref={controlsRef} makeDefault target={[0, 0, 0]} enablePan={false} minDistance={3.1} maxDistance={9} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.34} />
     </>
   );
