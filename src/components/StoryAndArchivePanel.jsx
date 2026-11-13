@@ -11,38 +11,38 @@ import { transmitText } from '../utils/radio.js';
 
 const COPY = {
   en: {
-    archive: 'MISSION ARCHIVE', count: 'RELICS IN DATABASE', hint: 'Select an artifact to open its memory room.',
-    search: 'Search by name, mission, type or year', noMatches: 'No relics match your search.', clearSearch: 'Clear search',
-    realModel: 'NASA GLB MODEL', proceduralModel: 'BUILT 3D MODEL',
-    noLocation: 'Location coordinates unavailable', memory: 'MEMORY ROOM', back: 'BACK TO MAP',
-    telemetry: 'MISSION TELEMETRY', record: 'RECORD ID(S)', coordinates: 'SURFACE COORDINATES', orbit: 'ORBIT / POSITION', positionUnavailable: 'Position not specified in the archive',
-    hotspots: 'INSPECTION POINTS', hotspotHint: 'Select a point to inspect its function and fate.', hotspotDetail: 'FUNCTION & MISSION FATE', locked: 'LOCKED', unlocked: 'UNLOCKED',
-    mission: 'MISSION PROFILE', active: 'ARCHIVED', story: 'Story & Q&A', timeline: 'Timeline', quiz: 'Explorer Quiz',
-    transmit: 'Listen to Transmission', transmitting: 'TRANSMITTING…', stop: 'Stop transmission', voice: 'NATURAL VOICE', subtitleLoading: 'RECEIVING TRANSMISSION…',
-    fieldNote: 'FIELD TRANSMISSION', qa: 'ASK THE ARCHIVE', answer: 'ARCHIVE RESPONSE',
-    milestones: 'MISSION MILESTONES', quizTitle: 'CHECK YOUR SIGNAL', choose: 'Select the correct answer to unlock this explorer badge.',
-    submit: 'CONFIRM ANSWER', correct: 'SIGNAL VERIFIED — BADGE UNLOCKED', already: 'BADGE ALREADY IN YOUR ARCHIVE', wrong: 'SIGNAL MISMATCH — TRY AGAIN',
-    badge: 'EXPLORER BADGE', citation: 'SOURCE ARCHIVE', nssdca: 'NSSDCA RECORD ID(S)', nasa: 'NASA ARCHIVE', sources: 'NASA SOURCES',
-    launch: 'LAUNCH', landing: 'SURFACE ARRIVAL', end: 'LAST SIGNAL / END', site: 'MISSION SITE',
-    category: 'MISSION CLASS', details: 'MISSION DETAILS', time: 'MISSION TIMELINE', quizHint: 'Choose an answer below.',
-    open: 'OPEN MEMORY ROOM', deep: 'DEEP SPACE', moon: 'MOON', mars: 'MARS', lander: 'LANDER', rover: 'ROVER', scientific: 'SCIENTIFIC PACKAGE', probe: 'DEEP SPACE PROBE', rotorcraft: 'ROTORCRAFT', orbiter: 'ORBITER', impact: 'IMPACTOR',
+    archive: 'MISSIONS TO EXPLORE', count: 'MISSIONS IN THE ARCHIVE', hint: 'Choose a mission to explore its story.',
+    search: 'Search missions by name or year', noMatches: 'No missions found. Try another word.', clearSearch: 'Clear search',
+    realModel: 'NASA 3D MODEL', proceduralModel: '3D MODEL',
+    noLocation: 'Location not listed', memory: 'MISSION STORY', back: 'BACK TO MISSIONS',
+    telemetry: 'MISSION FACTS', record: 'NASA MISSION ID', coordinates: 'WHERE IT LANDED', orbit: 'LOCATION', positionUnavailable: 'Location not listed',
+    hotspots: 'PARTS TO EXPLORE', hotspotHint: 'Tap a glowing point to learn what that part does.', hotspotDetail: 'ABOUT THIS PART', locked: 'NOT EARNED', unlocked: 'EARNED',
+    mission: 'MISSION INFO', active: 'IN THE ARCHIVE', story: 'Story & questions', timeline: 'Mission journey', quiz: 'Quick quiz',
+    transmit: 'Listen to the story', transmitting: 'PLAYING…', stop: 'Stop audio', voice: 'SPACECRAFT VOICE', subtitleLoading: 'PLAYING THE STORY…',
+    fieldNote: 'A STORY FROM SPACE', qa: 'QUESTIONS & ANSWERS', answer: 'ANSWER',
+    milestones: 'STEPS IN THE JOURNEY', quizTitle: 'WHAT DID YOU LEARN?', choose: 'Choose the right answer to earn this badge.',
+    submit: 'CHECK ANSWER', correct: 'CORRECT — BADGE EARNED', already: 'BADGE ALREADY EARNED', wrong: 'NOT QUITE — TRY AGAIN',
+    badge: 'EXPLORER BADGE', citation: 'NASA SOURCES', nssdca: 'NASA MISSION ID', nasa: 'NASA SOURCE', sources: 'MORE NASA SOURCES',
+    launch: 'LAUNCH', landing: 'LANDED', end: 'MISSION ENDED', site: 'MISSION PLACE',
+    category: 'MISSION TYPE', details: 'MISSION DETAILS', time: 'MISSION JOURNEY', quizHint: 'Choose an answer below.',
+    open: 'OPEN MISSION STORY', deep: 'SPACE', moon: 'MOON', mars: 'MARS', lander: 'LANDING CRAFT', rover: 'ROVER', scientific: 'SCIENCE TOOLS', probe: 'SPACE PROBE', rotorcraft: 'HELICOPTER', orbiter: 'ORBITER', impact: 'IMPACT PROBE',
   },
   ar: {
-    archive: 'أرشيف المهمات', count: 'أثر في قاعدة البيانات', hint: 'اختر أثرًا لفتح غرفة ذاكرته.',
-    search: 'ابحث بالاسم أو المهمة أو النوع أو السنة', noMatches: 'لا توجد آثار تطابق البحث.', clearSearch: 'مسح البحث',
-    realModel: 'نموذج GLB من ناسا', proceduralModel: 'مجسم إجرائي ثلاثي الأبعاد',
-    noLocation: 'إحداثيات الموقع غير متاحة', memory: 'غرفة الذاكرة', back: 'العودة إلى الخريطة',
-    telemetry: 'بيانات المهمة', record: 'معرّف/معرّفات سجل', coordinates: 'إحداثيات السطح', orbit: 'المدار / الموقع', positionUnavailable: 'الموقع غير محدد في الأرشيف',
-    hotspots: 'نقاط الفحص', hotspotHint: 'اختر نقطة لفحص وظيفتها ومصيرها.', hotspotDetail: 'الوظيفة والمصير في المهمة', locked: 'مقفلة', unlocked: 'مفتوحة',
-    mission: 'ملف المهمة', active: 'مؤرشف', story: 'القصة والأسئلة', timeline: 'الخط الزمني', quiz: 'اختبار المستكشف',
-    transmit: 'استمع إلى الإرسال', transmitting: 'جارٍ الإرسال…', stop: 'إيقاف الإرسال', voice: 'صوت طبيعي', subtitleLoading: 'جارٍ استقبال الإرسال…',
-    fieldNote: 'إرسال من الميدان', qa: 'اسأل الأرشيف', answer: 'رد الأرشيف',
-    milestones: 'محطات المهمة', quizTitle: 'تحقّق من الإشارة', choose: 'اختر الإجابة الصحيحة لفتح شارة المستكشف.',
-    submit: 'تأكيد الإجابة', correct: 'تم التحقق من الإشارة — فُتحت الشارة', already: 'الشارة موجودة بالفعل في أرشيفك', wrong: 'الإشارة غير مطابقة — حاول مجددًا',
-    badge: 'شارة المستكشف', citation: 'أرشيف المصدر', nssdca: 'معرّف/معرّفات سجل', nasa: 'أرشيف ناسا', sources: 'مصادر ناسا',
-    launch: 'الإطلاق', landing: 'الوصول إلى السطح', end: 'آخر إشارة / نهاية المهمة', site: 'موقع المهمة',
-    category: 'فئة المهمة', details: 'تفاصيل المهمة', time: 'الخط الزمني للمهمة', quizHint: 'اختر إجابة بالأسفل.',
-    open: 'افتح غرفة الذاكرة', deep: 'الفضاء العميق', moon: 'القمر', mars: 'المريخ', lander: 'مسبار هبوط', rover: 'عربة جوالة', scientific: 'حزمة علمية', probe: 'مسبار فضائي', rotorcraft: 'مروحية', orbiter: 'مركبة مدارية', impact: 'مسبار اصطدام',
+    archive: 'مهمات لاستكشافها', count: 'المهمات في الأرشيف', hint: 'اختر مهمة لتشاهد قصتها.',
+    search: 'ابحث عن مهمة بالاسم أو السنة', noMatches: 'لم نجد مهمة بهذا البحث. جرّب كلمة أخرى.', clearSearch: 'مسح البحث',
+    realModel: 'مجسم ناسا ثلاثي الأبعاد', proceduralModel: 'مجسم ثلاثي الأبعاد',
+    noLocation: 'الموقع غير مذكور', memory: 'قصة المهمة', back: 'العودة للمهمات',
+    telemetry: 'معلومات المهمة', record: 'رقم المهمة', coordinates: 'مكان الهبوط', orbit: 'الموقع', positionUnavailable: 'الموقع غير مذكور',
+    hotspots: 'أجزاء لاستكشافها', hotspotHint: 'اضغط على نقطة مضيئة لتعرف وظيفة هذا الجزء.', hotspotDetail: 'عن هذا الجزء', locked: 'لم تحصل عليها', unlocked: 'حصلت عليها',
+    mission: 'معلومات المهمة', active: 'في الأرشيف', story: 'القصة والأسئلة', timeline: 'رحلة المهمة', quiz: 'سؤال سريع',
+    transmit: 'استمع إلى القصة', transmitting: 'جارٍ التشغيل…', stop: 'إيقاف الصوت', voice: 'صوت المركبة', subtitleLoading: 'جارٍ تشغيل القصة…',
+    fieldNote: 'حكاية من الفضاء', qa: 'أسئلة وأجوبة', answer: 'الإجابة',
+    milestones: 'خطوات الرحلة', quizTitle: 'ماذا تعلمت؟', choose: 'اختر الإجابة الصحيحة لتحصل على هذه الشارة.',
+    submit: 'تحقق من الإجابة', correct: 'إجابة صحيحة — حصلت على الشارة', already: 'حصلت على الشارة من قبل', wrong: 'ليست الإجابة الصحيحة — حاول مرة أخرى',
+    badge: 'شارة المستكشف', citation: 'مصادر ناسا', nssdca: 'رقم المهمة', nasa: 'مصدر ناسا', sources: 'مصادر أخرى',
+    launch: 'الإطلاق', landing: 'الهبوط', end: 'نهاية المهمة', site: 'مكان المهمة',
+    category: 'نوع المهمة', details: 'معلومات المهمة', time: 'رحلة المهمة', quizHint: 'اختر إجابة بالأسفل.',
+    open: 'افتح قصة المهمة', deep: 'الفضاء', moon: 'القمر', mars: 'المريخ', lander: 'مركبة هبوط', rover: 'عربة استكشاف', scientific: 'أدوات علمية', probe: 'مسبار فضائي', rotorcraft: 'مروحية', orbiter: 'مركبة مدارية', impact: 'مسبار اصطدام',
   },
 };
 
@@ -87,16 +87,14 @@ function getBodyLabel(item, language, copy) {
 
 function getTypeLabel(type, language, copy) {
   const normalized = (type || '').toLowerCase();
-  if (language === 'ar') {
-    if (normalized.includes('rover')) return copy.rover;
-    if (normalized.includes('lander')) return copy.lander;
-    if (normalized.includes('scientific')) return copy.scientific;
-    if (normalized.includes('rotor')) return copy.rotorcraft;
-    if (normalized.includes('orbiter')) return copy.orbiter;
-    if (normalized.includes('impact')) return copy.impact;
-    if (normalized.includes('probe')) return copy.probe;
-  }
-  return type.toUpperCase();
+  if (normalized.includes('rover')) return copy.rover;
+  if (normalized.includes('lander')) return copy.lander;
+  if (normalized.includes('scientific')) return copy.scientific;
+  if (normalized.includes('rotor')) return copy.rotorcraft;
+  if (normalized.includes('orbiter')) return copy.orbiter;
+  if (normalized.includes('impact')) return copy.impact;
+  if (normalized.includes('probe')) return copy.probe;
+  return language === 'ar' ? type : type.toUpperCase();
 }
 
 function getTypeIcon(type = '') {
@@ -161,7 +159,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
       <div className="panel-title-row">
         <div>
           <span className="eyebrow">{copy.archive}</span>
-          <h2>{language === 'ar' ? 'أرشيف المهمات' : 'MISSION ARCHIVE'}</h2>
+          <h2>{language === 'ar' ? 'المهمات' : 'MISSIONS'}</h2>
         </div>
         <span className="archive-count" aria-live="polite">{String(filteredRelics.length).padStart(2, '0')} <i>/ {relics.length}</i></span>
       </div>
@@ -339,11 +337,11 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   };
 
   const storyChapters = [
-    { id: 'hero', label: isArabic ? 'المهمة' : 'MISSION' },
-    { id: 'transmission', label: isArabic ? 'الإرسال' : 'TRANSMISSION' },
-    ...hardwareHotspots.map((spot, index) => ({ id: `hardware-${index}`, label: spot.part || spot.title, hotspotIndex: index })),
-    { id: 'timeline', label: isArabic ? 'الخط الزمني' : 'TIMELINE' },
-    { id: 'quiz', label: isArabic ? 'الاختبار' : 'QUIZ' },
+    { id: 'hero', label: isArabic ? 'البداية' : 'START' },
+    { id: 'transmission', label: isArabic ? 'القصة' : 'STORY' },
+    ...hardwareHotspots.map((spot, index) => ({ id: `hardware-${index}`, label: isArabic ? `الجزء ${['الأول', 'الثاني', 'الثالث'][index] || index + 1}` : `PART ${index + 1}`, title: spot.part || spot.title, hotspotIndex: index })),
+    { id: 'timeline', label: isArabic ? 'الرحلة' : 'JOURNEY' },
+    { id: 'quiz', label: isArabic ? 'سؤال سريع' : 'QUICK QUIZ' },
   ];
   const scrollToChapter = (chapterId) => document.getElementById(`mission-chapter-${chapterId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -357,7 +355,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       </div>
 
       <nav className="story-chapter-nav" aria-label={isArabic ? 'فصول قصة المهمة' : 'Mission story chapters'}>
-        {storyChapters.map(({ id, label, hotspotIndex }) => (
+        {storyChapters.map(({ id, label, title, hotspotIndex }) => (
           <button
             key={id}
             type="button"
@@ -367,7 +365,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               scrollToChapter(id);
             }}
             aria-current={activeBeat === storyChapters.findIndex((chapter) => chapter.id === id) ? 'step' : undefined}
-            title={label}
+            title={title || label}
           >
             <i aria-hidden="true" /><span dir="auto">{label}</span>
           </button>
@@ -378,26 +376,26 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         <section id="mission-chapter-hero" className="story-chapter story-hero" data-story-chapter="hero">
           <div className="story-hero-copy">
             <span className="memory-classification">{getBodyLabel(item, language, copy)} <i /> {getTypeLabel(item.type, language, copy)}</span>
-            <p className="story-eyebrow">{isArabic ? 'سجلّ الرحلة · أرشيف ناسا' : 'MISSION LOG · NASA ARCHIVE'}</p>
+            <p className="story-eyebrow">{isArabic ? 'قصة من أرشيف ناسا' : 'A NASA MISSION STORY'}</p>
             <h1 dir="auto">{item.nickname || item.name}</h1>
             <p className="story-hero-location"><MapPin size={14} /><span dir="auto">{siteName}</span></p>
             <div className="mission-hero-meta">
               <span><small>{isArabic ? 'سنة الإطلاق' : 'LAUNCH YEAR'}</small><strong dir="ltr">{item.launchYear}</strong></span>
-              <span><small>{isArabic ? 'معرّف السجل' : 'NSSDCA RECORD'}</small><strong dir="ltr">{idText}</strong></span>
+              <span><small>{isArabic ? 'رقم المهمة' : 'NASA MISSION ID'}</small><strong dir="ltr">{idText}</strong></span>
               <span><small>{isArabic ? 'موقع المهمة' : 'MISSION SITE'}</small><strong dir="auto">{siteName}</strong></span>
             </div>
             <button type="button" className="story-scroll-cue" onClick={() => scrollToChapter('transmission')}>
-              <span>{isArabic ? 'ابدأ الحكاية' : 'BEGIN THE TRANSMISSION'}</span><i aria-hidden="true" />
+              <span>{isArabic ? 'ابدأ القصة' : 'START THE STORY'}</span><i aria-hidden="true" />
             </button>
           </div>
-          <span className="story-hero-record" dir="ltr">NSSDCA / {idText}</span>
+          <span className="story-hero-record" dir="ltr">NASA ID / {idText}</span>
         </section>
 
         <section id="mission-chapter-transmission" className="story-chapter transmission-chapter" data-story-chapter="transmission">
           <div className="chapter-copy transmission-copy">
             <span className="story-kicker"><span className="signal-bars"><i /><i /><i /><i /></span>{copy.fieldNote}</span>
-            <h2>{isArabic ? 'صوت من قلب المهمة' : 'A VOICE FROM THE MISSION'}</h2>
-            <p className="chapter-lede">{isArabic ? 'استمع إلى الحكاية كما لو أن المركبة تروي رحلتها.' : 'Hear the journey as if the spacecraft itself were speaking.'}</p>
+            <h2>{isArabic ? 'قصة المهمة' : 'THE MISSION STORY'}</h2>
+            <p className="chapter-lede">{isArabic ? 'استمع إلى المركبة وهي تحكي رحلتها.' : 'Hear the spacecraft tell its journey.'}</p>
             <div className="story-transcript" dir="auto">
               {storyBeats.map((beat, index) => <p className="first-person-story" key={`${item.id}-transcript-${index}`}>“{beat}”</p>)}
             </div>
@@ -449,12 +447,12 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
             key={`${item.id}-hardware-chapter-${index}`}
           >
             <div className="chapter-copy hardware-copy">
-              <span className="hardware-kicker"><i aria-hidden="true" />{isArabic ? 'فحص العتاد' : 'HARDWARE DEEP-DIVE'}</span>
+              <span className="hardware-kicker"><i aria-hidden="true" />{isArabic ? 'عن هذا الجزء' : 'ABOUT THIS PART'}</span>
               <h2 dir="auto">{spot.part || spot.title}</h2>
               <h3 dir="auto">{spot.title || spot.part}</h3>
               <p dir="auto">{spot.description}</p>
               <button type="button" className={`hardware-focus-button ${sameHotspot(hotspot, spot) ? 'is-active' : ''}`} onClick={() => setHotspot?.(spot)} aria-pressed={sameHotspot(hotspot, spot)}>
-                <span className="hardware-focus-dot" aria-hidden="true" />{isArabic ? 'تركيز على هذا الجزء' : 'FOCUS THIS COMPONENT'}
+                <span className="hardware-focus-dot" aria-hidden="true" />{isArabic ? 'قرّب لعرض هذا الجزء' : 'ZOOM IN ON THIS PART'}
               </button>
             </div>
           </section>
@@ -463,7 +461,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         <section id="mission-chapter-timeline" className="story-chapter mission-timeline-chapter" data-story-chapter="timeline">
           <div className="chapter-copy timeline-copy">
             <span className="story-kicker">{copy.milestones}</span>
-            <h2>{isArabic ? 'محطات في الرحلة' : 'MILESTONES IN FLIGHT'}</h2>
+            <h2>{isArabic ? 'رحلة المهمة' : 'THE MISSION JOURNEY'}</h2>
             <div className="mission-facts">
               <div><span>{copy.launch}</span><strong dir="ltr">{item.launchYear}</strong></div>
               <div><span>{copy.landing}</span><strong>{dateLabel(item.landingDate, language)}</strong></div>
