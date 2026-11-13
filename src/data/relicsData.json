@@ -1171,9 +1171,9 @@
     "endOfMission": "2024-01-25",
     "status": "Mission completed on 2024-01-25 after rotor damage during Flight 72; the cited NSSDCA ID is the Mars 2020 parent mission record, and NASA does not publish an exact Ingenuity coordinate.",
     "location": {
-      "siteName": "Jezero Crater, Mars (arrived attached beneath Perseverance; no precise Ingenuity surface coordinates published by NASA)",
-      "lat": null,
-      "lng": null
+      "siteName": "Jezero Crater, Mars (representative Mars 2020 landing-site coordinates; NASA does not publish a separate precise Ingenuity surface coordinate)",
+      "lat": 18.44,
+      "lng": 77.45
     },
     "story": {
       "en": "I am Ingenuity, the helicopter carried to Jezero Crater beneath Perseverance. On April 19, 2021, I made the first powered, controlled flight on another planet. I completed 72 flights instead of my planned five and helped scout routes and features for the rover. Rotor damage during my final flight ended my flying days, and NASA closed my mission on January 25, 2024.",
@@ -1268,7 +1268,7 @@
       "correctAnswer": 0
     },
     "badgeName": "First Flight on Mars",
-    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2020-052A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2020-052A; https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/; https://www.nasa.gov/news-release/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/; https://www.jpl.nasa.gov/missions/ingenuity/; https://science.nasa.gov/mission/mars-2020-perseverance/; https://mars.nasa.gov/technology/helicopter/"
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2020-052A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2020-052A; https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/; https://www.nasa.gov/news-release/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/; https://www.jpl.nasa.gov/missions/ingenuity/; https://science.nasa.gov/mission/mars-2020-perseverance/; https://mars.nasa.gov/technology/helicopter/; https://www.giss.nasa.gov/tools/mars24/help/landers.html"
   },
   {
     "id": "dawn-spacecraft",

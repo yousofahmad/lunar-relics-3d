@@ -389,6 +389,55 @@ function createEventEnvelope(context, start, duration, level) {
   return envelope;
 }
 
+function playRadarPulse() {
+  const context = audioContext;
+  if (!context || !isStarted || isMuted || voiceActive || !spatialFxInput) return;
+  const start = context.currentTime + 0.025;
+  const output = makePanner(context, Math.random() * 0.8 - 0.4);
+  output.connect(spatialFxInput);
+  [720, 1080].forEach((frequency, index) => {
+    const oscillator = context.createOscillator();
+    const envelope = context.createGain();
+    const onset = start + index * 0.105;
+    const duration = 0.15;
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(frequency, onset);
+    envelope.gain.setValueAtTime(0.0001, onset);
+    envelope.gain.linearRampToValueAtTime(0.012 / (index + 1), onset + 0.012);
+    envelope.gain.exponentialRampToValueAtTime(0.0001, onset + duration);
+    oscillator.connect(envelope);
+    envelope.connect(output);
+    oscillator.start(onset);
+    oscillator.stop(onset + duration + 0.01);
+    if (index === 1) oscillator.onended = () => { try { output.disconnect(); } catch {} };
+  });
+}
+
+function playCommunicationStatic() {
+  const context = audioContext;
+  if (!context || !isStarted || isMuted || voiceActive || !spatialFxInput) return;
+  const start = context.currentTime + 0.025;
+  const duration = 0.16;
+  const source = context.createBufferSource();
+  const band = context.createBiquadFilter();
+  const envelope = context.createGain();
+  const output = makePanner(context, Math.random() * 1.2 - 0.6);
+  source.buffer = createNoiseBuffer(context, 'white', duration);
+  band.type = 'bandpass';
+  band.frequency.value = 1950 + Math.random() * 900;
+  band.Q.value = 0.8;
+  envelope.gain.setValueAtTime(0.0001, start);
+  envelope.gain.linearRampToValueAtTime(0.006, start + 0.018);
+  envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+  source.connect(band);
+  band.connect(envelope);
+  envelope.connect(output);
+  output.connect(spatialFxInput);
+  source.onended = () => { try { output.disconnect(); } catch {} };
+  source.start(start);
+  source.stop(start + duration + 0.01);
+}
+
 function playTelemetryEvent(forcedKind = '') {
   const context = audioContext;
   if (!context || !isStarted || isMuted || !spatialFxInput) return;
@@ -498,7 +547,10 @@ function scheduleProceduralEvents() {
   if (!telemetryTimer) {
     telemetryTimer = window.setTimeout(() => {
       telemetryTimer = 0;
-      playTelemetryEvent();
+      playRadarPulse();
+      const eventChance = Math.random();
+      if (eventChance < 0.34) playCommunicationStatic();
+      else if (eventChance < 0.76) playTelemetryEvent();
       scheduleProceduralEvents();
     }, 2000 + Math.random() * 2000);
   }

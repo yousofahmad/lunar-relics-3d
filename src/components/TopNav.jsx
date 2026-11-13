@@ -1,4 +1,4 @@
-import { Clapperboard, Globe2, Languages, List, Moon, Orbit, Pause, Trophy, Volume2, VolumeX } from 'lucide-react';
+import { Clapperboard, Globe2, Languages, List, Moon, Orbit, Pause, Sparkles, Trophy, Volume2, VolumeX } from 'lucide-react';
 
 const CELESTIAL_VIEWS = [
   { id: 'Moon', icon: Moon, en: 'MOON', ar: 'القمر', subEn: 'OUR MOON', subAr: 'قمرنا' },
@@ -6,7 +6,7 @@ const CELESTIAL_VIEWS = [
   { id: 'Deep Space', icon: Orbit, en: 'SPACE', ar: 'الفضاء', subEn: 'MOON + MARS', subAr: 'القمر + المريخ' },
 ];
 
-export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, audioEnabled = true, audioStarted = false, soundscape = 'Moon', onToggleAudio = () => {}, autoPilotOn = false, onToggleAutoPilot = () => {} }) {
+export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, onOpenWhatsNew = () => {}, whatsNewOpen = false, audioEnabled = true, audioStarted = false, soundscape = 'Moon', onToggleAudio = () => {}, autoPilotOn = false, onToggleAutoPilot = () => {} }) {
   const unlockedCount = relics.filter((item) => badges.has(item.id)).length;
   const soundscapeLabels = soundscape === 'Mars'
     ? { full: language === 'ar' ? 'رياح المريخ' : 'Mars wind', compact: language === 'ar' ? 'المريخ' : 'Mars' }
@@ -112,6 +112,17 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
           <Trophy size={16} />
           <span className="badge-label">{language === 'ar' ? 'الشارات' : 'BADGES'}</span>
           <strong>{unlockedCount}<em>/{relics.length}</em></strong>
+        </button>
+        <button
+          type="button"
+          className="whats-new-trigger"
+          onClick={onOpenWhatsNew}
+          title={language === 'ar' ? 'ما الجديد في هذا التحديث' : 'What’s new in this update'}
+          aria-label={language === 'ar' ? 'عرض تفاصيل التحديث' : 'Show update details'}
+          aria-haspopup="dialog"
+          aria-expanded={Boolean(whatsNewOpen)}
+        >
+          <Sparkles size={15} />
         </button>
       </div>
     </header>

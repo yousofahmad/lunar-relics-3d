@@ -1,6 +1,7 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
+import ArchetypeHardware from './ArchetypeHardware.jsx';
 
 function isNeutralColor(color) {
   if (!color) return true;
@@ -104,7 +105,7 @@ function isAboveDescentStage(mesh) {
 
 function EasepContext() {
   return (
-    <group position={[1.28, -0.46, 0.22]}>
+    <group name="hardware-easep-package" position={[1.28, -0.46, 0.22]}>
       <mesh position={[0, 0.08, 0]} castShadow>
         <boxGeometry args={[0.23, 0.15, 0.2]} />
         <meshStandardMaterial color="#a6a89b" metalness={0.2} roughness={0.65} />
@@ -127,7 +128,8 @@ function EasepContext() {
   );
 }
 
-export default function GltfModel({ modelPath, onBoundsReady, descentStageOnly = false, preserveMaterials = false }) {
+export default function GltfModel({ modelPath, item, onBoundsReady, onModelReady, descentStageOnly = false, preserveMaterials = false }) {
+  const rigRef = useRef(null);
   const { scene } = useGLTF(modelPath);
   const prepared = useMemo(() => {
     const model = scene.clone(true);
@@ -181,11 +183,13 @@ export default function GltfModel({ modelPath, onBoundsReady, descentStageOnly =
 
   useEffect(() => {
     onBoundsReady?.(prepared.info);
-  }, [onBoundsReady, prepared]);
+    onModelReady?.(rigRef.current);
+  }, [onBoundsReady, onModelReady, prepared]);
 
   return (
-    <group>
+    <group ref={rigRef}>
       <primitive object={prepared.model} dispose={null} />
+      <ArchetypeHardware item={item} modelBounds={prepared.info} />
       {descentStageOnly && <EasepContext />}
     </group>
   );
