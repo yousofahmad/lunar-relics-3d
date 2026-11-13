@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import confetti from 'canvas-confetti';
 import {
@@ -204,7 +204,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
   );
 }
 
-function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHotspot, onStoryProgress }) {
+function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHotspot, onStoryProgress, audioEnabled = true }) {
   const copy = COPY[language] || COPY.en;
   const [activeTab, setActiveTab] = useState('story');
   const [activeQuestion, setActiveQuestion] = useState(null);
@@ -287,16 +287,21 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     };
   }, [activeTab, item.id, storyBeats.length, onStoryProgress]);
 
-  const stopAudio = () => {
+  const stopAudio = useCallback(() => {
     playbackTokenRef.current += 1;
     transmissionRef.current?.();
     transmissionRef.current = null;
     setIsTransmitting(false);
     setSubtitleText('');
     window.clearTimeout(subtitleTimerRef.current);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!audioEnabled) stopAudio();
+  }, [audioEnabled, stopAudio]);
 
   const playAudio = (text) => {
+    if (!audioEnabled || !text) return;
     const token = playbackTokenRef.current + 1;
     playbackTokenRef.current = token;
     transmissionRef.current?.();
@@ -427,7 +432,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               ))}
             </div>
             <div className="transmit-row">
-              <button type="button" className={`transmit-button ${isTransmitting ? 'transmitting' : ''}`} onClick={() => isTransmitting ? stopAudio() : playAudio(storyText)} aria-pressed={isTransmitting}>
+              <button type="button" className={`transmit-button ${isTransmitting ? 'transmitting' : ''}`} onClick={() => isTransmitting ? stopAudio() : playAudio(storyText)} aria-pressed={isTransmitting} disabled={!audioEnabled}>
                 {isTransmitting ? <VolumeX size={15} /> : <Volume2 size={15} />}
                 <span>{isTransmitting ? copy.stop : copy.transmit}</span>
                 <span className="transmit-frequency" dir="auto">{copy.voice}</span>
@@ -455,7 +460,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
                       }}>
                         <span dir="auto">{question}</span><span className="qa-toggle">{open ? '−' : '+'}</span>
                       </button>
-                      {open && <div className="qa-answer"><span>{copy.answer}</span><p dir="auto">{answer}</p><button type="button" onClick={() => playAudio(answer)} aria-label={copy.transmit}><Play size={13} /></button></div>}
+                      {open && <div className="qa-answer"><span>{copy.answer}</span><p dir="auto">{answer}</p><button type="button" onClick={() => playAudio(answer)} aria-label={copy.transmit} disabled={!audioEnabled}><Play size={13} /></button></div>}
                     </div>
                   );
                 })}
@@ -523,7 +528,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
 
 export default function StoryAndArchivePanel(props) {
   if (props.selectedRelic) {
-    return <MemoryRoom key={props.selectedRelic.id} item={props.selectedRelic} language={props.language} badges={props.badges} onBack={props.onBack} onUnlock={props.onUnlock} hotspot={props.hotspot} setHotspot={props.setHotspot} onStoryProgress={props.onStoryProgress} />;
+    return <MemoryRoom key={props.selectedRelic.id} item={props.selectedRelic} language={props.language} badges={props.badges} onBack={props.onBack} onUnlock={props.onUnlock} hotspot={props.hotspot} setHotspot={props.setHotspot} onStoryProgress={props.onStoryProgress} audioEnabled={props.audioEnabled} />;
   }
   return <ArchiveList relics={props.relics} language={props.language} onSelect={props.onSelect} archiveFilter={props.archiveFilter} setArchiveFilter={props.setArchiveFilter} />;
 }

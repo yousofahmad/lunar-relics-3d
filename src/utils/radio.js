@@ -64,6 +64,7 @@ export function transmitText(text, language, onDone = () => {}, onWordBoundary =
     const words = text.trim().split(/\s+/).filter(Boolean);
     let fallbackWord = 0;
     let nativeBoundariesAvailable = false;
+    const fallbackWordDuration = 390;
     utterance.onstart = () => {
       wordTimer = window.setInterval(() => {
         if (nativeBoundariesAvailable) {
@@ -85,14 +86,31 @@ export function transmitText(text, language, onDone = () => {}, onWordBoundary =
         const nextSpace = text.indexOf(' ', start);
         end = nextSpace < 0 ? text.length : nextSpace;
       }
-      onWordBoundary(text.slice(0, end).trimStart());
+      const visibleText = text.slice(0, end).trimStart();
+      fallbackWord = Math.max(fallbackWord, visibleText.trim().split(/\s+/).filter(Boolean).length);
+      onWordBoundary(visibleText);
     };
     utterance.onend = () => {
       window.clearInterval(wordTimer);
       onWordBoundary(text);
       complete();
     };
-    utterance.onerror = complete;
+    utterance.onerror = () => {
+      if (cancelled) return;
+      window.clearInterval(wordTimer);
+      const remainingWords = Math.max(0, words.length - fallbackWord);
+      if (remainingWords > 0) {
+        wordTimer = window.setInterval(() => {
+          fallbackWord = Math.min(fallbackWord + 1, words.length);
+          onWordBoundary(words.slice(0, fallbackWord).join(' '));
+          if (fallbackWord >= words.length) window.clearInterval(wordTimer);
+        }, fallbackWordDuration);
+      }
+      voiceTimer = window.setTimeout(() => {
+        onWordBoundary(text);
+        complete();
+      }, Math.max(650, remainingWords * fallbackWordDuration));
+    };
     window.speechSynthesis.speak(utterance);
   }).catch(complete);
 

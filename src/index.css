@@ -139,6 +139,22 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 .language-toggle i { width: 1px; height: 12px; background: rgba(134,191,207,0.24); }
 .language-toggle .language-current { color: var(--cyan-soft); }
 .language-toggle .arabic-label { font-family: var(--font-arabic); font-size: 11px; }
+.audio-global-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 9px;
+  border: 1px solid rgba(127, 194, 213, 0.15);
+  border-radius: 7px;
+  background: rgba(9, 20, 31, 0.62);
+  color: #6d8793;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  transition: border-color 150ms ease, color 150ms ease;
+}
+.audio-global-toggle:hover, .audio-global-toggle[aria-pressed='true'] { color: #d5f8ff; border-color: rgba(105,232,255,0.3); }
+.audio-global-toggle svg { color: var(--cyan); }
 .badge-counter { display: flex; align-items: center; gap: 7px; padding-inline-start: 13px; border-inline-start: 1px solid rgba(127,194,213,0.14); color: var(--amber); }
 .badge-counter svg { color: var(--amber); }
 .badge-label { color: #8297a1; font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; }
@@ -431,6 +447,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
   .brand-subtitle { gap: 4px; font-size: 6px; letter-spacing: 0.1em; }
   .topbar-actions { gap: 7px; }
   .language-toggle { gap: 5px; padding: 6px 7px; font-size: 8px; }
+  .audio-global-toggle { padding: 6px 7px; }
+  .audio-global-toggle .audio-label { display: none; }
   .badge-counter { gap: 5px; padding-inline-start: 7px; }
   .badge-counter svg { width: 14px; }
   .badge-label { display: none; }

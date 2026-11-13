@@ -57,6 +57,7 @@ export default function App() {
   const [archiveFilter, setArchiveFilter] = useState('All');
   const [selectedId, setSelectedId] = useState(null);
   const [language, setLanguage] = useState(() => localStorage.getItem('lunar-relics-language') || 'en');
+  const [audioEnabled, setAudioEnabled] = useState(true);
   const [badges, setBadges] = useState(readBadges);
   const [storyProgress, setStoryProgress] = useState({ index: 0, total: 1 });
   const [badgeModalOpen, setBadgeModalOpen] = useState(false);
@@ -152,6 +153,8 @@ export default function App() {
         badges={badges}
         onOpenBadges={() => setBadgeModalOpen(true)}
         badgesOpen={badgeModalOpen}
+        audioEnabled={audioEnabled}
+        onToggleAudio={() => setAudioEnabled((enabled) => !enabled)}
       />
       {badgeModalOpen && (
         <BadgeModal relics={displayRelics} badges={badges} language={language} onClose={closeBadgeModal} onSelect={openRelic} />
@@ -219,6 +222,7 @@ export default function App() {
             hotspot={hotspot}
             setHotspot={setHotspot}
             onStoryProgress={setStoryProgress}
+            audioEnabled={audioEnabled}
           />
         </aside>
       </main>
