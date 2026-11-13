@@ -178,6 +178,92 @@ function LanderModel() {
   );
 }
 
+function EagleDescentStageModel() {
+  const legs = [-1, 1].flatMap((x) => [-1, 1].map((z) => ({
+    upper: [x * 0.36, 0.34, z * 0.34],
+    foot: [x * 0.84, -0.72, z * 0.72],
+  })));
+  const facePanels = Array.from({ length: 8 }, (_, index) => {
+    const angle = ((index + 0.5) / 8) * Math.PI * 2;
+    const radius = 0.674;
+    return {
+      key: `foil-panel-${index}`,
+      position: [Math.sin(angle) * radius, 0.54, Math.cos(angle) * radius],
+      rotation: angle,
+      color: index % 2 ? '#bb985d' : '#c8a66b',
+    };
+  });
+  const frameCorners = Array.from({ length: 8 }, (_, index) => {
+    const angle = (index / 8) * Math.PI * 2;
+    return [Math.sin(angle) * 0.7, Math.cos(angle) * 0.7];
+  });
+
+  return (
+    <group>
+      <mesh position={[0, 0.54, 0]} castShadow>
+        <cylinderGeometry args={[0.62, 0.72, 0.52, 8]} />
+        <meshPhysicalMaterial color="#b99152" metalness={0.38} roughness={0.48} clearcoat={0.16} clearcoatRoughness={0.42} />
+      </mesh>
+      {facePanels.map((panel) => (
+        <mesh key={panel.key} position={panel.position} rotation={[0, panel.rotation, 0]}>
+          <boxGeometry args={[0.35, 0.27, 0.012]} />
+          <meshStandardMaterial color={panel.color} metalness={0.28} roughness={0.52} />
+        </mesh>
+      ))}
+      {frameCorners.map(([x, z], index) => (
+        <Strut key={`frame-${index}`} start={[x * 0.94, 0.29, z * 0.94]} end={[x * 0.88, 0.79, z * 0.88]} radius={0.018} color="#d4c08f" metalness={0.48} />
+      ))}
+      {[0.29, 0.79].map((y) => (
+        <mesh key={`deck-ring-${y}`} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[y === 0.29 ? 0.69 : 0.61, 0.018, 8, 48]} />
+          <meshStandardMaterial color="#d2b77c" metalness={0.52} roughness={0.4} />
+        </mesh>
+      ))}
+      <mesh position={[0, 0.82, 0]} castShadow>
+        <cylinderGeometry args={[0.62, 0.62, 0.075, 8]} />
+        <meshStandardMaterial color="#9fa8a9" metalness={0.42} roughness={0.48} />
+      </mesh>
+      {[-1, 1].flatMap((x) => [-1, 1].map((z) => (
+        <mesh key={`deck-equipment-${x}-${z}`} position={[x * 0.23, 0.88, z * 0.2]} castShadow>
+          <boxGeometry args={[0.16, 0.07, 0.13]} />
+          <meshStandardMaterial color="#777b73" metalness={0.32} roughness={0.56} />
+        </mesh>
+      )))}
+      {legs.map(({ upper, foot }, index) => (
+        <group key={`landing-leg-${index}`}>
+          <Strut start={upper} end={foot} radius={0.032} color="#aeb7b9" metalness={0.54} />
+          <Strut
+            start={[upper[0] * 0.9, upper[1] - 0.05, upper[2] * 0.9]}
+            end={[foot[0] * 0.94, foot[1] + 0.12, foot[2] * 0.94]}
+            radius={0.014}
+            color="#c9ac6a"
+            metalness={0.42}
+          />
+          <mesh position={foot} castShadow>
+            <cylinderGeometry args={[0.145, 0.17, 0.06, 24]} />
+            <meshStandardMaterial color="#8f999b" metalness={0.4} roughness={0.52} />
+          </mesh>
+        </group>
+      ))}
+      <mesh position={[0, 0.17, 0]} rotation={[Math.PI, 0, 0]} castShadow>
+        <cylinderGeometry args={[0.13, 0.22, 0.25, 12, 1, true]} />
+        <meshStandardMaterial color="#747b7c" metalness={0.56} roughness={0.42} side={THREE.DoubleSide} />
+      </mesh>
+      <mesh position={[0, -0.43, 0.95]} castShadow>
+        <boxGeometry args={[0.25, 0.17, 0.2]} />
+        <meshStandardMaterial color="#92978d" metalness={0.25} roughness={0.62} />
+      </mesh>
+      <mesh position={[0, -0.32, 0.95]}>
+        <boxGeometry args={[0.22, 0.035, 0.17]} />
+        <meshStandardMaterial color="#c6a960" metalness={0.34} roughness={0.54} />
+      </mesh>
+      <Strut start={[0, -0.34, 0.95]} end={[0, -0.16, 0.95]} radius={0.012} color="#b8bdb7" metalness={0.36} />
+      <SolarWing position={[0.18, -0.31, 1.06]} rotation={[0, 0, 0]} width={0.3} height={0.18} columns={3} rows={2} />
+      <SolarWing position={[-0.18, -0.31, 1.06]} rotation={[0, 0, 0]} width={0.3} height={0.18} columns={3} rows={2} />
+    </group>
+  );
+}
+
 function ScientificPackageModel() {
   return (
     <group>
@@ -283,6 +369,7 @@ function ProbeModel() {
 function ModelByType({ item }) {
   const type = (item.type || '').toLowerCase();
   if (type.includes('rover')) return <RoverModel />;
+  if (item.id === 'apollo-11-eagle-descent-stage') return <EagleDescentStageModel />;
   if (type.includes('lander')) return <LanderModel />;
   if (type.includes('scientific')) return <ScientificPackageModel />;
   if (type.includes('rotor')) return <RotorcraftModel />;

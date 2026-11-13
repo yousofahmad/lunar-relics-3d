@@ -12,6 +12,8 @@ const PLANET_ASSETS = {
   Moon: { color: '/textures/moon-color.jpg', height: '/textures/moon-height.jpg' },
   Mars: { color: '/textures/mars-color.jpg', height: '/textures/mars-height.jpg' },
 };
+const EAGLE_RELIC_ID = 'apollo-11-eagle-descent-stage';
+const EAGLE_MODEL_PATH = '/models/apollo_lunar_module.glb';
 
 const RIM_VERTEX_SHADER = `
   varying vec3 vNormal;
@@ -227,7 +229,13 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
   );
 }
 
-function buildHotspotPositions(item, modelBounds) {
+function buildHotspotPositions(item, modelBounds, usesOfficialApolloModel) {
+  if (item.id === EAGLE_RELIC_ID) {
+    if (usesOfficialApolloModel && modelBounds?.size) {
+      return [[0, 0.06, 0.49], [0, 0.34, 0], [1.28, -0.15, 0.22]];
+    }
+    return [[0, 0.52, 0.67], [0, 0.87, 0], [0, -0.18, 0.95]];
+  }
   if (modelBounds?.size) {
     const [width, height, depth] = modelBounds.size;
     const [minX, minY, minZ] = modelBounds.min;
@@ -261,11 +269,13 @@ function HotspotNode({ hotspot, index, position, onClick, selected, language }) 
 }
 
 function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef, storyProgress }) {
-  const isRealModel = item.has3DModel && item.model3dFile;
+  const usesOfficialApolloModel = item.id === EAGLE_RELIC_ID;
+  const isRealModel = usesOfficialApolloModel || (item.has3DModel && item.model3dFile);
+  const modelPath = usesOfficialApolloModel ? EAGLE_MODEL_PATH : item.model3dFile;
   const storyRig = useRef(null);
   const [modelBounds, setModelBounds] = useState(null);
   const onModelBoundsReady = useMemo(() => (bounds) => setModelBounds(bounds), []);
-  const hotspotPositions = useMemo(() => buildHotspotPositions(item, modelBounds), [item, modelBounds]);
+  const hotspotPositions = useMemo(() => buildHotspotPositions(item, modelBounds, usesOfficialApolloModel), [item, modelBounds, usesOfficialApolloModel]);
 
   useEffect(() => {
     setModelBounds(null);
@@ -286,10 +296,10 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     <>
       <color attach="background" args={['#03060b']} />
       <fog attach="fog" args={['#03060b', 18, 58]} />
-      <ambientLight intensity={0.24} color="#d9e2e8" />
-      <directionalLight position={[4, 6, 5]} intensity={3.2} color="#fffbeb" />
-      <directionalLight position={[-5, 2, -4]} intensity={2.0} color="#06b6d4" />
-      <pointLight position={[0, 6, 2]} intensity={2.4} color="#f5fbff" distance={20} />
+      <ambientLight intensity={0.42} color="#d9e2e8" />
+      <directionalLight position={[4, 6, 5]} intensity={2.7} color="#fffbeb" />
+      <directionalLight position={[-5, 2, -4]} intensity={1.35} color="#53b9cf" />
+      <pointLight position={[0, 6, 2]} intensity={1.55} color="#f5fbff" distance={20} />
       <Stars radius={80} depth={50} count={1400} factor={2.9} saturation={0.1} fade speed={0.06} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.52, 0]}>
         <circleGeometry args={[2.25, 80]} />
@@ -299,22 +309,22 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
         {isRealModel ? (
           <ModelErrorBoundary fallback={<HoloRelic item={item} />}>
             <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} kind="model" compact /></Html>}>
-              <GltfModel modelPath={item.model3dFile} onBoundsReady={onModelBoundsReady} />
+              <GltfModel modelPath={modelPath} onBoundsReady={onModelBoundsReady} descentStageOnly={usesOfficialApolloModel} />
             </Suspense>
           </ModelErrorBoundary>
         ) : <HoloRelic item={item} />}
+        {(item.hotspots || []).slice(0, 3).map((spot, index) => (
+          <HotspotNode
+            key={`${item.id}-spot-${index}`}
+            hotspot={spot}
+            index={index}
+            position={hotspotPositions[index]}
+            onClick={setHotspot}
+            selected={Boolean(selectedHotspot && ((selectedHotspot.part && selectedHotspot.part === spot.part) || (!selectedHotspot.part && selectedHotspot.title === spot.title)))}
+            language={language}
+          />
+        ))}
       </group>
-      {(item.hotspots || []).slice(0, 3).map((spot, index) => (
-        <HotspotNode
-          key={`${item.id}-spot-${index}`}
-          hotspot={spot}
-          index={index}
-          position={hotspotPositions[index]}
-          onClick={setHotspot}
-          selected={Boolean(selectedHotspot && ((selectedHotspot.part && selectedHotspot.part === spot.part) || (!selectedHotspot.part && selectedHotspot.title === spot.title)))}
-          language={language}
-        />
-      ))}
       <OrbitControls ref={controlsRef} makeDefault target={[0, 0, 0]} enablePan={false} minDistance={3.1} maxDistance={9} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.34} />
     </>
   );
@@ -411,7 +421,7 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
         </Suspense>
       </Canvas>
       <div className="canvas-tools">
-        <span className="render-state"><Activity size={13} />{selectedRelic ? (selectedRelic.has3DModel ? (isArabic ? 'نموذج ناسا ثلاثي الأبعاد' : 'NASA 3D MODEL') : (isArabic ? 'مركبة إجرائية ثلاثية الأبعاد' : 'PROCEDURAL 3D SPACECRAFT')) : (isArabic ? 'عرض كوكبي واقعي' : 'PLANETARY SURFACE VIEW')}</span>
+        <span className="render-state"><Activity size={13} />{selectedRelic ? (selectedRelic.has3DModel || selectedRelic.id === EAGLE_RELIC_ID ? (isArabic ? 'نموذج ناسا ثلاثي الأبعاد' : 'NASA 3D MODEL') : (isArabic ? 'مركبة إجرائية ثلاثية الأبعاد' : 'PROCEDURAL 3D SPACECRAFT')) : (isArabic ? 'عرض كوكبي واقعي' : 'PLANETARY SURFACE VIEW')}</span>
         <div className="viewer-control-group" role="group" aria-label={isArabic ? 'أدوات عرض المجسم' : '3D viewer controls'}>
           <button type="button" className="viewer-control-button" onClick={() => adjustZoom('out')} aria-label={isArabic ? 'تصغير المجسم' : 'Zoom out'} title={isArabic ? 'تصغير' : 'Zoom out'}><Minus size={14} /></button>
           <button type="button" className="viewer-control-button" onClick={() => adjustZoom('in')} aria-label={isArabic ? 'تكبير المجسم' : 'Zoom in'} title={isArabic ? 'تكبير' : 'Zoom in'}><Plus size={14} /></button>

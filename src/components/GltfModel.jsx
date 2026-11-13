@@ -62,10 +62,61 @@ function upgradeMaterial(material, meshName, meshIndex) {
   });
 }
 
-export default function GltfModel({ modelPath, onBoundsReady }) {
+function keepOriginalMaterial(material) {
+  if (!material?.clone) return material;
+  const original = material.clone();
+  if (original.isMeshStandardMaterial || original.isMeshPhysicalMaterial) {
+    original.envMapIntensity = 1;
+    original.needsUpdate = true;
+  }
+  return original;
+}
+
+function isAboveDescentStage(mesh) {
+  const bounds = new THREE.Box3().setFromObject(mesh);
+  const center = bounds.getCenter(new THREE.Vector3());
+  const radialOffset = Math.hypot(center.x, center.z);
+  return bounds.min.y > 2.72 || (bounds.max.y > 2.72 && center.y > 2.5 && radialOffset < 1.4);
+}
+
+function EasepContext() {
+  return (
+    <group position={[1.28, -0.46, 0.22]}>
+      <mesh position={[0, 0.08, 0]} castShadow>
+        <boxGeometry args={[0.23, 0.15, 0.2]} />
+        <meshStandardMaterial color="#a6a89b" metalness={0.2} roughness={0.65} />
+      </mesh>
+      <mesh position={[0, 0.17, 0]}>
+        <boxGeometry args={[0.19, 0.035, 0.16]} />
+        <meshStandardMaterial color="#c5a85d" metalness={0.3} roughness={0.58} />
+      </mesh>
+      {[-1, 1].map((side) => (
+        <mesh key={side} position={[side * 0.15, 0.16, 0]} rotation={[0, 0, side * -0.08]}>
+          <boxGeometry args={[0.1, 0.012, 0.13]} />
+          <meshStandardMaterial color="#263e55" metalness={0.26} roughness={0.42} />
+        </mesh>
+      ))}
+      <mesh position={[0, 0.25, 0.05]}>
+        <cylinderGeometry args={[0.012, 0.018, 0.16, 10]} />
+        <meshStandardMaterial color="#b7bdb8" metalness={0.34} roughness={0.5} />
+      </mesh>
+    </group>
+  );
+}
+
+export default function GltfModel({ modelPath, onBoundsReady, descentStageOnly = false }) {
   const { scene } = useGLTF(modelPath);
   const prepared = useMemo(() => {
     const model = scene.clone(true);
+    model.updateMatrixWorld(true);
+    if (descentStageOnly) {
+      const ascentStageParts = [];
+      model.traverse((child) => {
+        if (child.isMesh && isAboveDescentStage(child)) ascentStageParts.push(child);
+      });
+      ascentStageParts.forEach((part) => part.parent?.remove(part));
+      model.updateMatrixWorld(true);
+    }
     let meshIndex = 0;
     model.traverse((child) => {
       if (!child.isMesh) return;
@@ -73,8 +124,8 @@ export default function GltfModel({ modelPath, onBoundsReady }) {
       child.receiveShadow = true;
       const current = child.material;
       child.material = Array.isArray(current)
-        ? current.map((material) => upgradeMaterial(material, child.name, meshIndex++))
-        : upgradeMaterial(current, child.name, meshIndex++);
+        ? current.map((material) => descentStageOnly ? keepOriginalMaterial(material) : upgradeMaterial(material, child.name, meshIndex++))
+        : descentStageOnly ? keepOriginalMaterial(current) : upgradeMaterial(current, child.name, meshIndex++);
     });
 
     model.updateMatrixWorld(true);
@@ -99,11 +150,16 @@ export default function GltfModel({ modelPath, onBoundsReady }) {
       maxDimension: Math.max(normalizedSize.x, normalizedSize.y, normalizedSize.z),
     };
     return { model: normalizedModel, info };
-  }, [scene]);
+  }, [descentStageOnly, scene]);
 
   useEffect(() => {
     onBoundsReady?.(prepared.info);
   }, [onBoundsReady, prepared]);
 
-  return <primitive object={prepared.model} dispose={null} />;
+  return (
+    <group>
+      <primitive object={prepared.model} dispose={null} />
+      {descentStageOnly && <EasepContext />}
+    </group>
+  );
 }
