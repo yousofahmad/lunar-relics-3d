@@ -6,8 +6,18 @@ const CELESTIAL_VIEWS = [
   { id: 'Deep Space', icon: Orbit, en: 'SPACE', ar: 'الفضاء', subEn: 'MORE MISSIONS', subAr: 'مهمات أخرى' },
 ];
 
-export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, audioEnabled = true, onToggleAudio = () => {} }) {
+export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen, storyMode = false, archiveOpen = true, onOpenMissions = () => {}, audioEnabled = true, audioStarted = false, soundscape = 'Moon', onToggleAudio = () => {} }) {
   const unlockedCount = relics.filter((item) => badges.has(item.id)).length;
+  const soundscapeLabels = soundscape === 'Mars'
+    ? { full: language === 'ar' ? 'رياح المريخ' : 'Mars wind', compact: language === 'ar' ? 'المريخ' : 'Mars' }
+    : soundscape === 'Deep Space'
+      ? { full: language === 'ar' ? 'أجواء الفضاء' : 'Space ambience', compact: language === 'ar' ? 'الفضاء' : 'Space' }
+      : { full: language === 'ar' ? 'أجواء القمر' : 'Moon ambience', compact: language === 'ar' ? 'القمر' : 'Moon' };
+  const audioAction = !audioStarted && audioEnabled
+    ? { full: language === 'ar' ? 'المس لبدء الصوت' : 'Tap to start', compact: language === 'ar' ? 'المس' : 'Tap' }
+    : audioEnabled
+      ? { full: language === 'ar' ? 'كتم' : 'Mute', compact: language === 'ar' ? 'كتم' : 'Mute' }
+      : { full: language === 'ar' ? 'تشغيل' : 'Unmute', compact: language === 'ar' ? 'تشغيل' : 'Unmute' };
 
   return (
     <header className="topbar glass-panel">
@@ -53,11 +63,16 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
           className="audio-global-toggle"
           onClick={onToggleAudio}
           aria-pressed={audioEnabled}
-          aria-label={audioEnabled ? (language === 'ar' ? 'كتم الإرسال الصوتي' : 'Mute audio transmission') : (language === 'ar' ? 'تشغيل الإرسال الصوتي' : 'Enable audio transmission')}
-          title={audioEnabled ? (language === 'ar' ? 'كتم الصوت' : 'Mute audio') : (language === 'ar' ? 'تشغيل الصوت' : 'Enable audio')}
+          aria-label={!audioStarted && audioEnabled
+            ? (language === 'ar' ? `المس لبدء ${soundscapeLabels.full}` : `Tap to start ${soundscapeLabels.full}`)
+            : `${audioAction.full} ${soundscapeLabels.full}`}
+          title={`${soundscapeLabels.full} · ${audioAction.full}`}
         >
           {audioEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-          <span className="audio-label">{audioEnabled ? (language === 'ar' ? 'الصوت يعمل' : 'SOUND ON') : (language === 'ar' ? 'الصوت مغلق' : 'SOUND OFF')}</span>
+          <span className="soundscape-label soundscape-full">{soundscapeLabels.full}</span>
+          <span className="soundscape-label soundscape-compact">{soundscapeLabels.compact}</span>
+          <span className="audio-label audio-action-full">{audioAction.full}</span>
+          <span className="audio-label audio-action-compact">{audioAction.compact}</span>
         </button>
         <button
           type="button"

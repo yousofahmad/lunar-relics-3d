@@ -5,6 +5,7 @@ import BadgeModal from './components/BadgeModal.jsx';
 import TopNav from './components/TopNav.jsx';
 import StoryAndArchivePanel from './components/StoryAndArchivePanel.jsx';
 import SpaceLoader from './components/SpaceLoader.jsx';
+import { initializeAudioEngine, setAudioMuted, setSoundscape, subscribeAudioEngine } from './utils/audioEngine.js';
 
 const Space3DCanvas = lazy(() => import('./components/Space3DCanvas.jsx'));
 
@@ -59,6 +60,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [language, setLanguage] = useState(() => localStorage.getItem('lunar-relics-language') || 'en');
   const [audioEnabled, setAudioEnabled] = useState(true);
+  const [audioStarted, setAudioStarted] = useState(false);
   const [badges, setBadges] = useState(readBadges);
   const [storyProgress, setStoryProgress] = useState({ index: 0, total: 1 });
   const [badgeModalOpen, setBadgeModalOpen] = useState(false);
@@ -95,6 +97,15 @@ export default function App() {
     () => displayRelics.filter((item) => item.body === celestialView),
     [celestialView, displayRelics],
   );
+  const activeSoundscape = selectedRelic?.body || celestialView;
+
+  useEffect(() => initializeAudioEngine(), []);
+
+  useEffect(() => subscribeAudioEngine(({ started }) => setAudioStarted(started)), []);
+
+  useEffect(() => setSoundscape(activeSoundscape), [activeSoundscape]);
+
+  useEffect(() => setAudioMuted(!audioEnabled), [audioEnabled]);
 
   const unlockBadge = (relicId) => {
     setBadges((current) => {
@@ -155,6 +166,8 @@ export default function App() {
         onOpenBadges={() => setBadgeModalOpen(true)}
         badgesOpen={badgeModalOpen}
         storyMode={storyMode}
+        soundscape={activeSoundscape}
+        audioStarted={audioStarted}
         archiveOpen={archiveOpen}
         onOpenMissions={() => {
           if (storyMode) {
@@ -165,7 +178,15 @@ export default function App() {
           }
         }}
         audioEnabled={audioEnabled}
-        onToggleAudio={() => setAudioEnabled((enabled) => !enabled)}
+        onToggleAudio={() => {
+          if (!audioStarted && audioEnabled) {
+            setAudioMuted(false, { startIfUnmuting: true });
+            return;
+          }
+          const nextEnabled = !audioEnabled;
+          setAudioEnabled(nextEnabled);
+          setAudioMuted(!nextEnabled, { startIfUnmuting: true });
+        }}
       />
       {badgeModalOpen && (
         <BadgeModal relics={displayRelics} badges={badges} language={language} onClose={closeBadgeModal} onSelect={openRelic} />

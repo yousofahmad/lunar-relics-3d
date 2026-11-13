@@ -654,3 +654,29 @@ body { color: var(--suit-white); }
   .story-chapter-nav { min-height: 40px; gap: 4px; padding: 4px; }
   .story-chapter-nav button { min-height: 34px; flex: 0 0 auto; gap: 6px; padding-inline: 10px; font-size: 9px; letter-spacing: 0; }
 }
+
+.audio-global-toggle .soundscape-label { font-family: var(--font-mono); font-size: 7px; letter-spacing: .025em; white-space: nowrap; }
+.audio-global-toggle .soundscape-compact, .audio-global-toggle .audio-action-compact { display: none; }
+.audio-global-toggle .audio-action-full { color: var(--mission-red); }
+.audio-global-toggle[aria-pressed="false"] svg { color: var(--mission-red); }
+.audio-bars i, .signal-bars i { background: #FC3D21; box-shadow: 0 0 8px rgba(252,61,33,.38); }
+
+@media (max-width: 760px) {
+  .mission-drawer-toggle span { display: none; }
+  .audio-global-toggle { gap: 3px; padding-inline: 5px; }
+  .audio-global-toggle .soundscape-full, .audio-global-toggle .audio-action-full { display: none; }
+  .audio-global-toggle .soundscape-compact, .audio-global-toggle .audio-action-compact { display: inline; }
+  .audio-global-toggle .soundscape-label, .audio-global-toggle .audio-label { display: inline; font-size: 6px; letter-spacing: 0; white-space: nowrap; }
+  .language-toggle svg { display: none; }
+}
+
+@media (max-width: 760px) {
+  .audio-global-toggle .soundscape-label.soundscape-full,
+  .audio-global-toggle .audio-label.audio-action-full { display: none; }
+  .audio-global-toggle .soundscape-label.soundscape-compact,
+  .audio-global-toggle .audio-label.audio-action-compact { display: inline; }
+}
+
+@media (max-width: 760px) {
+  .audio-global-toggle .soundscape-label, .audio-global-toggle .audio-label { font-size: 7px; }
+}

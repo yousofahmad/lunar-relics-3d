@@ -5,6 +5,7 @@ import { Activity, LocateFixed, Minus, Plus, RotateCcw } from 'lucide-react';
 import * as THREE from 'three';
 import HoloRelic from './HoloRelic.jsx';
 import SpaceLoader from './SpaceLoader.jsx';
+import { playScrollWhoosh, playSonarLock } from '../utils/audioEngine.js';
 
 const GltfModel = lazy(() => import('./GltfModel.jsx'));
 
@@ -322,10 +323,24 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   const chapterId = storyProgress?.chapter || 'hero';
   const chapterHotspotIndex = chapterId.startsWith('hardware-') ? Number(chapterId.slice('hardware-'.length)) : -1;
   const focusIndex = chapterHotspotIndex >= 0 ? chapterHotspotIndex : selectedIndex;
+  const previousMotionRef = useRef({ chapterId, focusIndex });
 
   useEffect(() => {
     setModelBounds(null);
   }, [item.id]);
+
+  useEffect(() => {
+    const previous = previousMotionRef.current;
+    const chapterChanged = previous.chapterId !== chapterId;
+    const focusChanged = previous.focusIndex !== focusIndex;
+    const cameraGlides = chapterId === 'transmission'
+      || chapterId.startsWith('hardware-')
+      || previous.chapterId === 'transmission'
+      || previous.chapterId.startsWith('hardware-');
+    if (chapterChanged && cameraGlides) playScrollWhoosh();
+    if (focusIndex >= 0 && (focusChanged || (chapterChanged && chapterId.startsWith('hardware-')))) playSonarLock();
+    previousMotionRef.current = { chapterId, focusIndex };
+  }, [chapterId, focusIndex]);
 
   useFrame((state, delta) => {
     const rig = storyRig.current;

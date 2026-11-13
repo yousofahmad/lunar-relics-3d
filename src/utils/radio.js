@@ -1,8 +1,15 @@
+import { beginVoiceCue, cancelVoiceCue, finishVoiceCue } from './audioEngine.js';
+
 function chooseNaturalVoice(voices, language) {
   const prefix = language === 'ar' ? 'ar' : 'en';
   const sameLanguage = voices.filter((voice) => voice.lang?.toLowerCase().startsWith(prefix));
+  const preferredNames = language === 'ar'
+    ? [/google.*(?:arabic|العربية)/i, /microsoft.*hamed|\bhamed\b/i, /microsoft.*natural/i]
+    : [/google uk english male/i, /google us english/i, /microsoft.*natural/i, /\bdaniel\b/i];
+  const preferredVoice = preferredNames.map((pattern) => sameLanguage.find((voice) => pattern.test(voice.name))).find(Boolean);
   const naturalProvider = /(google|microsoft).*(natural|neural|online)|natural.*(google|microsoft)/i;
-  return sameLanguage.find((voice) => naturalProvider.test(voice.name))
+  return preferredVoice
+    || sameLanguage.find((voice) => naturalProvider.test(voice.name))
     || sameLanguage.find((voice) => /(google|microsoft)/i.test(voice.name))
     || sameLanguage.find((voice) => voice.default)
     || sameLanguage[0]
@@ -32,12 +39,14 @@ export function transmitText(text, language, onDone = () => {}, onWordBoundary =
   let utterance;
   let wordTimer = 0;
   let voiceTimer = 0;
+  let voiceSession = 0;
   const complete = () => {
     if (cancelled) return;
     cancelled = true;
     window.clearInterval(wordTimer);
     window.clearTimeout(voiceTimer);
     onDone();
+    if (voiceSession) finishVoiceCue(voiceSession);
   };
 
   if (!('speechSynthesis' in window)) {
@@ -58,7 +67,7 @@ export function transmitText(text, language, onDone = () => {}, onWordBoundary =
     utterance.lang = language === 'ar' ? 'ar-EG' : 'en-US';
     utterance.voice = chooseNaturalVoice(voices, language);
     utterance.pitch = 0.92;
-    utterance.rate = 0.95;
+    utterance.rate = 0.94;
     utterance.volume = 0.92;
 
     const words = text.trim().split(/\s+/).filter(Boolean);
@@ -111,7 +120,14 @@ export function transmitText(text, language, onDone = () => {}, onWordBoundary =
         complete();
       }, Math.max(650, remainingWords * fallbackWordDuration));
     };
-    window.speechSynthesis.speak(utterance);
+    beginVoiceCue().then((session) => {
+      voiceSession = session;
+      if (cancelled) {
+        cancelVoiceCue(session);
+        return;
+      }
+      window.speechSynthesis.speak(utterance);
+    }).catch(complete);
   }).catch(complete);
 
   return () => {
@@ -119,6 +135,7 @@ export function transmitText(text, language, onDone = () => {}, onWordBoundary =
     cancelled = true;
     window.clearInterval(wordTimer);
     window.clearTimeout(voiceTimer);
+    if (voiceSession) cancelVoiceCue(voiceSession);
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     onDone();
   };
