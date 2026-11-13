@@ -106,7 +106,7 @@ export default function App() {
   const selectedRelic = useMemo(() => displayRelics.find((item) => item.id === selectedId) || null, [displayRelics, selectedId]);
   const storyMode = Boolean(selectedRelic);
   const visibleRelics = useMemo(
-    () => celestialView === 'Deep Space' ? displayRelics : displayRelics.filter((item) => item.body === celestialView),
+    () => displayRelics.filter((item) => item.body === celestialView),
     [celestialView, displayRelics],
   );
   const activeSoundscape = selectedRelic?.body || celestialView;
@@ -257,7 +257,7 @@ export default function App() {
             )}
             <div className="canvas-meta">
               <span><RadioTower size={12} /> {isArabic ? 'عرض حي' : 'LIVE VIEW'}</span>
-              <span>{celestialView === 'Deep Space' ? (isArabic ? 'الفضاء' : 'SPACE') : celestialView.toUpperCase()}</span>
+              <span>{celestialView === 'Deep Space' ? (isArabic ? 'الفضاء العميق · المدار' : 'DEEP SPACE / ORBIT') : celestialView.toUpperCase()}</span>
             </div>
             {selectedRelic && (
               <div className={`model-honesty-badge ${getRelicModelInfo(selectedRelic).fidelity === 'authentic' ? 'is-authentic' : 'is-archetype'}`} role="status">

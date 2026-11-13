@@ -1,12 +1,14 @@
-import { BadgeCheck, ChevronLeft, Compass, RadioTower, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { BadgeCheck, ChevronLeft, Compass, Orbit, RadioTower, ShieldCheck, Sparkles, X } from 'lucide-react';
 
 const CONTENT = {
   en: {
     eyebrow: 'MISSION SYSTEM UPDATE',
     title: 'What’s new',
-    intro: 'A more reliable, immersive way to explore all 16 mission relics on any screen.',
+    intro: 'A more reliable, immersive way to explore all 16 mission relics, including a four-craft deep-space orbit view.',
     close: 'Got it',
     changes: [
+      ['Deep-space orbit archive', 'The renamed Deep Space / Orbit view brings Dawn, NEAR Shoemaker, Pioneer 10 & 11 and Kepler into a starfield with tappable 3D craft. Use the ORBIT 4 archive filter or a mission pin/name to open its existing story. Pioneer keeps its clearly identified in-house archetype because the archive has no Pioneer GLB.'],
+      ['Seam-safe planetary maps', 'Moon and Mars maps now use a 32px horizontal edge blend and explicit linear sampling with mipmaps disabled to prevent the UV seam. Only the boundary strip of new derived maps is blended; the source maps and mission data are preserved, with no synthetic terrain noise.'],
       ['Tap every planet pin', 'Each Moon and Mars marker has a real 48px HTML touch target and a tappable name label. Back-side pins are hidden, and touching the canvas pauses rotation immediately.'],
       ['Quick mission carousel', 'Swipe through missions for the current view and open a story with one tap.'],
       ['Room to explore on mobile', 'The header is now one compact row, the mission drawer starts closed, and story cards stay in a scrollable 42% screen-height sheet below the lifted model.'],
@@ -22,9 +24,11 @@ const CONTENT = {
   ar: {
     eyebrow: 'تحديث نظام المهمات',
     title: 'ما الجديد؟',
-    intro: 'استكشاف أوضح وأكثر سلاسة لمهمات الأرشيف الست عشرة على كل الشاشات.',
+    intro: 'استكشاف أوضح لمهمات الأرشيف الست عشرة، مع مشهد مداري يضم أربع مهمات للفضاء العميق.',
     close: 'حسنًا',
     changes: [
+      ['أرشيف مداري للفضاء العميق', 'يعرض تبويب الفضاء العميق / المدار مركبات Dawn وNEAR Shoemaker وPioneer 10 و11 وKepler وسط حقل نجوم، مع مجسمات ثلاثية الأبعاد وأسماء قابلة للمس. استخدم فلتر «المدار ٤» أو دبوس المهمة لفتح قصتها الموجودة. ويظل Pioneer ممثلًا بمجسمه الهندسي المخصص؛ فلا يوجد له ملف GLB في الأرشيف.'],
+      ['وصلات أكثر ثباتًا لخرائط الكواكب', 'أُضيف دمج أفقي بعرض ٣٢ بكسل للحواف، مع أخذ عينات خطي وإيقاف mipmaps لمنع خط وصلة UV. عُدّل شريط الحافة فقط في النسخ المشتقة، وبقيت ملفات المصدر وبيانات المهمات محفوظة من دون تضاريس اصطناعية.'],
       ['اضغط على أي دبوس كوكبي', 'لكل علامة على القمر والمريخ هدف لمس HTML فعلي بمقاس 48 بكسل واسم قابل للضغط. تُخفى العلامات على الوجه الخلفي ويتوقف الدوران فور لمس المشهد.'],
       ['شريط مهمات سريع', 'اسحب بين مهمات المشهد الحالي وافتح قصتها بلمسة واحدة.'],
       ['مساحة أوسع على الهاتف', 'صار الشريط العلوي صفًا واحدًا، وتبدأ قائمة المهمات مغلقة، وتبقى بطاقات القصة قابلة للتمرير في لوحة لا تتجاوز 42٪ من ارتفاع الشاشة أسفل المجسم المرفوع.'],
@@ -54,7 +58,7 @@ export default function WhatsNewDialog({ language = 'en', onClose }) {
         </div>
         <ul className="whats-new-list">
           {copy.changes.map(([title, detail], index) => {
-            const Icon = [Compass, ChevronLeft, Sparkles, RadioTower, RadioTower, ShieldCheck, BadgeCheck, Compass, RadioTower, ChevronLeft][index];
+            const Icon = [Orbit, Sparkles, Compass, ChevronLeft, Sparkles, RadioTower, RadioTower, ShieldCheck, BadgeCheck, Compass, RadioTower, ChevronLeft][index];
             return <li key={title}><span className="whats-new-item-icon"><Icon size={15} /></span><span><strong>{title}</strong><small>{detail}</small></span></li>;
           })}
         </ul>
