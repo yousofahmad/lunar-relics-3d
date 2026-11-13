@@ -258,25 +258,45 @@ body { color: var(--suit-white); }
 .story-chapter-nav button:hover { color: var(--suit-white); }
 .story-chapter-nav button.is-active { border-color: rgba(252,61,33,.28); background: rgba(252,61,33,.09); color: var(--suit-white); }
 .story-chapter-nav button.is-active i { background: var(--mission-red); box-shadow: 0 0 8px rgba(252,61,33,.7); }
+.story-progress-rail { position: fixed; z-index: 8; top: 50%; right: 20px; display: flex; align-items: center; flex-direction: column; gap: 7px; color: #788594; font-family: var(--font-mono); font-size: 7px; letter-spacing: .08em; transform: translateY(-50%); pointer-events: none; }
+.story-progress-rail > i { position: relative; display: block; width: 2px; height: 112px; overflow: hidden; border-radius: 999px; background: rgba(248,250,252,.17); }
+.story-progress-rail > i > b { position: absolute; right: 0; bottom: 0; left: 0; display: block; border-radius: inherit; background: var(--mission-red); box-shadow: 0 0 9px rgba(252,61,33,.7); transition: height 250ms ease; }
 .mission-story-scroll { position: absolute; inset: 0; height: 100%; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scroll-behavior: smooth; scroll-snap-type: y proximity; scrollbar-width: thin; scrollbar-color: rgba(148,163,184,.22) transparent; pointer-events: none; }
 .story-chapter { position: relative; display: flex; align-items: center; min-height: 100svh; padding: 110px 7vw 58px; scroll-snap-align: start; pointer-events: none; }
 .story-hero { align-items: center; }
-.story-hero-copy { width: min(720px, 55vw); margin-inline-start: 1vw; pointer-events: auto; }
+.story-hero-copy { position: relative; z-index: 10; width: min(36rem, 52vw); max-width: 36rem; margin-inline-start: 1vw; pointer-events: none; }
 .memory-classification { display: flex; align-items: center; gap: 8px; color: #bcc5cf; font-family: var(--font-mono); font-size: 7px; letter-spacing: .13em; text-transform: uppercase; }
 .memory-classification i { width: 3px; height: 3px; border-radius: 50%; background: var(--kapton-gold); }
 .story-eyebrow { margin: 21px 0 8px; color: #97a3b1; font-family: var(--font-mono); font-size: 8px; letter-spacing: .18em; }
-.story-hero h1 { max-width: 900px; margin: 0; color: var(--suit-white); font-family: var(--font-display); font-size: clamp(2.5rem, 5.5vw, 4.75rem); font-weight: 500; line-height: .98; letter-spacing: .005em; text-wrap: balance; text-shadow: 0 8px 36px rgba(0,0,0,.4); }
+.story-hero h1 { max-width: 36rem; margin: 0; color: var(--suit-white); font-family: var(--font-display); font-size: clamp(2.5rem, 5.5vw, 4.75rem); font-weight: 500; line-height: .98; letter-spacing: .005em; text-wrap: balance; text-shadow: 0 8px 36px rgba(0,0,0,.4); }
 .app-rtl .story-hero h1, .app-rtl .chapter-copy h2 { font-family: var(--font-arabic); line-height: 1.2; }
-.story-hero-location { display: flex; align-items: center; gap: 7px; margin: 14px 0 0; color: #adb7c2; font-size: 11px; }
+.story-hero-location { display: flex; align-items: flex-start; gap: 7px; margin: 14px 0 0; color: #adb7c2; font-size: 11px; }
 .story-hero-location svg { color: var(--kapton-gold); }
+.story-hero-location > span { min-width: 0; max-width: 36rem; white-space: normal; overflow-wrap: anywhere; line-height: 1.5; }
 .mission-hero-meta { display: flex; flex-wrap: wrap; gap: 20px 28px; margin-top: 25px; }
-.mission-hero-meta span { display: flex; flex-direction: column; gap: 5px; max-width: 240px; }
+.mission-hero-meta span { display: flex; flex-direction: column; gap: 5px; max-width: 240px; min-width: 0; }
 .mission-hero-meta small { color: #778393; font-family: var(--font-mono); font-size: 6px; letter-spacing: .12em; }
-.mission-hero-meta strong { overflow: hidden; color: #d7dde3; font-family: var(--font-mono); font-size: 9px; font-weight: 400; text-overflow: ellipsis; white-space: nowrap; }
+.mission-hero-meta strong { display: block; color: #d7dde3; font-family: var(--font-mono); font-size: 9px; font-weight: 400; white-space: normal; overflow-wrap: anywhere; line-height: 1.5; }
 .mission-hero-meta span:first-child strong { color: var(--kapton-gold); }
-.story-scroll-cue { display: inline-flex; align-items: center; gap: 11px; margin-top: 32px; padding: 0; border: 0; background: transparent; color: var(--suit-white); cursor: pointer; font-family: var(--font-mono); font-size: 7px; letter-spacing: .14em; }
-.story-scroll-cue i { display: inline-block; width: 48px; height: 1px; background: var(--mission-red); box-shadow: 0 0 9px rgba(252,61,33,.6); transition: width 160ms ease; }
-.story-scroll-cue:hover i { width: 72px; }
+.story-hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 30px; pointer-events: auto; }
+.story-scroll-cue { display: inline-flex; align-items: center; gap: 11px; margin: 0; padding: 0; border: 0; background: transparent; color: var(--suit-white); cursor: pointer; font-family: var(--font-mono); font-size: 7px; letter-spacing: .14em; }
+.immersive-story-button { min-height: 54px; gap: 12px; padding: 8px 15px 8px 9px; border: 1px solid rgba(252,61,33,.72); border-radius: 999px; background: linear-gradient(110deg, rgba(252,61,33,.24), rgba(14,18,25,.86) 74%); box-shadow: 0 0 24px rgba(252,61,33,.16), inset 0 1px 0 rgba(255,255,255,.08); backdrop-filter: blur(14px); letter-spacing: .035em; transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease, background 160ms ease; }
+.immersive-story-button:hover, .immersive-story-button.is-active { border-color: var(--mission-red); background: linear-gradient(110deg, rgba(252,61,33,.34), rgba(14,18,25,.92) 74%); box-shadow: 0 0 30px rgba(252,61,33,.26), inset 0 1px 0 rgba(255,255,255,.1); transform: translateY(-1px); }
+.immersive-play-icon { display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%; background: var(--mission-red); color: white; box-shadow: 0 0 16px rgba(252,61,33,.4); }
+.immersive-button-copy { display: flex; align-items: flex-start; flex-direction: column; gap: 4px; }
+.immersive-button-copy strong { color: #fff7f5; font-size: 8px; font-weight: 600; letter-spacing: .045em; white-space: nowrap; }
+.immersive-button-copy small { color: #d39b93; font-size: 6px; letter-spacing: .09em; white-space: nowrap; }
+.immersive-soundwave { display: inline-flex; align-items: center; justify-content: center; gap: 2px; width: 18px; height: 22px; margin-inline-start: 2px; }
+.immersive-soundwave i { display: block; width: 2px; height: 4px; border-radius: 2px; background: var(--mission-red); box-shadow: 0 0 6px rgba(252,61,33,.45); }
+.immersive-story-button.is-active .immersive-soundwave i { animation: auto-pilot-wave 780ms ease-in-out infinite; }
+.immersive-story-button.is-active .immersive-soundwave i:nth-child(2) { animation-delay: 90ms; }
+.immersive-story-button.is-active .immersive-soundwave i:nth-child(3) { animation-delay: 180ms; }
+.immersive-story-button.is-active .immersive-soundwave i:nth-child(4) { animation-delay: 270ms; }
+.immersive-story-button.is-active .immersive-soundwave i:nth-child(5) { animation-delay: 360ms; }
+.auto-pilot-hero-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 14px; border: 1px solid rgba(248,250,252,.15); border-radius: 999px; background: rgba(5,9,15,.62); color: #c3cbd4; cursor: pointer; font-family: var(--font-mono); font-size: 7px; letter-spacing: .07em; backdrop-filter: blur(13px); transition: border-color 160ms ease, background 160ms ease, color 160ms ease; }
+.auto-pilot-hero-button svg { color: var(--mission-red); }
+.auto-pilot-hero-button:hover, .auto-pilot-hero-button.is-active { border-color: rgba(252,61,33,.58); background: rgba(252,61,33,.12); color: var(--suit-white); }
+.story-hero-actions button { pointer-events: auto; }
 .story-hero-record { position: absolute; right: 4vw; bottom: 36px; color: rgba(234,179,8,.72); font-family: var(--font-mono); font-size: 7px; letter-spacing: .13em; }
 
 .chapter-copy { position: relative; z-index: 4; width: min(500px, 40vw); color: var(--suit-white); pointer-events: auto; }
@@ -506,6 +526,8 @@ body { color: var(--suit-white); }
   .canvas-meta { bottom: 50px; left: 13px; font-size: 6px; }
   .story-chapter-nav { top: 91px; left: 8px; right: 8px; justify-content: flex-start; max-width: none; min-height: 33px; padding: 3px; transform: none; }
   .story-chapter-nav button { min-height: 25px; padding-inline: 7px; font-size: 5px; }
+  .story-progress-rail { right: 8px; gap: 5px; font-size: 6px; }
+  .story-progress-rail > i { height: 82px; }
   .memory-header { top: 132px; left: 10px; }
   .app-rtl .memory-header { right: 10px; left: auto; }
   .back-button { min-height: 28px; padding-inline: 9px; font-size: 6px; }
@@ -520,7 +542,15 @@ body { color: var(--suit-white); }
   .mission-hero-meta span { max-width: 42%; }
   .mission-hero-meta small { font-size: 5px; }
   .mission-hero-meta strong { font-size: 7px; }
-  .story-scroll-cue { margin-top: 17px; font-size: 6px; }
+  .story-hero-actions { gap: 7px; margin-top: 15px; }
+  .story-scroll-cue { margin-top: 0; font-size: 7px; letter-spacing: 0; }
+  .immersive-story-button { min-height: 44px; gap: 7px; padding: 6px 9px 6px 6px; }
+  .immersive-play-icon { width: 27px; height: 27px; flex-basis: 27px; }
+  .immersive-button-copy { gap: 3px; }
+  .immersive-button-copy strong { font-size: 6px; letter-spacing: .025em; }
+  .immersive-button-copy small { font-size: 5px; letter-spacing: .045em; }
+  .immersive-soundwave { width: 13px; margin-inline-start: 0; }
+  .auto-pilot-hero-button { min-height: 42px; gap: 6px; padding-inline: 9px; font-size: 6px; letter-spacing: .025em; }
   .story-hero-record { right: 13px; bottom: 5px; font-size: 5px; }
   .transmission-chapter { align-items: flex-end; }
   .transmission-copy { width: 100%; max-height: 55svh; overflow-y: auto; margin: 0; padding: 15px; border: 1px solid rgba(248,250,252,.1); border-radius: 16px; background: rgba(4,8,14,.82); backdrop-filter: blur(14px); }

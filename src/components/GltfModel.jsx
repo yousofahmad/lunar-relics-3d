@@ -12,64 +12,87 @@ function isNeutralColor(color) {
 function materialFinish(meshName, materialName, meshIndex, originalColor) {
   const label = `${meshName} ${materialName}`.toLowerCase();
   if (/(solar|panel|carbon|array|black|dark|cell)/.test(label)) {
-    return { color: '#1e293b', metalness: 0.62, roughness: 0.34 };
+    return { color: '#1e293b' };
   }
   if (/(foil|gold|kapton|thermal|blanket|copper|dish|antenna|reflector)/.test(label)) {
-    return { color: '#d4af37', metalness: 0.84, roughness: 0.23 };
+    return { color: '#d4af37' };
   }
   if (isNeutralColor(originalColor) && meshIndex % 7 === 3) {
-    return { color: '#d4af37', metalness: 0.84, roughness: 0.23 };
+    return { color: '#d4af37' };
   }
   if (isNeutralColor(originalColor) && meshIndex % 7 === 5) {
-    return { color: '#1e293b', metalness: 0.62, roughness: 0.34 };
+    return { color: '#1e293b' };
   }
-  return { color: '#d4d8dd', metalness: 0.8, roughness: 0.27 };
+  return { color: '#d4d8dd' };
+}
+
+const PHYSICAL_FINISH = { metalness: 0.75, roughness: 0.22, envMapIntensity: 1.8 };
+
+function makePhysicalMaterial(source, fallbackColor, meshName = 'spacecraft') {
+  const materialName = source?.name || `${meshName}-aerospace-finish`;
+  let physical;
+
+  if (source?.isMeshStandardMaterial || source?.isMeshPhysicalMaterial) {
+    physical = source.clone();
+  } else {
+    physical = new THREE.MeshPhysicalMaterial({
+      name: materialName,
+      color: source?.color?.clone() || fallbackColor || new THREE.Color('#b9bec4'),
+      map: source?.map || null,
+      normalMap: source?.normalMap || null,
+      normalScale: source?.normalScale,
+      roughnessMap: source?.roughnessMap || null,
+      metalnessMap: source?.metalnessMap || null,
+      aoMap: source?.aoMap || null,
+      aoMapIntensity: source?.aoMapIntensity,
+      emissive: source?.emissive?.clone() || new THREE.Color('#000000'),
+      emissiveMap: source?.emissiveMap || null,
+      emissiveIntensity: source?.emissiveIntensity ?? 1,
+      alphaMap: source?.alphaMap || null,
+      alphaTest: source?.alphaTest ?? 0,
+      bumpMap: source?.bumpMap || null,
+      bumpScale: source?.bumpScale,
+      displacementMap: source?.displacementMap || null,
+      displacementScale: source?.displacementScale,
+      displacementBias: source?.displacementBias,
+      side: source?.side ?? THREE.FrontSide,
+      transparent: source?.transparent ?? false,
+      opacity: source?.opacity ?? 1,
+      vertexColors: source?.vertexColors ?? false,
+      depthWrite: source?.depthWrite ?? true,
+      blending: source?.blending ?? THREE.NormalBlending,
+      clearcoat: 0.28,
+      clearcoatRoughness: 0.24,
+    });
+  }
+
+  physical.metalness = PHYSICAL_FINISH.metalness;
+  physical.roughness = PHYSICAL_FINISH.roughness;
+  physical.envMapIntensity = PHYSICAL_FINISH.envMapIntensity;
+  physical.needsUpdate = true;
+  return physical;
 }
 
 function upgradeMaterial(material, meshName, meshIndex) {
-  if (material?.map) {
-    const textured = material.clone();
-    if (textured.isMeshStandardMaterial || textured.isMeshPhysicalMaterial) {
-      textured.envMapIntensity = 1.35;
-      textured.roughness = Math.min(textured.roughness ?? 0.45, 0.46);
-    }
-    return textured;
-  }
-
   const originalColor = material?.color?.clone() || new THREE.Color('#b9bec4');
-  const finish = materialFinish(meshName, material?.name || '', meshIndex, originalColor);
-  if (material?.isMeshStandardMaterial || material?.isMeshPhysicalMaterial) {
-    const upgraded = material.clone();
+  const upgraded = makePhysicalMaterial(material, originalColor, meshName);
+
+  // Keep mapped artwork intact; only tune its physically based response.
+  if (!material?.map) {
+    const finish = materialFinish(meshName, material?.name || '', meshIndex, originalColor);
     upgraded.color.set(finish.color);
-    upgraded.metalness = finish.metalness;
-    upgraded.roughness = finish.roughness;
-    upgraded.envMapIntensity = 1.5;
-    upgraded.needsUpdate = true;
-    return upgraded;
   }
 
-  return new THREE.MeshPhysicalMaterial({
-    name: material?.name || `${meshName || 'spacecraft'}-aerospace-finish`,
-    color: finish.color,
-    metalness: finish.metalness,
-    roughness: finish.roughness,
-    clearcoat: finish.metalness > 0.75 ? 0.3 : 0.12,
-    clearcoatRoughness: 0.28,
-    side: material?.side ?? THREE.FrontSide,
-    transparent: material?.transparent ?? false,
-    opacity: material?.opacity ?? 1,
-    envMapIntensity: 1.5,
-  });
+  if (upgraded.isMeshPhysicalMaterial && upgraded.clearcoat === 0) {
+    upgraded.clearcoat = 0.22;
+    upgraded.clearcoatRoughness = 0.28;
+  }
+  return upgraded;
 }
 
-function keepOriginalMaterial(material) {
-  if (!material?.clone) return material;
-  const original = material.clone();
-  if (original.isMeshStandardMaterial || original.isMeshPhysicalMaterial) {
-    original.envMapIntensity = 1;
-    original.needsUpdate = true;
-  }
-  return original;
+function keepOriginalMaterial(material, meshName) {
+  // Apollo's gold and silver colors/textures remain intact while the surface gets a metal finish.
+  return makePhysicalMaterial(material, material?.color?.clone(), meshName);
 }
 
 function isAboveDescentStage(mesh) {
@@ -81,7 +104,7 @@ function isAboveDescentStage(mesh) {
 
 function EasepContext() {
   return (
-    <group position={[1.28, -0.46, 0.22]}>
+    <group position={[0.45, -0.46, 0.22]}>
       <mesh position={[0, 0.08, 0]} castShadow>
         <boxGeometry args={[0.23, 0.15, 0.2]} />
         <meshStandardMaterial color="#a6a89b" metalness={0.2} roughness={0.65} />
@@ -124,8 +147,12 @@ export default function GltfModel({ modelPath, onBoundsReady, descentStageOnly =
       child.receiveShadow = true;
       const current = child.material;
       child.material = Array.isArray(current)
-        ? current.map((material) => (descentStageOnly || preserveMaterials) ? keepOriginalMaterial(material) : upgradeMaterial(material, child.name, meshIndex++))
-        : (descentStageOnly || preserveMaterials) ? keepOriginalMaterial(current) : upgradeMaterial(current, child.name, meshIndex++);
+        ? current.map((material) => (descentStageOnly || preserveMaterials)
+          ? keepOriginalMaterial(material, child.name)
+          : upgradeMaterial(material, child.name, meshIndex++))
+        : (descentStageOnly || preserveMaterials)
+          ? keepOriginalMaterial(current, child.name)
+          : upgradeMaterial(current, child.name, meshIndex++);
     });
 
     model.updateMatrixWorld(true);
