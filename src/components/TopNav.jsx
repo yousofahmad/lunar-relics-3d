@@ -1,14 +1,12 @@
 import { Globe2, Languages, Moon, Orbit, Trophy } from 'lucide-react';
 
-const FILTERS = [
-  { id: 'Moon', icon: Moon, en: 'Moon', ar: 'القمر' },
-  { id: 'Mars', icon: Globe2, en: 'Mars', ar: 'المريخ' },
-  { id: 'Deep Space', icon: Orbit, en: 'Deep Space', ar: 'الفضاء العميق' },
-  { id: 'All', icon: Orbit, en: 'All', ar: 'الكل' },
+const CELESTIAL_VIEWS = [
+  { id: 'Moon', icon: Moon, en: 'THE MOON', ar: 'القمر', subEn: 'LUNA', subAr: 'LUNA' },
+  { id: 'Mars', icon: Globe2, en: 'MARS', ar: 'المريخ', subEn: 'SURFACE', subAr: 'السطح' },
+  { id: 'Deep Space', icon: Orbit, en: 'DEEP SPACE / ORBIT', ar: 'الفضاء العميق / المدار', subEn: 'MISSIONS', subAr: 'المهمات' },
 ];
 
-export default function TopNav({ filter, setFilter, language, setLanguage, relics, badges, onOpenBadges, badgesOpen }) {
-  const countFor = (id) => (id === 'All' ? relics.length : relics.filter((item) => item.body === id).length);
+export default function TopNav({ celestialView, setCelestialView, language, setLanguage, relics, badges, onOpenBadges, badgesOpen }) {
   const unlockedCount = relics.filter((item) => badges.has(item.id)).length;
 
   return (
@@ -21,18 +19,18 @@ export default function TopNav({ filter, setFilter, language, setLanguage, relic
         </div>
       </div>
 
-      <nav className="planet-tabs" aria-label={language === 'ar' ? 'تصفية الأرشيف' : 'Filter archive'}>
-        {FILTERS.map(({ id, icon: Icon, en, ar }) => (
+      <nav className="planet-tabs" aria-label={language === 'ar' ? 'اختر المشهد السماوي' : 'Select a celestial view'}>
+        {CELESTIAL_VIEWS.map(({ id, icon: Icon, en, ar, subEn, subAr }) => (
           <button
-            className={`planet-tab ${filter === id ? 'active' : ''}`}
+            className={`planet-tab ${celestialView === id ? 'active' : ''} view-${id === 'Deep Space' ? 'deep-space' : id.toLowerCase()}`}
             key={id}
-            onClick={() => setFilter(id)}
+            onClick={() => setCelestialView(id)}
             type="button"
-            aria-pressed={filter === id}
+            aria-pressed={celestialView === id}
           >
-            <Icon size={15} strokeWidth={1.8} />
+            <Icon size={17} strokeWidth={1.8} />
             <span>{language === 'ar' ? ar : en}</span>
-            <small>{countFor(id)}</small>
+            <small>{language === 'ar' ? subAr : subEn}</small>
           </button>
         ))}
       </nav>

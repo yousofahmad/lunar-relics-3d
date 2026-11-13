@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { Activity, Crosshair, Info, RadioTower } from 'lucide-react';
+import { Crosshair, Info, RadioTower } from 'lucide-react';
 import { fetchRelics, LOCAL_RELICS } from './services/api.js';
 import BadgeModal from './components/BadgeModal.jsx';
 import TopNav from './components/TopNav.jsx';
@@ -19,7 +19,8 @@ function readBadges() {
 
 export default function App() {
   const [relics, setRelics] = useState(LOCAL_RELICS);
-  const [filter, setFilter] = useState('All');
+  const [celestialView, setCelestialView] = useState('Moon');
+  const [archiveFilter, setArchiveFilter] = useState('All');
   const [selectedId, setSelectedId] = useState(null);
   const [language, setLanguage] = useState(() => localStorage.getItem('lunar-relics-language') || 'en');
   const [badges, setBadges] = useState(readBadges);
@@ -52,8 +53,8 @@ export default function App() {
 
   const selectedRelic = useMemo(() => relics.find((item) => item.id === selectedId) || null, [relics, selectedId]);
   const visibleRelics = useMemo(
-    () => filter === 'All' ? relics : relics.filter((item) => item.body === filter),
-    [filter, relics],
+    () => relics.filter((item) => item.body === celestialView),
+    [celestialView, relics],
   );
 
   const unlockBadge = (relicId) => {
@@ -69,6 +70,7 @@ export default function App() {
 
   const openRelic = (item) => {
     setBadgeModalOpen(false);
+    setCelestialView(item.body || 'Moon');
     setHotspot(null);
     setSelectedId(item.id);
   };
@@ -78,8 +80,13 @@ export default function App() {
     setSelectedId(null);
   };
 
+  const changeCelestialView = (nextView) => {
+    setCelestialView(nextView);
+    setHotspot(null);
+    setSelectedId(null);
+  };
+
   const isArabic = language === 'ar';
-  const isProceduralHologram = Boolean(selectedRelic && !selectedRelic.has3DModel);
 
   return (
     <div className={`app-shell ${isArabic ? 'app-rtl' : ''}`} dir={isArabic ? 'rtl' : 'ltr'}>
@@ -88,8 +95,8 @@ export default function App() {
       <div className="ambient-glow glow-two" aria-hidden="true" />
 
       <TopNav
-        filter={filter}
-        setFilter={(next) => { setFilter(next); setHotspot(null); }}
+        celestialView={celestialView}
+        setCelestialView={changeCelestialView}
         language={language}
         setLanguage={setLanguage}
         relics={relics}
@@ -102,23 +109,12 @@ export default function App() {
       )}
 
       <main className="workspace-grid">
-        <section className={`viewport-panel glass-panel ${selectedRelic ? 'inspection-mode' : ''}`}>
-          <div className="viewport-header">
-            <div className="viewport-heading">
-              <span className="eyebrow"><span className="live-dot" />{isArabic ? 'استكشاف ثلاثي الأبعاد' : 'LIVE 3D EXPLORATION'}</span>
-              <h1>{selectedRelic ? (isArabic ? 'غرفة الذاكرة' : 'MEMORY ROOM') : (isArabic ? 'شبكة الآثار' : 'RELIC NETWORK')}</h1>
-            </div>
-            <div className="viewport-status">
-              <span className="status-pill"><Activity size={13} /> {isArabic ? 'عرض تفاعلي' : 'INTERACTIVE VIEW'}</span>
-              <span className="status-dot" />
-            </div>
-          </div>
-
-          <div className={`canvas-stage ${isProceduralHologram ? 'hologram-active' : ''}`}>
+        <section className={`viewport-panel glass-panel ${selectedRelic ? 'inspection-mode' : ''}`} aria-label={isArabic ? 'المشهد ثلاثي الأبعاد' : '3D scene'}>
+          <div className="canvas-stage">
             <Suspense fallback={<div className="canvas-chunk-loader"><SpaceLoader language={language} kind="model" compact /></div>}>
               <Space3DCanvas
                 relics={visibleRelics}
-                filter={filter}
+                filter={celestialView}
                 selectedRelic={selectedRelic}
                 onSelect={openRelic}
                 language={language}
@@ -126,31 +122,19 @@ export default function App() {
                 setHotspot={setHotspot}
               />
             </Suspense>
-            {isProceduralHologram && (
-              <div className="hologram-overlay" aria-hidden="true">
-                <span className="hologram-corner corner-nw" />
-                <span className="hologram-corner corner-ne" />
-                <span className="hologram-corner corner-sw" />
-                <span className="hologram-corner corner-se" />
-                <span className="hologram-radar-ring ring-outer" />
-                <span className="hologram-radar-ring ring-inner" />
-                <span className="hologram-scanlines" />
-                <span className="hologram-frame-label">{isArabic ? 'مخطط هولوغرافي' : 'HOLOGRAPHIC BLUEPRINT'}</span>
-              </div>
-            )}
             {!selectedRelic && (
               <div className="map-instructions">
                 <Crosshair size={14} />
-                <span>{isArabic ? 'اختر نقطة مضيئة أو أثرًا من القائمة' : 'SELECT A GLOWING SITE OR A RELIC FROM THE ARCHIVE'}</span>
+                <span>{isArabic ? 'اختر نقطة مضيئة أو أثرًا من الأرشيف' : 'SELECT A LIT SURFACE BEACON OR A RELIC FROM THE ARCHIVE'}</span>
               </div>
             )}
             <div className="canvas-meta">
               <span><RadioTower size={12} /> {isArabic ? 'اتصال حي' : 'SIGNAL LINK'}</span>
-              <span>{filter === 'All' ? 'SOL / SYSTEM' : filter.toUpperCase()}</span>
+              <span>{celestialView === 'Deep Space' ? 'DEEP SPACE' : celestialView.toUpperCase()}</span>
             </div>
             {hotspot && (
               <div className="hotspot-readout" role="status">
-                <button className="hotspot-close" type="button" onClick={() => setHotspot(null)} aria-label="Close hotspot">×</button>
+                <button className="hotspot-close" type="button" onClick={() => setHotspot(null)} aria-label={isArabic ? 'إغلاق نقطة الفحص' : 'Close hotspot'}>×</button>
                 <span className="hotspot-kicker">{isArabic ? 'نقطة فحص الجهاز' : 'HARDWARE HOTSPOT'}</span>
                 <strong dir="auto">{hotspot.title || hotspot.part}</strong>
                 <p dir="auto">{hotspot.description}</p>
@@ -165,7 +149,9 @@ export default function App() {
 
         <aside className="archive-panel glass-panel">
           <StoryAndArchivePanel
-            relics={visibleRelics}
+            relics={relics}
+            archiveFilter={archiveFilter}
+            setArchiveFilter={setArchiveFilter}
             selectedRelic={selectedRelic}
             language={language}
             badges={badges}

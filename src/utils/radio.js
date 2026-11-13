@@ -1,92 +1,107 @@
-function playQuindar(context, when, duration = 0.12) {
-  const oscillator = context.createOscillator();
-  const gain = context.createGain();
-  oscillator.type = 'sine';
-  oscillator.frequency.setValueAtTime(2525, when);
-  gain.gain.setValueAtTime(0.0001, when);
-  gain.gain.linearRampToValueAtTime(0.055, when + 0.012);
-  gain.gain.setValueAtTime(0.055, when + duration - 0.018);
-  gain.gain.linearRampToValueAtTime(0.0001, when + duration);
-  oscillator.connect(gain);
-  gain.connect(context.destination);
-  oscillator.start(when);
-  oscillator.stop(when + duration + 0.01);
+function chooseNaturalVoice(voices, language) {
+  const prefix = language === 'ar' ? 'ar' : 'en';
+  const sameLanguage = voices.filter((voice) => voice.lang?.toLowerCase().startsWith(prefix));
+  const naturalProvider = /(google|microsoft).*(natural|neural|online)|natural.*(google|microsoft)/i;
+  return sameLanguage.find((voice) => naturalProvider.test(voice.name))
+    || sameLanguage.find((voice) => /(google|microsoft)/i.test(voice.name))
+    || sameLanguage.find((voice) => voice.default)
+    || sameLanguage[0]
+    || null;
 }
 
-function addRadioStatic(context, when) {
-  const sampleRate = context.sampleRate;
-  const buffer = context.createBuffer(1, Math.floor(sampleRate * 0.22), sampleRate);
-  const channel = buffer.getChannelData(0);
-  for (let i = 0; i < channel.length; i += 1) channel[i] = (Math.random() * 2 - 1) * 0.28;
-  const source = context.createBufferSource();
-  const filter = context.createBiquadFilter();
-  const gain = context.createGain();
-  filter.type = 'lowpass';
-  filter.frequency.value = 2600;
-  gain.gain.setValueAtTime(0.0001, when);
-  gain.gain.linearRampToValueAtTime(0.018, when + 0.035);
-  gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.21);
-  source.buffer = buffer;
-  source.connect(filter);
-  filter.connect(gain);
-  gain.connect(context.destination);
-  source.start(when);
-  source.stop(when + 0.23);
+function loadVoices(synthesis) {
+  const available = synthesis.getVoices();
+  if (available.length) return Promise.resolve(available);
+
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      synthesis.removeEventListener?.('voiceschanged', finish);
+      resolve(synthesis.getVoices());
+    };
+    const timer = window.setTimeout(finish, 800);
+    synthesis.addEventListener?.('voiceschanged', finish, { once: true });
+  });
 }
 
-export function transmitText(text, language, onDone = () => {}) {
+export function transmitText(text, language, onDone = () => {}, onWordBoundary = () => {}) {
   let cancelled = false;
-  let context;
   let utterance;
-  let startTimer = 0;
-  const finish = () => {
+  let wordTimer = 0;
+  let voiceTimer = 0;
+  const complete = () => {
     if (cancelled) return;
     cancelled = true;
-    if (context && context.state !== 'closed') context.close().catch(() => {});
+    window.clearInterval(wordTimer);
+    window.clearTimeout(voiceTimer);
     onDone();
   };
 
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (AudioContextClass) {
-      context = new AudioContextClass();
-      const now = context.currentTime + 0.015;
-      addRadioStatic(context, now);
-      playQuindar(context, now + 0.035, 0.12);
-    }
-  } catch {
-    context = undefined;
+  if (!('speechSynthesis' in window)) {
+    onWordBoundary(text);
+    voiceTimer = window.setTimeout(complete, 350);
+    return () => {
+      if (cancelled) return;
+      cancelled = true;
+      window.clearTimeout(voiceTimer);
+      onDone();
+    };
   }
 
-  startTimer = window.setTimeout(() => {
+  window.speechSynthesis.cancel();
+  loadVoices(window.speechSynthesis).then((voices) => {
     if (cancelled) return;
-    if (!('speechSynthesis' in window)) {
-      window.setTimeout(finish, 450);
-      return;
-    }
-    window.speechSynthesis.cancel();
     utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = language === 'ar' ? 'ar-EG' : 'en-US';
-    utterance.pitch = 0.72;
-    utterance.rate = 0.88;
-    utterance.volume = 0.96;
-    const voices = window.speechSynthesis.getVoices();
-    const preferredVoice = voices.find((voice) => voice.lang.toLowerCase().startsWith(language === 'ar' ? 'ar' : 'en'));
-    if (preferredVoice) utterance.voice = preferredVoice;
-    utterance.onend = () => {
-      if (context && context.state === 'running') playQuindar(context, context.currentTime + 0.03, 0.12);
-      window.setTimeout(finish, 240);
+    utterance.voice = chooseNaturalVoice(voices, language);
+    utterance.pitch = 0.92;
+    utterance.rate = 0.95;
+    utterance.volume = 0.92;
+
+    const words = text.trim().split(/\s+/).filter(Boolean);
+    let fallbackWord = 0;
+    let nativeBoundariesAvailable = false;
+    utterance.onstart = () => {
+      wordTimer = window.setInterval(() => {
+        if (nativeBoundariesAvailable) {
+          window.clearInterval(wordTimer);
+          return;
+        }
+        fallbackWord = Math.min(fallbackWord + 1, words.length);
+        onWordBoundary(words.slice(0, fallbackWord).join(' '));
+        if (fallbackWord >= words.length) window.clearInterval(wordTimer);
+      }, 390);
     };
-    utterance.onerror = finish;
+    utterance.onboundary = (event) => {
+      if (!Number.isFinite(event.charIndex)) return;
+      nativeBoundariesAvailable = true;
+      window.clearInterval(wordTimer);
+      const start = Math.max(0, event.charIndex);
+      let end = start + (Number(event.charLength) || 0);
+      if (end <= start) {
+        const nextSpace = text.indexOf(' ', start);
+        end = nextSpace < 0 ? text.length : nextSpace;
+      }
+      onWordBoundary(text.slice(0, end).trimStart());
+    };
+    utterance.onend = () => {
+      window.clearInterval(wordTimer);
+      onWordBoundary(text);
+      complete();
+    };
+    utterance.onerror = complete;
     window.speechSynthesis.speak(utterance);
-  }, 320);
+  }).catch(complete);
 
   return () => {
     if (cancelled) return;
     cancelled = true;
-    window.clearTimeout(startTimer);
+    window.clearInterval(wordTimer);
+    window.clearTimeout(voiceTimer);
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    if (context && context.state !== 'closed') context.close().catch(() => {});
     onDone();
   };
 }

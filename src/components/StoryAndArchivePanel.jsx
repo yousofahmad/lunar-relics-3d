@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import confetti from 'canvas-confetti';
 import {
   Activity, ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, Box, CalendarDays,
-  Check, CircleHelp, Clock3, MapPin, Play, Radio, RadioTower, RotateCcw, Search,
+  CarFront, Check, CircleHelp, Clock3, Crosshair, Globe2, ListFilter, MapPin,
+  Moon, Orbit, Play, Radio, RadioTower, Rocket, RotateCcw, Satellite, Search,
   Sparkles, Volume2, VolumeX, X,
 } from 'lucide-react';
 import { transmitText } from '../utils/radio.js';
@@ -11,36 +13,36 @@ const COPY = {
   en: {
     archive: 'MISSION ARCHIVE', count: 'RELICS IN DATABASE', hint: 'Select an artifact to open its memory room.',
     search: 'Search by name, mission, type or year', noMatches: 'No relics match your search.', clearSearch: 'Clear search',
-    realModel: 'NASA 3D MODEL', hologram: 'HOLOGRAM',
+    realModel: 'NASA GLB MODEL', proceduralModel: 'BUILT 3D MODEL',
     noLocation: 'Location coordinates unavailable', memory: 'MEMORY ROOM', back: 'BACK TO MAP',
     telemetry: 'MISSION TELEMETRY', record: 'RECORD ID(S)', coordinates: 'SURFACE COORDINATES', orbit: 'ORBIT / POSITION', positionUnavailable: 'Position not specified in the archive',
     hotspots: 'HARDWARE HOTSPOTS', hotspotHint: 'Select a point to inspect its function and fate.', hotspotDetail: 'ENGINEERING FUNCTION & FATE', locked: 'LOCKED', unlocked: 'UNLOCKED',
     mission: 'MISSION PROFILE', active: 'ARCHIVED', story: 'Story & Q&A', timeline: 'Timeline', quiz: 'Explorer Quiz',
-    transmit: 'Listen to Transmission', transmitting: 'TRANSMITTING…', stop: 'Stop transmission',
+    transmit: 'Listen to Transmission', transmitting: 'TRANSMITTING…', stop: 'Stop transmission', voice: 'NATURAL VOICE', subtitleLoading: 'RECEIVING TRANSMISSION…',
     fieldNote: 'FIELD TRANSMISSION', qa: 'ASK THE ARCHIVE', answer: 'ARCHIVE RESPONSE',
     milestones: 'MISSION MILESTONES', quizTitle: 'CHECK YOUR SIGNAL', choose: 'Select the correct answer to unlock this explorer badge.',
     submit: 'CONFIRM ANSWER', correct: 'SIGNAL VERIFIED — BADGE UNLOCKED', already: 'BADGE ALREADY IN YOUR ARCHIVE', wrong: 'SIGNAL MISMATCH — TRY AGAIN',
     badge: 'EXPLORER BADGE', citation: 'SOURCE ARCHIVE', nssdca: 'NSSDCA RECORD ID(S)', nasa: 'NASA ARCHIVE', sources: 'NASA SOURCES',
     launch: 'LAUNCH', landing: 'SURFACE ARRIVAL', end: 'LAST SIGNAL / END', site: 'MISSION SITE',
     category: 'MISSION CLASS', details: 'MISSION DETAILS', time: 'MISSION TIMELINE', quizHint: 'Choose an answer below.',
-    open: 'OPEN MEMORY ROOM', deep: 'DEEP SPACE', moon: 'MOON', mars: 'MARS', lander: 'LANDER', rover: 'ROVER',
+    open: 'OPEN MEMORY ROOM', deep: 'DEEP SPACE', moon: 'MOON', mars: 'MARS', lander: 'LANDER', rover: 'ROVER', scientific: 'SCIENTIFIC PACKAGE', probe: 'DEEP SPACE PROBE', rotorcraft: 'ROTORCRAFT', orbiter: 'ORBITER', impact: 'IMPACTOR',
   },
   ar: {
     archive: 'أرشيف المهمات', count: 'أثر في قاعدة البيانات', hint: 'اختر أثرًا لفتح غرفة ذاكرته.',
     search: 'ابحث بالاسم أو المهمة أو النوع أو السنة', noMatches: 'لا توجد آثار تطابق البحث.', clearSearch: 'مسح البحث',
-    realModel: 'نموذج ناسا ثلاثي الأبعاد', hologram: 'مجسم هولوغرافي',
+    realModel: 'نموذج GLB من ناسا', proceduralModel: 'مجسم إجرائي ثلاثي الأبعاد',
     noLocation: 'إحداثيات الموقع غير متاحة', memory: 'غرفة الذاكرة', back: 'العودة إلى الخريطة',
     telemetry: 'بيانات المهمة', record: 'معرّف/معرّفات سجل', coordinates: 'إحداثيات السطح', orbit: 'المدار / الموقع', positionUnavailable: 'الموقع غير محدد في الأرشيف',
     hotspots: 'نقاط العتاد', hotspotHint: 'اختر نقطة لفحص وظيفتها ومصيرها.', hotspotDetail: 'الوظيفة الهندسية والمصير', locked: 'مقفلة', unlocked: 'مفتوحة',
     mission: 'ملف المهمة', active: 'مؤرشف', story: 'القصة والأسئلة', timeline: 'الخط الزمني', quiz: 'اختبار المستكشف',
-    transmit: 'استمع إلى الإرسال', transmitting: 'جارٍ الإرسال…', stop: 'إيقاف الإرسال',
+    transmit: 'استمع إلى الإرسال', transmitting: 'جارٍ الإرسال…', stop: 'إيقاف الإرسال', voice: 'صوت طبيعي', subtitleLoading: 'جارٍ استقبال الإرسال…',
     fieldNote: 'إرسال من الميدان', qa: 'اسأل الأرشيف', answer: 'رد الأرشيف',
     milestones: 'محطات المهمة', quizTitle: 'تحقّق من الإشارة', choose: 'اختر الإجابة الصحيحة لفتح شارة المستكشف.',
     submit: 'تأكيد الإجابة', correct: 'تم التحقق من الإشارة — فُتحت الشارة', already: 'الشارة موجودة بالفعل في أرشيفك', wrong: 'الإشارة غير مطابقة — حاول مجددًا',
     badge: 'شارة المستكشف', citation: 'أرشيف المصدر', nssdca: 'معرّف/معرّفات سجل', nasa: 'أرشيف ناسا', sources: 'مصادر ناسا',
     launch: 'الإطلاق', landing: 'الوصول إلى السطح', end: 'آخر إشارة / نهاية المهمة', site: 'موقع المهمة',
     category: 'فئة المهمة', details: 'تفاصيل المهمة', time: 'الخط الزمني للمهمة', quizHint: 'اختر إجابة بالأسفل.',
-    open: 'افتح غرفة الذاكرة', deep: 'الفضاء العميق', moon: 'القمر', mars: 'المريخ', lander: 'مسبار هبوط', rover: 'عربة جوالة',
+    open: 'افتح غرفة الذاكرة', deep: 'الفضاء العميق', moon: 'القمر', mars: 'المريخ', lander: 'مسبار هبوط', rover: 'عربة جوالة', scientific: 'حزمة علمية', probe: 'مسبار فضائي', rotorcraft: 'مروحية', orbiter: 'مركبة مدارية', impact: 'مسبار اصطدام',
   },
 };
 
@@ -79,26 +81,44 @@ function getBodyLabel(item, language, copy) {
 }
 
 function getTypeLabel(type, language, copy) {
+  const normalized = (type || '').toLowerCase();
   if (language === 'ar') {
-    if (type.toLowerCase().includes('rover')) return copy.rover;
-    if (type.toLowerCase().includes('lander')) return copy.lander;
+    if (normalized.includes('rover')) return copy.rover;
+    if (normalized.includes('lander')) return copy.lander;
+    if (normalized.includes('scientific')) return copy.scientific;
+    if (normalized.includes('rotor')) return copy.rotorcraft;
+    if (normalized.includes('orbiter')) return copy.orbiter;
+    if (normalized.includes('impact')) return copy.impact;
+    if (normalized.includes('probe')) return copy.probe;
   }
   return type.toUpperCase();
+}
+
+function getTypeIcon(type = '') {
+  const normalized = type.toLowerCase();
+  if (normalized.includes('rover')) return CarFront;
+  if (normalized.includes('lander')) return Rocket;
+  if (normalized.includes('scientific')) return Activity;
+  if (normalized.includes('rotor')) return RotateCcw;
+  if (normalized.includes('orbiter')) return Orbit;
+  if (normalized.includes('impact')) return Crosshair;
+  return Satellite;
 }
 
 function RelicCard({ item, language, onSelect }) {
   const copy = COPY[language] || COPY.en;
   const AssetIcon = item.has3DModel ? Box : Sparkles;
-  const assetLabel = item.has3DModel ? copy.realModel : copy.hologram;
+  const TypeIcon = getTypeIcon(item.type);
+  const assetLabel = item.has3DModel ? copy.realModel : copy.proceduralModel;
   return (
     <button type="button" className="relic-card" onClick={() => onSelect(item)} aria-label={`${item.nickname || item.name} — ${assetLabel}`}>
-      <span className={`relic-card-art ${item.has3DModel ? 'has-model' : 'is-hologram'}`} aria-hidden="true"><AssetIcon size={21} strokeWidth={1.6} /></span>
+      <span className={`relic-card-art ${item.has3DModel ? 'has-model' : 'is-procedural'}`} aria-hidden="true"><TypeIcon size={22} strokeWidth={1.6} /></span>
       <span className="relic-card-copy">
-        <span className="relic-card-index">{String(item.launchYear).slice(-2)} <i /> {item.type.toUpperCase()}</span>
+        <span className="relic-card-index">{item.launchYear} <i /> {getTypeLabel(item.type, language, copy)}</span>
         <span className="relic-card-title">{item.nickname || item.name}</span>
         <span className="relic-card-meta">
           <span>{getBodyLabel(item, language, copy)} · {item.landingDate ? dateLabel(item.landingDate, language) : item.launchYear}</span>
-          <span className={`relic-card-model ${item.has3DModel ? 'has-model' : 'is-hologram'}`}><AssetIcon size={10} />{assetLabel}</span>
+          <span className={`relic-card-model ${item.has3DModel ? 'has-model' : 'is-procedural'}`}><AssetIcon size={10} />{assetLabel}</span>
         </span>
       </span>
       <span className="relic-card-arrow"><ArrowUpRight size={15} /></span>
@@ -106,31 +126,57 @@ function RelicCard({ item, language, onSelect }) {
   );
 }
 
-function ArchiveList({ relics, language, onSelect }) {
+const ARCHIVE_FILTERS = [
+  { id: 'All', icon: ListFilter, en: 'ALL', ar: 'الكل' },
+  { id: 'Moon', icon: Moon, en: 'MOON', ar: 'القمر' },
+  { id: 'Mars', icon: Globe2, en: 'MARS', ar: 'المريخ' },
+  { id: '3D', icon: Box, en: '3D MODELS', ar: 'نماذج 3D' },
+];
+
+function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArchiveFilter }) {
   const copy = COPY[language] || COPY.en;
   const [query, setQuery] = useState('');
   const normalizedQuery = query.trim().toLocaleLowerCase(language === 'ar' ? 'ar' : 'en');
+  const scopedRelics = relics.filter((item) => {
+    if (archiveFilter === '3D') return Boolean(item.has3DModel && item.model3dFile);
+    if (archiveFilter === 'All') return true;
+    return item.body === archiveFilter;
+  });
   const filteredRelics = normalizedQuery
-    ? relics.filter((item) => {
+    ? scopedRelics.filter((item) => {
       const searchableText = [
         item.id, item.name, item.nickname, item.type, getTypeLabel(item.type, language, copy), item.body, getBodyLabel(item, language, copy),
         item.launchYear, item.landingDate, item.location?.siteName,
       ].filter(Boolean).join(' ').toLocaleLowerCase(language === 'ar' ? 'ar' : 'en');
       return searchableText.includes(normalizedQuery);
     })
-    : relics;
+    : scopedRelics;
   return (
     <div className="archive-list-view">
       <div className="panel-title-row">
         <div>
           <span className="eyebrow">{copy.archive}</span>
-          <h2>{language === 'ar' ? 'سجلّ الاستكشاف' : 'EXPLORER LOG'}</h2>
+          <h2>{language === 'ar' ? 'أرشيف المهمات' : 'MISSION ARCHIVE'}</h2>
         </div>
         <span className="archive-count" aria-live="polite">{String(filteredRelics.length).padStart(2, '0')} <i>/ {relics.length}</i></span>
       </div>
       <div className="archive-summary">
         <span className="summary-line" />
         <p>{copy.hint}</p>
+      </div>
+      <div className="archive-category-filters" role="group" aria-label={language === 'ar' ? 'تصفية أرشيف المهمات' : 'Filter mission archive'}>
+        {ARCHIVE_FILTERS.map(({ id, icon: Icon, en, ar }) => {
+          const count = id === 'All'
+            ? relics.length
+            : id === '3D'
+              ? relics.filter((item) => item.has3DModel && item.model3dFile).length
+              : relics.filter((item) => item.body === id).length;
+          return (
+            <button type="button" key={id} className={`archive-filter-chip ${archiveFilter === id ? 'active' : ''}`} onClick={() => setArchiveFilter?.(id)} aria-pressed={archiveFilter === id}>
+              <Icon size={12} /><span>{language === 'ar' ? ar : en}</span><small>{count}</small>
+            </button>
+          );
+        })}
       </div>
       <div className="archive-search" role="search">
         <Search size={15} aria-hidden="true" />
@@ -160,8 +206,10 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [quizResult, setQuizResult] = useState('');
   const [isTransmitting, setIsTransmitting] = useState(false);
+  const [subtitleText, setSubtitleText] = useState('');
   const transmissionRef = useRef(null);
   const playbackTokenRef = useRef(0);
+  const subtitleTimerRef = useRef(0);
   const isArabic = language === 'ar';
   const storyText = item.story?.[language] || item.story?.en || '';
   const questions = item.interactiveQA || [];
@@ -179,8 +227,10 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     setActiveQuestion(null);
     setSelectedAnswer(null);
     setQuizResult('');
+    setSubtitleText('');
     return () => {
       playbackTokenRef.current += 1;
+      window.clearTimeout(subtitleTimerRef.current);
       transmissionRef.current?.();
       transmissionRef.current = null;
     };
@@ -191,6 +241,8 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     transmissionRef.current?.();
     transmissionRef.current = null;
     setIsTransmitting(false);
+    setSubtitleText('');
+    window.clearTimeout(subtitleTimerRef.current);
   };
 
   const playAudio = (text) => {
@@ -198,12 +250,22 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     playbackTokenRef.current = token;
     transmissionRef.current?.();
     transmissionRef.current = null;
+    window.clearTimeout(subtitleTimerRef.current);
+    setSubtitleText('');
     setIsTransmitting(true);
-    transmissionRef.current = transmitText(text, language, () => {
-      if (playbackTokenRef.current !== token) return;
-      setIsTransmitting(false);
-      transmissionRef.current = null;
-    });
+    transmissionRef.current = transmitText(
+      text,
+      language,
+      () => {
+        if (playbackTokenRef.current !== token) return;
+        setIsTransmitting(false);
+        transmissionRef.current = null;
+        subtitleTimerRef.current = window.setTimeout(() => setSubtitleText(''), 2800);
+      },
+      (visibleText) => {
+        if (playbackTokenRef.current === token) setSubtitleText(visibleText);
+      },
+    );
   };
 
   const submitQuiz = () => {
@@ -305,7 +367,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               <button type="button" className={`transmit-button ${isTransmitting ? 'transmitting' : ''}`} onClick={() => isTransmitting ? stopAudio() : playAudio(storyText)} aria-pressed={isTransmitting}>
                 {isTransmitting ? <VolumeX size={15} /> : <Volume2 size={15} />}
                 <span>{isTransmitting ? copy.stop : copy.transmit}</span>
-                <span className="transmit-frequency" dir="ltr">2525 Hz</span>
+                <span className="transmit-frequency" dir="auto">{copy.voice}</span>
               </button>
               {isTransmitting && (
                 <span className="audio-visualizer" role="status" aria-live="polite" aria-label={copy.transmitting}>
@@ -385,6 +447,13 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
           {urls.length === 0 && <span className="citation-missing">{copy.sources}</span>}
         </div>
       </div>
+      {(isTransmitting || subtitleText) && createPortal(
+        <div className={`cinematic-subtitle-bar ${isTransmitting ? 'is-speaking' : ''}`} role="status" aria-live="polite" aria-atomic="false">
+          <span className="subtitle-signal" aria-hidden="true"><i /><i /><i /><i /><i /></span>
+          <p dir="auto">{subtitleText || copy.subtitleLoading}</p>
+        </div>,
+        document.body,
+      )}
     </div>
   );
 }
@@ -393,5 +462,5 @@ export default function StoryAndArchivePanel(props) {
   if (props.selectedRelic) {
     return <MemoryRoom key={props.selectedRelic.id} item={props.selectedRelic} language={props.language} badges={props.badges} onBack={props.onBack} onUnlock={props.onUnlock} hotspot={props.hotspot} setHotspot={props.setHotspot} />;
   }
-  return <ArchiveList relics={props.relics} language={props.language} onSelect={props.onSelect} />;
+  return <ArchiveList relics={props.relics} language={props.language} onSelect={props.onSelect} archiveFilter={props.archiveFilter} setArchiveFilter={props.setArchiveFilter} />;
 }
