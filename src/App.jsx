@@ -1,11 +1,13 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { Crosshair, Info, RadioTower } from 'lucide-react';
+import { BadgeCheck, Crosshair, Info, RadioTower } from 'lucide-react';
 import { fetchRelics, LOCAL_RELICS } from './services/api.js';
 import BadgeModal from './components/BadgeModal.jsx';
 import TopNav from './components/TopNav.jsx';
 import StoryAndArchivePanel from './components/StoryAndArchivePanel.jsx';
+import WhatsNewDialog from './components/WhatsNewDialog.jsx';
 import SpaceLoader from './components/SpaceLoader.jsx';
 import { initializeAudioEngine, playUiChirp, setAudioMuted, setSoundscape, subscribeAudioEngine } from './utils/audioEngine.js';
+import { getModelHonestyLabel, getRelicModelInfo } from './utils/relicModelMap.js';
 
 const Space3DCanvas = lazy(() => import('./components/Space3DCanvas.jsx'));
 
@@ -31,22 +33,25 @@ const APOLLO_LM_PRESENTATION = {
   },
   hotspots: [
     {
-      part: 'Ascent stage & crew cabin',
-      title: 'Crew cabin and lunar-orbit return stage',
-      description: 'The upper stage housed the astronauts and its ascent engine. It lifted Armstrong and Aldrin from the lunar surface into orbit on July 21, 1969, then rejoined Columbia.',
-    },
-    {
       part: 'Descent stage',
       title: 'Landing platform and descent propulsion',
-      description: 'The lower stage carried the descent propulsion system, propellant tanks, and surface equipment. It brought Eagle down to Mare Tranquillitatis and remained on the Moon when the ascent stage departed.',
+      description: 'The lower stage carried Eagle’s descent propulsion system, propellant tanks, and surface equipment. It brought Armstrong and Aldrin to Mare Tranquillitatis and remained on the Moon.',
     },
     {
       part: 'Landing legs & footpads',
       title: 'Lunar touchdown supports',
       description: 'Four extendable legs and broad footpads supported the Lunar Module at touchdown and kept the crew cabin clear of the lunar surface.',
     },
+    {
+      part: 'Early Apollo Scientific Experiment Package (EASEP)',
+      title: 'Experiments deployed beside Eagle',
+      description: 'The Apollo 11 crew deployed EASEP beside the descent stage, including a passive seismometer and laser-ranging retroreflector. It sits next to the lander, not on its body.',
+    },
   ],
 };
+
+const WHATS_NEW_VERSION = '2026-11-13-hardware-map-accuracy';
+const WHATS_NEW_STORAGE_KEY = 'lunar-relics-whats-new';
 
 function presentRelic(item) {
   return item.id === APOLLO_LM_ID ? { ...item, ...APOLLO_LM_PRESENTATION } : item;
@@ -65,6 +70,7 @@ export default function App() {
   const [badges, setBadges] = useState(readBadges);
   const [storyProgress, setStoryProgress] = useState({ index: 0, total: 1 });
   const [badgeModalOpen, setBadgeModalOpen] = useState(false);
+  const [whatsNewOpen, setWhatsNewOpen] = useState(false);
   const [hotspot, setHotspot] = useState(null);
   const [apiState, setApiState] = useState('local');
   const [isInitialLoading, setIsInitialLoading] = useState(() => Boolean(import.meta.env.VITE_API_URL?.trim()));
@@ -82,6 +88,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (localStorage.getItem(WHATS_NEW_STORAGE_KEY) !== WHATS_NEW_VERSION) setWhatsNewOpen(true);
+  }, []);
+
+  useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
     localStorage.setItem('lunar-relics-language', language);
@@ -95,7 +105,7 @@ export default function App() {
   const selectedRelic = useMemo(() => displayRelics.find((item) => item.id === selectedId) || null, [displayRelics, selectedId]);
   const storyMode = Boolean(selectedRelic);
   const visibleRelics = useMemo(
-    () => displayRelics.filter((item) => item.body === celestialView),
+    () => celestialView === 'Deep Space' ? displayRelics : displayRelics.filter((item) => item.body === celestialView),
     [celestialView, displayRelics],
   );
   const activeSoundscape = selectedRelic?.body || celestialView;
@@ -118,6 +128,10 @@ export default function App() {
   };
 
   const closeBadgeModal = useCallback(() => setBadgeModalOpen(false), []);
+  const closeWhatsNew = useCallback(() => {
+    localStorage.setItem(WHATS_NEW_STORAGE_KEY, WHATS_NEW_VERSION);
+    setWhatsNewOpen(false);
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle('story-scroll-page', storyMode);
@@ -176,6 +190,8 @@ export default function App() {
         badges={badges}
         onOpenBadges={() => setBadgeModalOpen(true)}
         badgesOpen={badgeModalOpen}
+        onOpenWhatsNew={() => setWhatsNewOpen(true)}
+        whatsNewOpen={whatsNewOpen}
         storyMode={storyMode}
         soundscape={activeSoundscape}
         audioStarted={audioStarted}
@@ -232,6 +248,15 @@ export default function App() {
               <span>{celestialView === 'Deep Space' ? (isArabic ? 'الفضاء' : 'SPACE') : celestialView.toUpperCase()}</span>
             </div>
             {selectedRelic && (
+              <div className={`model-honesty-badge ${getRelicModelInfo(selectedRelic).fidelity === 'authentic' ? 'is-authentic' : 'is-archetype'}`} role="status">
+                <BadgeCheck size={15} aria-hidden="true" />
+                <span>
+                  <strong>{getModelHonestyLabel(selectedRelic)}</strong>
+                  <small dir="auto">{isArabic ? (getRelicModelInfo(selectedRelic).fidelity === 'authentic' ? 'مجسم NASA للمهمة نفسها' : 'تمثيل هندسي شفاف للفئة') : getRelicModelInfo(selectedRelic).modelLabel}</small>
+                </span>
+              </div>
+            )}
+            {selectedRelic && (
               <div className="story-scene-hud" aria-live="polite">
                 <span>{isArabic ? 'حكاية المهمة · مرّر للمتابعة' : 'MISSION STORY · SCROLL TO CONTINUE'}</span>
                 <strong dir="auto">{selectedRelic.nickname || selectedRelic.name}</strong>
@@ -279,6 +304,7 @@ export default function App() {
         <span>SPACE APPS CAIRO 2026 <i /> LUNAR RELICS 3D</span>
         <span className={`api-indicator ${apiState === 'online' ? 'is-online' : ''}`}><span />{apiState === 'online' ? (isArabic ? 'بيانات متصلة' : 'REMOTE DATA SYNCED') : (isArabic ? 'أرشيف محلي' : 'LOCAL ARCHIVE READY')}</span>
       </footer>
+      {whatsNewOpen && <WhatsNewDialog language={language} onClose={closeWhatsNew} />}
       {isInitialLoading && <SpaceLoader language={language} overlay />}
     </div>
   );

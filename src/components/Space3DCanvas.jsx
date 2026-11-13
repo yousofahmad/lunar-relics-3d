@@ -4,14 +4,15 @@ import { ContactShadows, Environment, Html, Lightformer, OrbitControls, Stars } 
 import { Activity, LocateFixed, Minus, Plus, RotateCcw } from 'lucide-react';
 import * as THREE from 'three';
 import SpaceLoader from './SpaceLoader.jsx';
+import HoloRelic from './HoloRelic.jsx';
 import { playScrollWhoosh, playSonarLock } from '../utils/audioEngine.js';
-import { getRelicModelPath } from '../utils/relicModelMap.js';
+import { getRelicModelInfo } from '../utils/relicModelMap.js';
 
 const GltfModel = lazy(() => import('./GltfModel.jsx'));
 
 const PLANET_ASSETS = {
-  Moon: { color: '/textures/moon-color.jpg', height: '/textures/moon-height.jpg' },
-  Mars: { color: '/textures/mars-color.jpg', height: '/textures/mars-height.jpg' },
+  Moon: { color: '/textures/moon-color-seamless.webp', height: '/textures/moon-height-seamless.webp' },
+  Mars: { color: '/textures/mars-color-seamless.webp', height: '/textures/mars-height-seamless.webp' },
 };
 const APOLLO_LM_ID = 'apollo-11-eagle-descent-stage';
 
@@ -60,9 +61,9 @@ function SpaceStudioEnvironment() {
   );
 }
 
-function toSpherePoint(lat, lng, radius) {
+function toSpherePoint(lat, lng, radius, longitudeOffset = 0) {
   const latitude = THREE.MathUtils.degToRad(Number(lat) || 0);
-  const longitude = THREE.MathUtils.degToRad(Number(lng) || 0);
+  const longitude = THREE.MathUtils.degToRad((Number(lng) || 0) + longitudeOffset);
   return [
     -radius * Math.cos(latitude) * Math.sin(longitude),
     radius * Math.sin(latitude),
@@ -70,7 +71,7 @@ function toSpherePoint(lat, lng, radius) {
   ];
 }
 
-function Pin({ item, position, onSelect, selected = false, language = 'en' }) {
+function Pin({ item, position, onSelect, onHoverChange, selected = false, language = 'en' }) {
   const beacon = useRef();
   const [hovered, setHovered] = useState(false);
   const beaconColor = selected ? '#FC3D21' : '#EAB308';
@@ -92,12 +93,7 @@ function Pin({ item, position, onSelect, selected = false, language = 'en' }) {
   return (
     <group position={position} quaternion={orientation}>
       <group ref={beacon}>
-        <mesh
-          position={[0, 0.07, 0]}
-          onClick={(event) => { event.stopPropagation(); onSelect(item); }}
-          onPointerOver={(event) => { event.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
-          onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }}
-        >
+        <mesh position={[0, 0.07, 0]}>
           <sphereGeometry args={[selected ? 0.065 : 0.048, 24, 20]} />
           <meshBasicMaterial color={beaconColor} />
         </mesh>
@@ -109,9 +105,18 @@ function Pin({ item, position, onSelect, selected = false, language = 'en' }) {
           <sphereGeometry args={[0.105, 18, 14]} />
           <meshBasicMaterial color={beaconColor} transparent opacity={0.09} depthWrite={false} />
         </mesh>
+        <mesh
+          position={[0, 0.09, 0]}
+          onClick={(event) => { event.stopPropagation(); onSelect(item); }}
+          onPointerOver={(event) => { event.stopPropagation(); setHovered(true); onHoverChange?.(true); document.body.style.cursor = 'pointer'; }}
+          onPointerOut={() => { setHovered(false); onHoverChange?.(false); document.body.style.cursor = ''; }}
+        >
+          <sphereGeometry args={[selected ? 0.24 : 0.21, 20, 16]} />
+          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+        </mesh>
       </group>
       {(hovered || selected) && (
-        <Html center position={[0, 0.3, 0]} distanceFactor={11} className="pin-label" occlude>
+        <Html center position={[0, 0.34, 0]} distanceFactor={9} className="pin-label" occlude>
           <span dir={language === 'ar' ? 'auto' : 'ltr'}>{label}</span>
         </Html>
       )}
@@ -121,6 +126,7 @@ function Pin({ item, position, onSelect, selected = false, language = 'en' }) {
 
 function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, autoRotate, showCaption = true }) {
   const group = useRef();
+  const [hoveredPin, setHoveredPin] = useState(false);
   const assets = PLANET_ASSETS[body];
   const [colorMap, heightMap] = useLoader(THREE.TextureLoader, [assets.color, assets.height]);
   const rimColor = useMemo(() => new THREE.Color(body === 'Mars' ? '#f2aa77' : '#60a5fa'), [body]);
@@ -129,14 +135,20 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
   useMemo(() => {
     colorMap.colorSpace = THREE.SRGBColorSpace;
     colorMap.anisotropy = 8;
+    colorMap.wrapS = THREE.RepeatWrapping;
+    colorMap.wrapT = THREE.ClampToEdgeWrapping;
+    colorMap.needsUpdate = true;
     heightMap.colorSpace = THREE.NoColorSpace;
     heightMap.anisotropy = 8;
+    heightMap.wrapS = THREE.RepeatWrapping;
+    heightMap.wrapT = THREE.ClampToEdgeWrapping;
+    heightMap.needsUpdate = true;
     return null;
   }, [colorMap, heightMap]);
 
   useFrame((_, delta) => {
-    if (autoRotate && group.current) group.current.rotation.y += delta * 0.018;
-  });
+    if (autoRotate && !hoveredPin && group.current) group.current.rotation.y += delta * 0.018;
+  }, [autoRotate, hoveredPin]);
 
   return (
     <group ref={group}>
@@ -171,6 +183,7 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
             item={item}
             position={toSpherePoint(item.location.lat, item.location.lng, radius * 1.002)}
             onSelect={onSelect}
+            onHoverChange={setHoveredPin}
             selected={selectedRelic?.id === item.id}
             language={language}
           />
@@ -185,72 +198,26 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
   );
 }
 
-function OrbitalRelic({ item, position, onSelect, selected, language, compact }) {
-  const modelRig = useRef();
-  const [hovered, setHovered] = useState(false);
-  const modelPath = getRelicModelPath(item);
-  const title = item.nickname || item.name;
-
-  useFrame(({ clock }) => {
-    if (modelRig.current) modelRig.current.rotation.y = clock.elapsedTime * 0.24 + item.id.length * 0.08;
-  });
-
-  return (
-    <group position={position}>
-      <group ref={modelRig} scale={compact ? 0.105 : 0.17}>
-        <ModelErrorBoundary fallback={null}>
-          <Suspense fallback={null}><GltfModel modelPath={modelPath} /></Suspense>
-        </ModelErrorBoundary>
-      </group>
-      <mesh
-        onClick={(event) => { event.stopPropagation(); onSelect(item); }}
-        onPointerOver={(event) => { event.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
-        onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }}
-      >
-        <sphereGeometry args={[compact ? 0.2 : 0.3, 16, 12]} />
-        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-      </mesh>
-      {(hovered || selected) && (
-        <Html center position={[0, compact ? 0.3 : 0.4, 0]} distanceFactor={compact ? 8 : 10} className="pin-label" occlude>
-          <span dir={language === 'ar' ? 'auto' : 'ltr'}>{title}</span>
-        </Html>
-      )}
-    </group>
-  );
-}
-
 function DeepSpaceMap({ items, onSelect, selectedRelic, language, autoRotate, archiveOpen }) {
   const { size } = useThree();
   const compact = size.width < 620;
   const tablet = !compact && size.width < 1200;
   const sidebarDocked = archiveOpen && size.width > 760;
-  const centerShift = sidebarDocked ? 1.2 : 0;
+  const centerShift = sidebarDocked ? (language === 'ar' ? 1.05 : -1.05) : 0;
   const planetRadius = compact ? 0.55 : tablet ? 0.82 : 1.38;
   const moonPosition = compact ? [-0.68, 0.38, 0] : tablet ? [0, 1, 0] : [-1.72, 0, 0];
   const marsPosition = compact ? [0.68, 0.38, 0] : tablet ? [0, -1, 0] : [1.72, 0, 0];
-  const points = useMemo(() => items.map((item, index) => {
-    const compactPositions = [[-0.18, 0.12, 1.12], [0.18, 0.12, 1.3], [-0.18, -0.14, 1.3], [0.18, -0.14, 1.12]];
-    if (compact) return { item, position: compactPositions[index % compactPositions.length] };
-    if (tablet) {
-      const tabletPositions = [[-0.3, 0.26, 1.18], [0.3, 0.26, 1.36], [-0.3, -0.26, 1.36], [0.3, -0.26, 1.18]];
-      return { item, position: tabletPositions[index % tabletPositions.length] };
-    }
-    const angle = (index / Math.max(items.length, 1)) * Math.PI * 2 - Math.PI / 2;
-    const orbitalRadius = 0.48;
-    return { item, position: [Math.cos(angle) * orbitalRadius, Math.sin(angle) * orbitalRadius, 1.72 + (index % 2) * 0.18] };
-  }), [items, compact, tablet]);
+  const moonItems = items.filter((item) => item.body === 'Moon');
+  const marsItems = items.filter((item) => item.body === 'Mars');
 
   return (
     <group position={[centerShift, 0, 0]}>
       <group position={moonPosition}>
-        <Planet body="Moon" items={[]} radius={planetRadius} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} showCaption={false} />
+        <Planet body="Moon" items={moonItems} radius={planetRadius} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} showCaption={false} />
       </group>
       <group position={marsPosition}>
-        <Planet body="Mars" items={[]} radius={planetRadius} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} showCaption={false} />
+        <Planet body="Mars" items={marsItems} radius={planetRadius} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} showCaption={false} />
       </group>
-      {points.map(({ item, position }) => (
-        <OrbitalRelic key={item.id} item={item} position={position} onSelect={onSelect} selected={selectedRelic?.id === item.id} language={language} compact={compact} />
-      ))}
       <Html fullscreen zIndexRange={[2, 2]}>
         <div className={`dual-map-captions ${compact ? 'is-compact' : ''} ${tablet ? 'is-tablet' : ''}`} role="group" aria-label={language === 'ar' ? 'القمر والمريخ معًا' : 'Moon and Mars together'}>
           <span>{language === 'ar' ? 'القمر · LUNA' : 'THE MOON · LUNA'}</span>
@@ -290,31 +257,88 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
   );
 }
 
-function buildHotspotPositions(item, modelBounds, isApolloLunarModule) {
-  if (modelBounds?.size) {
-    const [width, height, depth] = modelBounds.size;
-    const [minX, minY, minZ] = modelBounds.min;
-    const centerX = minX + width / 2;
-    const centerZ = minZ + depth / 2;
-    if (isApolloLunarModule) {
-      return [
-        [centerX, minY + height * 0.78, centerZ],
-        [centerX, minY + height * 0.43, centerZ],
-        [minX + width * 0.14, minY + height * 0.2, centerZ],
-      ];
-    }
-    return [
-      [centerX, minY + height * 0.84, centerZ],
-      [minX + width * 0.9, minY + height * 0.5, centerZ + depth * 0.08],
-      [centerX, minY + height * 0.47, minZ + depth * 0.9],
-    ];
+function getHotspotRegion(hotspot) {
+  const text = `${hotspot?.part || ''} ${hotspot?.title || ''} ${hotspot?.description || ''}`.toLowerCase();
+  if (/camera|pancam|navcam|mast|photometer|telescope|rotor|blade|antenna|dish|imager|sensor/.test(text)) return 'top';
+  if (/solar|panel|wing|rtg|radioisotope|battery|power|generator|array/.test(text)) return 'side';
+  if (/wheel|leg|footpad|bogie|suspension|mobility|descent stage|landing gear|radar|altimeter|retrorocket|braking/.test(text)) return 'lower';
+  if (/rear|relay|lcru|propulsion|engine/.test(text)) return 'rear';
+  if (/arm|sampler|scoop|drill|seismometer|seismic|alsep|easep|instrument|apxs|plaque|collector|hp3|ida/.test(text)) return 'front';
+  return 'top';
+}
+
+function getHotspotAliases(hotspot) {
+  const text = `${hotspot?.part || ''} ${hotspot?.title || ''} ${hotspot?.description || ''}`.toLowerCase();
+  if (/rtg|radioisotope|snap-?\d+|generator/.test(text)) return ['rtg', 'snap', 'radioisotope', 'generator'];
+  if (/solar|panel|wing|array|battery/.test(text)) return ['solar', 'panel', 'array', 'battery', 'hardware-power'];
+  if (/rat|rock abrasion/.test(text)) return ['rat', 'abrasion', 'arm', 'tool'];
+  if (/robotic arm|instrument deployment|sampler arm|surface sampler|instrumented arm|\bapxs\b|\bhp3\b|\bida\b/.test(text)) return ['hp3', 'ida', 'arm', 'sampler', 'scoop', 'drill', 'apxs', 'instrument'];
+  if (/pancam|navcam|camera|mast|photometer|telescope|imager|sensor|\bmsi\b|\bxgrs\b|\bnis\b/.test(text)) return ['camera', 'mast', 'pancam', 'navcam', 'imager', 'sensor', 'photometer', 'telescope', 'msi', 'xgrs', 'nis'];
+  if (/rotor|blade/.test(text)) return ['rotor', 'blade'];
+  if (/antenna|dish|lcru|communications relay/.test(text)) return ['antenna', 'dish', 'lcru', 'relay'];
+  if (/wheel|leg|footpad|bogie|suspension/.test(text)) return ['wheel', 'leg', 'footpad', 'bogie', 'suspension'];
+  if (/seismometer|seismic|easep|alsep/.test(text)) return ['seismometer', 'seismic', 'easep', 'alsep', 'science'];
+  if (/hp3|ida|arm|sampler|scoop|drill|apxs|collector|instrument/.test(text)) return ['hp3', 'ida', 'arm', 'sampler', 'scoop', 'drill', 'apxs', 'instrument'];
+  if (/plaque/.test(text)) return ['plaque'];
+  return [];
+}
+
+function findNamedHardware(rig, hotspot) {
+  const aliases = getHotspotAliases(hotspot);
+  if (aliases.length === 0) return null;
+  const matches = [];
+  rig.traverse((node) => {
+    if (node === rig || (!node.isMesh && node.children.length === 0)) return;
+    const label = `${node.name || ''} ${node.userData?.hardwarePart || ''}`.toLowerCase();
+    if (!aliases.some((alias) => label.includes(alias))) return;
+    const bounds = new THREE.Box3().setFromObject(node);
+    if (bounds.isEmpty()) return;
+    const size = bounds.getSize(new THREE.Vector3());
+    matches.push({ node, volume: Math.max(size.x * size.y * size.z, 0.000001) });
+  });
+  matches.sort((first, second) => first.volume - second.volume);
+  return matches[0]?.node || null;
+}
+
+function raycastHardwareSurface(rig, target, hotspot, index) {
+  const region = getHotspotRegion(hotspot);
+  const directions = {
+    top: new THREE.Vector3(0, 1, 0),
+    side: new THREE.Vector3(index % 2 === 0 ? 1 : -1, 0.12, 0),
+    lower: new THREE.Vector3(0.48, -1, 0.42),
+    rear: new THREE.Vector3(0, 0.12, -1),
+    front: new THREE.Vector3(0.48, 0.08, 1),
+  };
+  const bounds = new THREE.Box3().setFromObject(target);
+  if (bounds.isEmpty()) return null;
+  const center = bounds.getCenter(new THREE.Vector3());
+  const size = bounds.getSize(new THREE.Vector3());
+  const range = Math.max(size.length(), 0.2);
+  const direction = directions[region] || directions.top;
+  const raycaster = new THREE.Raycaster();
+  const origins = [direction, direction.clone().negate()];
+
+  for (const outward of origins) {
+    raycaster.set(center.clone().addScaledVector(outward, range * 1.6), outward.clone().negate());
+    raycaster.far = range * 3.2;
+    const hit = raycaster.intersectObject(target, true)[0];
+    if (!hit) continue;
+    const normal = hit.face?.normal?.clone().applyMatrix3(new THREE.Matrix3().getNormalMatrix(hit.object.matrixWorld)).normalize();
+    const point = hit.point.clone();
+    if (normal) point.addScaledVector(normal, 0.012);
+    return rig.worldToLocal(point).toArray();
   }
 
-  const type = (item.type || '').toLowerCase();
-  if (type.includes('rover')) return [[0, 0.87, 0], [1.16, 0.12, 0.34], [0, 0.04, 0.72]];
-  if (type.includes('lander')) return [[0, 0.88, 0], [0.84, 0.38, 0.12], [0, 0.2, 0.79]];
-  if (type.includes('scientific')) return [[0, 0.86, 0], [0.95, 0.2, 0.2], [0, 0.17, 0.7]];
-  return [[0, 0.86, 0], [1.05, 0.16, 0.14], [0, 0.16, 0.82]];
+  return null;
+}
+
+function buildHotspotPositions(rig, hotspots) {
+  if (!rig) return [];
+  rig.updateWorldMatrix(true, true);
+  return hotspots.map((hotspot, index) => {
+    const namedPart = findNamedHardware(rig, hotspot);
+    return raycastHardwareSurface(rig, namedPart || rig, hotspot, index);
+  });
 }
 
 function HotspotNode({ hotspot, position, onClick, selected, language }) {
@@ -371,23 +395,21 @@ function HardwareCallout({ position, rigRef, active }) {
 function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef, storyProgress }) {
   const { camera, size } = useThree();
   const isApolloLunarModule = item.id === APOLLO_LM_ID;
-  const modelPath = getRelicModelPath(item);
+  const modelInfo = getRelicModelInfo(item);
+  const modelPath = modelInfo.modelPath;
   const isRealModel = Boolean(modelPath);
   const storyRig = useRef(null);
-  const [modelBounds, setModelBounds] = useState(null);
-  const onModelBoundsReady = useMemo(() => (bounds) => setModelBounds(bounds), []);
-  const hotspotPositions = useMemo(() => buildHotspotPositions(item, modelBounds, isApolloLunarModule), [item, modelBounds, isApolloLunarModule]);
-  const dataHotspots = (item.hotspots || []).slice(0, 3);
+  const [modelReadyId, setModelReadyId] = useState(null);
+  const modelReady = modelReadyId === item.id;
+  const onModelReady = useMemo(() => () => setModelReadyId(item.id), [item.id]);
+  const dataHotspots = useMemo(() => (item.hotspots || []).slice(0, 3), [item.hotspots]);
+  const hotspotPositions = useMemo(() => modelReady ? buildHotspotPositions(storyRig.current, dataHotspots) : [], [dataHotspots, item.id, modelReady]);
   const selectedIndex = dataHotspots.findIndex((spot) => selectedHotspot && ((selectedHotspot.part && selectedHotspot.part === spot.part) || (!selectedHotspot.part && selectedHotspot.title === spot.title)));
   const chapterId = storyProgress?.chapter || 'hero';
   const chapterIndex = storyProgress?.index ?? 0;
   const chapterHotspotIndex = chapterId.startsWith('hardware-') ? Number(chapterId.slice('hardware-'.length)) : -1;
   const focusIndex = chapterHotspotIndex >= 0 ? chapterHotspotIndex : selectedIndex;
   const previousMotionRef = useRef({ chapterId, focusIndex, chapterIndex });
-
-  useEffect(() => {
-    setModelBounds(null);
-  }, [item.id]);
 
   useEffect(() => {
     const previous = previousMotionRef.current;
@@ -420,20 +442,20 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : -0.18;
     const targetTilt = focusIndex >= 0 ? [0.1, -0.08, 0.17][focusIndex] ?? 0 : 0.015;
     const cameraDistance = isHardwareChapter
-      ? (hardwareOrdinal === 2 ? 3.35 : 3.7)
+      ? 2.75
       : chapterId === 'hero' && size.width >= 1024 ? 5.25 : 4.7;
     rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, targetYaw + (autoRotate ? Math.sin(state.clock.elapsedTime * 0.32) * 0.035 : 0), 1.8, delta);
     rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, targetTilt, 1.8, delta);
     rig.position.x = THREE.MathUtils.damp(rig.position.x, targetX, 1.8, delta);
     rig.position.y = THREE.MathUtils.damp(rig.position.y, mobileLift + (isHardwareChapter ? 0 : Math.sin(state.clock.elapsedTime * 0.42) * 0.035), 1.8, delta);
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, focusWorld.x * 0.12 + state.pointer.x * 0.11, 1.4, delta);
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, 0.12 + focusWorld.y * 0.1 + state.pointer.y * 0.08, 1.4, delta);
-    camera.position.z = THREE.MathUtils.damp(camera.position.z, cameraDistance, 1.4, delta);
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, focusWorld.x + state.pointer.x * 0.09, 1.4, delta);
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, focusWorld.y + 0.14 + state.pointer.y * 0.07, 1.4, delta);
+    camera.position.z = THREE.MathUtils.damp(camera.position.z, focusWorld.z + cameraDistance, 1.4, delta);
     const controls = controlsRef.current;
     if (controls) {
-      controls.target.x = THREE.MathUtils.damp(controls.target.x, focusWorld.x * 0.18 + state.pointer.x * 0.05, 1.4, delta);
-      controls.target.y = THREE.MathUtils.damp(controls.target.y, focusWorld.y * 0.22 + state.pointer.y * 0.035, 1.4, delta);
-      controls.target.z = THREE.MathUtils.damp(controls.target.z, focusWorld.z * 0.18, 1.4, delta);
+      controls.target.x = THREE.MathUtils.damp(controls.target.x, focusWorld.x + state.pointer.x * 0.035, 1.4, delta);
+      controls.target.y = THREE.MathUtils.damp(controls.target.y, focusWorld.y + state.pointer.y * 0.025, 1.4, delta);
+      controls.target.z = THREE.MathUtils.damp(controls.target.z, focusWorld.z, 1.4, delta);
       controls.update();
     }
   });
@@ -458,14 +480,14 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
         {isRealModel ? (
           <ModelErrorBoundary
             key={item.id}
-            fallback={<Html center transform={false}><span className="model-load-error">{language === 'ar' ? 'تعذّر تحميل النموذج ثلاثي الأبعاد' : '3D mission model could not be loaded'}</span></Html>}
+            fallback={<HoloRelic item={item} onModelReady={onModelReady} />}
           >
             <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} kind="model" compact /></Html>}>
-              <GltfModel modelPath={modelPath} onBoundsReady={onModelBoundsReady} descentStageOnly={isApolloLunarModule} />
+              <GltfModel modelPath={modelPath} item={item} onModelReady={onModelReady} descentStageOnly={isApolloLunarModule} />
             </Suspense>
           </ModelErrorBoundary>
-        ) : <Html center transform={false}><span className="model-load-error">{language === 'ar' ? 'لا يتوفر ملف نموذج لهذه المهمة' : 'No 3D model is available for this mission'}</span></Html>}
-        {focusIndex >= 0 && dataHotspots[focusIndex] && (
+        ) : <HoloRelic item={item} onModelReady={onModelReady} />}
+        {focusIndex >= 0 && dataHotspots[focusIndex] && hotspotPositions[focusIndex] && (
           <HotspotNode
             hotspot={dataHotspots[focusIndex]}
             position={hotspotPositions[focusIndex]}
@@ -476,7 +498,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
         )}
       </group>
       {focusIndex >= 0 && hotspotPositions[focusIndex] && <HardwareCallout position={hotspotPositions[focusIndex]} rigRef={storyRig} active />}
-      <OrbitControls ref={controlsRef} makeDefault target={[0, 0, 0]} enablePan={false} minDistance={3.1} maxDistance={9} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.34} />
+      <OrbitControls ref={controlsRef} makeDefault target={[0, 0, 0]} enablePan={false} minDistance={2.05} maxDistance={9} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.34} />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -365,7 +365,155 @@ function ProbeModel() {
   );
 }
 
+function LunarRovingVehicleModel() {
+  const wheels = [-1, 1].flatMap((x) => [-1, 1].map((z) => [x * 0.78, -0.3, z * 0.62]));
+  return (
+    <group>
+      <group name="hardware-wheel-system">
+        {wheels.map((wheel, index) => (
+          <group key={`lrv-wheel-${index}`}>
+            <Strut start={[wheel[0] * 0.72, -0.05, wheel[2] * 0.72]} end={wheel} radius={0.028} />
+            <Wheel position={wheel} />
+          </group>
+        ))}
+      </group>
+      <Strut start={[-0.63, -0.12, -0.45]} end={[0.63, -0.12, -0.45]} radius={0.035} />
+      <Strut start={[-0.63, -0.12, 0.45]} end={[0.63, -0.12, 0.45]} radius={0.035} />
+      <Strut start={[-0.63, -0.12, -0.45]} end={[-0.63, -0.12, 0.45]} radius={0.035} />
+      <Strut start={[0.63, -0.12, -0.45]} end={[0.63, -0.12, 0.45]} radius={0.035} />
+      <mesh position={[0, 0.02, 0]} castShadow>
+        <boxGeometry args={[0.9, 0.18, 0.62]} />
+        <meshPhysicalMaterial color="#c9ced1" metalness={0.75} roughness={0.28} clearcoat={0.24} />
+      </mesh>
+      <group name="hardware-batteries" position={[0, 0.2, -0.2]}>
+        {[-1, 1].map((side) => (
+          <mesh key={side} position={[side * 0.22, 0, 0]} castShadow>
+            <boxGeometry args={[0.22, 0.16, 0.26]} />
+            <meshStandardMaterial color="#b7bec2" metalness={0.64} roughness={0.34} />
+          </mesh>
+        ))}
+      </group>
+      <group name="hardware-lcru" position={[0, 0.28, 0.24]}>
+        <mesh castShadow>
+          <boxGeometry args={[0.3, 0.22, 0.22]} />
+          <meshPhysicalMaterial color="#d4af37" metalness={0.78} roughness={0.26} />
+        </mesh>
+        <Strut start={[0, 0.22, 0]} end={[0, 0.52, 0]} radius={0.018} />
+        <AntennaDish position={[0, 0.58, 0.04]} rotation={[0.48, 0, 0]} radius={0.18} />
+      </group>
+      {[-1, 1].map((side) => (
+        <mesh key={`seat-${side}`} position={[side * 0.22, 0.24, 0]} castShadow>
+          <boxGeometry args={[0.3, 0.06, 0.32]} />
+          <meshStandardMaterial color="#8b969c" metalness={0.36} roughness={0.48} />
+        </mesh>
+      ))}
+      <Strut start={[0.34, 0.18, 0.22]} end={[0.52, 0.55, 0.34]} radius={0.018} color="#d4af37" />
+      <mesh position={[0.52, 0.56, 0.34]}>
+        <boxGeometry args={[0.12, 0.08, 0.06]} />
+        <meshStandardMaterial color="#17212a" metalness={0.38} roughness={0.26} />
+      </mesh>
+    </group>
+  );
+}
+
+function AlsepModel() {
+  return (
+    <group>
+      <mesh position={[0, 0.2, 0]} castShadow>
+        <boxGeometry args={[0.72, 0.28, 0.56]} />
+        <meshPhysicalMaterial color="#c8cdd0" metalness={0.65} roughness={0.34} clearcoat={0.2} />
+      </mesh>
+      <mesh position={[0, 0.38, 0]}>
+        <boxGeometry args={[0.5, 0.09, 0.38]} />
+        <meshStandardMaterial color="#d4af37" metalness={0.78} roughness={0.27} />
+      </mesh>
+      <group name="hardware-snap27-rtg" position={[0.76, 0.2, 0.12]} rotation={[0, 0, Math.PI / 2]}>
+        <mesh castShadow>
+          <cylinderGeometry args={[0.12, 0.14, 0.42, 20]} />
+          <meshPhysicalMaterial color="#b7bec2" metalness={0.7} roughness={0.29} />
+        </mesh>
+        <mesh position={[0, 0.25, 0]}>
+          <cylinderGeometry args={[0.17, 0.17, 0.06, 16]} />
+          <meshStandardMaterial color="#c99d36" metalness={0.82} roughness={0.26} />
+        </mesh>
+      </group>
+      <group name="hardware-passive-seismic-experiment" position={[-0.78, 0.05, 0.12]}>
+        <mesh position={[0, 0.06, 0]} castShadow>
+          <cylinderGeometry args={[0.22, 0.24, 0.1, 24]} />
+          <meshStandardMaterial color="#aeb7bc" metalness={0.78} roughness={0.32} />
+        </mesh>
+        <mesh position={[0, 0.14, 0]}>
+          <cylinderGeometry args={[0.12, 0.14, 0.08, 20]} />
+          <meshPhysicalMaterial color="#c8a84e" metalness={0.74} roughness={0.28} />
+        </mesh>
+      </group>
+      <group name="hardware-alsep-central-station">
+        <Strut start={[0, 0.34, 0]} end={[0, 0.78, 0]} radius={0.022} />
+        <AntennaDish position={[0, 0.81, 0.2]} rotation={[0.38, 0, 0]} radius={0.24} />
+        {[-1, 1].map((side) => (
+          <Strut key={side} start={[side * 0.26, 0.08, -0.2]} end={[side * 0.52, -0.28, -0.32]} radius={0.022} color="#d4af37" />
+        ))}
+      </group>
+    </group>
+  );
+}
+
+function PioneerProbeModel() {
+  const rtgPositions = [[-1.05, 0.05, -0.28], [-1.05, 0.05, 0.28], [1.02, -0.12, -0.42], [1.02, -0.12, 0.42]];
+  return (
+    <group>
+      <mesh position={[0, 0.1, 0]} castShadow>
+        <cylinderGeometry args={[0.32, 0.38, 0.72, 12]} />
+        <meshPhysicalMaterial color="#c4cbd0" metalness={0.77} roughness={0.27} clearcoat={0.25} />
+      </mesh>
+      <mesh position={[0, -0.04, 0]}>
+        <cylinderGeometry args={[0.35, 0.35, 0.12, 12]} />
+        <meshStandardMaterial color="#d4af37" metalness={0.8} roughness={0.28} />
+      </mesh>
+      <group name="hardware-high-gain-antenna" position={[0, 0.58, 0.12]} rotation={[0.58, 0, 0]}>
+        <AntennaDish radius={0.45} color="#d2d7db" />
+      </group>
+      <group name="hardware-radioisotope-thermoelectric-generators">
+        {rtgPositions.map((end, index) => {
+          const start = [0, 0.18, 0];
+          return (
+            <group key={`pioneer-rtg-${index}`}>
+              <Strut start={start} end={end} radius={0.025} color="#d4af37" />
+              <group position={end} rotation={[0, 0, Math.PI / 2]}>
+                <mesh castShadow>
+                  <cylinderGeometry args={[0.09, 0.105, 0.32, 18]} />
+                  <meshStandardMaterial color="#aeb7bd" metalness={0.78} roughness={0.28} />
+                </mesh>
+                {Array.from({ length: 6 }, (_, rib) => (
+                  <mesh key={rib} position={[0, -0.13 + rib * 0.052, 0]}>
+                    <torusGeometry args={[0.103, 0.008, 6, 18]} />
+                    <meshStandardMaterial color="#d4af37" metalness={0.82} roughness={0.26} />
+                  </mesh>
+                ))}
+              </group>
+            </group>
+          );
+        })}
+      </group>
+      <group name="hardware-pioneer-plaque" position={[0.35, -0.2, 0.36]} rotation={[0.28, 0.2, 0]}>
+        <mesh castShadow>
+          <boxGeometry args={[0.34, 0.24, 0.018]} />
+          <meshStandardMaterial color="#c9a755" metalness={0.8} roughness={0.3} />
+        </mesh>
+        <mesh position={[0, 0, 0.012]}>
+          <boxGeometry args={[0.22, 0.018, 0.009]} />
+          <meshStandardMaterial color="#8a7139" metalness={0.5} roughness={0.38} />
+        </mesh>
+      </group>
+      <Strut start={[-0.18, 0.1, 0]} end={[-0.45, -0.48, 0]} radius={0.018} />
+    </group>
+  );
+}
+
 function ModelByType({ item }) {
+  if (item.id === 'apollo-15-lrv') return <LunarRovingVehicleModel />;
+  if (item.id === 'alsep-scientific-packages') return <AlsepModel />;
+  if (item.id === 'pioneer-10-11') return <PioneerProbeModel />;
   const type = (item.type || '').toLowerCase();
   if (type.includes('rover')) return <RoverModel />;
   if (item.id === 'apollo-11-eagle-descent-stage') return <EagleDescentStageModel />;
@@ -375,9 +523,14 @@ function ModelByType({ item }) {
   return <ProbeModel />;
 }
 
-export default function HoloRelic({ item }) {
+export default function HoloRelic({ item, onModelReady }) {
+  const modelRef = useRef(null);
+  useEffect(() => {
+    onModelReady?.(modelRef.current);
+  }, [onModelReady, item.id]);
+
   return (
-    <group scale={0.96}>
+    <group ref={modelRef} name={`relic-${item.id}-archetype`} scale={0.96}>
       <ModelByType item={item} />
     </group>
   );

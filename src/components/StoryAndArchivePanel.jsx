@@ -8,7 +8,7 @@ import {
   Sparkles, Volume2, VolumeX, X,
 } from 'lucide-react';
 import { transmitText } from '../utils/radio.js';
-import { getRelicModelPath } from '../utils/relicModelMap.js';
+import { has3DRepresentation } from '../utils/relicModelMap.js';
 
 const COPY = {
   en: {
@@ -155,7 +155,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
   const [query, setQuery] = useState('');
   const normalizedQuery = query.trim().toLocaleLowerCase(language === 'ar' ? 'ar' : 'en');
   const scopedRelics = relics.filter((item) => {
-    if (archiveFilter === '3D') return Boolean(getRelicModelPath(item));
+    if (archiveFilter === '3D') return has3DRepresentation(item);
     if (archiveFilter === 'All') return true;
     return item.body === archiveFilter;
   });
@@ -186,7 +186,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
           const count = id === 'All'
             ? relics.length
             : id === '3D'
-              ? relics.filter((item) => Boolean(getRelicModelPath(item))).length
+              ? relics.filter((item) => has3DRepresentation(item)).length
               : relics.filter((item) => item.body === id).length;
           return (
             <button type="button" key={id} className={`archive-filter-chip ${archiveFilter === id ? 'active' : ''}`} onClick={() => setArchiveFilter?.(id)} aria-pressed={archiveFilter === id}>
