@@ -273,6 +273,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       tourDelayCancelRef.current = null;
       playbackTokenRef.current += 1;
       window.clearTimeout(subtitleTimerRef.current);
+      window.clearTimeout(advanceTimerRef.current);
       transmissionRef.current?.();
       transmissionRef.current = null;
     };
@@ -531,6 +532,31 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   };
 
   const narrationUrl = item.narration?.[storyLanguage] || item.narration?.en || null;
+  const narrationRatioRef = useRef(0);
+  const advanceTimerRef = useRef(0);
+
+  // While the voice is talking, the page walks with it: the story pane keeps
+  // the spoken paragraph in view instead of making people scroll by hand.
+  useEffect(() => {
+    if (!narrationOn) return undefined;
+    let frame = 0;
+    const follow = () => {
+      const pane = document.querySelector('.story-mode .mission-story-scroll');
+      const chapter = document.getElementById('mission-chapter-transmission');
+      if (pane && chapter) {
+        const ratio = Math.min(1, Math.max(0, narrationRatioRef.current));
+        const paneRect = pane.getBoundingClientRect();
+        const chapterTop = chapter.getBoundingClientRect().top - paneRect.top + pane.scrollTop;
+        const target = chapterTop + chapter.offsetHeight * ratio - pane.clientHeight * 0.42;
+        const max = pane.scrollHeight - pane.clientHeight;
+        const clamped = Math.min(max, Math.max(0, target));
+        if (Math.abs(clamped - pane.scrollTop) > 2) pane.scrollTop += (clamped - pane.scrollTop) * 0.08;
+      }
+      frame = window.requestAnimationFrame(follow);
+    };
+    frame = window.requestAnimationFrame(follow);
+    return () => window.cancelAnimationFrame(frame);
+  }, [narrationOn]);
 
   const toggleNarration = () => {
     if (narrationOn) {
@@ -542,13 +568,16 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     }
     if (!narrationUrl) { playAudio(storyText); return; }
     const words = storyText.split(/\s+/).filter(Boolean);
+    narrationRatioRef.current = 0;
+    scrollToChapter('transmission');
     setNarrationOn(true);
     setIsTransmitting(true);
     setSubtitleText('');
     playNarration(narrationUrl, {
       onProgress: (time, duration) => {
         if (!duration) return;
-        const index = Math.min(words.length, Math.round((time / duration) * words.length));
+        narrationRatioRef.current = time / duration;
+        const index = Math.min(words.length, Math.round(narrationRatioRef.current * words.length));
         setSubtitleText(words.slice(0, index).join(' '));
       },
       onEnded: () => {
@@ -556,6 +585,16 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         setIsTransmitting(false);
         setSubtitleText(storyText);
         subtitleTimerRef.current = window.setTimeout(() => setSubtitleText(''), 3200);
+        // Keep the visit moving: carry on to the next chapter by itself.
+        const index = storyChapters.findIndex((chapter) => chapter.id === 'transmission');
+        const next = storyChapters[index + 1];
+        if (next) {
+          window.clearTimeout(advanceTimerRef.current);
+          advanceTimerRef.current = window.setTimeout(() => {
+            scrollToChapter(next.id);
+            setActiveBeat(storyChapters.findIndex((chapter) => chapter.id === next.id));
+          }, 1400);
+        }
       },
       onError: () => {
         setNarrationOn(false);

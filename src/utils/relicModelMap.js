@@ -17,24 +17,21 @@ const RELIC_PRESENTATIONS = {
     modelLabel: 'Apollo surface science package archetype',
   },
   'surveyor-3': {
-    modelPath: '/models/viking_lander.glb',
+    modelPath: null,
     fidelity: 'archetype',
-    archetype: 'three-leg planetary lander',
-    addOns: 'surveyor',
-    modelLabel: 'Three-leg lander class mesh · Surveyor hardware details added',
+    archetype: 'Surveyor lunar lander',
+    modelLabel: 'Surveyor lander reconstruction · three-leg frame, solar panel, sampling arm',
   },
   'sojourner-rover': {
-    modelPath: '/models/opportunity.glb',
+    modelPath: null,
     fidelity: 'archetype',
-    archetype: 'six-wheel planetary rover',
-    addOns: 'sojourner',
-    modelLabel: 'Six-wheel rover class mesh · Sojourner details added',
+    archetype: 'Sojourner microrover',
+    modelLabel: 'Sojourner reconstruction · solar deck, six cleated wheels, rocker-bogie',
   },
   'spirit-rover': {
     modelPath: '/models/opportunity.glb',
-    fidelity: 'archetype',
-    archetype: 'Mars Exploration Rover twin',
-    modelLabel: 'Mars Exploration Rover class mesh · Spirit twin representation',
+    fidelity: 'authentic',
+    modelLabel: 'NASA Mars Exploration Rover mesh · Spirit twin',
   },
   'opportunity-rover': {
     modelPath: '/models/opportunity.glb',
@@ -52,11 +49,10 @@ const RELIC_PRESENTATIONS = {
     modelLabel: 'NASA Viking lander mesh',
   },
   'phoenix-lander': {
-    modelPath: '/models/viking_lander.glb',
+    modelPath: null,
     fidelity: 'archetype',
-    archetype: 'three-leg Mars lander',
-    addOns: 'phoenix',
-    modelLabel: 'Three-leg lander class mesh · Phoenix solar wings added',
+    archetype: 'Phoenix polar lander',
+    modelLabel: 'Phoenix reconstruction · circular deck, twin solar arrays, robotic arm',
   },
   'insight-lander': {
     modelPath: '/models/insight_lander.glb',
@@ -79,10 +75,9 @@ const RELIC_PRESENTATIONS = {
     modelLabel: 'NASA NEAR Shoemaker spacecraft mesh',
   },
   'pioneer-10-11': {
-    modelPath: null,
-    fidelity: 'archetype',
-    archetype: 'radioisotope deep-space probe',
-    modelLabel: 'Radioisotope-powered deep-space probe archetype',
+    modelPath: '/models/pioneer10.glb',
+    fidelity: 'authentic',
+    modelLabel: 'NASA Pioneer 10 mesh',
   },
   'kepler-space-telescope': {
     modelPath: '/models/kepler_b.glb',
@@ -113,8 +108,14 @@ export function has3DRepresentation(item) {
   return Boolean(item && (getRelicModelInfo(item).modelPath || item.has3DModel || item.type));
 }
 
-export function getModelHonestyLabel(item) {
-  return getRelicModelInfo(item).fidelity === 'authentic'
+export function getModelHonestyLabel(item, language = 'en') {
+  const authentic = getRelicModelInfo(item).fidelity === 'authentic';
+  if (language === 'ar') {
+    return authentic
+      ? 'مجسم NASA أصلي · نسخة مطابقة'
+      : 'إعادة بناء توضيحية · مش مجسم NASA أصلي';
+  }
+  return authentic
     ? 'AUTHENTIC NASA 3D MESH'
-    : '3D ARCHETYPE MODEL (CLASS REPRESENTATION)';
+    : 'ILLUSTRATIVE RECONSTRUCTION · NOT A NASA MESH';
 }

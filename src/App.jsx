@@ -295,7 +295,7 @@ export default function App() {
               <div className={`model-honesty-badge ${getRelicModelInfo(selectedRelic).fidelity === 'authentic' ? 'is-authentic' : 'is-archetype'}`} role="status">
                 <BadgeCheck size={15} aria-hidden="true" />
                 <span>
-                  <strong>{getModelHonestyLabel(selectedRelic)}</strong>
+                  <strong>{getModelHonestyLabel(selectedRelic, language)}</strong>
                   <small dir="auto">{isArabic ? (getRelicModelInfo(selectedRelic).fidelity === 'authentic' ? 'مجسم NASA للمهمة نفسها' : 'تمثيل هندسي شفاف للفئة') : getRelicModelInfo(selectedRelic).modelLabel}</small>
                 </span>
               </div>

@@ -1174,3 +1174,10 @@ body { color: var(--suit-white); }
   .story-mode .story-experience-panel::before { height: 128px; }
   .story-chapter { scroll-margin-top: 128px; }
 }
+
+/* The read-along subtitle bar must not sit on top of the last line of copy */
+.story-mode .mission-story-scroll { padding-bottom: 150px; }
+.story-mode .story-chapter:last-of-type { margin-bottom: 40px; }
+@media (max-width: 760px) {
+  .story-mode .mission-story-scroll { padding-bottom: 170px; }
+}

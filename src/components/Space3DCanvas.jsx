@@ -677,8 +677,11 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   const isRealModel = Boolean(modelPath);
   const storyRig = useRef(null);
   const [modelReadyId, setModelReadyId] = useState(null);
+  const [modelBounds, setModelBounds] = useState(null);
   const modelReady = modelReadyId === item.id;
   const onModelReady = useMemo(() => () => setModelReadyId(item.id), [item.id]);
+  const onBoundsReady = useMemo(() => (bounds) => setModelBounds(bounds), []);
+  useEffect(() => { setModelBounds(null); }, [item.id]);
   const dataHotspots = useMemo(() => (item.hotspots || []).slice(0, 3), [item.hotspots]);
   const hotspotPositions = useMemo(() => modelReady ? buildHotspotPositions(storyRig.current, dataHotspots) : [], [dataHotspots, item.id, modelReady]);
   const selectedIndex = dataHotspots.findIndex((spot) => selectedHotspot && ((selectedHotspot.part && selectedHotspot.part === spot.part) || (!selectedHotspot.part && selectedHotspot.title === spot.title)));
@@ -708,11 +711,17 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     const isHardwareChapter = chapterId.startsWith('hardware-');
     const hardwareOrdinal = chapterHotspotIndex >= 0 ? chapterHotspotIndex : Math.max(selectedIndex, 0);
     const compactLayout = size.width <= 760;
-    const slide = compactLayout ? 0.24 : 1.65;
+    // Frame from the model's real footprint: a long tube (Kepler) and a wide
+    // lander (Apollo) must not share one hardcoded camera distance.
+    const modelSpan = modelBounds ? Math.max(modelBounds.size[0], modelBounds.size[1], modelBounds.size[2]) : 2.2;
+    const modelWidth = modelBounds ? Math.max(modelBounds.size[0], modelBounds.size[2]) : 2.2;
+    const slide = compactLayout ? 0.24 : Math.min(1.65, Math.max(0.85, modelWidth * 0.5));
     let targetX = 0;
     if (chapterId === 'hero') targetX = compactLayout ? 0 : size.width >= 1024 ? 1.35 : 0.72;
     else if (chapterId === 'transmission') targetX = compactLayout ? 0.12 : slide;
-    else if (isHardwareChapter) targetX = compactLayout ? 0 : (hardwareOrdinal === 2 ? -1.4 : (hardwareOrdinal % 2 === 0 ? -slide : slide));
+    else if (isHardwareChapter) targetX = compactLayout ? 0 : (hardwareOrdinal === 2 ? -slide : (hardwareOrdinal % 2 === 0 ? -slide : slide));
+    // Arabic layout puts the copy on the right, so the hardware moves the other way.
+    if (language === 'ar') targetX = -targetX * 1.45;
     const mobileLift = compactLayout ? 0.55 : 0;
     const focusPoint = focusIndex >= 0 && hotspotPositions[focusIndex] ? new THREE.Vector3(...hotspotPositions[focusIndex]) : new THREE.Vector3(0, 0, 0);
     const focusWorld = rig.localToWorld(focusPoint);
@@ -720,7 +729,14 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     const cameraFocus = compactLayout ? rigCenter : focusWorld;
     const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : -0.18;
     const targetTilt = focusIndex >= 0 ? [0.1, -0.08, 0.17][focusIndex] ?? 0 : 0.015;
-    const cameraDistance = compactLayout ? 6.8 : isHardwareChapter ? 2.75 : chapterId === 'hero' && size.width >= 1024 ? 5.25 : 4.7;
+    const fitDistance = (modelSpan / 2) / Math.tan((camera.fov * Math.PI) / 360);
+    const cameraDistance = compactLayout
+      ? Math.max(6.4, fitDistance * 2.1)
+      : isHardwareChapter
+        ? Math.max(3.35, fitDistance * 1.32)
+        : chapterId === 'hero' && size.width >= 1024
+          ? Math.max(5.25, fitDistance * 2.05)
+          : Math.max(4.7, fitDistance * 1.85);
     rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, targetYaw + (autoRotate ? Math.sin(state.clock.elapsedTime * 0.32) * 0.035 : 0), 1.8, delta);
     rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, targetTilt, 1.8, delta);
     rig.position.x = THREE.MathUtils.damp(rig.position.x, targetX, 1.8, delta);
@@ -760,7 +776,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
             fallback={<HoloRelic item={item} onModelReady={onModelReady} />}
           >
             <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} kind="model" compact /></Html>}>
-              <GltfModel modelPath={modelPath} item={item} onModelReady={onModelReady} descentStageOnly={isApolloLunarModule} />
+              <GltfModel modelPath={modelPath} item={item} onModelReady={onModelReady} onBoundsReady={onBoundsReady} descentStageOnly={isApolloLunarModule} />
             </Suspense>
           </ModelErrorBoundary>
         ) : <HoloRelic item={item} onModelReady={onModelReady} />}
