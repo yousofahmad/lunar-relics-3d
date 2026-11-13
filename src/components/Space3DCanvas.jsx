@@ -260,8 +260,9 @@ function HotspotNode({ hotspot, index, position, onClick, selected, language }) 
   );
 }
 
-function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef }) {
+function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef, storyProgress }) {
   const isRealModel = item.has3DModel && item.model3dFile;
+  const storyRig = useRef(null);
   const [modelBounds, setModelBounds] = useState(null);
   const onModelBoundsReady = useMemo(() => (bounds) => setModelBounds(bounds), []);
   const hotspotPositions = useMemo(() => buildHotspotPositions(item, modelBounds), [item, modelBounds]);
@@ -269,6 +270,17 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   useEffect(() => {
     setModelBounds(null);
   }, [item.id]);
+
+  useFrame((_, delta) => {
+    const rig = storyRig.current;
+    if (!rig) return;
+    const progress = storyProgress?.total > 1 ? storyProgress.index / (storyProgress.total - 1) : 0;
+    const phase = progress * Math.PI * 2;
+    rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, -0.22 + progress * 0.42, 1.7, delta);
+    rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, Math.sin(phase) * 0.035, 1.7, delta);
+    rig.position.x = THREE.MathUtils.damp(rig.position.x, Math.sin(phase) * 0.1, 1.7, delta);
+    rig.position.y = THREE.MathUtils.damp(rig.position.y, Math.cos(phase) * 0.045, 1.7, delta);
+  });
 
   return (
     <>
@@ -283,7 +295,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
         <circleGeometry args={[2.25, 80]} />
         <meshBasicMaterial color="#08141b" transparent opacity={0.42} />
       </mesh>
-      <group>
+      <group ref={storyRig}>
         {isRealModel ? (
           <ModelErrorBoundary fallback={<HoloRelic item={item} />}>
             <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} kind="model" compact /></Html>}>
@@ -342,7 +354,7 @@ function CameraFlight({ selectedId, controlsRef }) {
   return null;
 }
 
-export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot }) {
+export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot, storyProgress }) {
   const [autoRotate, setAutoRotate] = useState(true);
   const controlsRef = useRef(null);
   const selectTimer = useRef(0);
@@ -383,7 +395,7 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
       >
         <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} compact /></Html>}>
           {selectedRelic ? (
-            <InspectionScene item={selectedRelic} language={language} setHotspot={setHotspot} selectedHotspot={hotspot} autoRotate={autoRotate} controlsRef={controlsRef} />
+            <InspectionScene item={selectedRelic} language={language} setHotspot={setHotspot} selectedHotspot={hotspot} autoRotate={autoRotate} controlsRef={controlsRef} storyProgress={storyProgress} />
           ) : (
             <MapScene
               celestialView={celestialView}

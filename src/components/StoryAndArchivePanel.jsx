@@ -74,6 +74,11 @@ function dateLabel(value, language) {
   return new Intl.DateTimeFormat(language === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(date);
 }
 
+function splitStoryBeats(text) {
+  const parts = text.match(/[^.!؟]+[.!؟]+|[^.!؟]+$/gu) || [text];
+  return parts.map((part) => part.trim()).filter(Boolean);
+}
+
 function getBodyLabel(item, language, copy) {
   if (item.body === 'Moon') return copy.moon;
   if (item.body === 'Mars') return copy.mars;
@@ -199,7 +204,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
   );
 }
 
-function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHotspot }) {
+function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHotspot, onStoryProgress }) {
   const copy = COPY[language] || COPY.en;
   const [activeTab, setActiveTab] = useState('story');
   const [activeQuestion, setActiveQuestion] = useState(null);
@@ -207,11 +212,13 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const [quizResult, setQuizResult] = useState('');
   const [isTransmitting, setIsTransmitting] = useState(false);
   const [subtitleText, setSubtitleText] = useState('');
+  const [activeBeat, setActiveBeat] = useState(0);
   const transmissionRef = useRef(null);
   const playbackTokenRef = useRef(0);
   const subtitleTimerRef = useRef(0);
   const isArabic = language === 'ar';
   const storyText = item.story?.[language] || item.story?.en || '';
+  const storyBeats = splitStoryBeats(storyText);
   const questions = item.interactiveQA || [];
   const timeline = item.timeline || [];
   const quiz = item.quiz || {};
@@ -228,6 +235,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     setSelectedAnswer(null);
     setQuizResult('');
     setSubtitleText('');
+    setActiveBeat(0);
     return () => {
       playbackTokenRef.current += 1;
       window.clearTimeout(subtitleTimerRef.current);
@@ -235,6 +243,49 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       transmissionRef.current = null;
     };
   }, [item.id]);
+
+  useEffect(() => {
+    if (activeTab !== 'story') return undefined;
+    const beats = [...(document.querySelectorAll('.story-scroll-beat'))];
+    if (!beats.length) return undefined;
+    const storyPane = document.querySelector('.story-mode .archive-panel');
+    let animationFrame = 0;
+    const updateActiveBeat = () => {
+      if (animationFrame) return;
+      animationFrame = window.requestAnimationFrame(() => {
+        animationFrame = 0;
+        const paneRect = storyPane?.getBoundingClientRect();
+        const paneScrolls = storyPane && getComputedStyle(storyPane).overflowY === 'auto';
+        const focusY = paneScrolls && paneRect
+          ? paneRect.top + paneRect.height * 0.5
+          : window.innerHeight * 0.53;
+        let nearestIndex = 0;
+        let nearestDistance = Infinity;
+        beats.forEach((beat, index) => {
+          const rect = beat.getBoundingClientRect();
+          const distance = rect.top <= focusY && rect.bottom >= focusY
+            ? 0
+            : Math.min(Math.abs(rect.top - focusY), Math.abs(rect.bottom - focusY));
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestIndex = index;
+          }
+        });
+        setActiveBeat(nearestIndex);
+        onStoryProgress?.({ index: nearestIndex, total: beats.length });
+      });
+    };
+    updateActiveBeat();
+    window.addEventListener('scroll', updateActiveBeat, { passive: true });
+    storyPane?.addEventListener('scroll', updateActiveBeat, { passive: true });
+    window.addEventListener('resize', updateActiveBeat);
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener('scroll', updateActiveBeat);
+      storyPane?.removeEventListener('scroll', updateActiveBeat);
+      window.removeEventListener('resize', updateActiveBeat);
+    };
+  }, [activeTab, item.id, storyBeats.length, onStoryProgress]);
 
   const stopAudio = () => {
     playbackTokenRef.current += 1;
@@ -359,10 +410,22 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       </div>
 
       <div className="memory-content" key={`${item.id}-${activeTab}`}>
-        {activeTab === 'story' && (
-          <div className="story-view">
+      {activeTab === 'story' && (
+        <div className="story-view">
             <div className="story-kicker"><span className="signal-bars"><i /><i /><i /><i /></span>{copy.fieldNote}</div>
-            <p className="first-person-story" dir="auto">“{storyText}”</p>
+            <div className="story-scroll-intro">
+              <span>{isArabic ? 'حكاية تُروى مع كل خطوة' : 'A STORY IN SCROLLING CHAPTERS'}</span>
+              <p>{isArabic ? 'مرّر لتتابع الرحلة؛ المشهد ثلاثي الأبعاد يتحرك مع فصولها.' : 'Scroll through the mission. The 3D artifact shifts gently with each chapter.'}</p>
+            </div>
+            <div className="story-chapter-stack" aria-label={copy.fieldNote}>
+              {storyBeats.map((beat, index) => (
+                <article className={`story-scroll-beat ${activeBeat === index ? 'is-active' : ''}`} data-story-beat={index} key={`${item.id}-story-beat-${index}`}>
+                  <div className="story-beat-marker"><span dir="ltr">{String(index + 1).padStart(2, '0')}</span><i /></div>
+                  <p className="first-person-story" dir="auto">“{beat}”</p>
+                  <span className="story-beat-count" dir="ltr">{String(index + 1).padStart(2, '0')} / {String(storyBeats.length).padStart(2, '0')}</span>
+                </article>
+              ))}
+            </div>
             <div className="transmit-row">
               <button type="button" className={`transmit-button ${isTransmitting ? 'transmitting' : ''}`} onClick={() => isTransmitting ? stopAudio() : playAudio(storyText)} aria-pressed={isTransmitting}>
                 {isTransmitting ? <VolumeX size={15} /> : <Volume2 size={15} />}
@@ -460,7 +523,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
 
 export default function StoryAndArchivePanel(props) {
   if (props.selectedRelic) {
-    return <MemoryRoom key={props.selectedRelic.id} item={props.selectedRelic} language={props.language} badges={props.badges} onBack={props.onBack} onUnlock={props.onUnlock} hotspot={props.hotspot} setHotspot={props.setHotspot} />;
+    return <MemoryRoom key={props.selectedRelic.id} item={props.selectedRelic} language={props.language} badges={props.badges} onBack={props.onBack} onUnlock={props.onUnlock} hotspot={props.hotspot} setHotspot={props.setHotspot} onStoryProgress={props.onStoryProgress} />;
   }
   return <ArchiveList relics={props.relics} language={props.language} onSelect={props.onSelect} archiveFilter={props.archiveFilter} setArchiveFilter={props.setArchiveFilter} />;
 }

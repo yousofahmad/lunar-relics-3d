@@ -24,6 +24,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [language, setLanguage] = useState(() => localStorage.getItem('lunar-relics-language') || 'en');
   const [badges, setBadges] = useState(readBadges);
+  const [storyProgress, setStoryProgress] = useState({ index: 0, total: 1 });
   const [badgeModalOpen, setBadgeModalOpen] = useState(false);
   const [hotspot, setHotspot] = useState(null);
   const [apiState, setApiState] = useState('local');
@@ -52,6 +53,7 @@ export default function App() {
   }, [badges]);
 
   const selectedRelic = useMemo(() => relics.find((item) => item.id === selectedId) || null, [relics, selectedId]);
+  const storyMode = Boolean(selectedRelic);
   const visibleRelics = useMemo(
     () => relics.filter((item) => item.body === celestialView),
     [celestialView, relics],
@@ -68,15 +70,27 @@ export default function App() {
 
   const closeBadgeModal = useCallback(() => setBadgeModalOpen(false), []);
 
+  useEffect(() => {
+    document.documentElement.classList.toggle('story-scroll-page', storyMode);
+    document.body.classList.toggle('story-scroll-page', storyMode);
+    window.scrollTo(0, 0);
+    return () => {
+      document.documentElement.classList.remove('story-scroll-page');
+      document.body.classList.remove('story-scroll-page');
+    };
+  }, [storyMode]);
+
   const openRelic = (item) => {
     setBadgeModalOpen(false);
     setCelestialView(item.body || 'Moon');
     setHotspot(null);
+    setStoryProgress({ index: 0, total: 1 });
     setSelectedId(item.id);
   };
 
   const backToMap = () => {
     setHotspot(null);
+    setStoryProgress({ index: 0, total: 1 });
     setSelectedId(null);
   };
 
@@ -89,7 +103,7 @@ export default function App() {
   const isArabic = language === 'ar';
 
   return (
-    <div className={`app-shell ${isArabic ? 'app-rtl' : ''}`} dir={isArabic ? 'rtl' : 'ltr'}>
+    <div className={`app-shell ${storyMode ? 'story-mode' : ''} ${isArabic ? 'app-rtl' : ''}`} dir={isArabic ? 'rtl' : 'ltr'}>
       <div className="ambient-grid" aria-hidden="true" />
       <div className="ambient-glow glow-one" aria-hidden="true" />
       <div className="ambient-glow glow-two" aria-hidden="true" />
@@ -108,7 +122,7 @@ export default function App() {
         <BadgeModal relics={relics} badges={badges} language={language} onClose={closeBadgeModal} onSelect={openRelic} />
       )}
 
-      <main className="workspace-grid">
+      <main className={`workspace-grid ${storyMode ? 'story-mode' : ''}`}>
         <section className={`viewport-panel glass-panel ${selectedRelic ? 'inspection-mode' : ''}`} aria-label={isArabic ? 'المشهد ثلاثي الأبعاد' : '3D scene'}>
           <div className="canvas-stage">
             <Suspense fallback={<div className="canvas-chunk-loader"><SpaceLoader language={language} kind="model" compact /></div>}>
@@ -120,6 +134,7 @@ export default function App() {
                 language={language}
                 hotspot={hotspot}
                 setHotspot={setHotspot}
+                storyProgress={storyProgress}
               />
             </Suspense>
             {!selectedRelic && (
@@ -132,6 +147,14 @@ export default function App() {
               <span><RadioTower size={12} /> {isArabic ? 'اتصال حي' : 'SIGNAL LINK'}</span>
               <span>{celestialView === 'Deep Space' ? 'DEEP SPACE' : celestialView.toUpperCase()}</span>
             </div>
+            {selectedRelic && (
+              <div className="story-scene-hud" aria-live="polite">
+                <span>{isArabic ? 'حكاية المهمة · مرّر للمتابعة' : 'MISSION STORY · SCROLL TO CONTINUE'}</span>
+                <strong dir="auto">{selectedRelic.nickname || selectedRelic.name}</strong>
+                <div className="story-scene-progress" aria-hidden="true"><i style={{ width: `${storyProgress.total > 1 ? (storyProgress.index / (storyProgress.total - 1)) * 100 : 0}%` }} /></div>
+                <small dir="ltr">{String(storyProgress.index + 1).padStart(2, '0')} / {String(storyProgress.total).padStart(2, '0')}</small>
+              </div>
+            )}
             {hotspot && (
               <div className="hotspot-readout" role="status">
                 <button className="hotspot-close" type="button" onClick={() => setHotspot(null)} aria-label={isArabic ? 'إغلاق نقطة الفحص' : 'Close hotspot'}>×</button>
@@ -160,6 +183,7 @@ export default function App() {
             onUnlock={unlockBadge}
             hotspot={hotspot}
             setHotspot={setHotspot}
+            onStoryProgress={setStoryProgress}
           />
         </aside>
       </main>
