@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.vercel/
+.netlify/
+homepage-preview.png
+.env
+.env.*
+!.env.example
+.DS_Store

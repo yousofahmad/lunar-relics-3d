@@ -1,0 +1,398 @@
+/* Mission Control refinements: compact glass surfaces, legible telemetry, and mobile-safe overlays. */
+:root {
+  font-family: 'Inter', 'Cairo', sans-serif;
+  --panel: rgba(2, 6, 23, 0.75);
+  --line: rgba(6, 182, 212, 0.2);
+  --line-bright: rgba(6, 182, 212, 0.38);
+  --cyan: #06b6d4;
+  --cyan-soft: #67e8f9;
+  --amber: #f59e0b;
+  --font-arabic: 'Cairo', sans-serif;
+  --font-display: 'Orbitron', 'Inter', sans-serif;
+}
+
+.app-shell { font-family: 'Inter', 'Cairo', sans-serif; }
+.app-rtl { font-family: 'Cairo', 'Inter', sans-serif; }
+.glass-panel {
+  border-color: rgba(6, 182, 212, 0.2);
+  background: rgba(2, 6, 23, 0.75);
+  backdrop-filter: blur(12px);
+}
+
+button.badge-counter {
+  appearance: none;
+  min-height: 34px;
+  padding-block: 3px;
+  padding-inline: 12px 0;
+  border-block: 0;
+  border-inline: 0;
+  border-inline-start: 1px solid rgba(6, 182, 212, 0.2);
+  background: transparent;
+  color: var(--amber);
+  cursor: pointer;
+  text-align: start;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+button.badge-counter:hover, button.badge-counter[aria-expanded='true'] {
+  color: #ffd27d;
+  border-inline-start-color: rgba(245, 158, 11, 0.55);
+}
+button.badge-counter:focus-visible { outline-color: var(--amber); }
+
+/* Compact archive telemetry. Values are read directly from the verified local record. */
+.mission-telemetry {
+  min-width: 0;
+  margin: 0 17px 10px;
+  padding: 9px 10px 10px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 6px;
+  background: rgba(2, 6, 23, 0.75);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(12px);
+}
+.telemetry-heading {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  margin-block-end: 8px;
+  color: #7dd3e3;
+  font-family: 'DM Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+}
+.telemetry-heading svg { flex: 0 0 auto; color: var(--cyan); }
+.telemetry-heading > span { min-width: 0; }
+.telemetry-heading bdi {
+  margin-inline-start: auto;
+  color: #536f7b;
+  font-family: 'Orbitron', monospace;
+  font-size: 6px;
+  letter-spacing: 0.04em;
+  unicode-bidi: isolate;
+}
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 76px;
+  gap: 7px 10px;
+  min-width: 0;
+}
+.telemetry-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.telemetry-item > span {
+  color: #647f8b;
+  font-family: 'DM Mono', monospace;
+  font-size: 6px;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+}
+.telemetry-item strong {
+  min-width: 0;
+  color: #d7f2f7;
+  font-family: 'Orbitron', 'DM Mono', monospace;
+  font-size: 8px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  unicode-bidi: isolate;
+}
+.telemetry-position {
+  grid-column: 1 / -1;
+  padding-block-start: 6px;
+  border-block-start: 1px solid rgba(6, 182, 212, 0.1);
+}
+.telemetry-position strong { color: #b5cbd3; font-family: 'Inter', 'Cairo', sans-serif; font-size: 9px; }
+.telemetry-position strong[dir='ltr'] { color: #a8e5ef; font-family: 'Orbitron', 'DM Mono', monospace; font-size: 8px; }
+
+/* Synchronized detail pills for the three fixed 3D hardware markers. */
+.memory-hotspots {
+  min-width: 0;
+  margin: 0 17px 9px;
+}
+.hotspot-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 10px;
+  margin-block-end: 7px;
+  color: #88a7b2;
+  font-family: 'DM Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+}
+.hotspot-section-heading small {
+  min-width: 0;
+  color: #58727e;
+  font-family: 'Inter', 'Cairo', sans-serif;
+  font-size: 8px;
+  letter-spacing: 0;
+  text-align: end;
+}
+.hotspot-pill-list { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.hotspot-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  min-height: 36px;
+  max-width: 100%;
+  padding-block: 5px;
+  padding-inline: 8px;
+  border: 1px solid rgba(6, 182, 212, 0.17);
+  border-radius: 4px;
+  background: rgba(2, 6, 23, 0.58);
+  color: #8da8b2;
+  cursor: pointer;
+  text-align: start;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease, box-shadow 140ms ease;
+}
+.hotspot-pill > span:last-child { min-width: 0; overflow-wrap: anywhere; font-size: 8px; line-height: 1.35; }
+.hotspot-pill:hover { border-color: rgba(6, 182, 212, 0.5); color: #d4f2f7; }
+.hotspot-pill.is-selected, .hotspot-pill[aria-pressed='true'] {
+  border-color: rgba(245, 158, 11, 0.62);
+  background: rgba(120, 76, 13, 0.2);
+  color: #ffe0a6;
+  box-shadow: inset 0 0 14px rgba(245, 158, 11, 0.07), 0 0 12px rgba(245, 158, 11, 0.08);
+}
+.hotspot-pill-index { color: var(--cyan-soft); font-family: 'Orbitron', monospace; font-size: 7px; }
+.hotspot-detail {
+  min-width: 0;
+  margin-block-start: 7px;
+  padding-block: 7px 8px;
+  padding-inline: 9px;
+  border: 1px solid rgba(6, 182, 212, 0.14);
+  border-inline-start: 2px solid var(--amber);
+  border-radius: 4px;
+  background: rgba(2, 6, 23, 0.58);
+}
+.hotspot-detail-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 8px; }
+.hotspot-detail-heading > span { color: #718994; font-family: 'DM Mono', monospace; font-size: 6px; letter-spacing: 0.08em; }
+.hotspot-detail-heading strong { color: #f5d8a4; font-size: 9px; font-weight: 600; overflow-wrap: anywhere; }
+.hotspot-detail p { margin: 5px 0 0; color: #9db2bb; font-size: 8px; line-height: 1.5; overflow-wrap: anywhere; }
+
+/* Audio transmission visualizer; CSS-only bars remain inexpensive to animate. */
+.transmit-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.audio-visualizer { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; color: var(--cyan-soft); }
+.audio-bars { display: inline-flex; align-items: center; gap: 2px; height: 18px; }
+.audio-bars i { display: block; width: 2px; height: 4px; border-radius: 2px; background: var(--cyan); transform: scaleY(0.5); transform-origin: center; animation: transmission-bars 720ms ease-in-out infinite alternate; }
+.audio-bars i:nth-child(2) { animation-delay: 110ms; }
+.audio-bars i:nth-child(3) { animation-delay: 220ms; }
+.audio-bars i:nth-child(4) { animation-delay: 330ms; }
+.audio-bars i:nth-child(5) { animation-delay: 440ms; }
+.audio-live { color: #7bd6e3; font-family: 'Orbitron', monospace; font-size: 6px; letter-spacing: 0.1em; }
+@keyframes transmission-bars { from { transform: scaleY(0.38); opacity: 0.55; } to { transform: scaleY(1.8); opacity: 1; } }
+
+/* Explorer badge dialog. The entire 16-record grid stays scrollable on short screens. */
+.badge-modal-backdrop {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  overflow-y: auto;
+  background: rgba(1, 5, 12, 0.78);
+  backdrop-filter: blur(12px);
+}
+.badge-modal-panel {
+  width: min(100%, 820px);
+  max-height: calc(100vh - 24px);
+  max-height: calc(100svh - 24px);
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 10px;
+  background: rgba(2, 6, 23, 0.96);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(16px);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(6, 182, 212, 0.25) transparent;
+}
+.badge-modal-header {
+  position: sticky;
+  z-index: 2;
+  inset-block-start: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px 16px;
+  border-block-end: 1px solid rgba(6, 182, 212, 0.16);
+  background: rgba(2, 6, 23, 0.94);
+  backdrop-filter: blur(12px);
+}
+.badge-modal-heading { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.badge-modal-emblem { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 36px; border: 1px solid rgba(245, 158, 11, 0.36); border-radius: 50%; background: rgba(245, 158, 11, 0.08); color: var(--amber); }
+.badge-modal-kicker { display: block; color: #6d8791; font-family: 'DM Mono', monospace; font-size: 7px; letter-spacing: 0.13em; }
+.badge-modal-heading h2 { margin: 4px 0 0; color: #e9f8fc; font-family: 'Orbitron', 'Cairo', sans-serif; font-size: clamp(13px, 2vw, 17px); font-weight: 500; letter-spacing: 0.04em; overflow-wrap: anywhere; }
+.badge-modal-close { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 36px; border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 5px; background: rgba(6, 182, 212, 0.05); color: #9ab9c2; cursor: pointer; }
+.badge-modal-close:hover { border-color: rgba(245, 158, 11, 0.48); color: var(--amber); }
+.badge-modal-progress { padding: 12px 16px 14px; border-block-end: 1px solid rgba(6, 182, 212, 0.1); }
+.badge-progress-label { display: flex; justify-content: space-between; gap: 10px; margin-block-end: 7px; color: #76909b; font-family: 'DM Mono', monospace; font-size: 7px; letter-spacing: 0.1em; }
+.badge-progress-label strong { color: #eaf7fa; font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 500; }
+.badge-progress-label i { color: #718894; font-style: normal; }
+.badge-progress-track { height: 4px; overflow: hidden; border-radius: 999px; background: rgba(6, 182, 212, 0.1); }
+.badge-progress-track > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--cyan), var(--amber)); box-shadow: 0 0 12px rgba(6, 182, 212, 0.42); transition: width 180ms ease; }
+.badge-modal-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; min-width: 0; padding: 12px; }
+.badge-modal-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  gap: 7px 8px;
+  min-width: 0;
+  min-height: 136px;
+  padding: 10px;
+  border: 1px solid rgba(6, 182, 212, 0.18);
+  border-radius: 6px;
+  background: linear-gradient(145deg, rgba(10, 29, 43, 0.78), rgba(3, 10, 20, 0.82));
+  color: inherit;
+  cursor: pointer;
+  text-align: start;
+  transition: border-color 150ms ease, background 150ms ease, opacity 150ms ease, transform 150ms ease;
+}
+.badge-modal-card:hover { border-color: rgba(6, 182, 212, 0.52); transform: translateY(-1px); }
+.badge-modal-card.is-unlocked { border-color: rgba(200, 255, 107, 0.28); background: linear-gradient(145deg, rgba(53, 75, 36, 0.23), rgba(3, 10, 20, 0.86)); }
+.badge-modal-card.is-unlocked:hover { border-color: rgba(200, 255, 107, 0.6); }
+.badge-modal-card.is-locked { opacity: 0.64; }
+.badge-modal-card.is-locked:hover { opacity: 0.88; }
+.badge-card-index { grid-column: 1; grid-row: 1; color: #6c8793; font-family: 'Orbitron', monospace; font-size: 7px; }
+.badge-card-icon { grid-column: 2; grid-row: 1; justify-self: end; color: #73858b; }
+.badge-modal-card.is-unlocked .badge-card-icon { color: var(--lime); filter: drop-shadow(0 0 6px rgba(200, 255, 107, 0.36)); }
+.badge-card-copy { grid-column: 1 / -1; grid-row: 2; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.badge-card-body { color: #67c9da; font-family: 'DM Mono', monospace; font-size: 6px; letter-spacing: 0.1em; }
+.badge-card-name { color: #e4f4f7; font-size: 9px; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; }
+.badge-card-relic { color: #9aafb6; font-size: 8px; line-height: 1.35; overflow-wrap: anywhere; }
+.badge-card-hint { color: #758a91; font-size: 7px; line-height: 1.4; overflow-wrap: anywhere; }
+.badge-modal-card.is-unlocked .badge-card-hint { color: #a9c48c; }
+.badge-card-state { grid-column: 1 / -1; grid-row: 3; justify-self: start; max-width: calc(100% - 16px); padding: 3px 6px; border: 1px solid rgba(245, 158, 11, 0.22); border-radius: 3px; color: #d0a45d; font-family: 'DM Mono', 'Cairo', monospace; font-size: 6px; letter-spacing: 0.06em; overflow-wrap: anywhere; }
+.badge-card-state.state-unlocked { border-color: rgba(200, 255, 107, 0.28); color: #c5e78f; }
+.badge-card-arrow { position: absolute; inset-inline-end: 9px; inset-block-end: 9px; color: #708890; }
+.badge-modal-card.is-unlocked .badge-card-arrow { color: var(--lime); }
+
+/* CSS-only hologram frame for the eight records without GLB assets. */
+.hologram-overlay {
+  position: absolute;
+  z-index: 1;
+  inset: 13px;
+  overflow: hidden;
+  border: 1px solid rgba(6, 182, 212, 0.08);
+  pointer-events: none;
+}
+.hologram-corner { position: absolute; z-index: 2; width: 17px; height: 17px; border-color: rgba(103, 232, 249, 0.55); border-style: solid; }
+.corner-nw { inset-block-start: 0; inset-inline-start: 0; border-width: 1px 0 0 1px; }
+.corner-ne { inset-block-start: 0; inset-inline-end: 0; border-width: 1px 1px 0 0; }
+.corner-sw { inset-block-end: 0; inset-inline-start: 0; border-width: 0 0 1px 1px; }
+.corner-se { inset-block-end: 0; inset-inline-end: 0; border-width: 0 1px 1px 0; }
+.hologram-scanlines { position: absolute; z-index: 1; inset: 0; background: repeating-linear-gradient(0deg, rgba(103, 232, 249, 0.045) 0, rgba(103, 232, 249, 0.045) 1px, transparent 1px, transparent 4px); opacity: 0.55; }
+.hologram-radar-ring { position: absolute; inset-block-start: 51%; inset-inline-start: 50%; aspect-ratio: 1; border-radius: 50%; pointer-events: none; }
+.hologram-radar-ring.ring-outer { width: min(70%, 460px); border: 1px dashed rgba(6, 182, 212, 0.2); transform: translate(-50%, -50%) rotateX(68deg); animation: hologram-orbit 28s linear infinite; }
+.hologram-radar-ring.ring-inner { width: min(50%, 330px); border: 1px solid rgba(245, 158, 11, 0.16); box-shadow: inset 0 0 18px rgba(6, 182, 212, 0.05); transform: translate(-50%, -50%) rotateX(68deg) rotate(18deg); animation: hologram-orbit-reverse 21s linear infinite; }
+.hologram-radar-ring.ring-outer::before, .hologram-radar-ring.ring-inner::before { position: absolute; inset: 15%; border: 1px solid rgba(6, 182, 212, 0.12); border-radius: 50%; content: ''; }
+.hologram-frame-label { position: absolute; z-index: 2; inset-inline-start: 18px; inset-block-end: 15px; color: rgba(103, 232, 249, 0.62); font-family: 'Orbitron', 'Cairo', sans-serif; font-size: 6px; letter-spacing: 0.13em; }
+@keyframes hologram-orbit { to { transform: translate(-50%, -50%) rotateX(68deg) rotate(360deg); } }
+@keyframes hologram-orbit-reverse { to { transform: translate(-50%, -50%) rotateX(68deg) rotate(-342deg); } }
+
+/* Selected Three.js markers keep their scene coordinates; only their affordance changes. */
+.three-hotspot {
+  width: 44px;
+  height: 44px;
+  border-color: rgba(103, 232, 249, 0.82);
+  background: rgba(5, 18, 28, 0.9);
+  font-size: 9px;
+  touch-action: manipulation;
+}
+.three-hotspot::after { inset: -4px; }
+.three-hotspot.is-selected, .three-hotspot[aria-pressed='true'] {
+  z-index: 2;
+  border-color: var(--amber);
+  background: rgba(120, 76, 13, 0.88);
+  color: #fff0ce;
+  box-shadow: 0 0 17px rgba(245, 158, 11, 0.55), inset 0 0 9px rgba(245, 158, 11, 0.22);
+  transform: scale(1.08);
+}
+.three-hotspot.is-selected::after, .three-hotspot[aria-pressed='true']::after { border-color: rgba(245, 158, 11, 0.5); animation-duration: 1.4s; }
+.badge-status { flex: 0 0 auto; padding: 3px 5px; border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 3px; color: #c59954; font-family: 'DM Mono', 'Cairo', monospace; font-size: 6px; letter-spacing: 0.04em; }
+.badge-status.badge-unlocked { border-color: rgba(200, 255, 107, 0.3); color: #c9e99a; }
+
+/* Responsive layouts: logical positioning, readable wraps, and no horizontal page overflow. */
+html, body, #root { width: 100%; max-width: 100%; }
+.app-shell, .topbar, .workspace-grid, .viewport-panel, .archive-panel, .memory-room { min-width: 0; }
+.topbar { grid-template-columns: minmax(0, 1fr) auto; }
+.brand-lockup, .topbar-actions, .viewport-header, .viewport-heading, .viewport-status { min-width: 0; }
+.brand-title, .brand-subtitle { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.planet-tabs { min-width: 0; max-width: 100%; }
+.telemetry-item, .badge-card-copy, .badge-card-hint, .hotspot-detail { overflow-wrap: anywhere; }
+
+@media (max-width: 980px) {
+  .hotspot-readout { display: none; }
+  .badge-modal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .mission-telemetry { margin-inline: 13px; }
+  .memory-hotspots { margin-inline: 13px; }
+}
+@media (max-width: 640px) {
+  .topbar { grid-template-columns: minmax(0, 1fr) auto; }
+  .topbar-actions { gap: 5px; }
+  .viewport-heading h1 { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .memory-telemetry { min-width: 0; }
+  .mission-telemetry { margin-inline: 11px; padding: 8px; }
+  .memory-hotspots { margin-inline: 11px; }
+  .hotspot-section-heading { align-items: flex-start; flex-direction: column; }
+  .hotspot-section-heading small { text-align: start; }
+  .hotspot-pill { min-height: 42px; }
+  .badge-modal-backdrop { place-items: start center; padding: 12px; }
+  .badge-modal-panel { width: 100%; max-height: calc(100vh - 24px); max-height: calc(100svh - 24px); }
+  .badge-modal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 9px; }
+  .badge-modal-card { min-height: 132px; padding: 9px; }
+  .badge-modal-header, .badge-modal-progress { padding-inline: 12px; }
+  .audio-live { display: none; }
+  .hologram-overlay { inset: 9px; }
+  .hologram-frame-label { inset-inline-start: 12px; inset-block-end: 11px; font-size: 5px; }
+}
+@media (max-width: 380px) {
+  .brand-subtitle, .planet-tab small, .render-state { display: none; }
+  .topbar-actions { gap: 4px; }
+  .language-toggle { padding-inline: 6px; }
+  .planet-tabs { overflow-x: auto; overscroll-behavior-inline: contain; }
+  .badge-modal-grid { grid-template-columns: minmax(0, 1fr); }
+  .badge-modal-card { min-height: 112px; }
+  .telemetry-heading bdi { font-size: 5px; }
+  .telemetry-grid { grid-template-columns: minmax(0, 1fr) 66px; }
+  .mission-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .mission-facts > div { padding-inline: 5px; }
+}
+
+.app-rtl .mission-telemetry, .app-rtl .memory-hotspots, .app-rtl .badge-modal-panel { font-family: 'Cairo', 'Inter', sans-serif; }
+.app-rtl .telemetry-heading, .app-rtl .telemetry-item > span, .app-rtl .badge-modal-kicker, .app-rtl .badge-progress-label,
+.app-rtl .badge-card-body, .app-rtl .badge-card-state, .app-rtl .audio-live, .app-rtl .hotspot-pill-index { font-family: 'DM Mono', 'Cairo', monospace; }
+.app-rtl .hotspot-readout { text-align: start; }
+
+@media (prefers-reduced-motion: reduce) {
+  .audio-bars i, .hologram-radar-ring { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
+
+/* Logical-property normalization for existing archive details in both writing directions. */
+.brand-title > span { margin-inline-start: 4px; margin-inline-end: 0; }
+.relic-card { padding-block: 11px 10px; padding-inline: 12px 35px; }
+.relic-card::before { inset-inline-start: 0; }
+.relic-card-arrow { inset-inline-end: 13px; }
+.memory-tabs button.active::after { inset-inline: 10%; }
+.hotspot-readout strong { padding-inline-end: 14px; }
+.qa-answer { padding-block: 2px 11px; padding-inline: 0 27px; }
+.qa-answer button { inset-inline-end: 0; }
+.mission-timeline { margin-block-start: 17px; margin-block-end: 0; margin-inline: 5px 0; padding-inline: 19px 0; }
+.mission-timeline::before { inset-inline-start: 4px; }
+.timeline-node { inset-inline-start: -19px; }
+.memory-content { text-align: start; }
+.app-rtl .mission-timeline { margin-inline: 5px 0; padding-inline: 19px 0; }
+.app-rtl .memory-content { text-align: start; }
+
+.brand-lockup > div { min-width: 0; }
+.first-person-story { font-family: 'Inter', 'Cairo', sans-serif; }
+.app-rtl .first-person-story { font-family: 'Cairo', 'Inter', sans-serif; }

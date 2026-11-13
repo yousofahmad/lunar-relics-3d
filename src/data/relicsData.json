@@ -1,0 +1,1722 @@
+[
+  {
+    "id": "apollo-11-eagle-descent-stage",
+    "name": "Apollo Lunar Modules (Apollo 11 Eagle Descent Stage)",
+    "nickname": "Eagle Descent Stage",
+    "body": "Moon",
+    "has3DModel": false,
+    "model3dFile": null,
+    "type": "Lander",
+    "launchYear": 1969,
+    "landingDate": "1969-07-20",
+    "endOfMission": "1969-07-24",
+    "status": "The descent stage was left on the Moon when Eagle’s ascent stage departed on 1969-07-21; the Apollo 11 mission itself ended on 1969-07-24.",
+    "location": {
+      "siteName": "Mare Tranquillitatis (Sea of Tranquility), Apollo 11 Lunar Module site",
+      "lat": 0.67416,
+      "lng": 23.47314
+    },
+    "story": {
+      "en": "I am the descent stage of Apollo 11’s Eagle, launched from Earth on July 16, 1969. I helped slow the Lunar Module toward Mare Tranquillitatis, where it touched down on July 20. When the ascent stage lifted off the next day, I stayed behind as a quiet witness to the mission. NASA later imaged my resting place from lunar orbit.",
+      "ar": "أنا مرحلة الهبوط من Eagle، وحدة Apollo 11 القمرية التي انطلقت من الأرض في 16 يوليو 1969. ساعدتُ المركبة على التباطؤ والهبوط في Mare Tranquillitatis (بحر الهدوء) يوم 20 يوليو. عندما غادرت مرحلة الصعود في اليوم التالي، بقيتُ على القمر شاهدةً صامتةً على المهمة. ثم رصدت NASA موقعي لاحقًا من المدار القمري."
+    },
+    "hotspots": [
+      {
+        "description": "The lower LM stage contained the deep-throttling descent engine, propellant tanks, landing legs, and stored surface equipment. It supported powered descent and acted as the launch platform for the ascent stage; it remained at the Apollo 11 site on the Moon after ascent-stage liftoff.",
+        "part": "Descent stage",
+        "title": "Landing and surface-support stage"
+      },
+      {
+        "description": "The upper LM stage housed Armstrong and Aldrin and used its ascent engine to leave the Moon at 17:54:01 UT on 21 July 1969. It rendezvoused and docked with Columbia, was jettisoned into lunar orbit on 22 July, and its later fate is not known according to NSSDCA.",
+        "part": "Ascent stage",
+        "title": "Crew return stage"
+      },
+      {
+        "description": "EASEP included a passive seismometer, lunar dust detector, solar panels, antenna, and communications equipment. It was deployed near the LM; NSSDCA says transmissions were stopped on 3 August 1969, it operated again on the next lunar day, and the experiment was terminated on 27 August 1969 when it no longer accepted commands.",
+        "part": "Early Apollo Scientific Experiment Package (EASEP)",
+        "title": "Surface science package"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1969",
+        "event": "Apollo 11 launched from Cape Kennedy at 13:32:00 UT on a Saturn V; Eagle was the Lunar Module payload."
+      },
+      {
+        "year": "1969",
+        "event": "Eagle landed at 20:17:40 UT in Mare Tranquillitatis (Sea of Tranquility)."
+      },
+      {
+        "year": "1969",
+        "event": "The ascent stage lifted off the Moon at 17:54:01 UT after 21 hours 36 minutes on the surface, leaving the descent stage behind."
+      },
+      {
+        "year": "1969",
+        "event": "After docking with Columbia, the LM was jettisoned into lunar orbit at 00:01:01 UT; NSSDCA states that the LM's later fate is not known."
+      },
+      {
+        "year": "1969",
+        "event": "The Apollo 11 crew splashed down in the Pacific Ocean at 16:50:35 UT, the official end date used here for the parent Apollo 11 mission."
+      },
+      {
+        "year": "2009",
+        "event": "NASA's Lunar Reconnaissance Orbiter imaged the Apollo 11 landing site and the descent stage."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Where did Eagle's descent stage land?",
+          "ar": "أين هبطت مرحلة هبوط Eagle؟"
+        },
+        "answer": {
+          "en": "It landed in Mare Tranquillitatis, the Sea of Tranquility, at 0.67416° N, 23.47314° E in NASA's stated lunar reference frame.",
+          "ar": "هبطت في Mare Tranquillitatis، أي Mare Tranquillitatis (بحر الهدوء)، عند 0.67416 درجة شمالاً و23.47314 درجة شرقاً وفق النظام المرجعي القمري المذكور من NASA."
+        }
+      },
+      {
+        "question": {
+          "en": "What happened to the descent stage after the astronauts left the Moon?",
+          "ar": "ماذا حدث لمرحلة الهبوط بعد مغادرة رواد الفضاء القمر؟"
+        },
+        "answer": {
+          "en": "It was left on the lunar surface when the ascent stage lifted off; NASA later identified it in Lunar Reconnaissance Orbiter imagery.",
+          "ar": "تُركت على سطح القمر عندما أقلعت مرحلة الصعود، ثم حددتها NASA لاحقاً في صور المركبة المدارية الاستطلاعية القمرية."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "Where did the Eagle descent stage land?",
+        "ar": "أين هبطت مرحلة هبوط Eagle؟"
+      },
+      "options": {
+        "en": [
+          "Mare Tranquillitatis (Sea of Tranquility)",
+          "Chryse Planitia on Mars",
+          "Oceanus Procellarum at Apollo 12"
+        ],
+        "ar": [
+          "Mare Tranquillitatis (بحر الهدوء)",
+          "Chryse Planitia على المريخ",
+          "Oceanus Procellarum في موقع Apollo 12"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Sea of Tranquility Pioneer",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1969-059C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C; https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo11info.html; https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html; https://www.nasa.gov/missions/apollo/apollo-11/apollo-11-mission-overview/; https://science.nasa.gov/earth/earth-observatory/apollo-11-landing-site-39408/"
+  },
+  {
+    "id": "apollo-15-lrv",
+    "name": "Lunar Roving Vehicles (LRVs) (Apollo 15 LRV)",
+    "nickname": "Apollo 15 Moon Buggy",
+    "body": "Moon",
+    "has3DModel": false,
+    "model3dFile": null,
+    "type": "Rover",
+    "launchYear": 1971,
+    "landingDate": "1971-07-30",
+    "endOfMission": "1971-08-02",
+    "status": "Used on Apollo 15 and left at Hadley-Apennine when the crew departed the lunar surface on 1971-08-02. NASA does not publish a separate LRV last-contact date or rover-specific coordinates; the coordinates here are for the Falcon landing site. NSSDCA ID 1971-063C is the associated Apollo 15 mission record, not a separately cataloged LRV ID.",
+    "location": {
+      "siteName": "Apollo 15 Hadley-Apennine lunar landing site (Falcon landing site)",
+      "lat": 26.13239,
+      "lng": 3.6333
+    },
+    "story": {
+      "en": "I am the Apollo 15 lunar rover, folded aboard Falcon until the crew unloaded me on July 31, 1971. I carried David Scott and Jim Irwin on three traverses across Hadley-Apennine terrain. Together we covered 27.8 kilometers, giving the astronauts a wider scientific reach. When Falcon lifted off on August 2, I remained on the Moon.",
+      "ar": "أنا المركبة القمرية الجوالة لـ Apollo 15، وقد حُملت مطويةً داخل Falcon حتى أنزلني الطاقم في 31 يوليو 1971. حملتُ ديفيد سكوت وجيم إروين في ثلاث جولات عبر منطقة Hadley-Apennine. قطعنا معًا 27.8 كيلومترًا، فتمكّن الرائدان من استكشاف مساحة أوسع. وعندما أقلعت Falcon في 2 أغسطس، بقيتُ على القمر."
+    },
+    "hotspots": [
+      {
+        "description": "An electric, foldable lunar vehicle used to extend the astronauts' EVA range. It was deployed from the lunar module, driven on three traverses totaling 27.8 km, and left associated with the Apollo 15 lunar surface site; NASA's reviewed pages do not state a separate disposal or last-contact date.",
+        "part": "Apollo 15 LRV",
+        "title": "Lunar surface mobility vehicle"
+      },
+      {
+        "description": "Two non-rechargeable 36-volt silver-zinc potassium-hydroxide batteries powered the four wheel-drive motors, steering motors, brakes and the 36-volt utility outlet. They were surface-operation power hardware; NASA's reviewed pages do not publish a separate disposal event or end date for them.",
+        "part": "LRV 36-volt silver-zinc batteries",
+        "title": "Drive, steering and utility power"
+      },
+      {
+        "description": "The LCRU was one of the new Apollo J-mission equipment items evaluated with the LRV and supported lunar surface communications. The reviewed NASA pages do not publish a separate LCRU disposal or last-contact record, so its individual fate is not asserted here.",
+        "part": "Lunar Communications Relay Unit (LCRU)",
+        "title": "Communications relay associated with the LRV"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1971",
+        "event": "Apollo 15 launched from Launch Pad 39A at Cape Canaveral on Saturn V AS-510 at 9:34:00 a.m. EDT."
+      },
+      {
+        "year": "1971",
+        "event": "Apollo 15 Falcon lunar module landed at 22:16:29 UT at the Hadley-Apennine site; the LRV was carried in the lunar module."
+      },
+      {
+        "year": "1971",
+        "event": "The LRV made its lunar debut, was unloaded and deployed during the first surface EVA, and began its traverses."
+      },
+      {
+        "year": "1971",
+        "event": "The second EVA included a 12.5 km LRV traverse southeast along the Apennine Mountains and back to the ALSEP site."
+      },
+      {
+        "year": "1971",
+        "event": "The third EVA included a 5.1 km LRV traverse; the lunar module then lifted off the Moon at 17:11:22 UT."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "What was the Apollo 15 LRV used for?",
+          "ar": "فيما استُخدمت مركبة Apollo 15 الجوالة؟"
+        },
+        "answer": {
+          "en": "It extended the astronauts' range for lunar surface EVAs and transported them across the Hadley-Apennine area.",
+          "ar": "وسّعت مدى تنقل رائدي الفضاء أثناء الأنشطة خارج المركبة ونقلتهما عبر منطقة Hadley-Apennine."
+        }
+      },
+      {
+        "question": {
+          "en": "How far did the Apollo 15 LRV travel in total?",
+          "ar": "كم بلغت المسافة الإجمالية التي قطعتها مركبة Apollo 15 الجوالة؟"
+        },
+        "answer": {
+          "en": "NASA NSSDCA reports 27.8 kilometers in 3 hours 2 minutes of driving time.",
+          "ar": "تذكر NSSDCA التابعة لـ NASA أنها قطعت 27.8 كيلومتراً خلال 3 ساعات ودقيقتين من القيادة."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "How far did the Apollo 15 LRV travel in total?",
+        "ar": "كم بلغت المسافة الإجمالية التي قطعتها مركبة Apollo 15 الجوالة؟"
+      },
+      "options": {
+        "en": [
+          "27.8 km",
+          "12.5 km",
+          "5.0 km"
+        ],
+        "ar": [
+          "27.8 كيلومترًا",
+          "12.5 كيلومترًا",
+          "5.0 كيلومترات"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Hadley-Apennine Trailblazer",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1971-063C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_lrv.html; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C; https://www.nasa.gov/missions/apollo/apollo-15-mission-details/; https://www.nasa.gov/gallery/apollo-15/"
+  },
+  {
+    "id": "alsep-scientific-packages",
+    "name": "ALSEP Scientific Packages",
+    "nickname": "Apollo 12 ALSEP",
+    "body": "Moon",
+    "has3DModel": false,
+    "model3dFile": null,
+    "type": "Scientific Package",
+    "launchYear": 1969,
+    "landingDate": "1969-11-19",
+    "endOfMission": "1977-09-30",
+    "status": "ALSEP stations were shut down on 1977-09-30 and remain on the Moon; the date and coordinates here represent Apollo 12, one of five ALSEP deployments.",
+    "location": {
+      "siteName": "Apollo 12 ALSEP central station, Oceanus Procellarum (representative of Apollo 12, 14, 15, 16, and 17 ALSEP sites)",
+      "lat": -3.0094,
+      "lng": -23.4246
+    },
+    "story": {
+      "en": "I am the Apollo Lunar Surface Experiments Package, a network of instruments rather than a single spacecraft. On Apollo 12, astronauts deployed one set of my instruments at Oceanus Procellarum and connected them to a central station. My instruments sent measurements of lunar activity and environment back to Earth for years. NASA shut down the ALSEP stations on September 30, 1977, while the hardware remained on the Moon.",
+      "ar": "أنا حزمة تجارب سطح القمر التابعة لـ Apollo، شبكة من الأجهزة وليست مركبة واحدة. في Apollo 12 نشر الرواد مجموعة من أجهزتي في Oceanus Procellarum ووصلوها بمحطة مركزية. أرسلت أجهزتي إلى الأرض قياسات عن نشاط القمر وبيئته لسنوات. أوقفت NASA محطات ALSEP في 30 سبتمبر 1977، بينما بقيت المعدات على القمر."
+    },
+    "hotspots": [
+      {
+        "part": "ALSEP central station",
+        "title": "Communications and control hub",
+        "description": "The central station processed instrument data, received commands, and relayed measurements to Earth. It remained at the Apollo 12 site after the ALSEP network was shut down on September 30, 1977."
+      },
+      {
+        "part": "SNAP-27 radioisotope thermoelectric generator (RTG)",
+        "title": "Nuclear thermal power source",
+        "description": "The SNAP-27 converted heat from plutonium-238 decay into electrical power for the ALSEP station. The generator remained with the package on the lunar surface."
+      },
+      {
+        "part": "Apollo 12 Passive Seismic Experiment",
+        "title": "Lunar seismic instrument",
+        "description": "The experiment measured lunar seismic activity and interior properties, sending data through the central station until NASA shut down the ALSEP network."
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1963",
+        "event": "NASA conceived the Apollo Lunar Surface Experiments Package to maximize scientific return while limiting weight and complexity."
+      },
+      {
+        "year": "1968",
+        "event": "NASA formally accepted the first flight ALSEP system from Bendix on July 23."
+      },
+      {
+        "year": "1969",
+        "event": "Apollo 12 launched on November 14; Intrepid landed and the ALSEP central station was deployed at Oceanus Procellarum on November 19."
+      },
+      {
+        "year": "1972",
+        "event": "Apollo 17 carried the final ALSEP deployment; it landed on December 11."
+      },
+      {
+        "year": "1977",
+        "event": "NASA shut down the ALSEP stations on September 30; the hardware remained on the Moon."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Why is Apollo 11 not included among the ALSEP NSSDCA IDs here?",
+          "ar": "لماذا لا يظهر Apollo 11 ضمن معرّفات NSSDCA الخاصة بـ ALSEP هنا؟"
+        },
+        "answer": {
+          "en": "Apollo 11 carried the smaller Early Apollo Surface Experiment Package (EASEP), while the ALSEP series represented here was flown on Apollo 12, 14, 15, 16, and 17.",
+          "ar": "حملت Apollo 11 حزمة التجارب السطحية المبكرة EASEP الأصغر، بينما سُلّسلت ALSEP الممثلة هنا على Apollo 12 و14 و15 و16 و17."
+        }
+      },
+      {
+        "question": {
+          "en": "What powered the Apollo 12 ALSEP station?",
+          "ar": "ما الذي زوّد محطة ALSEP في Apollo 12 بالطاقة؟"
+        },
+        "answer": {
+          "en": "A SNAP-27 radioisotope thermoelectric generator using heat from plutonium-238 decay supplied approximately 70 watts at 16 volts.",
+          "ar": "زوّدها مولد SNAP-27 حراري إشعاعي استخدم حرارة اضمحلال البلوتونيوم-238، بقدرة تقريبية 70 واط عند 16 فولت."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "When did NASA shut down the ALSEP stations?",
+        "ar": "متى أوقفت NASA محطات ALSEP؟"
+      },
+      "options": {
+        "en": [
+          "September 30, 1977",
+          "December 11, 1972",
+          "November 19, 1969"
+        ],
+        "ar": [
+          "30 سبتمبر 1977",
+          "11 ديسمبر 1972",
+          "19 نوفمبر 1969"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Lunar Science Networker",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1969-099C, 1971-008C, 1971-063C, 1972-031C, 1972-096C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-099C; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-008C; https://nssdc.gsfc.nasa.gov/nmc/spacecraftDisplay.do?id=1971-063C; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1972-031C; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1972-096C; https://nssdc.gsfc.nasa.gov/planetary/lunar/apolloloc.html; https://www.nasa.gov/history/50-years-ago-first-apollo-lunar-surface-experiment-package-accepted/"
+  },
+  {
+    "id": "surveyor-3",
+    "name": "Surveyor Landers (Surveyor 3)",
+    "nickname": "Surveyor 3",
+    "body": "Moon",
+    "has3DModel": false,
+    "model3dFile": null,
+    "type": "Lander",
+    "launchYear": 1967,
+    "landingDate": "1967-04-20",
+    "endOfMission": "1967-05-04",
+    "status": "Inactive on the lunar surface after last contact on 1967-05-04; Apollo 12 astronauts recovered some parts in 1969.",
+    "location": {
+      "siteName": "Surveyor Crater, southeast Oceanus Procellarum",
+      "lat": -3.0162,
+      "lng": -23.418
+    },
+    "story": {
+      "en": "I am Surveyor 3, one of NASA’s early lunar landers that tested the surface before Apollo. After several bounces, I came to rest in southeast Oceanus Procellarum on April 20, 1967. I sent 6,326 images and used my sampler to dig and test the soil. My signals ended after lunar night, and Apollo 12 astronauts later recovered some of my parts.",
+      "ar": "أنا Surveyor 3، أحد المسابير القمرية المبكرة التابعة لـ NASA التي اختبرت السطح قبل Apollo. بعد عدة ارتدادات، استقررت في جنوب شرق Oceanus Procellarum يوم 20 أبريل 1967. أرسلتُ 6326 صورة واستخدمتُ أداة أخذ العينات لحفر التربة واختبارها. انقطعت إشاراتي بعد الليل القمري، ثم استعاد رواد Apollo 12 بعض أجزائي."
+    },
+    "hotspots": [
+      {
+        "description": "The camera transmitted 6,326 lunar-surface pictures. Apollo 12 astronauts removed the camera system on 20 November 1969 for examination on Earth; NSSDCA states that the camera is now displayed at the Smithsonian National Air and Space Museum.",
+        "part": "Survey television camera",
+        "title": "Imaging system"
+      },
+      {
+        "description": "A 1.5-meter pantograph arm with a 12-by-5-centimeter scoop dug trenches and performed bearing and impact tests. It operated for 18 hours 22 minutes; NASA reports that Apollo 12 recovered the soil scoop for study.",
+        "part": "Surface sampler",
+        "title": "Soil-mechanics sampling arm and scoop"
+      },
+      {
+        "description": "The altitude-marking radar initiated terminal braking, while Doppler/altimeter radars guided the vernier engines. After firing, the main retrorocket and altitude-marking radar were jettisoned; the vernier engines continued through the first two bounces until an Earth command shut them off 34 seconds after initial touchdown.",
+        "part": "Descent radar and propulsion hardware",
+        "title": "Landing guidance and braking system"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1967",
+        "event": "Launch at 07:05:01 UT from Cape Canaveral Launch Complex 36B on Atlas-Centaur."
+      },
+      {
+        "year": "1967",
+        "event": "Initial lunar touchdown at 00:04:17 UT; final touchdown after two bounces at 00:04:53 UT in southeast Oceanus Procellarum."
+      },
+      {
+        "year": "1967",
+        "event": "Operations continued through the lunar day until after local sunset."
+      },
+      {
+        "year": "1967",
+        "event": "Last contact/data returned at 00:04 UT; the spacecraft did not resume operation after lunar night."
+      },
+      {
+        "year": "1969",
+        "event": "Apollo 12 astronauts visited Surveyor 3 and removed about 10 kg of parts, including the television camera, for terrestrial examination."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Why was Surveyor 3's surface sampler important?",
+          "ar": "لماذا كان جهاز أخذ العينات السطحية في Surveyor 3 مهماً؟"
+        },
+        "answer": {
+          "en": "It dug and manipulated lunar soil and performed bearing and impact tests, helping scientists assess whether the surface could support an Apollo lunar module.",
+          "ar": "حفر التربة القمرية وحرّكها وأجرى اختبارات تحمل واصطدام، مما ساعد العلماء على تقييم قدرة السطح على حمل مركبة Apollo القمرية."
+        }
+      },
+      {
+        "question": {
+          "en": "What happened to Surveyor 3 after its mission stopped?",
+          "ar": "ماذا حدث لـ Surveyor 3 بعد توقف مهمته؟"
+        },
+        "answer": {
+          "en": "It failed to resume operation after the lunar night, and Apollo 12 astronauts later visited it and removed parts for examination on Earth.",
+          "ar": "لم يستأنف العمل بعد الليل القمري، ثم زاره رواد Apollo 12 وأزالوا أجزاء منه لفحصها على الأرض."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "What happened to Surveyor 3 after its last contact?",
+        "ar": "ماذا حدث لـ Surveyor 3 بعد آخر اتصال؟"
+      },
+      "options": {
+        "en": [
+          "It remained on the Moon and Apollo 12 later recovered some parts.",
+          "It returned to Earth aboard Apollo 12.",
+          "It continued sending images until 1977."
+        ],
+        "ar": [
+          "بقي على القمر واستعاد رواد Apollo 12 بعض أجزائه لاحقًا.",
+          "عاد إلى الأرض على متن Apollo 12.",
+          "واصل إرسال الصور حتى عام 1977."
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Lunar Soil Tester",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1967-035A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1967-035A; https://science.nasa.gov/mission/surveyor-3/; https://www.nasa.gov/missions/lunar-reconnaissance-orbiter-looks-at-apollo-12-surveyor-3-landing-sites/; https://www.jpl.nasa.gov/missions/surveyor-3/; https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html"
+  },
+  {
+    "id": "sojourner-rover",
+    "name": "Sojourner Rover",
+    "nickname": "Sojourner",
+    "body": "Mars",
+    "has3DModel": false,
+    "model3dFile": null,
+    "type": "Rover",
+    "launchYear": 1996,
+    "landingDate": "1997-07-06",
+    "endOfMission": "1997-09-27",
+    "status": "Last Pathfinder data arrived on 1997-09-27; NASA separately records formal termination of the broader Pathfinder mission on 1998-03-10. The coordinates are the estimated Pathfinder landing point, not a separately surveyed final Sojourner position; NSSDCA ID 1996-068A is the associated Pathfinder mission record.",
+    "location": {
+      "siteName": "Ares Vallis, Mars (Mars Pathfinder landing site; Carl Sagan Memorial Station)",
+      "lat": 19.33,
+      "lng": -33.55
+    },
+    "story": {
+      "en": "I am Sojourner, a small rover carried by Mars Pathfinder. I rolled onto the surface at Ares Vallis on July 6, 1997, and examined nearby rocks and soil with my cameras and APXS. Pathfinder relayed my data to Earth as I explored beyond the lander. The last Pathfinder data arrived in September, and I remained on Mars with the mission hardware.",
+      "ar": "أنا Sojourner، عربة جوالة صغيرة حملتها مهمة Mars Pathfinder إلى المريخ. نزلت إلى سطح منطقة Ares Vallis في 6 يوليو 1997 وفحصت الصخور والتربة القريبة بكاميراتي وجهاز APXS. نقل Pathfinder بياناتي إلى الأرض بينما استكشفتُ ما حول المسبار الهابط. وصل آخر إرسال بيانات من Pathfinder في سبتمبر، وبقيتُ على المريخ مع معدات المهمة."
+    },
+    "hotspots": [
+      {
+        "description": "Measured the elemental composition of Martian rocks and soil. Its separate post-mission disposition is not reported; it remained with the rover when communications ended.",
+        "part": "Alpha Proton X-ray Spectrometer (APXS)",
+        "title": "Rock and soil composition instrument"
+      },
+      {
+        "description": "Distributed vehicle load across six wheels; eleven brushed motors controlled wheels, steering, and instrument deployment. No recovery or removal is reported, so it remained on the surface with Sojourner.",
+        "part": "Rocker-bogie suspension and six-wheel system",
+        "title": "Mobility and load distribution"
+      },
+      {
+        "description": "Sojourner was primarily solar powered; primary batteries operated during the first three weeks and augmented solar power. NASA reports no later separate disposition.",
+        "part": "Solar power system and primary batteries",
+        "title": "Electrical power"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1996",
+        "event": "Mars Pathfinder carrying Sojourner launched from Cape Canaveral on December 4 at 06:58 UTC."
+      },
+      {
+        "year": "1997",
+        "event": "Pathfinder landed at Ares Vallis on July 4; Sojourner rolled onto the Martian surface on July 6 at about 05:40 UTC."
+      },
+      {
+        "year": "1997",
+        "event": "The final received Pathfinder data transmission was at 10:23 UTC on September 27."
+      },
+      {
+        "year": "1998",
+        "event": "NASA states that the successful mission was terminated on March 10 after five months of attempted communications recovery."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "What did Sojourner use the APXS to measure?",
+          "ar": "ماذا استخدمت Sojourner جهاز APXS لقياسه؟"
+        },
+        "answer": {
+          "en": "It measured the elemental composition of Martian rocks and soil.",
+          "ar": "قاس التركيب العنصري لصخور وتربة المريخ."
+        }
+      },
+      {
+        "question": {
+          "en": "Why was the Pathfinder lander important to Sojourner?",
+          "ar": "لماذا كان المسبار الهابط Pathfinder مهماً لـ Sojourner؟"
+        },
+        "answer": {
+          "en": "It relayed the rover's communications and data between Sojourner and Earth.",
+          "ar": "كان ينقل اتصالات وبيانات العربة بين Sojourner والأرض."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "When did Sojourner roll onto the Martian surface?",
+        "ar": "متى نزلت Sojourner إلى سطح المريخ؟"
+      },
+      "options": {
+        "en": [
+          "July 6, 1997",
+          "July 4, 1997",
+          "September 27, 1997"
+        ],
+        "ar": [
+          "6 يوليو 1997",
+          "4 يوليو 1997",
+          "27 سبتمبر 1997"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Ares Vallis Pathfinder",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1996-068A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1996-068A; https://science.nasa.gov/mission/mars-pathfinder/; https://www.jpl.nasa.gov/missions/mars-pathfinder-sojourner-rover/; https://www-robotics.jpl.nasa.gov/what-we-do/flight-projects/pathfinder/; https://nssdc.gsfc.nasa.gov/planetary/marsland.html; https://science.nasa.gov/resource/sojourner-rover-near-the-dice/"
+  },
+  {
+    "id": "spirit-rover",
+    "name": "Spirit Rover",
+    "nickname": "Spirit",
+    "body": "Mars",
+    "has3DModel": false,
+    "model3dFile": null,
+    "type": "Rover",
+    "launchYear": 2003,
+    "landingDate": "2004-01-04",
+    "endOfMission": "2011-05-25",
+    "status": "Mission complete; contact was lost after 2010-03-22 and NASA ended recovery efforts on 2011-05-25.",
+    "location": {
+      "siteName": "Columbia Memorial Station, Gusev Crater, Mars",
+      "lat": -14.5692,
+      "lng": 175.4729
+    },
+    "story": {
+      "en": "I am Spirit, NASA’s rover sent to investigate Gusev Crater for signs of water-altered rocks. I landed on January 4, 2004 UTC, at a site later named Columbia Memorial Station. I climbed hills and studied rocks, but soft soil and a failed wheel eventually left me stationary. After my silence began in March 2010, NASA ended recovery attempts in May 2011.",
+      "ar": "أنا Spirit، عربة NASA الجوالة التي أُرسلت إلى Gusev Crater للبحث عن صخور غيّرتها المياه. هبطتُ في 4 يناير 2004 بالتوقيت العالمي، في موقع سُمّي لاحقًا Columbia Memorial Station. صعدتُ التلال ودرستُ الصخور، لكن التربة الرخوة وتعطل إحدى عجلاتي تركاني ساكنة في النهاية. وبعد أن بدأ صمتي في مارس 2010، أنهت NASA محاولات استعادتي في مايو 2011."
+    },
+    "hotspots": [
+      {
+        "description": "The mast carried panoramic and navigation cameras and the Miniature Thermal Emission Spectrometer for stereoscopic imaging, navigation, and mineral/thermal observations. It remained part of the stranded rover at Columbia Memorial Station when the mission ended.",
+        "part": "Panoramic Mast Assembly (Pancam, Navcam, Mini-TES)",
+        "title": "Imaging and remote sensing mast"
+      },
+      {
+        "description": "The arm placed contact instruments on rocks and soil; the Rock Abrasion Tool ground into rock surfaces, while APXS, Mössbauer, the Microscopic Imager, and magnets characterized material. NASA records Spirit using RAT on Adirondack and later exposing silica-rich soil while a failed wheel dragged across the surface; the arm and instruments remained on the rover after contact was lost.",
+        "part": "Instrument Deployment Device with RAT, APXS, Mössbauer Spectrometer, Microscopic Imager, and magnets",
+        "title": "Robotic science arm"
+      },
+      {
+        "description": "Solar panels supplied power and the six wheels enabled surface travel. Spirit became stuck in soft soil on May 1, 2009, later lost its right-rear wheel, and could not achieve the desired winter tilt; it therefore remained a stationary science platform before final contact loss on Mars.",
+        "part": "Solar-panel power system and six-wheel mobility system",
+        "title": "Power and mobility hardware"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "2003",
+        "event": "Spirit launched from Cape Canaveral SLC-17A on June 10 at 17:58:47 UTC."
+      },
+      {
+        "year": "2004",
+        "event": "Spirit landed in Gusev Crater on January 4 at 04:35 UTC (20:35 PST on January 3); the site was later named Columbia Memorial Station."
+      },
+      {
+        "year": "2004",
+        "event": "Spirit used its Rock Abrasion Tool on Adirondack, the first such rock abrasion operation on Mars, according to NASA's mission history."
+      },
+      {
+        "year": "2005",
+        "event": "Spirit reached the summit of Husband Hill on September 29 and acquired 360-degree true-color panoramas."
+      },
+      {
+        "year": "2009",
+        "event": "Spirit became stuck in soft soil on May 1; its right-rear wheel stopped working on November 28."
+      },
+      {
+        "year": "2010",
+        "event": "After March 22, NASA mission controllers could not regain contact; the mission was reformulated as a stationary science platform before final recovery efforts."
+      },
+      {
+        "year": "2011",
+        "event": "NASA officially concluded recovery efforts and declared the mission complete on May 25."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Where did Spirit land?",
+          "ar": "أين هبطت Spirit؟"
+        },
+        "answer": {
+          "en": "Spirit landed in Gusev Crater on Mars, at the site later named Columbia Memorial Station.",
+          "ar": "هبطت Spirit في Gusev Crater على المريخ، في موقع سُمّي لاحقًا Columbia Memorial Station."
+        }
+      },
+      {
+        "question": {
+          "en": "Why did NASA end recovery efforts for Spirit in 2011?",
+          "ar": "لماذا أنهت NASA محاولات استعادة Spirit في عام 2011؟"
+        },
+        "answer": {
+          "en": "Spirit had been silent since March 22, 2010, and NASA could not regain contact despite more than 1,300 commands; excessive cold was considered the most probable cause.",
+          "ar": "كانت Spirit صامتة منذ 22 مارس 2010، ولم تتمكن NASA من استعادة الاتصال رغم إرسال أكثر من 1300 أمر؛ واعتُبرت البرودة الشديدة السبب الأكثر احتمالًا."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "Where did Spirit land?",
+        "ar": "أين هبطت Spirit؟"
+      },
+      "options": {
+        "en": [
+          "Columbia Memorial Station in Gusev Crater",
+          "Eagle crater in Meridiani Planum",
+          "Utopia Planitia"
+        ],
+        "ar": [
+          "Columbia Memorial Station في Gusev Crater",
+          "فوهة Eagle في Meridiani Planum",
+          "Utopia Planitia"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Gusev Crater Geologist",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2003-028A. NASA/NSSDCA source pages: https://science.nasa.gov/mission/mer-spirit/; https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/; https://nssdc.gsfc.nasa.gov/planetary/mars/mars_exploration_rovers/mera_images.html; https://nssdc.gsfc.nasa.gov/planetary/chronology_mars.html"
+  },
+  {
+    "id": "opportunity-rover",
+    "name": "Opportunity Rover",
+    "nickname": "Oppy",
+    "body": "Mars",
+    "has3DModel": true,
+    "model3dFile": "/models/opportunity.glb",
+    "type": "Rover",
+    "launchYear": 2003,
+    "landingDate": "2004-01-25",
+    "endOfMission": "2019-02-13",
+    "status": "NASA’s precise touchdown record is January 25, 2004 UTC; the NASA mission chronology presents January 24 as the local mission date. NASA declared the mission complete on 2019-02-13 after the final signal on 2018-06-10. NASA Science coordinates are used here, while NSSDCA publishes a slightly different rounded position.",
+    "location": {
+      "siteName": "Challenger Memorial Station, within Eagle crater on Meridiani Planum",
+      "lat": -1.9483,
+      "lng": 354.47417
+    },
+    "story": {
+      "en": "I am Opportunity, the Mars rover that landed in Meridiani Planum in January 2004. I examined rocks and soils for signs of ancient water and traveled far beyond my planned 90-sol mission. A planet-wide dust storm dimmed the sunlight my solar panels needed, and Earth received my last signal on June 10, 2018. NASA declared my mission complete the following February.",
+      "ar": "أنا Opportunity، عربة المريخ الجوالة التي هبطت في Meridiani Planum في يناير 2004. فحصتُ الصخور والتربة بحثًا عن آثار المياه القديمة، وواصلتُ العمل متجاوزةً كثيرًا مهمتي المخططة ذات التسعين يومًا مريخيًا. حجبت عاصفة غبار شملت الكوكب ضوء الشمس الذي تحتاج إليه ألواحي، ووصلت آخر إشارة مني إلى الأرض في 10 يونيو 2018. أعلنت NASA اكتمال مهمتي في فبراير التالي."
+    },
+    "hotspots": [
+      {
+        "description": "Two mast-mounted cameras produced detailed multi-wavelength, three-dimensional panoramic views of the Martian landscape. NASA states that the camera mast also acted as a periscope for Mini-TES. The instrument remained aboard the rover; NASA's cited mission pages do not publish a separate post-mission disposition for it beyond the rover's final resting location in Perseverance Valley.",
+        "part": "Pancam (Panoramic Camera)",
+        "title": "Panoramic imaging system"
+      },
+      {
+        "description": "A rotating grinding wheel removed dust and weathered rock to expose fresh mineral surfaces for analysis by the rover's instruments. NASA records that Opportunity used the RAT during its mission, including to remove surface dust. The tool remained part of the rover hardware, with no separately published NASA disposition beyond the rover's final resting location in Perseverance Valley.",
+        "part": "Rock Abrasion Tool (RAT)",
+        "title": "Rock-surface preparation tool"
+      },
+      {
+        "description": "The APXS measured how rocks and soils respond to alpha particles and X-rays to determine their elemental chemistry. It was mounted on the instrument turret at the end of the robotic arm. NASA does not publish a separate final disposition for the APXS; it remained part of the rover at mission end.",
+        "part": "Alpha Particle X-ray Spectrometer (APXS)",
+        "title": "Elemental-composition spectrometer"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "2003",
+        "event": "Opportunity launched on July 7 aboard a Delta II 7925H from Cape Canaveral, Florida."
+      },
+      {
+        "year": "2004",
+        "event": "Opportunity landed in Meridiani Planum on January 24 local mission date, came to rest in Eagle crater, and the landing area was later named Challenger Memorial Station."
+      },
+      {
+        "year": "2005",
+        "event": "NASA controllers freed Opportunity after a sand entrapment that lasted about six weeks; the rover also discovered the iron-nickel meteorite later called Heat Shield Rock."
+      },
+      {
+        "year": "2006",
+        "event": "Opportunity reached Victoria Crater in September after a 21-month journey."
+      },
+      {
+        "year": "2011",
+        "event": "Opportunity arrived at Endeavour Crater on August 9 after traveling nearly three years from its previous major target."
+      },
+      {
+        "year": "2015",
+        "event": "Opportunity became the first human enterprise to exceed a marathon distance on another world, reaching 26.219 miles (42.195 kilometers)."
+      },
+      {
+        "year": "2018",
+        "event": "A Mars-wide dust storm reduced available solar energy; the last signal from Opportunity was received on June 10."
+      },
+      {
+        "year": "2019",
+        "event": "NASA declared the Opportunity mission complete on February 13."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Where did Opportunity land, and what was the landing area later called?",
+          "ar": "أين هبطت Opportunity، وماذا سُمّيت منطقة الهبوط لاحقًا؟"
+        },
+        "answer": {
+          "en": "It landed in Meridiani Planum inside Eagle crater; NASA says the area became known as Challenger Memorial Station.",
+          "ar": "هبطت في ميريدياني بلانوم داخل فوهة Eagle؛ وتقول NASA إن المنطقة عُرفت لاحقًا باسم محطة تشالنجر التذكارية."
+        }
+      },
+      {
+        "question": {
+          "en": "Why did NASA declare the Opportunity mission complete?",
+          "ar": "لماذا أعلنت NASA انتهاء مهمة Opportunity؟"
+        },
+        "answer": {
+          "en": "A severe Mars-wide dust storm cut the solar energy available to the rover; after the last received signal on June 10, 2018 and recovery attempts, NASA declared the mission complete on February 13, 2019.",
+          "ar": "أدّت عاصفة غبار شديدة شملت المريخ إلى تقليل الطاقة الشمسية المتاحة للعربة؛ وبعد آخر إشارة مستقبَلة في 10 يونيو 2018 ومحاولات الاستعادة، أعلنت NASA انتهاء المهمة في 13 فبراير 2019."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "What most directly ended Opportunity’s operations?",
+        "ar": "ما السبب المباشر الأبرز لانتهاء عمليات Opportunity؟"
+      },
+      "options": {
+        "en": [
+          "A Mars-wide dust storm reduced solar power, and contact was not regained.",
+          "Its batteries failed during a planned landing.",
+          "It was deliberately shut down before reaching Mars."
+        ],
+        "ar": [
+          "قللت عاصفة غبار شملت المريخ الطاقة الشمسية، ولم يُستعد الاتصال.",
+          "تعطلت بطارياته أثناء هبوط مخطط.",
+          "أُوقف عمدًا قبل وصوله إلى المريخ."
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Meridiani Marathoner",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2003-032A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2003-032A; https://science.nasa.gov/mission/mer-opportunity/; https://www.jpl.nasa.gov/missions/mars-exploration-rover-opportunity-mer/; https://www.jpl.nasa.gov/news/nasas-opportunity-rover-mission-on-mars-comes-to-end/; https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/; https://science.nasa.gov/mission/mars-exploration-rovers-spirit-and-opportunity/science-instruments/"
+  },
+  {
+    "id": "viking-1-lander",
+    "name": "Viking 1 & 2 Landers (Viking 1 Lander)",
+    "nickname": "Thomas Mutch Memorial Station",
+    "body": "Mars",
+    "has3DModel": true,
+    "model3dFile": "/models/viking_lander.glb",
+    "type": "Lander",
+    "launchYear": 1975,
+    "landingDate": "1976-07-20",
+    "endOfMission": "1982-11-13",
+    "status": "Inactive after contact loss; NSSDCA records 1982-11-13, while NASA’s mission page reports the final transmission on 1982-11-11. Coordinates use the NSSDCA record; NASA’s mission page gives a different rounded position.",
+    "location": {
+      "siteName": "Chryse Planitia (Golden Plain), Mars",
+      "lat": 22.27,
+      "lng": 312.05
+    },
+    "story": {
+      "en": "I am Viking 1 Lander, the first spacecraft to operate successfully on Mars’ surface. I touched down in Chryse Planitia on July 20, 1976, and sent back images while my arm sampled the soil. My biology experiments found no clear evidence of life, even as they revealed complex chemistry. A faulty command ended communication in November 1982, leaving me at my Martian site.",
+      "ar": "أنا المسبار الهابط Viking 1، أول مركبة تعمل بنجاح على سطح المريخ. هبطتُ في Chryse Planitia يوم 20 يوليو 1976، وأرسلتُ الصور بينما جمعت ذراعي عينات من التربة. لم تجد تجاربي البيولوجية دليلًا واضحًا على الحياة، رغم كشفها كيمياءً معقدة. أنهى أمرٌ معيب الاتصالات في نوفمبر 1982، فبقيتُ في موقعي المريخي."
+    },
+    "hotspots": [
+      {
+        "description": "They produced panoramic and surface photographs, including the first images returned from the landing site. NASA reports that the lander continued imaging until communications ended; the cameras remained part of the landed spacecraft, with no separate disposal event published by NASA.",
+        "part": "Two 360-degree cylindrical scan cameras",
+        "title": "Surface imaging system"
+      },
+      {
+        "description": "The arm collected Martian soil and delivered samples to the biology laboratory and analytical instruments; NASA records the first samples being scooped on July 28, 1976. The arm remained on the lander at Chryse Planitia when communications were lost; NASA does not report a separate end-of-life disposition.",
+        "part": "Sampler arm with collector head, temperature sensor, and magnet",
+        "title": "Soil sampling arm"
+      },
+      {
+        "description": "It was intended to study Martian seismic activity, but NASA/NSSDCA records say it failed to uncage and therefore did not operate as intended. It remained installed on the lander at the site; no separate physical fate is published by NASA.",
+        "part": "Seismometer",
+        "title": "Seismic detector"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1975",
+        "event": "Viking 1 launched from Cape Canaveral on August 20 aboard Titan IIIE-Centaur."
+      },
+      {
+        "year": "1976",
+        "event": "The spacecraft entered Mars orbit on June 19; the lander separated and landed in Chryse Planitia on July 20 at 11:53:06 UT."
+      },
+      {
+        "year": "1976",
+        "event": "The sampler arm collected the first soil samples on July 28 and delivered them for biological and chemical analysis."
+      },
+      {
+        "year": "1981",
+        "event": "The lander was named Thomas Mutch Memorial Station in honor of the Viking imaging-team leader."
+      },
+      {
+        "year": "1982",
+        "event": "The final transmission was reported by NASA as November 11; the NSSDCA record dates loss of contact after a faulty command to November 13."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Where did Viking 1 Lander land, and what did NASA call the site?",
+          "ar": "أين هبط Viking 1 Lander، وماذا سمّت NASA الموقع؟"
+        },
+        "answer": {
+          "en": "It landed in Chryse Planitia, also called the Golden Plain, on Mars.",
+          "ar": "هبط في Chryse Planitia، التي تُسمّى أيضاً السهل الذهبي، على المريخ."
+        }
+      },
+      {
+        "question": {
+          "en": "What happened to the Viking 1 Lander mission in November 1982?",
+          "ar": "ماذا حدث لمهمة Viking 1 Lander في نوفمبر 1982؟"
+        },
+        "answer": {
+          "en": "A faulty command interrupted communications; NASA reports the final transmission on November 11, while the NSSDCA record dates loss of contact to November 13.",
+          "ar": "أدى أمر معيب إلى انقطاع الاتصالات؛ تذكر NASA أن آخر إرسال كان في 11 نوفمبر، بينما يؤرخ سجل NSSDCA فقدان الاتصال في 13 نوفمبر."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "Where did Viking 1 Lander touch down?",
+        "ar": "أين هبط Viking 1 Lander؟"
+      },
+      "options": {
+        "en": [
+          "Chryse Planitia",
+          "Utopia Planitia",
+          "Gusev Crater"
+        ],
+        "ar": [
+          "Chryse Planitia",
+          "Utopia Planitia",
+          "Gusev Crater"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Chryse Planitia Pioneer",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1975-075C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1975-075C; https://nssdc.gsfc.nasa.gov/planetary/viking.html; https://science.nasa.gov/mission/viking-1/; https://science.nasa.gov/mission/viking/; https://science.nasa.gov/mission/viking/spacecraft-and-science/"
+  },
+  {
+    "id": "viking-2-lander",
+    "name": "Viking 1 & 2 Landers (Viking 2 Lander)",
+    "nickname": "Gerald Soffen Memorial Station",
+    "body": "Mars",
+    "has3DModel": true,
+    "model3dFile": "/models/viking_lander.glb",
+    "type": "Lander",
+    "launchYear": 1975,
+    "landingDate": "1976-09-03",
+    "endOfMission": "1980-04-11",
+    "status": "Inactive after battery failure; NSSDCA records the last data/shutdown on 1980-04-11, while NASA’s Viking 2 page lists 1980-04-12.",
+    "location": {
+      "siteName": "Utopia Planitia, Mars (about 200 km west of Mie Crater)",
+      "lat": 47.6673,
+      "lng": 134.2809
+    },
+    "story": {
+      "en": "I am Viking 2 Lander, sent to explore the Martian plain of Utopia Planitia. After landing on September 3, 1976, I photographed the terrain and sampled soil for chemistry and biology experiments. My results did not provide definitive evidence of living microorganisms. My batteries eventually failed, and my last data arrived in April 1980.",
+      "ar": "أنا المسبار الهابط Viking 2، أُرسلت لاستكشاف سهل Utopia Planitia على المريخ. بعد هبوطي في 3 سبتمبر 1976، صوّرت التضاريس وجمعت عينات للتجارب الكيميائية والبيولوجية. لم تقدّم نتائجي دليلًا حاسمًا على وجود كائنات دقيقة حية. تعطلت بطارياتي في النهاية، ووصلت آخر بياناتي في أبريل 1980."
+    },
+    "hotspots": [
+      {
+        "description": "The cameras acquired panoramic and surface images immediately after landing. NASA's NSSDCA record describes them as mounted near one long side of the lander; no recovery or later removal is reported, so they remained part of the lander at Utopia Planitia after operations ended.",
+        "part": "Two 360-degree cylindrical scan cameras",
+        "title": "Surface imaging system"
+      },
+      {
+        "description": "The arm collected Martian soil for the lander's experiments and included a temperature sensor and magnet. NASA's cited NSSDCA record places it on the lander; no post-mission recovery is reported, so it remained at the landing site with the lander.",
+        "part": "Sampler arm with collector head, temperature sensor, and magnet",
+        "title": "Surface sampling and magnetic investigation arm"
+      },
+      {
+        "description": "The two plutonium-238 RTGs supplied continuous power to the lander; NSSDCA gives about 30 W per generator at 4.4 V. They were affixed to opposite sides of the base, and NASA reports no recovery or removal after shutdown, so their documented disposition is to remain with the lander at the site.",
+        "part": "Two SNAP-19 radioisotope thermal generator units",
+        "title": "Long-duration electrical power"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1975",
+        "event": "Viking 2 launched toward Mars on September 9 from Cape Canaveral; NASA's mission page records 18:39:00 UT."
+      },
+      {
+        "year": "1976",
+        "event": "Viking 2 entered Mars orbit on August 7; the lander separated on September 3 and landed at Utopia Planitia."
+      },
+      {
+        "year": "1976",
+        "event": "The lander began surface imaging and science operations; its biology experiments later provided no definitive evidence of life."
+      },
+      {
+        "year": "1980",
+        "event": "NASA records the last Viking 2 lander data on April 11; NSSDCA says the lander was turned off after battery failure."
+      },
+      {
+        "year": "2001",
+        "event": "NASA's Viking 2 mission page says the lander was renamed Gerald Soffen Memorial Station in July 2001."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Where did the Viking 2 Lander touch down?",
+          "ar": "أين هبط Viking 2 Lander؟"
+        },
+        "answer": {
+          "en": "It touched down at Utopia Planitia on Mars, about 200 km west of Mie Crater.",
+          "ar": "هبط في يوتوبيا بلانيتيا على المريخ، على بُعد نحو 200 كيلومتر غرب فوهة مي."
+        }
+      },
+      {
+        "question": {
+          "en": "What did NASA conclude about life from Viking's biology experiments?",
+          "ar": "ماذا خلصت NASA بشأن الحياة من تجارب Viking البيولوجية؟"
+        },
+        "answer": {
+          "en": "The experiments produced no definitive evidence of living microorganisms at the landing site.",
+          "ar": "لم تقدّم التجارب دليلاً حاسماً على وجود كائنات حية دقيقة في موقع الهبوط."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "Where did Viking 2 Lander touch down?",
+        "ar": "أين هبط Viking 2 Lander؟"
+      },
+      "options": {
+        "en": [
+          "Utopia Planitia",
+          "Chryse Planitia",
+          "Elysium Planitia"
+        ],
+        "ar": [
+          "Utopia Planitia",
+          "Chryse Planitia",
+          "Elysium Planitia"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Utopia Planitia Explorer",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1975-083C. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1975-083C; https://nssdc.gsfc.nasa.gov/planetary/viking.html; https://science.nasa.gov/mission/viking-2/; https://science.nasa.gov/astrobiology/missions/viking-project/"
+  },
+  {
+    "id": "phoenix-lander",
+    "name": "Phoenix Lander",
+    "nickname": "Phoenix",
+    "body": "Mars",
+    "has3DModel": false,
+    "model3dFile": null,
+    "type": "Lander",
+    "launchYear": 2007,
+    "landingDate": "2008-05-25",
+    "endOfMission": "2008-11-02",
+    "status": "Mission ended after the final signal on 2008-11-02; NASA and NSSDCA publish different touchdown times, but both give the calendar date 2008-05-25.",
+    "location": {
+      "siteName": "Green Valley of Vastitas Borealis, the arctic plains of Mars",
+      "lat": 68.15,
+      "lng": -125.9
+    },
+    "story": {
+      "en": "I am NASA’s Phoenix lander, built to examine the icy northern plains of Mars. My robotic arm collected soil and ice-rich material for onboard analysis in 2008. A sample heated by my TEGA instrument helped confirm water ice beneath the surface, while other tests detected perchlorate. After Martian winter reduced power from my solar panels, Earth received my final signal on November 2, 2008.",
+      "ar": "أنا المسبار الهابط Phoenix التابع لـ NASA، صُممتُ لفحص السهول الشمالية الجليدية للمريخ. جمعت ذراعي الروبوتية التربة ومواد غنية بالجليد لتحليلها على متني في عام 2008. ساعدت عينة سخّنها جهاز TEGA في تأكيد وجود جليد مائي تحت السطح، وكشفت اختبارات أخرى البركلورات. وبعد أن خفّض شتاء المريخ الطاقة التي تولدها ألواحي الشمسية، وصل آخر إرسال مني في 2 نوفمبر 2008."
+    },
+    "hotspots": [
+      {
+        "description": "The arm dug into the Martian soil and delivered samples to the instruments; RAC documented the trench and samples. NASA reports that the arm was deployed and operated during the surface mission, and the lander ultimately became inactive when mission communications ended.",
+        "part": "Robotic arm and Robotic Arm Camera (RAC)",
+        "title": "Sampling and close-up imaging system"
+      },
+      {
+        "description": "TEGA heated soil and ice samples and analyzed released volatiles. NASA states that a sample analyzed by TEGA provided the basis for the official July 31, 2008 announcement confirming water on Mars; the instrument remained on the inactive lander after the final signal.",
+        "part": "Thermal and Evolved Gas Analyzer (TEGA)",
+        "title": "Thermal analysis ovens and gas analyzer"
+      },
+      {
+        "description": "The two solar-panel wings supplied power after landing. NASA's JPL states that communications ended in November 2008 when the panels ceased operating in the dark Martian winter; the panels and lander hardware remained at the Mars landing site.",
+        "part": "Solar-panel wings",
+        "title": "Electrical power generation"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "2007",
+        "event": "Phoenix launched at 09:26:34 UT from Cape Canaveral Air Force Station on a Delta II 7925."
+      },
+      {
+        "year": "2008",
+        "event": "Phoenix entered the Martian atmosphere and landed in Green Valley of Vastitas Borealis; NASA's mission page gives touchdown as 23:38:38 UT."
+      },
+      {
+        "year": "2008",
+        "event": "NASA officially announced that Phoenix had found water on Mars from a TEGA-analyzed sample."
+      },
+      {
+        "year": "2008",
+        "event": "The Phoenix team announced detection of perchlorates in Martian soil."
+      },
+      {
+        "year": "2008",
+        "event": "NSSDCA records the last received signal and marks the Phoenix mission officially ended."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "What did Phoenix use its robotic arm to collect and deliver for analysis?",
+          "ar": "ماذا استخدم فينكس ذراعه الروبوتية لجمعه وتسليمه للتحليل؟"
+        },
+        "answer": {
+          "en": "It collected Martian soil and ice-rich samples and delivered them to onboard instruments such as TEGA and MECA.",
+          "ar": "جمع عينات من تربة المريخ ومواد غنية بالجليد وسلّمها إلى أجهزة على متن المركبة مثل TEGA و MECA."
+        }
+      },
+      {
+        "question": {
+          "en": "Why did Phoenix communications end in November 2008?",
+          "ar": "لماذا انتهت اتصالات فينكس في نوفمبر 2008؟"
+        },
+        "answer": {
+          "en": "NASA states that the solar panels ceased operating in the dark Martian winter, and NSSDCA records November 2, 2008 as the last received signal.",
+          "ar": "تذكر NASA أن الألواح الشمسية توقفت عن العمل خلال شتاء المريخ المظلم، ويسجل NSSDCA تاريخ 2 نوفمبر 2008 بوصفه تاريخ آخر إشارة مستقبلة."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "What did Phoenix confirm beneath the Martian surface?",
+        "ar": "ما الذي أكده Phoenix تحت سطح المريخ؟"
+      },
+      "options": {
+        "en": [
+          "Water ice",
+          "A global liquid-water ocean",
+          "Active plant life"
+        ],
+        "ar": [
+          "جليد مائي",
+          "محيط عالمي من الماء السائل",
+          "حياة نباتية نشطة"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Arctic Ice Finder",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2007-034A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-034A; https://science.nasa.gov/mission/mars-phoenix/; https://www.jpl.nasa.gov/missions/phoenix/; https://nssdc.gsfc.nasa.gov/planetary/mars_2003_05.html"
+  },
+  {
+    "id": "insight-lander",
+    "name": "InSight Lander",
+    "nickname": "InSight",
+    "body": "Mars",
+    "has3DModel": true,
+    "model3dFile": "/models/insight_lander.glb",
+    "type": "Lander",
+    "launchYear": 2018,
+    "landingDate": "2018-11-26",
+    "endOfMission": "2022-12-21",
+    "status": "NASA received the final transmission on 2022-12-15 and declared the mission over on 2022-12-21.",
+    "location": {
+      "siteName": "Elysium Planitia, Mars",
+      "lat": 4.5,
+      "lng": 135.9
+    },
+    "story": {
+      "en": "I am InSight, a stationary lander sent to listen to Mars and measure the planet’s interior. I reached Elysium Planitia on November 26, 2018, and my SEIS instrument recorded marsquakes and other ground vibrations. My heat probe struggled in unexpectedly clumpy soil, but I still gathered important data. NASA received my final transmission on December 15, 2022, and declared the mission over six days later.",
+      "ar": "أنا InSight، مسبار هابط ثابت أُرسل للاستماع إلى المريخ وقياس باطنه. وصلت إلى Elysium Planitia في 26 نوفمبر 2018، وسجّل جهازي SEIS الزلازل المريخية واهتزازات أرضية أخرى. واجه مسبار الحرارة صعوبة في تربة متكتلة على نحو غير متوقع، لكنني جمعت بيانات مهمة. استقبلت NASA آخر إرسال مني في 15 ديسمبر 2022، وأعلنت انتهاء المهمة بعد ستة أيام."
+    },
+    "hotspots": [
+      {
+        "description": "A surface seismometer that measured seismic waves from marsquakes, meteorite impacts, and atmospheric or weather-driven vibrations. NASA reported that it was the last science instrument still powered as dust reduced available energy; the mission then ended after the December 15, 2022 last transmission.",
+        "part": "SEIS",
+        "title": "Seismic Experiment for Interior Structure"
+      },
+      {
+        "description": "A self-penetrating heat-flow probe designed to reach almost 5 meters and measure heat escaping from Mars' interior. Unexpectedly clumpy soil prevented the planned depth; NASA reports that the mole reached about 40 centimeters (16 inches) and collected soil-property and thermal data.",
+        "part": "HP3 mole",
+        "title": "Heat Flow and Physical Properties Package"
+      },
+      {
+        "description": "The lander's robotic arm placed SEIS and HP3 on the Martian surface and used its scoop in attempts to help the HP3 mole and to remove or move soil on the solar panels. NASA describes these operations during the mission; the arm remained part of the landed spacecraft when communications ended.",
+        "part": "IDA",
+        "title": "Instrument Deployment Arm"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "2018",
+        "event": "Launch from Vandenberg Air Force Base on an Atlas V-401."
+      },
+      {
+        "year": "2018",
+        "event": "Landing in western Elysium Planitia, Mars; NASA records 11:52:59 a.m. Pacific Time."
+      },
+      {
+        "year": "2020",
+        "event": "The original primary mission was scheduled to end after about two Earth years, but NASA extended the mission."
+      },
+      {
+        "year": "2022",
+        "event": "Last transmission from InSight was received on Earth."
+      },
+      {
+        "year": "2022",
+        "event": "After two unsuccessful communication attempts, NASA declared the mission over."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "What did InSight's SEIS instrument measure?",
+          "ar": "ماذا قاس جهاز SEIS في إنسايت؟"
+        },
+        "answer": {
+          "en": "It measured seismic waves and vibrations from marsquakes, impacts, and some atmospheric or weather activity.",
+          "ar": "قاس الموجات والاهتزازات الزلزالية الناتجة عن زلازل المريخ والاصطدامات وبعض أنشطة الغلاف الجوي أو الطقس."
+        }
+      },
+      {
+        "question": {
+          "en": "Why did the HP3 mole stop far short of its planned depth?",
+          "ar": "لماذا توقف مسبار HP3 الحفّار قبل وقت طويل من العمق المخطط؟"
+        },
+        "answer": {
+          "en": "Unexpectedly clumpy Martian soil prevented the mole from gaining enough traction to reach its intended depth.",
+          "ar": "منعته تربة مريخية متكتلة على نحو غير متوقع من اكتساب قوة دفع كافية للوصول إلى العمق المقصود."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "What did InSight’s SEIS instrument measure?",
+        "ar": "ماذا قاس جهاز SEIS في InSight؟"
+      },
+      "options": {
+        "en": [
+          "Seismic waves and ground vibrations",
+          "The elemental composition of rocks",
+          "The speed of the Martian winds only"
+        ],
+        "ar": [
+          "الموجات الزلزالية واهتزازات الأرض",
+          "التركيب العنصري للصخور",
+          "سرعة رياح المريخ فقط"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Marsquake Listener",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2018-042A. NASA/NSSDCA source pages: https://science.nasa.gov/mission/insight/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2018-042A; https://science.nasa.gov/mission/insight/science-instruments/; https://www.jpl.nasa.gov/news/nasa-retires-insight-mars-lander-mission-after-years-of-science/"
+  },
+  {
+    "id": "ingenuity-helicopter",
+    "name": "Ingenuity Helicopter",
+    "nickname": "Ginny",
+    "body": "Mars",
+    "has3DModel": true,
+    "model3dFile": "/models/ingenuity.glb",
+    "type": "Rotorcraft",
+    "launchYear": 2020,
+    "landingDate": "2021-02-18",
+    "endOfMission": "2024-01-25",
+    "status": "Mission completed on 2024-01-25 after rotor damage during Flight 72; the cited NSSDCA ID is the Mars 2020 parent mission record, and NASA does not publish an exact Ingenuity coordinate.",
+    "location": {
+      "siteName": "Jezero Crater, Mars (arrived attached beneath Perseverance; no precise Ingenuity surface coordinates published by NASA)",
+      "lat": null,
+      "lng": null
+    },
+    "story": {
+      "en": "I am Ingenuity, the helicopter carried to Jezero Crater beneath Perseverance. On April 19, 2021, I made the first powered, controlled flight on another planet. I completed 72 flights instead of my planned five and helped scout routes and features for the rover. Rotor damage during my final flight ended my flying days, and NASA closed my mission on January 25, 2024.",
+      "ar": "أنا Ingenuity، المروحية التي حملتها مركبة Perseverance إلى فوهة Jezero. في 19 أبريل 2021 نفّذتُ أول رحلة طيران مضبوطة ومزوّدة بالطاقة على كوكب آخر. أكملتُ 72 رحلة بدلًا من خمس رحلات اختبار مخططة، وساعدتُ في استطلاع مسارات ومعالم للمركبة الجوالة. أنهى تلف الدوّار في رحلتي الأخيرة قدرتي على الطيران، وأغلقت NASA مهمتي في 25 يناير 2024."
+    },
+    "hotspots": [
+      {
+        "description": "The two counter-rotating blades generated lift in Mars’s very thin atmosphere. During the January 18, 2024 flight, contact was lost about 1 meter above the surface; NASA later received imagery showing rotor-blade damage, and the helicopter was no longer capable of flight.",
+        "part": "Twin counter-rotating rotor blades",
+        "title": "Mars-flight rotor system"
+      },
+      {
+        "description": "The solar panel charged the lithium-ion batteries, providing energy for flight and survival heating. This system powered Ingenuity during its operations; NASA’s cited mission-end reports do not state a separate disposal or recovery outcome for the power hardware, and the helicopter remains on the Martian surface.",
+        "part": "Solar panel and lithium-ion batteries",
+        "title": "Power system"
+      },
+      {
+        "description": "Ingenuity relied on Perseverance to relay commands and data between the helicopter and Earth because it could not be flown in real time. Communications were reestablished after the January 18 flight, but the helicopter remained grounded after the rotor damage.",
+        "part": "Perseverance rover communications relay",
+        "title": "Surface communications link"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "2020",
+        "event": "July 30: Mars 2020 launched from Cape Canaveral Air Force Station on an Atlas V-541, carrying Perseverance and Ingenuity."
+      },
+      {
+        "year": "2021",
+        "event": "February 18: Mars 2020 landed in Jezero Crater; Ingenuity arrived attached beneath Perseverance."
+      },
+      {
+        "year": "2021",
+        "event": "April 4: Ingenuity was deployed to the Martian surface."
+      },
+      {
+        "year": "2021",
+        "event": "April 19: Ingenuity made the first powered, controlled flight by an aircraft on another planet."
+      },
+      {
+        "year": "2021",
+        "event": "May 7: After its fifth test flight, Ingenuity transitioned from the original technology demonstration to an operations-demonstration role."
+      },
+      {
+        "year": "2024",
+        "event": "January 18: The final flight ended with loss of contact near touchdown and subsequent rotor-blade damage."
+      },
+      {
+        "year": "2024",
+        "event": "January 25: NASA announced that the Ingenuity mission was complete."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Why did Ingenuity need Perseverance during its mission?",
+          "ar": "لماذا احتاجت Ingenuity إلى بيرسيفيرانس أثناء مهمتها؟"
+        },
+        "answer": {
+          "en": "Perseverance relayed commands and data between Ingenuity and Earth because Ingenuity’s flights were autonomous and could not be piloted with a real-time joystick.",
+          "ar": "كانت بيرسيفيرانس تنقل الأوامر والبيانات بين Ingenuity والأرض، لأن رحلات Ingenuity كانت ذاتية ولم يكن ممكناً قيادتها بعصا تحكم لحظية."
+        }
+      },
+      {
+        "question": {
+          "en": "What ended Ingenuity’s ability to fly?",
+          "ar": "ما الذي أنهى قدرة Ingenuity على الطيران؟"
+        },
+        "answer": {
+          "en": "NASA reported rotor-blade damage during the January 18, 2024 flight; the helicopter was no longer capable of flight.",
+          "ar": "أفادت NASA بحدوث ضرر في شفرات الدوّار أثناء رحلة 18 يناير 2024، فأصبحت المروحية غير قادرة على الطيران."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "How many flights did Ingenuity complete?",
+        "ar": "كم رحلة أكملت Ingenuity؟"
+      },
+      "options": {
+        "en": [
+          "72",
+          "5",
+          "19"
+        ],
+        "ar": [
+          "72",
+          "5",
+          "19"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "First Flight on Mars",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2020-052A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2020-052A; https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/; https://www.nasa.gov/news-release/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/; https://www.jpl.nasa.gov/missions/ingenuity/; https://science.nasa.gov/mission/mars-2020-perseverance/; https://mars.nasa.gov/technology/helicopter/"
+  },
+  {
+    "id": "dawn-spacecraft",
+    "name": "Dawn Spacecraft",
+    "nickname": "Dawn",
+    "body": "Deep Space",
+    "has3DModel": true,
+    "model3dFile": "/models/dawn.glb",
+    "type": "Deep Space Probe",
+    "launchYear": 2007,
+    "landingDate": null,
+    "endOfMission": "2018-11-01",
+    "status": "NASA ended the mission on 2018-11-01 after hydrazine depletion and loss of signal on 2018-10-31; the inert spacecraft remains in orbit around Ceres.",
+    "location": {
+      "siteName": "Final orbit around dwarf planet Ceres; earlier orbital mission at asteroid Vesta (no surface landing)",
+      "lat": null,
+      "lng": null
+    },
+    "story": {
+      "en": "I am Dawn, a deep-space explorer powered by xenon ion propulsion. I orbited Vesta before traveling onward to dwarf planet Ceres, where I studied its bright deposits and geology from orbit. I was not designed to land, so I remain an inert spacecraft circling Ceres. NASA ended my mission in November 2018 after my hydrazine supply ran out.",
+      "ar": "أنا Dawn، مستكشفة فضائية عميقة تعمل بدفع أيوني باستخدام الزينون. دُرت حول Vesta ثم تابعت رحلتي إلى الكوكب القزم Ceres، ودرستُ رواسبه اللامعة وتضاريسه من المدار. لم أُصمَّم للهبوط، لذلك بقيتُ مركبة خاملة تدور حول Ceres. أنهت NASA مهمتي في نوفمبر 2018 بعد نفاد الهيدرازين."
+    },
+    "hotspots": [
+      {
+        "description": "Two solar-array wings supplied electrical power for the spacecraft and its ion propulsion system. They remained part of the spacecraft, which became inert in Ceres orbit after hydrazine depletion prevented further pointing control.",
+        "part": "Solar-array wings",
+        "title": "Power generation"
+      },
+      {
+        "description": "Three xenon ion thrusters gradually changed Dawn's heliocentric trajectory and enabled travel from Earth to Vesta and then Ceres. NASA reports that no further ion thrusting was planned in the final Ceres orbit; the system remains aboard the inert spacecraft in orbit around Ceres.",
+        "part": "Xenon ion propulsion system",
+        "title": "Low-thrust interplanetary propulsion"
+      },
+      {
+        "description": "Hydrazine thrusters controlled spacecraft orientation, including pointing the solar arrays and antennas. The hydrazine was depleted on 2018-10-31, communications ceased, and Dawn could no longer be steered; the spacecraft remains in its protective Ceres orbit.",
+        "part": "Hydrazine reaction-control system",
+        "title": "Orientation and attitude control"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "2007",
+        "event": "Launch from Cape Canaveral, Florida, at 11:34 UTC on a Delta II 7925."
+      },
+      {
+        "year": "2009",
+        "event": "Mars gravity assist during the heliocentric cruise."
+      },
+      {
+        "year": "2011",
+        "event": "Arrival at and orbital insertion around asteroid Vesta."
+      },
+      {
+        "year": "2012",
+        "event": "Departure from Vesta."
+      },
+      {
+        "year": "2015",
+        "event": "Arrival at and orbital insertion around dwarf planet Ceres."
+      },
+      {
+        "year": "2016",
+        "event": "End of the primary mission."
+      },
+      {
+        "year": "2018",
+        "event": "Hydrazine depleted; the spacecraft's radio signal was lost as it could no longer maintain orientation."
+      },
+      {
+        "year": "2018",
+        "event": "NASA officially announced the end of the Dawn mission."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Why are Dawn's latitude and longitude null?",
+          "ar": "لماذا قيمتا خط العرض والطول لمركبة Dawn تساويان null؟"
+        },
+        "answer": {
+          "en": "Dawn was an orbiter and NASA states it was not engineered to land; its relevant location is its orbital path, not a fixed surface point.",
+          "ar": "كانت Dawn مركبة مدارية، وتذكر NASA أنها لم تُهندَس للهبوط؛ لذلك فموقعها المناسب هو مسارها المداري وليس نقطة ثابتة على السطح."
+        }
+      },
+      {
+        "question": {
+          "en": "What ended Dawn's ability to communicate with Earth?",
+          "ar": "ما الذي أنهى قدرة Dawn على التواصل مع الأرض؟"
+        },
+        "answer": {
+          "en": "Its hydrazine was depleted on October 31, 2018, so it could no longer control its orientation to point its antenna at Earth; NASA officially ended the mission on November 1.",
+          "ar": "نفد الهيدرازين في 31 أكتوبر 2018، فلم تعد قادرة على توجيه هوائيها نحو الأرض؛ وأعلنت NASA انتهاء المهمة رسمياً في 1 نوفمبر."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "What was Dawn’s final planetary destination?",
+        "ar": "ما وجهة Dawn المدارية الأخيرة؟"
+      },
+      "options": {
+        "en": [
+          "Dwarf planet Ceres",
+          "Asteroid Vesta",
+          "Mars"
+        ],
+        "ar": [
+          "الكوكب القزم Ceres",
+          "الكويكب Vesta",
+          "المريخ"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Vesta-Ceres Voyager",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2007-043A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-043A; https://science.nasa.gov/mission/dawn/; https://science.nasa.gov/mission/dawn/toolkit/end-of-mission/; https://science.nasa.gov/mission/dawn/mission-status/; https://science.nasa.gov/mission/dawn/technology/spacecraft/; https://science.nasa.gov/mission/dawn/science/overview/; https://science.nasa.gov/mission/dawn/faq/"
+  },
+  {
+    "id": "near-shoemaker",
+    "name": "NEAR Shoemaker",
+    "nickname": "NEAR Shoemaker",
+    "body": "Deep Space",
+    "has3DModel": true,
+    "model3dFile": "/models/near_shoemaker.glb",
+    "type": "Deep Space Probe",
+    "launchYear": 1996,
+    "landingDate": "2001-02-12",
+    "endOfMission": "2001-02-28",
+    "status": "Mission ended after final contact on 2001-02-28; the spacecraft remains at Eros’ saddle region, and NASA’s opened pages do not provide surface coordinates. NASA pages report touchdown times that differ by minutes, but agree on the 2001-02-12 calendar date.",
+    "location": {
+      "siteName": "Saddle region of asteroid 433 Eros, just south of Himeros",
+      "lat": null,
+      "lng": null
+    },
+    "story": {
+      "en": "I am NEAR Shoemaker, sent to investigate asteroid 433 Eros. I became the first spacecraft to orbit an asteroid and, although I was not designed as a lander, touched down gently in Eros’ saddle region in February 2001. I kept returning images and gamma-ray measurements from the surface for about two weeks. My last contact came on February 28, after the surface cold overcame my operations.",
+      "ar": "أنا NEAR Shoemaker، أُرسلت لدراسة الكويكب 433 Eros. أصبحتُ أول مركبة تدور حول كويكب، ثم هبطتُ بهدوء في منطقة السرج على Eros في فبراير 2001 رغم أنني لم أُصمَّم كمركبة هبوط. واصلتُ إرسال الصور وقياسات أشعة غاما من السطح لنحو أسبوعين. انتهى الاتصال بي في 28 فبراير بعدما اشتد البرد على السطح."
+    },
+    "hotspots": [
+      {
+        "part": "Multi-Spectral Imager (MSI)",
+        "title": "Surface imaging camera",
+        "description": "A multispectral camera used to image Eros and Mathilde; it returned high-resolution descent images, including views from about 120 meters above Eros, and its final transmitted image was received during touchdown."
+      },
+      {
+        "part": "X-Ray/Gamma-Ray Spectrometer (XGRS)",
+        "title": "Elemental-composition spectrometer",
+        "description": "Measured X-ray and gamma-ray signatures to determine surface elemental composition; it continued collecting data from the surface for about two weeks after touchdown."
+      },
+      {
+        "part": "Near-Infrared Spectrometer (NIS)",
+        "title": "Mineralogy instrument",
+        "description": "Collected near-infrared spectra for mineralogical and surface studies and helped map more than 70 percent of Eros; NASA NSSDCA records it was turned off after an excessive power surge in May 2000."
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1996",
+        "event": "NEAR launched on February 17 as the first mission in NASA’s Discovery program."
+      },
+      {
+        "year": "1997",
+        "event": "NEAR flew within about 1,200 km of asteroid 253 Mathilde on June 27."
+      },
+      {
+        "year": "1998",
+        "event": "NEAR performed an Earth gravity-assist flyby on January 23 and later flew past Eros on December 23."
+      },
+      {
+        "year": "2000",
+        "event": "NEAR entered orbit around 433 Eros on February 14, becoming the first spacecraft to orbit an asteroid."
+      },
+      {
+        "year": "2001",
+        "event": "NEAR made the first asteroid touchdown on February 12 in Eros’ saddle region and maintained contact until February 28."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Where did NEAR Shoemaker touch down?",
+          "ar": "أين هبطت NEAR Shoemaker؟"
+        },
+        "answer": {
+          "en": "NASA describes the touchdown site as the saddle region of 433 Eros, just south of the saddle-shaped feature Himeros.",
+          "ar": "تصف NASA موقع الهبوط بأنه منطقة السرج على 433 Eros، جنوب المعلم ذي الشكل السَرْجي Himeros بقليل."
+        }
+      },
+      {
+        "question": {
+          "en": "What ended the mission?",
+          "ar": "ما الذي أنهى المهمة؟"
+        },
+        "answer": {
+          "en": "Final contact was made on February 28, 2001, after the spacecraft operated on the cold asteroid surface for about two weeks.",
+          "ar": "حدث الاتصال الأخير في 28 فبراير 2001، بعدما واصلت المركبة العمل على سطح الكويكب البارد نحو أسبوعين."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "What was NEAR Shoemaker the first spacecraft to do?",
+        "ar": "ما الإنجاز الأول الذي حققته NEAR Shoemaker؟"
+      },
+      "options": {
+        "en": [
+          "Orbit and land on an asteroid",
+          "Return a sample from Mars",
+          "Land on the Moon and deploy a rover"
+        ],
+        "ar": [
+          "الدوران حول كويكب والهبوط عليه",
+          "إعادة عينة من المريخ",
+          "الهبوط على القمر وإنزال عربة جوالة"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Eros Orbiter and Touchdown",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1996-008A. NASA/NSSDCA source pages: https://science.nasa.gov/mission/near-shoemaker/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1996-008A; https://nssdc.gsfc.nasa.gov/planetary/near.html; https://science.nasa.gov/solar-system/jpl-navigators-guide-near-to-historic-landing-on-asteroid-eros/; https://science.nasa.gov/solar-system/near-shoemakers-historic-landing-on-eros-exceeds-science-engineering-expectations/"
+  },
+  {
+    "id": "pioneer-10-11",
+    "name": "Pioneer 10 & 11",
+    "nickname": "Pioneer twins",
+    "body": "Deep Space",
+    "has3DModel": false,
+    "model3dFile": null,
+    "type": "Deep Space Probe",
+    "launchYear": 1972,
+    "landingDate": null,
+    "endOfMission": "2003-01-23",
+    "status": "Neither spacecraft landed; Pioneer 11 ceased science operations in 1995 and Pioneer 10’s last signal was received on 2003-01-23. Both continue on heliocentric escape trajectories.",
+    "location": {
+      "siteName": "Deep-space heliocentric escape trajectories: Pioneer 10 generally toward Aldebaran in Taurus; Pioneer 11 generally toward Lambda Aquila in the direction of Aquila/Sagittarius",
+      "lat": null,
+      "lng": null
+    },
+    "story": {
+      "en": "I am Pioneer 10, joined in this archive by my sister spacecraft Pioneer 11. I crossed the asteroid belt and explored Jupiter, while Pioneer 11 used a Jupiter flyby to continue to Saturn. Our radioisotope generators and antennas kept sending science home as we traveled outward. Pioneer 11 fell silent in 1995 and Pioneer 10 sent its last detected signal in 2003; both remain on Solar System escape paths.",
+      "ar": "أنا Pioneer 10، وترافقني في هذا الأرشيف المركبة الشقيقة Pioneer 11. عبرتُ حزام الكويكبات واستكشفتُ المشتري، بينما استخدمت Pioneer 11 مرورها قرب المشتري لمواصلة رحلتها إلى زحل. واصلت مولداتنا وأطباقنا إرسال البيانات العلمية إلى الأرض ونحن نبتعد. صمتت Pioneer 11 في 1995، وأرسلت Pioneer 10 آخر إشارة مرصودة في 2003؛ وما زلنا على مساري هروب من النظام الشمسي."
+    },
+    "hotspots": [
+      {
+        "description": "The spacecraft used radioisotope generators for electrical power during the long outer-Solar-System missions. NSSDCA records declining RTG output as the reason for instrument power sharing and eventual loss of operations; Pioneer 10's transmitter became too weak for further detection in 2003, and Pioneer 11's science operations and daily telemetry ceased in 1995 when available power was insufficient.",
+        "part": "Radioisotope thermoelectric generators (RTGs)",
+        "title": "Long-duration nuclear electrical power"
+      },
+      {
+        "description": "Each spacecraft carried a 2.74 m high-gain dish with redundant receivers/transmitters and communicated through NASA's Deep Space Network. Pioneer 11's antenna could no longer remain pointed toward Earth after Earth's motion carried it out of view, ending communications; Pioneer 10's final detectable signal was received on 2003-01-23.",
+        "part": "High-gain parabolic antenna and S-band radio system",
+        "title": "Deep-space communication"
+      },
+      {
+        "description": "A metal plaque on each spacecraft depicts a man and a woman and indicates the location of the Sun and Earth using astronomical references. NASA states the plaques were intended to communicate information about the creators and origin if found by an intelligent civilization; the plaques remain attached to the outbound spacecraft.",
+        "part": "Pioneer plaque",
+        "title": "Message identifying the spacecraft's origin"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1972",
+        "event": "Pioneer 10 launched from Cape Canaveral on March 2 and entered the asteroid belt on July 15."
+      },
+      {
+        "year": "1973",
+        "event": "Pioneer 10 made its closest Jupiter approach on December 4; Pioneer 11 launched on April 6."
+      },
+      {
+        "year": "1974",
+        "event": "Pioneer 11 made its closest Jupiter approach on December 3 after using Jupiter's gravity to redirect toward Saturn."
+      },
+      {
+        "year": "1979",
+        "event": "Pioneer 11 made the first close exploration of Saturn on September 1, passing about 13,000 miles from the cloud tops and returning 440 images."
+      },
+      {
+        "year": "1983",
+        "event": "Pioneer 10 crossed Neptune's orbit on June 13, the first human-made object to do so."
+      },
+      {
+        "year": "1990",
+        "event": "Pioneer 11 crossed Neptune's orbit on February 23."
+      },
+      {
+        "year": "1995",
+        "event": "NASA Ames made last contact with Pioneer 11 on September 30; final engineering data were received on November 24."
+      },
+      {
+        "year": "2003",
+        "event": "Pioneer 10's last weak signal was received on January 23; NASA later reported no further detectable response."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Which Pioneer spacecraft was the first to fly past Saturn?",
+          "ar": "أي مركبة Pioneer كانت أول من حلّق قرب زحل؟"
+        },
+        "answer": {
+          "en": "Pioneer 11 was the first spacecraft to fly past Saturn on September 1, 1979.",
+          "ar": "كانت Pioneer 11 أول مركبة تحلّق قرب زحل في 1 سبتمبر 1979."
+        }
+      },
+      {
+        "question": {
+          "en": "Did Pioneer 10 or Pioneer 11 land on a planetary surface?",
+          "ar": "هل هبطت Pioneer 10 أو Pioneer 11 على سطح كوكبي؟"
+        },
+        "answer": {
+          "en": "No. Both were flyby spacecraft on heliocentric escape trajectories, so there is no landing site or published surface latitude and longitude.",
+          "ar": "لا. كلتاهما مركبتا تحليق على مسارات هروب حول الشمس، لذلك لا يوجد موقع هبوط أو خط عرض وخط طول سطحيان منشوران."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "Which Pioneer spacecraft was first to fly past Saturn?",
+        "ar": "أي مركبتي Pioneer كانت أول من حلق قرب زحل؟"
+      },
+      "options": {
+        "en": [
+          "Pioneer 11",
+          "Pioneer 10",
+          "Both on the same date"
+        ],
+        "ar": [
+          "Pioneer 11",
+          "Pioneer 10",
+          "كلتاهما في التاريخ نفسه"
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Outer Solar System Scouts",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 1972-012A, 1973-019A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1972-012A; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-019A; https://science.nasa.gov/mission/pioneer-10/; https://science.nasa.gov/mission/pioneer-11/; https://science.nasa.gov/missions/pioneer/pioneer-10-sends-last-signal/; https://www.nasa.gov/solar-system/planets/saturn/40-years-ago-pioneer-11-first-to-explore-saturn/"
+  },
+  {
+    "id": "kepler-space-telescope",
+    "name": "Kepler Space Telescope",
+    "nickname": "Kepler",
+    "body": "Deep Space",
+    "has3DModel": true,
+    "model3dFile": "/models/kepler_b.glb",
+    "type": "Deep Space Probe",
+    "launchYear": 2009,
+    "landingDate": null,
+    "endOfMission": "2018-10-30",
+    "status": "NASA retired Kepler on 2018-10-30 after fuel depletion; final communications-disconnect commands were sent on 2018-11-15, and the spacecraft remains in an Earth-trailing solar orbit.",
+    "location": {
+      "siteName": "Earth-trailing heliocentric solar orbit; approximately 0.97 × 1.041 AU with 0.5° inclination to the solar ecliptic",
+      "lat": null,
+      "lng": null
+    },
+    "story": {
+      "en": "I am Kepler, a space telescope built to find planets by watching stars dim as planets passed in front of them. My observations revealed thousands of possible worlds, and the extended K2 mission continued after reaction-wheel failures. When my fuel ran out in 2018, NASA retired me in my Earth-trailing solar orbit. Final communication commands followed in November, and I now travel silently around the Sun.",
+      "ar": "أنا Kepler، تلسكوب فضائي صُمم لاكتشاف الكواكب عبر رصد خفوت النجوم عندما تمر الكواكب أمامها. كشفت ملاحظاتي آلاف العوالم المحتملة، واستمرت مهمة K2 بعد تعطل عجلات ردّ الفعل. عندما نفد وقودي في 2018، أحالتني NASA إلى التقاعد في مداري الشمسي الذي يتبع الأرض. أُرسلت أوامر الاتصال الأخيرة في نوفمبر، وأواصل الآن الدوران بصمت حول الشمس."
+    },
+    "hotspots": [
+      {
+        "description": "It measured extremely small changes in stellar brightness caused by transits. NASA describes it as Kepler's essentially single scientific instrument, with an approximately 1-meter aperture and a 1.4-meter primary mirror; after retirement it remained aboard the spacecraft in its safe solar orbit.",
+        "part": "Photometer / Schmidt telescope",
+        "title": "The planet-finding instrument"
+      },
+      {
+        "description": "The image-sensor array recorded the photometer's stellar measurements across Kepler's field of view. NASA describes the spacecraft as carrying the largest digital camera outfitted for space observations at that time; it was not recovered to Earth and remains with the retired spacecraft.",
+        "part": "Digital image-sensor array",
+        "title": "The space camera"
+      },
+      {
+        "description": "The four gyroscope-like reaction wheels controlled the telescope's pointing. NASA reports that one failed in July 2012 and a second failed in May 2013; the two remaining wheels helped make the K2 mission possible, while solar pressure and thrusters were later used for pointing control.",
+        "part": "Reaction wheels",
+        "title": "Precision-pointing actuators"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "2009",
+        "event": "Kepler launched from Cape Canaveral at 03:49:57 UTC on a Delta II rocket, according to NASA's exact UTC time and the NSSDCA record."
+      },
+      {
+        "year": "2009",
+        "event": "NASA's in-depth mission page says Kepler began its operational mission after commissioning."
+      },
+      {
+        "year": "2012",
+        "event": "The extended K2 mission began after the prime mission was formally extended."
+      },
+      {
+        "year": "2013",
+        "event": "A second reaction-wheel failure ended the original mission's planned precise pointing and new data collection."
+      },
+      {
+        "year": "2018",
+        "event": "NASA announced that Kepler had run out of fuel and would be retired in its current safe orbit."
+      },
+      {
+        "year": "2018",
+        "event": "NASA transmitted the final goodnight commands to disconnect communications with Earth."
+      }
+    ],
+    "interactiveQA": [
+      {
+        "question": {
+          "en": "Why did Kepler observe stellar brightness so precisely?",
+          "ar": "لماذا راقب Kepler سطوع النجوم بهذه الدقة؟"
+        },
+        "answer": {
+          "en": "To detect tiny transit-related dips in brightness that can indicate a planet crossing in front of its star.",
+          "ar": "لكشف الانخفاضات الصغيرة في السطوع الناتجة عن عبور كوكب أمام نجمه، وهي علامة قد تشير إلى وجوده."
+        }
+      },
+      {
+        "question": {
+          "en": "What happened to Kepler at the end of its mission?",
+          "ar": "ماذا حدث لـ Kepler في نهاية مهمته؟"
+        },
+        "answer": {
+          "en": "NASA announced that it had run out of fuel, retired it in its current safe orbit, and sent final commands to disconnect communications.",
+          "ar": "أعلنت NASA أن وقوده نفد، فأحالته إلى التقاعد في مداره الآمن الحالي، ثم أرسلت أوامر نهائية لقطع الاتصالات."
+        }
+      }
+    ],
+    "quiz": {
+      "question": {
+        "en": "Why was the Kepler mission retired?",
+        "ar": "لماذا أُحيلت مهمة Kepler إلى التقاعد؟"
+      },
+      "options": {
+        "en": [
+          "The spacecraft ran out of fuel.",
+          "It landed on an exoplanet.",
+          "A dust storm blocked its view from Earth."
+        ],
+        "ar": [
+          "نفد وقود المركبة.",
+          "هبطت على كوكب خارج المجموعة الشمسية.",
+          "حجبت عاصفة غبار رؤيتها من الأرض."
+        ]
+      },
+      "correctAnswer": 0
+    },
+    "badgeName": "Planet Transit Finder",
+    "nasaSource": "NASA Space Science Data Coordinated Archive (NSSDCA) IDs: 2009-011A. NASA/NSSDCA source pages: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2009-011A; https://science.nasa.gov/mission/kepler/; https://science.nasa.gov/mission/kepler/in-depth/; https://science.nasa.gov/universe/exoplanets/goodnight-kepler-final-commands-for-space-telescope/; https://science.nasa.gov/resource/kepler-space-telescope/; https://www.nasa.gov/history/10-years-ago-kepler-planet-finder-is-launched/"
+  }
+]

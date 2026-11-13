@@ -1,0 +1,361 @@
+import { useEffect, useRef, useState } from 'react';
+import confetti from 'canvas-confetti';
+import {
+  Activity, ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, CalendarDays, Check,
+  CircleHelp, Clock3, MapPin, Play, Radio, RadioTower, RotateCcw, Sparkles,
+  Volume2, VolumeX,
+} from 'lucide-react';
+import { transmitText } from '../utils/radio.js';
+
+const COPY = {
+  en: {
+    archive: 'MISSION ARCHIVE', count: 'RELICS IN DATABASE', hint: 'Select an artifact to open its memory room.',
+    noLocation: 'Location coordinates unavailable', memory: 'MEMORY ROOM', back: 'BACK TO MAP',
+    telemetry: 'MISSION TELEMETRY', record: 'RECORD ID(S)', coordinates: 'SURFACE COORDINATES', orbit: 'ORBIT / POSITION', positionUnavailable: 'Position not specified in the archive',
+    hotspots: 'HARDWARE HOTSPOTS', hotspotHint: 'Select a point to inspect its function and fate.', hotspotDetail: 'ENGINEERING FUNCTION & FATE', locked: 'LOCKED', unlocked: 'UNLOCKED',
+    mission: 'MISSION PROFILE', active: 'ARCHIVED', story: 'Story & Q&A', timeline: 'Timeline', quiz: 'Explorer Quiz',
+    transmit: 'Listen to Transmission', transmitting: 'TRANSMITTING…', stop: 'Stop transmission',
+    fieldNote: 'FIELD TRANSMISSION', qa: 'ASK THE ARCHIVE', answer: 'ARCHIVE RESPONSE',
+    milestones: 'MISSION MILESTONES', quizTitle: 'CHECK YOUR SIGNAL', choose: 'Select the correct answer to unlock this explorer badge.',
+    submit: 'CONFIRM ANSWER', correct: 'SIGNAL VERIFIED — BADGE UNLOCKED', already: 'BADGE ALREADY IN YOUR ARCHIVE', wrong: 'SIGNAL MISMATCH — TRY AGAIN',
+    badge: 'EXPLORER BADGE', citation: 'SOURCE ARCHIVE', nssdca: 'NSSDCA RECORD ID(S)', nasa: 'NASA ARCHIVE', sources: 'NASA SOURCES',
+    launch: 'LAUNCH', landing: 'SURFACE ARRIVAL', end: 'LAST SIGNAL / END', site: 'MISSION SITE',
+    category: 'MISSION CLASS', details: 'MISSION DETAILS', time: 'MISSION TIMELINE', quizHint: 'Choose an answer below.',
+    open: 'OPEN MEMORY ROOM', deep: 'DEEP SPACE', moon: 'MOON', mars: 'MARS', lander: 'LANDER', rover: 'ROVER',
+  },
+  ar: {
+    archive: 'أرشيف المهمات', count: 'أثر في قاعدة البيانات', hint: 'اختر أثرًا لفتح غرفة ذاكرته.',
+    noLocation: 'إحداثيات الموقع غير متاحة', memory: 'غرفة الذاكرة', back: 'العودة إلى الخريطة',
+    telemetry: 'بيانات المهمة', record: 'معرّف/معرّفات سجل', coordinates: 'إحداثيات السطح', orbit: 'المدار / الموقع', positionUnavailable: 'الموقع غير محدد في الأرشيف',
+    hotspots: 'نقاط العتاد', hotspotHint: 'اختر نقطة لفحص وظيفتها ومصيرها.', hotspotDetail: 'الوظيفة الهندسية والمصير', locked: 'مقفلة', unlocked: 'مفتوحة',
+    mission: 'ملف المهمة', active: 'مؤرشف', story: 'القصة والأسئلة', timeline: 'الخط الزمني', quiz: 'اختبار المستكشف',
+    transmit: 'استمع إلى الإرسال', transmitting: 'جارٍ الإرسال…', stop: 'إيقاف الإرسال',
+    fieldNote: 'إرسال من الميدان', qa: 'اسأل الأرشيف', answer: 'رد الأرشيف',
+    milestones: 'محطات المهمة', quizTitle: 'تحقّق من الإشارة', choose: 'اختر الإجابة الصحيحة لفتح شارة المستكشف.',
+    submit: 'تأكيد الإجابة', correct: 'تم التحقق من الإشارة — فُتحت الشارة', already: 'الشارة موجودة بالفعل في أرشيفك', wrong: 'الإشارة غير مطابقة — حاول مجددًا',
+    badge: 'شارة المستكشف', citation: 'أرشيف المصدر', nssdca: 'معرّف/معرّفات سجل', nasa: 'أرشيف ناسا', sources: 'مصادر ناسا',
+    launch: 'الإطلاق', landing: 'الوصول إلى السطح', end: 'آخر إشارة / نهاية المهمة', site: 'موقع المهمة',
+    category: 'فئة المهمة', details: 'تفاصيل المهمة', time: 'الخط الزمني للمهمة', quizHint: 'اختر إجابة بالأسفل.',
+    open: 'افتح غرفة الذاكرة', deep: 'الفضاء العميق', moon: 'القمر', mars: 'المريخ', lander: 'مسبار هبوط', rover: 'عربة جوالة',
+  },
+};
+
+function getSources(nasaSource = '') {
+  const idText = nasaSource.match(/NSSDCA\)?\s+IDs?:\s*([^.]+)/i)?.[1]?.trim() || '—';
+  const urls = [...new Set(nasaSource.match(/https?:\/\/[^\s;]+/g) || [])].map((url) => url.replace(/[.,]+$/, ''));
+  return { idText, urls };
+}
+
+function getTelemetryPosition(item, copy) {
+  const { lat, lng, siteName } = item.location || {};
+  if (Number.isFinite(lat) && Number.isFinite(lng)) {
+    const latitude = `${Math.abs(lat)}° ${lat < 0 ? 'S' : 'N'}`;
+    const longitude = `${Math.abs(lng)}° ${lng < 0 ? 'W' : 'E'}`;
+    return { label: copy.coordinates, value: `${latitude}  ·  ${longitude}`, coordinates: true };
+  }
+  return { label: copy.orbit, value: siteName || copy.positionUnavailable, coordinates: false };
+}
+
+function sameHotspot(first, second) {
+  if (!first || !second) return false;
+  if (first.part && second.part) return first.part === second.part;
+  return Boolean(first.title && second.title && first.title === second.title);
+}
+
+function dateLabel(value, language) {
+  if (!value) return '—';
+  const date = new Date(`${value}T00:00:00Z`);
+  return new Intl.DateTimeFormat(language === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(date);
+}
+
+function getBodyLabel(item, language, copy) {
+  if (item.body === 'Moon') return copy.moon;
+  if (item.body === 'Mars') return copy.mars;
+  return copy.deep;
+}
+
+function getTypeLabel(type, language, copy) {
+  if (language === 'ar') {
+    if (type.toLowerCase().includes('rover')) return copy.rover;
+    if (type.toLowerCase().includes('lander')) return copy.lander;
+  }
+  return type.toUpperCase();
+}
+
+function RelicCard({ item, language, onSelect }) {
+  const copy = COPY[language] || COPY.en;
+  return (
+    <button type="button" className="relic-card" onClick={() => onSelect(item)}>
+      <span className="relic-card-index">{String(item.launchYear).slice(-2)} <i /> {item.type.toUpperCase()}</span>
+      <span className="relic-card-title">{item.nickname || item.name}</span>
+      <span className="relic-card-meta"><span>{getBodyLabel(item, language, copy)}</span><span>{item.landingDate ? dateLabel(item.landingDate, language) : item.launchYear}</span></span>
+      <span className="relic-card-arrow"><ArrowUpRight size={15} /></span>
+    </button>
+  );
+}
+
+function ArchiveList({ relics, language, onSelect }) {
+  const copy = COPY[language] || COPY.en;
+  return (
+    <div className="archive-list-view">
+      <div className="panel-title-row">
+        <div>
+          <span className="eyebrow">{copy.archive}</span>
+          <h2>{language === 'ar' ? 'سجلّ الاستكشاف' : 'EXPLORER LOG'}</h2>
+        </div>
+        <span className="archive-count">{String(relics.length).padStart(2, '0')} <i>/ 16</i></span>
+      </div>
+      <div className="archive-summary">
+        <span className="summary-line" />
+        <p>{copy.hint}</p>
+      </div>
+      <div className="relic-list" role="list" aria-label={copy.archive}>
+        {relics.map((item) => <RelicCard key={item.id} item={item} language={language} onSelect={onSelect} />)}
+      </div>
+      <div className="archive-footnote"><span className="live-dot" />{copy.count}</div>
+    </div>
+  );
+}
+
+function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHotspot }) {
+  const copy = COPY[language] || COPY.en;
+  const [activeTab, setActiveTab] = useState('story');
+  const [activeQuestion, setActiveQuestion] = useState(null);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [quizResult, setQuizResult] = useState('');
+  const [isTransmitting, setIsTransmitting] = useState(false);
+  const transmissionRef = useRef(null);
+  const playbackTokenRef = useRef(0);
+  const isArabic = language === 'ar';
+  const storyText = item.story?.[language] || item.story?.en || '';
+  const questions = item.interactiveQA || [];
+  const timeline = item.timeline || [];
+  const quiz = item.quiz || {};
+  const options = quiz.options?.[language] || quiz.options?.en || [];
+  const { idText, urls } = getSources(item.nasaSource);
+  const siteName = item.location?.siteName || copy.noLocation;
+  const position = getTelemetryPosition(item, copy);
+  const hardwareHotspots = (item.hotspots || []).slice(0, 3);
+  const activeHotspot = hardwareHotspots.find((spot) => sameHotspot(hotspot, spot));
+
+  useEffect(() => {
+    setActiveTab('story');
+    setActiveQuestion(null);
+    setSelectedAnswer(null);
+    setQuizResult('');
+    return () => {
+      playbackTokenRef.current += 1;
+      transmissionRef.current?.();
+      transmissionRef.current = null;
+    };
+  }, [item.id]);
+
+  const stopAudio = () => {
+    playbackTokenRef.current += 1;
+    transmissionRef.current?.();
+    transmissionRef.current = null;
+    setIsTransmitting(false);
+  };
+
+  const playAudio = (text) => {
+    const token = playbackTokenRef.current + 1;
+    playbackTokenRef.current = token;
+    transmissionRef.current?.();
+    transmissionRef.current = null;
+    setIsTransmitting(true);
+    transmissionRef.current = transmitText(text, language, () => {
+      if (playbackTokenRef.current !== token) return;
+      setIsTransmitting(false);
+      transmissionRef.current = null;
+    });
+  };
+
+  const submitQuiz = () => {
+    if (selectedAnswer === null) return;
+    if (selectedAnswer === quiz.correctAnswer) {
+      const alreadyUnlocked = badges.has(item.id);
+      setQuizResult(alreadyUnlocked ? 'already' : 'unlocked');
+      if (!alreadyUnlocked) {
+        confetti({ particleCount: 82, spread: 68, startVelocity: 28, origin: { y: 0.72 }, colors: ['#06b6d4', '#c8ff6b', '#ffffff', '#f59e0b'], disableForReducedMotion: true });
+        onUnlock(item.id);
+      }
+    } else {
+      setQuizResult('wrong');
+    }
+  };
+
+  const tabs = [
+    { id: 'story', label: copy.story, icon: Radio },
+    { id: 'timeline', label: copy.timeline, icon: Clock3 },
+    { id: 'quiz', label: copy.quiz, icon: CircleHelp },
+  ];
+
+  return (
+    <div className="memory-room">
+      <div className="memory-header">
+        <button type="button" className="back-button" onClick={onBack}>
+          {isArabic ? <ArrowRight size={15} /> : <ArrowLeft size={15} />}<span>{copy.back}</span>
+        </button>
+        <span className="memory-status"><span />{copy.active}</span>
+      </div>
+
+      <div className="memory-identity">
+        <span className="memory-classification">{getBodyLabel(item, language, copy)} <i /> {getTypeLabel(item.type, language, copy)}</span>
+        <h2 dir="auto">{item.nickname || item.name}</h2>
+        <div className="memory-location"><MapPin size={13} /><span dir="auto">{siteName}</span></div>
+      </div>
+
+      <section className="mission-telemetry" aria-label={copy.telemetry}>
+        <div className="telemetry-heading"><Activity size={13} /><span>{copy.telemetry}</span><bdi dir="ltr">NSSDCA / DATA</bdi></div>
+        <div className="telemetry-grid">
+        <div className="telemetry-item"><span dir={isArabic ? 'rtl' : 'ltr'}>{isArabic ? <>{copy.record} <bdi dir="ltr">NSSDCA</bdi></> : <><bdi dir="ltr">NSSDCA</bdi> {copy.record}</>}</span><strong dir="ltr">{idText}</strong></div>
+          <div className="telemetry-item telemetry-launch"><span>{copy.launch}</span><strong dir="ltr">{item.launchYear}</strong></div>
+          <div className="telemetry-item telemetry-position"><span>{position.label}</span><strong dir={position.coordinates ? 'ltr' : 'auto'} title={position.value}>{position.value}</strong></div>
+        </div>
+      </section>
+
+      <div className="mission-facts">
+        <div><span>{copy.launch}</span><strong>{item.launchYear}</strong></div>
+        <div><span>{copy.landing}</span><strong>{dateLabel(item.landingDate, language)}</strong></div>
+        <div><span>{copy.end}</span><strong>{dateLabel(item.endOfMission, language)}</strong></div>
+      </div>
+
+      {hardwareHotspots.length > 0 && (
+        <section className="memory-hotspots" aria-label={copy.hotspots}>
+          <div className="hotspot-section-heading"><span>{copy.hotspots}</span><small>{copy.hotspotHint}</small></div>
+          <div className="hotspot-pill-list" role="group" aria-label={copy.hotspots}>
+            {hardwareHotspots.map((spot, index) => {
+              const selected = sameHotspot(hotspot, spot);
+              const part = spot.part || spot.title;
+              return (
+                <button
+                  className={`hotspot-pill ${selected ? 'is-selected' : ''}`}
+                  type="button"
+                  key={`${item.id}-hotspot-pill-${index}`}
+                  onClick={() => setHotspot?.(spot)}
+                  aria-pressed={selected}
+                  aria-label={`${isArabic ? 'نقطة عتاد' : 'Hardware point'} ${index + 1}: ${part}`}
+                  title={spot.title || part}
+                >
+                  <span className="hotspot-pill-index" dir="ltr">{String(index + 1).padStart(2, '0')}</span>
+                  <span dir="auto">{part}</span>
+                </button>
+              );
+            })}
+          </div>
+          {activeHotspot && (
+            <div className="hotspot-detail" id="hotspot-detail" role="status" aria-live="polite">
+              <div className="hotspot-detail-heading"><span>{copy.hotspotDetail}</span><strong dir="auto">{activeHotspot.title || activeHotspot.part}</strong></div>
+              <p dir="auto">{activeHotspot.description}</p>
+            </div>
+          )}
+        </section>
+      )}
+
+      <div className="memory-tabs" role="tablist" aria-label={copy.details}>
+        {tabs.map(({ id, label, icon: Icon }) => (
+          <button type="button" role="tab" aria-selected={activeTab === id} className={activeTab === id ? 'active' : ''} onClick={() => setActiveTab(id)} key={id}>
+            <Icon size={14} /><span>{label}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="memory-content" key={`${item.id}-${activeTab}`}>
+        {activeTab === 'story' && (
+          <div className="story-view">
+            <div className="story-kicker"><span className="signal-bars"><i /><i /><i /><i /></span>{copy.fieldNote}</div>
+            <p className="first-person-story" dir="auto">“{storyText}”</p>
+            <div className="transmit-row">
+              <button type="button" className={`transmit-button ${isTransmitting ? 'transmitting' : ''}`} onClick={() => isTransmitting ? stopAudio() : playAudio(storyText)} aria-pressed={isTransmitting}>
+                {isTransmitting ? <VolumeX size={15} /> : <Volume2 size={15} />}
+                <span>{isTransmitting ? copy.stop : copy.transmit}</span>
+                <span className="transmit-frequency" dir="ltr">2525 Hz</span>
+              </button>
+              {isTransmitting && (
+                <span className="audio-visualizer" role="status" aria-live="polite" aria-label={copy.transmitting}>
+                  <span className="audio-bars" aria-hidden="true"><i /><i /><i /><i /><i /></span>
+                  <span className="audio-live" dir="ltr">{isArabic ? 'مباشر' : 'LIVE'}</span>
+                </span>
+              )}
+            </div>
+
+            <div className="qa-section">
+              <div className="section-label"><span>{copy.qa}</span><span className="section-rule" /></div>
+              <div className="qa-list">
+                {questions.map((qa, index) => {
+                  const question = qa.question?.[language] || qa.question?.en || '';
+                  const answer = qa.answer?.[language] || qa.answer?.en || '';
+                  const open = activeQuestion === index;
+                  return (
+                    <div className={`qa-item ${open ? 'open' : ''}`} key={`${item.id}-qa-${index}`}>
+                      <button type="button" className="qa-question" onClick={() => {
+                        setActiveQuestion(open ? null : index);
+                        if (!open) playAudio(answer);
+                      }}>
+                        <span dir="auto">{question}</span><span className="qa-toggle">{open ? '−' : '+'}</span>
+                      </button>
+                      {open && <div className="qa-answer"><span>{copy.answer}</span><p dir="auto">{answer}</p><button type="button" onClick={() => playAudio(answer)} aria-label={copy.transmit}><Play size={13} /></button></div>}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'timeline' && (
+          <div className="timeline-view">
+            <div className="section-label"><span>{copy.milestones}</span><span className="section-rule" /></div>
+            <div className="mission-timeline">
+              {timeline.map((step, index) => (
+                <div className="timeline-item" key={`${item.id}-timeline-${index}`}>
+                  <span className="timeline-node"><i /></span>
+                  <span className="timeline-year">{step.year}</span>
+                  <p dir="auto">{step.event}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'quiz' && (
+          <div className="quiz-view">
+            <div className="quiz-orbit" aria-hidden="true"><Sparkles size={18} /></div>
+            <span className="story-kicker">{copy.quizTitle}</span>
+            <h3 dir="auto">{quiz.question?.[language] || quiz.question?.en}</h3>
+            <p className="quiz-hint">{copy.choose}</p>
+            <div className="quiz-options">
+              {options.map((option, index) => (
+                <button type="button" key={`${item.id}-option-${index}`} className={`quiz-option ${selectedAnswer === index ? 'selected' : ''} ${['unlocked', 'already'].includes(quizResult) && index === quiz.correctAnswer ? 'answer-correct' : ''}`} onClick={() => { setSelectedAnswer(index); setQuizResult(''); }}>
+                  <span className="option-index" dir="ltr">0{index + 1}</span><span dir="auto">{option}</span>{selectedAnswer === index && <Check size={15} />}
+                </button>
+              ))}
+            </div>
+            <button type="button" className="quiz-submit" onClick={submitQuiz} disabled={selectedAnswer === null}>
+              {quizResult === 'wrong' ? <RotateCcw size={14} /> : <BadgeCheck size={15} />}
+              <span>{quizResult === 'wrong' ? copy.wrong : copy.submit}</span>
+            </button>
+            {(quizResult === 'unlocked' || quizResult === 'already') && <div className="quiz-success" role="status"><BadgeCheck size={17} /><span>{quizResult === 'already' ? copy.already : copy.correct}</span></div>}
+            {quizResult === 'wrong' && <div className="quiz-error">{copy.wrong}</div>}
+            <div className="badge-reward"><span className="badge-reward-icon"><Sparkles size={16} /></span><span><small>{copy.badge}</small><strong dir="auto">{item.badgeName}</strong></span><span className={`badge-status ${badges.has(item.id) ? 'badge-unlocked' : 'badge-locked'}`}>{badges.has(item.id) ? copy.unlocked : copy.locked}</span></div>
+          </div>
+        )}
+      </div>
+
+      <div className="citation-footer">
+        <div className="citation-heading"><span><RadioTower size={13} />{copy.citation}</span><span className="citation-id" dir={isArabic ? 'rtl' : 'ltr'}>{isArabic ? <>{copy.nssdca} <bdi dir="ltr">NSSDCA</bdi>: </> : `${copy.nssdca}: `}<bdi dir="ltr">{idText}</bdi></span></div>
+        <div className="citation-links">
+          {urls.slice(0, 3).map((url, index) => <a href={url} target="_blank" rel="noreferrer" key={url}>{index === 0 ? copy.nasa : `${copy.sources} ${index + 1}`}<ArrowUpRight size={11} /></a>)}
+          {urls.length === 0 && <span className="citation-missing">{copy.sources}</span>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function StoryAndArchivePanel(props) {
+  if (props.selectedRelic) {
+    return <MemoryRoom key={props.selectedRelic.id} item={props.selectedRelic} language={props.language} badges={props.badges} onBack={props.onBack} onUnlock={props.onUnlock} hotspot={props.hotspot} setHotspot={props.setHotspot} />;
+  }
+  return <ArchiveList relics={props.relics} language={props.language} onSelect={props.onSelect} />;
+}
