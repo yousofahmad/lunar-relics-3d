@@ -205,6 +205,7 @@ export default function App() {
                 hotspot={hotspot}
                 setHotspot={setHotspot}
                 storyProgress={storyProgress}
+                archiveOpen={archiveOpen}
               />
             </Suspense>
             {!selectedRelic && (
