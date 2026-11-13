@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
-import { Environment, Html, Lightformer, OrbitControls, Stars } from '@react-three/drei';
+import { ContactShadows, Environment, Html, Lightformer, OrbitControls, Stars } from '@react-three/drei';
 import { Activity, LocateFixed, Minus, Plus, RotateCcw } from 'lucide-react';
 import * as THREE from 'three';
 import SpaceLoader from './SpaceLoader.jsx';
@@ -408,10 +408,13 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     if (!rig) return;
     const isHardwareChapter = chapterId.startsWith('hardware-');
     const hardwareOrdinal = chapterHotspotIndex >= 0 ? chapterHotspotIndex : Math.max(selectedIndex, 0);
-    const slide = size.width < 720 ? 0.24 : 1.65;
+    const compactLayout = size.width <= 760;
+    const slide = compactLayout ? 0.24 : 1.65;
     let targetX = 0;
-    if (chapterId === 'transmission') targetX = slide;
-    else if (isHardwareChapter) targetX = hardwareOrdinal === 2 ? -1.4 : (hardwareOrdinal % 2 === 0 ? -slide : slide);
+    if (chapterId === 'hero') targetX = compactLayout ? 0 : size.width >= 1024 ? 1.35 : 0.72;
+    else if (chapterId === 'transmission') targetX = compactLayout ? 0.12 : slide;
+    else if (isHardwareChapter) targetX = compactLayout ? 0 : (hardwareOrdinal === 2 ? -1.4 : (hardwareOrdinal % 2 === 0 ? -slide : slide));
+    const mobileLift = compactLayout ? 0.55 : 0;
     const focusPoint = focusIndex >= 0 && hotspotPositions[focusIndex] ? new THREE.Vector3(...hotspotPositions[focusIndex]) : new THREE.Vector3(0, 0, 0);
     const focusWorld = rig.localToWorld(focusPoint);
     const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : -0.18;
@@ -420,14 +423,14 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, targetYaw + (autoRotate ? Math.sin(state.clock.elapsedTime * 0.32) * 0.035 : 0), 1.8, delta);
     rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, targetTilt, 1.8, delta);
     rig.position.x = THREE.MathUtils.damp(rig.position.x, targetX, 1.8, delta);
-    rig.position.y = THREE.MathUtils.damp(rig.position.y, isHardwareChapter ? 0 : Math.sin(state.clock.elapsedTime * 0.42) * 0.035, 1.8, delta);
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, focusWorld.x * 0.12, 1.4, delta);
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, 0.12 + focusWorld.y * 0.1, 1.4, delta);
+    rig.position.y = THREE.MathUtils.damp(rig.position.y, mobileLift + (isHardwareChapter ? 0 : Math.sin(state.clock.elapsedTime * 0.42) * 0.035), 1.8, delta);
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, focusWorld.x * 0.12 + state.pointer.x * 0.11, 1.4, delta);
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, 0.12 + focusWorld.y * 0.1 + state.pointer.y * 0.08, 1.4, delta);
     camera.position.z = THREE.MathUtils.damp(camera.position.z, cameraDistance, 1.4, delta);
     const controls = controlsRef.current;
     if (controls) {
-      controls.target.x = THREE.MathUtils.damp(controls.target.x, focusWorld.x * 0.18, 1.4, delta);
-      controls.target.y = THREE.MathUtils.damp(controls.target.y, focusWorld.y * 0.22, 1.4, delta);
+      controls.target.x = THREE.MathUtils.damp(controls.target.x, focusWorld.x * 0.18 + state.pointer.x * 0.05, 1.4, delta);
+      controls.target.y = THREE.MathUtils.damp(controls.target.y, focusWorld.y * 0.22 + state.pointer.y * 0.035, 1.4, delta);
       controls.target.z = THREE.MathUtils.damp(controls.target.z, focusWorld.z * 0.18, 1.4, delta);
       controls.update();
     }
@@ -443,11 +446,12 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
       <directionalLight position={[-6, -3, -5]} intensity={1.1} color="#60a5fa" />
       <pointLight position={[0, 4, -5]} intensity={0.32} color="#EAB308" distance={18} />
       <pointLight position={[0, 4, 4]} intensity={0.34} color="#dbe5ee" distance={18} />
-      <Stars radius={80} depth={50} count={1400} factor={2.9} saturation={0.1} fade speed={0.06} />
+      <Stars radius={80} depth={50} count={3500} factor={3} saturation={0.1} fade speed={0.6} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.52, 0]}>
         <circleGeometry args={[2.25, 80]} />
-        <meshBasicMaterial color="#0B3D91" transparent opacity={0.18} />
+        <meshBasicMaterial color="#0B3D91" transparent opacity={0.12} />
       </mesh>
+      <ContactShadows position={[0, -1.35, 0]} opacity={0.65} scale={8} blur={2.4} far={4} color="#000000" />
       <group ref={storyRig}>
         {isRealModel ? (
           <ModelErrorBoundary
@@ -542,6 +546,7 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
   return (
     <div className="space-canvas-wrap">
       <Canvas
+        shadows
         dpr={[1, 1.75]}
         camera={{ position: [0, 0.1, 8.4], fov: 40, near: 0.1, far: 140 }}
         gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}

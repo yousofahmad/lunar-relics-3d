@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import confetti from 'canvas-confetti';
 import {
-  Activity, ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, Box, CalendarDays,
+  Activity, ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, Box, CalendarDays, Clapperboard,
   CarFront, Check, CircleHelp, Clock3, Crosshair, Globe2, ListFilter, MapPin,
   Moon, Orbit, Play, Radio, RadioTower, Rocket, RotateCcw, Satellite, Search,
   Sparkles, Volume2, VolumeX, X,
@@ -78,6 +78,19 @@ function dateLabel(value, language) {
 function splitStoryBeats(text) {
   const parts = text.match(/[^.!؟]+[.!؟]+|[^.!؟]+$/gu) || [text];
   return parts.map((part) => part.trim()).filter(Boolean);
+}
+
+function getHardwareChapterLabel(spot, index, language) {
+  const source = language === 'ar'
+    ? spot.partAr || spot.titleAr || spot.part || spot.title
+    : spot.shortTitle || spot.part || spot.title;
+  const words = String(source || 'HARDWARE')
+    .replace(/[&/·—–]+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2);
+  return `${String(index + 1).padStart(2, '0')} ${words.join(' ').toLocaleUpperCase(language === 'ar' ? 'ar' : 'en')}`;
 }
 
 function getBodyLabel(item, language, copy) {
@@ -370,10 +383,10 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const storyChapters = useMemo(() => [
     { id: 'hero', label: isArabic ? 'البداية' : 'START' },
     { id: 'transmission', label: isArabic ? 'القصة' : 'STORY' },
-    ...hardwareHotspots.map((spot, index) => ({ id: `hardware-${index}`, label: isArabic ? `الجزء ${['الأول', 'الثاني', 'الثالث'][index] || index + 1}` : `PART ${index + 1}`, title: spot.part || spot.title, hotspotIndex: index })),
+    ...hardwareHotspots.map((spot, index) => ({ id: `hardware-${index}`, label: getHardwareChapterLabel(spot, index, language), title: spot.part || spot.title, hotspotIndex: index })),
     { id: 'timeline', label: isArabic ? 'الرحلة' : 'JOURNEY' },
     { id: 'quiz', label: isArabic ? 'سؤال سريع' : 'QUICK QUIZ' },
-  ], [hardwareHotspots, isArabic]);
+  ], [hardwareHotspots, isArabic, language]);
   const scrollToChapter = useCallback((chapterId) => {
     document.getElementById(`mission-chapter-${chapterId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, []);
@@ -466,7 +479,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     if (!autoPilotOn) return undefined;
     const pauseForManualInput = (event) => {
       const target = event.target instanceof Element ? event.target : event.target?.parentElement;
-      if (target?.closest('.story-scroll-cue, .transmit-button')) return;
+      if (target?.closest('.story-scroll-cue, .auto-pilot-hero-button, .transmit-button')) return;
       if (!target?.closest('.mission-story-scroll, .space-canvas-wrap')) return;
       setAutoPilotOn(false);
       stopAudio(false);
@@ -519,12 +532,27 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               scrollToChapter(id);
             }}
             aria-current={activeBeat === storyChapters.findIndex((chapter) => chapter.id === id) ? 'step' : undefined}
+            aria-label={hotspotIndex != null ? `${String(hotspotIndex + 1).padStart(2, '0')} ${title || label}` : label}
             title={title || label}
           >
             <i aria-hidden="true" /><span dir="auto">{label}</span>
           </button>
         ))}
       </nav>
+
+      <div
+        className="story-progress-rail"
+        role="progressbar"
+        aria-label={isArabic ? 'تقدم قصة المهمة' : 'Mission story progress'}
+        aria-valuemin={1}
+        aria-valuemax={storyChapters.length}
+        aria-valuenow={Math.min(activeBeat + 1, storyChapters.length)}
+        aria-valuetext={`${Math.min(activeBeat + 1, storyChapters.length)} / ${storyChapters.length}`}
+      >
+        <span>{String(Math.min(activeBeat + 1, storyChapters.length)).padStart(2, '0')}</span>
+        <i aria-hidden="true"><b style={{ height: `${((Math.min(activeBeat + 1, storyChapters.length)) / storyChapters.length) * 100}%` }} /></i>
+        <span>{String(storyChapters.length).padStart(2, '0')}</span>
+      </div>
 
       <main className="mission-story-scroll">
         <section id="mission-chapter-hero" className="story-chapter story-hero" data-story-chapter="hero">
@@ -538,9 +566,32 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               <span><small>{isArabic ? 'رقم المهمة' : 'NASA MISSION ID'}</small><strong dir="ltr">{idText}</strong></span>
               <span><small>{isArabic ? 'موقع المهمة' : 'MISSION SITE'}</small><strong dir="auto">{siteName}</strong></span>
             </div>
-            <button type="button" className="story-scroll-cue" onClick={() => startTourFrom('transmission')}>
-              <span>{isArabic ? 'ابدأ القصة' : 'START THE STORY'}</span><i aria-hidden="true" />
-            </button>
+            <div className="story-hero-actions">
+              <button
+                type="button"
+                className={`story-scroll-cue immersive-story-button ${autoPilotOn ? 'is-active' : ''}`}
+                onClick={() => startTourFrom('hero')}
+                aria-label={isArabic ? 'ابدأ القصة الغامرة مع التمرير التلقائي والصوت' : 'Start immersive story with auto-scroll and voice'}
+                aria-pressed={autoPilotOn}
+              >
+                <span className="immersive-play-icon" aria-hidden="true"><Play size={14} fill="currentColor" /></span>
+                <span className="immersive-button-copy">
+                  <strong>{isArabic ? 'ابدأ القصة الغامرة' : 'START IMMERSIVE STORY'}</strong>
+                  <small>{isArabic ? 'تمرير تلقائي + تعليق صوتي' : 'AUTO-SCROLL + VOICE'}</small>
+                </span>
+                <span className="immersive-soundwave" aria-hidden="true"><i /><i /><i /><i /><i /></span>
+              </button>
+              <button
+                type="button"
+                className={`auto-pilot-hero-button ${autoPilotOn ? 'is-active' : ''}`}
+                onClick={() => startTourFrom('hero')}
+                aria-label={isArabic ? 'تشغيل جولة الطيار الآلي من البداية' : 'Start the auto-pilot tour from the beginning'}
+                aria-pressed={autoPilotOn}
+              >
+                <Clapperboard size={14} aria-hidden="true" />
+                <span>{isArabic ? 'جولة الطيار الآلي' : 'AUTO-PILOT TOUR'}</span>
+              </button>
+            </div>
           </div>
           <span className="story-hero-record" dir="ltr">NASA ID / {idText}</span>
         </section>
