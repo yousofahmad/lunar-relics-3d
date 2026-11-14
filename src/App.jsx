@@ -1,20 +1,21 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { ArrowUpRight, BadgeCheck, Crosshair, Database, Info, Play, RadioTower } from 'lucide-react';
+import { ArrowUpRight, BadgeCheck, Crosshair, Database, Globe2, Info, Moon, Orbit, Play, RadioTower, Volume2, VolumeX } from 'lucide-react';
 import { fetchRelics, LOCAL_RELICS } from './services/api.js';
-import BadgeModal from './components/BadgeModal.jsx';
-import ExplorerChallenge from './components/ExplorerChallenge.jsx';
 import TopNav from './components/TopNav.jsx';
-import StoryAndArchivePanel from './components/StoryAndArchivePanel.jsx';
-import WhatsNewDialog from './components/WhatsNewDialog.jsx';
 import SpaceLoader from './components/SpaceLoader.jsx';
 import { initializeAudioEngine, playHoverTick, playSelectSweep, setAudioMuted, setSoundscape, subscribeAudioEngine } from './utils/audioEngine.js';
 import { getModelHonestyLabel, getRelicModelInfo } from './utils/relicModelMap.js';
+import { readLaunchLocation, readPreference, savePreference } from './utils/experience.js';
 
 const Space3DCanvas = lazy(() => import('./components/Space3DCanvas.jsx'));
+const StoryAndArchivePanel = lazy(() => import('./components/StoryAndArchivePanel.jsx'));
+const BadgeModal = lazy(() => import('./components/BadgeModal.jsx'));
+const ExplorerChallenge = lazy(() => import('./components/ExplorerChallenge.jsx'));
+const WhatsNewDialog = lazy(() => import('./components/WhatsNewDialog.jsx'));
 
 function readBadges() {
   try {
-    const saved = JSON.parse(localStorage.getItem('lunar-relics-badges') || '[]');
+    const saved = JSON.parse(readPreference('lunar-relics-badges', '[]'));
     return new Set(Array.isArray(saved) ? saved : []);
   } catch {
     return new Set();
@@ -57,18 +58,19 @@ function presentRelic(item) {
 }
 
 export default function App() {
+  const launch = useMemo(() => readLaunchLocation(window.location.search, LOCAL_RELICS), []);
   const [relics, setRelics] = useState(LOCAL_RELICS);
-  const [celestialView, setCelestialView] = useState('Moon');
+  const [celestialView, setCelestialView] = useState(launch.view);
   const [archiveFilter, setArchiveFilter] = useState('All');
-  const [archiveOpen, setArchiveOpen] = useState(() => typeof window === 'undefined' || !window.matchMedia('(max-width: 760px)').matches);
-  const [selectedId, setSelectedId] = useState(null);
+  const [archiveOpen, setArchiveOpen] = useState(() => !launch.hasDestination && !window.matchMedia('(max-width: 760px)').matches);
+  const [selectedId, setSelectedId] = useState(launch.missionId);
   const [language, setLanguage] = useState(() => {
-    const savedLanguage = localStorage.getItem('lunar-relics-language');
-    return savedLanguage === 'en' || savedLanguage === 'ar' ? savedLanguage : 'ar';
+    const savedLanguage = readPreference('lunar-relics-language');
+    return launch.language || (savedLanguage === 'en' || savedLanguage === 'ar' ? savedLanguage : 'ar');
   });
-  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [audioEnabled, setAudioEnabled] = useState(() => readPreference('lunar-relics-audio-enabled', 'off') === 'on');
   const [audioStarted, setAudioStarted] = useState(false);
-  const [entryPortalOpen, setEntryPortalOpen] = useState(true);
+  const [entryPortalOpen, setEntryPortalOpen] = useState(!launch.hasDestination);
   const [autoPilotOn, setAutoPilotOn] = useState(false);
   const [badges, setBadges] = useState(readBadges);
   const [storyProgress, setStoryProgress] = useState({ index: 0, total: 1 });
@@ -80,7 +82,7 @@ export default function App() {
   const [challengeOpen, setChallengeOpen] = useState(false);
   const [challengePick, setChallengePick] = useState(null);
   const [xp, setXp] = useState(() => {
-    const saved = Number(localStorage.getItem('lunar-relics-xp') || 0);
+    const saved = Number(readPreference('lunar-relics-xp', '0'));
     return Number.isFinite(saved) ? saved : 0;
   });
   const isArabic = language === 'ar';
@@ -98,23 +100,22 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (window.matchMedia('(max-width: 760px)').matches) return;
-    if (localStorage.getItem(WHATS_NEW_STORAGE_KEY) !== WHATS_NEW_VERSION) setWhatsNewOpen(true);
-  }, []);
-
-  useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
-    localStorage.setItem('lunar-relics-language', language);
+    savePreference('lunar-relics-language', language);
   }, [language]);
 
   useEffect(() => {
-    localStorage.setItem('lunar-relics-badges', JSON.stringify([...badges]));
+    savePreference('lunar-relics-badges', JSON.stringify([...badges]));
   }, [badges]);
 
   useEffect(() => {
-    localStorage.setItem('lunar-relics-xp', String(xp));
+    savePreference('lunar-relics-xp', String(xp));
   }, [xp]);
+
+  useEffect(() => {
+    savePreference('lunar-relics-audio-enabled', audioEnabled ? 'on' : 'off');
+  }, [audioEnabled]);
 
   const displayRelics = useMemo(() => relics.map(presentRelic), [relics]);
   const featuredRelic = useMemo(
@@ -169,7 +170,7 @@ export default function App() {
 
   const closeBadgeModal = useCallback(() => setBadgeModalOpen(false), []);
   const closeWhatsNew = useCallback(() => {
-    localStorage.setItem(WHATS_NEW_STORAGE_KEY, WHATS_NEW_VERSION);
+    savePreference(WHATS_NEW_STORAGE_KEY, WHATS_NEW_VERSION);
     setWhatsNewOpen(false);
   }, []);
 
@@ -235,8 +236,12 @@ export default function App() {
     setEntryPortalOpen(false);
     setArchiveOpen(true);
     setWhatsNewOpen(false);
-    setAudioEnabled(true);
-    setAudioMuted(false, { startIfUnmuting: true });
+    if (audioEnabled) setAudioMuted(false, { startIfUnmuting: true });
+  };
+  const toggleAudio = () => {
+    const nextEnabled = !audioEnabled;
+    setAudioEnabled(nextEnabled);
+    setAudioMuted(!nextEnabled, { startIfUnmuting: nextEnabled });
   };
   const emitUiCue = (event, hover = false) => {
     const target = event.target instanceof Element ? event.target : event.target?.parentElement;
@@ -253,6 +258,9 @@ export default function App() {
       <div className="ambient-glow glow-one" aria-hidden="true" />
       <div className="ambient-glow glow-two" aria-hidden="true" />
 
+      <a className="skip-to-content" href={entryPortalOpen ? '#entry-portal-title' : '#experience-main'}>{isArabic ? 'انتقل إلى المحتوى' : 'Skip to content'}</a>
+      <Suspense fallback={<div className="experience-loading" role="status"><SpaceLoader language={language} compact /></div>}>
+      {!entryPortalOpen && <>
       <TopNav
         celestialView={celestialView}
         setCelestialView={changeCelestialView}
@@ -282,21 +290,13 @@ export default function App() {
         audioEnabled={audioEnabled}
         autoPilotOn={autoPilotOn}
         onToggleAutoPilot={() => setAutoPilotOn((current) => !current)}
-        onToggleAudio={() => {
-          if (!audioStarted && audioEnabled) {
-            setAudioMuted(false, { startIfUnmuting: true });
-            return;
-          }
-          const nextEnabled = !audioEnabled;
-          setAudioEnabled(nextEnabled);
-          setAudioMuted(!nextEnabled, { startIfUnmuting: true });
-        }}
+        onToggleAudio={toggleAudio}
       />
       {badgeModalOpen && (
         <BadgeModal relics={displayRelics} badges={badges} language={language} onClose={closeBadgeModal} onSelect={openRelic} />
       )}
 
-      <main className={`workspace-grid ${storyMode ? 'story-mode' : ''}`}>
+      <main id="experience-main" tabIndex={-1} className={`workspace-grid ${storyMode ? 'story-mode' : ''}`}>
         <section className={`viewport-panel glass-panel ${selectedRelic ? 'inspection-mode' : ''}`} aria-label={isArabic ? 'المشهد ثلاثي الأبعاد' : '3D scene'}>
           <div className="canvas-stage">
             <Suspense fallback={<div className="canvas-chunk-loader"><SpaceLoader language={language} kind="model" compact /></div>}>
@@ -411,9 +411,10 @@ export default function App() {
           }}
         />
       )}
-      {isInitialLoading && <SpaceLoader language={language} overlay />}
+      {isInitialLoading && <span className="archive-sync-note" role="status">{isArabic ? 'الأرشيف جاهز · نتحقق من التحديثات في الخلفية' : 'Archive ready · checking for updates in the background'}</span>}
+      </>}
       {entryPortalOpen && (
-        <section className="entry-portal" dir={isArabic ? 'rtl' : 'ltr'} aria-labelledby="entry-portal-title">
+        <main className="entry-portal" dir={isArabic ? 'rtl' : 'ltr'} aria-labelledby="entry-portal-title">
           <div className="entry-portal-shade" aria-hidden="true" />
           <header className="entry-masthead">
             <div className="entry-brand-lockup">
@@ -469,6 +470,21 @@ export default function App() {
                 </button>
               </div>
               <p className="entry-portal-note">{isArabic ? 'السرد الصوتي اختياري · النماذج تُحمّل عند اختيارها' : 'Audio is optional · 3D models load when selected'}</p>
+              <nav className="entry-world-choices" aria-label={isArabic ? 'اختر عالمك للاستكشاف' : 'Choose a world to explore'}>
+                {[
+                  { id: 'Moon', icon: Moon, ar: 'القمر', en: 'The Moon' },
+                  { id: 'Mars', icon: Globe2, ar: 'المريخ', en: 'Mars' },
+                  { id: 'Deep Space', icon: Orbit, ar: 'الفضاء العميق', en: 'Deep space' },
+                ].map(({ id, icon: Icon, ar, en }) => (
+                  <button type="button" key={id} onClick={() => { enterArchive(); changeCelestialView(id); setArchiveOpen(false); }}>
+                    <Icon size={18} aria-hidden="true" /><span>{isArabic ? ar : en}<small>{displayRelics.filter((item) => item.body === id).length} {isArabic ? 'مهمات' : 'missions'}</small></span><ArrowUpRight size={13} aria-hidden="true" />
+                  </button>
+                ))}
+              </nav>
+              <button type="button" className="entry-sound-toggle" onClick={toggleAudio} aria-pressed={audioEnabled}>
+                {audioEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
+                {isArabic ? (audioEnabled ? 'الصوت مفعّل · كتم' : 'استكشف بهدوء · فعّل الصوت إن أحببت') : (audioEnabled ? 'Sound on · mute' : 'Explore quietly · turn sound on if you like')}
+              </button>
             </div>
 
             {featuredRelic && (
@@ -478,7 +494,7 @@ export default function App() {
                   <span className="entry-card-orbit entry-card-orbit-one" /><span className="entry-card-orbit entry-card-orbit-two" />
                   <span className="entry-card-moon" /><span className="entry-card-crosshair">+</span>
                   <span className="entry-card-coord-label">{featuredCoordinates || (isArabic ? 'موقع موثّق' : 'DOCUMENTED SITE')}</span>
-                  <span className="entry-card-scene-caption">{isArabic ? `موقع المهمة · ${featuredBodyLabel}` : `MISSION SITE · ${featuredBodyLabel}`}</span>
+                  <span className="entry-card-scene-caption">{isArabic ? `معاينة العالم · ${featuredBodyLabel}` : `DESTINATION PREVIEW · ${featuredBodyLabel}`}</span>
                 </div>
                 <div className="entry-feature-copy">
                   <p className="entry-feature-kicker">{featuredIsApollo
@@ -503,8 +519,9 @@ export default function App() {
             <span><i />{isArabic ? 'بيانات المهمات · قصص متعددة الفصول · استكشاف ثلاثي الأبعاد' : 'MISSION DATA · CHAPTERED STORIES · INTERACTIVE 3D'}</span>
             <span>{isArabic ? 'مشروع فريق Cairo 2026' : 'A CAIRO 2026 TEAM PROJECT'}</span>
           </footer>
-        </section>
+        </main>
       )}
+      </Suspense>
     </div>
   );
 }
