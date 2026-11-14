@@ -495,8 +495,13 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     ];
   }, [hardwareHotspots, isArabic, item.launchYear, item.name, item.nickname, language, quiz.question, storyLanguage, storyText, timeline]);
 
+  const tourDataRef = useRef(null);
+  tourDataRef.current = { tourSteps, storyChapters, storyText, narrationUrl };
+
   useEffect(() => {
     if (!autoPilotOn || tourSteps.length === 0) return undefined;
+    const { tourSteps: steps, storyChapters: chapters, storyText: text, narrationUrl: voice } = tourDataRef.current || {};
+    if (!steps || !chapters) return undefined;
     const runId = ++tourRunRef.current;
     let active = true;
     const isCurrentRun = () => active && tourRunRef.current === runId;
@@ -516,13 +521,13 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     });
 
     const runTour = async () => {
-      const startIndex = Math.min(Math.max(0, activeBeatRef.current), tourSteps.length - 1);
+      const startIndex = voice ? 0 : Math.min(Math.max(0, activeBeatRef.current), steps.length - 1);
       // When the mission has a recorded voice, the whole journey is narrated:
       // the clip runs start to finish and the camera/story advance with it,
       // so nobody sits through a silent step.
-      if (narrationUrl && startIndex <= 1) {
-        const words = storyText.split(/\s+/).filter(Boolean);
-        const ids = new Set(storyChapters.map((chapter) => chapter.id));
+      if (voice) {
+        const words = String(text || '').split(/\s+/).filter(Boolean);
+        const ids = new Set(chapters.map((chapter) => chapter.id));
         const marks = [
           [0, 'transmission'],
           [0.4, 'hardware-0'],
@@ -537,7 +542,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         setNarrationOn(true);
         setIsTransmitting(true);
         await new Promise((resolve) => {
-          playNarration(narrationUrl, {
+          playNarration(voice, {
             onProgress: (time, duration) => {
               if (!duration || !isCurrentRun()) return;
               const ratio = Math.min(1, time / duration);
@@ -547,7 +552,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               if (nextStage > stage) {
                 stage = nextStage;
                 scrollToChapter(marks[stage][1]);
-                setActiveBeat(storyChapters.findIndex((chapter) => chapter.id === marks[stage][1]));
+                setActiveBeat(chapters.findIndex((chapter) => chapter.id === marks[stage][1]));
               }
             },
             onEnded: () => resolve(),
@@ -557,15 +562,15 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         if (!isCurrentRun()) return;
         setNarrationOn(false);
         setIsTransmitting(false);
-        setSubtitleText(storyText);
+        setSubtitleText(text || '');
         subtitleTimerRef.current = window.setTimeout(() => setSubtitleText(''), 2600);
         if (ids.has('quiz')) scrollToChapter('quiz');
         setAutoPilotOn(false);
         return;
       }
-      for (let index = startIndex; index < tourSteps.length; index += 1) {
+      for (let index = startIndex; index < steps.length; index += 1) {
         if (!isCurrentRun()) return;
-        const step = tourSteps[index];
+        const step = steps[index];
         scrollToChapter(step.id);
         await wait(720);
         if (!isCurrentRun()) return;
@@ -584,7 +589,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       tourDelayCancelRef.current = null;
       stopAudio(false);
     };
-  }, [autoPilotOn, language, playAudio, playNarration, scrollToChapter, setAutoPilotOn, stopAudio, tourRestartToken, tourSteps, narrationUrl, storyText, storyChapters]);
+  }, [autoPilotOn, playAudio, playNarration, scrollToChapter, setAutoPilotOn, stopAudio, tourRestartToken]);
 
   useEffect(() => {
     if (!autoPilotOn) return undefined;
@@ -902,7 +907,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         </section>
       </main>
 
-      {(isTransmitting || subtitleText) && createPortal(
+      {(isTransmitting || subtitleText) && storyChapters[activeBeat]?.id !== 'transmission' && createPortal(
         <div className={`cinematic-subtitle-bar ${isTransmitting ? 'is-speaking' : ''}`} role="status" aria-live="polite" aria-atomic="false">
           <span className="subtitle-signal" aria-hidden="true"><i /><i /><i /><i /><i /></span>
           <p dir="auto">{subtitleText || copy.subtitleLoading}</p>

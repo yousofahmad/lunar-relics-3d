@@ -14,7 +14,8 @@
     "location": {
       "siteName": "Mare Tranquillitatis (Sea of Tranquility), Apollo 11 Lunar Module site",
       "lat": 0.67416,
-      "lng": 23.47314
+      "lng": 23.47314,
+      "siteNameAr": "بحر الهدوء، موقع وحدة الهبوط القمرية أبولو 11"
     },
     "story": {
       "en": "I rest on the Moon, and Eagle rests on me. I am the descent stage — the lower half of the Apollo 11 Lunar Module, built to set the lander down at Mare Tranquillitatis, the Sea of Tranquility, and to hold it there. I left Earth aboard Apollo 11 on July 16, 1969. On July 20, at 20:17:40 Universal Time, we touch down.\nFor 21 hours and 36 minutes we stay on the surface. Then comes July 21, and the separation. The ascent stage is built to lift off. I am not the part that leaves. It rises away, and the foundation of the lander stays behind on the Moon. What carries a lander down does not travel with it when it goes.\nOn July 24, Apollo 11 ends with the crew’s splashdown in the Pacific Ocean. I stay at the landing site. In 2009, NASA’s Lunar Reconnaissance Orbiter circles overhead and photographs the site — and me. Look up: the foundation is still there.",
@@ -139,7 +140,8 @@
     "location": {
       "siteName": "Apollo 15 Hadley-Apennine lunar landing site (Falcon landing site)",
       "lat": 26.13239,
-      "lng": 3.6333
+      "lng": 3.6333,
+      "siteNameAr": "موقع هبوط أبولو 15 هادلي-أبينين (موقع هبوط فالكون)"
     },
     "story": {
       "en": "I am folded inside Falcon, waiting to carry astronauts across the Moon. That is how my journey begins in 1971. I am the Apollo 15 Moon Buggy. On July 30 we land at Hadley-Apennine, and the next day the crew unfolds me. The waiting inside the spacecraft is over; my work on the surface begins.\nDavid Scott and Jim Irwin climb aboard. How far can their science reach beyond the landing site? On three journeys we cover 27.8 kilometers — farther than their feet alone could take their work. On the second, I carry them 12.5 kilometers southeast along the Apennine Mountains and back to the site of their instruments. I can take them out. I cannot take them home.\nOur third journey covers 5.1 kilometers. Then, on August 2, 1971, Falcon lifts off the Moon. They leave; I stay at Hadley-Apennine. My journeys end where theirs must continue.",
@@ -268,7 +270,8 @@
     "location": {
       "siteName": "Apollo 12 ALSEP central station, Oceanus Procellarum (representative of Apollo 12, 14, 15, 16, and 17 ALSEP sites)",
       "lat": -3.0094,
-      "lng": -23.4246
+      "lng": -23.4246,
+      "siteNameAr": "محطة ALSEP المركزية لأبولو 12، محيط العواصف (تمثل مواقع ALSEP لأبولو 12، 14، 15، 16، و17)"
     },
     "story": {
       "en": "My instruments sit on lunar ground at Oceanus Procellarum. It is November 19, 1969. The astronauts set me down and link me to a central station — my hub for communications and control. I am Apollo 12’s ALSEP, the Apollo Lunar Surface Experiments Package. Not a spacecraft: a set of scientific instruments, studying the Moon beneath them.\nMy story starts with a NASA idea from 1963 — gather more science while keeping weight and complexity down. Apollo 12 launched on November 14, 1969, carrying that idea toward the Moon. Now one of my instruments senses movement in the lunar ground, and my measurements carry news of that activity and of the Moon’s environment back to Earth. For years, I send what I measure.\nI belong to a family of packages that five Apollo missions deployed. On September 30, 1977, NASA shuts our stations down. My messages stop. My hardware stays. Look up: silence is not absence.",
@@ -397,7 +400,8 @@
     "location": {
       "siteName": "Surveyor Crater, southeast Oceanus Procellarum",
       "lat": -3.0162,
-      "lng": -23.418
+      "lng": -23.418,
+      "siteNameAr": "فوهة سيرفيور، جنوب شرق محيط العواصف"
     },
     "story": {
       "en": "The lunar surface meets me, then falls away. I bounce twice before I finally settle. It is April 20, 1967, in southeast Oceanus Procellarum. I am Surveyor 3, launched from Cape Canaveral that year on an Atlas-Centaur, sent to test the Moon’s surface before Apollo. Now the ground is within reach of my scoop.\nWhat can this soil tell us? My camera returns 6,326 pictures, while my sampling arm and scoop cut trenches and test the ground directly — images show the surface, digging lets me examine what they show. I work through the lunar day and past local sunset. My last contact comes on May 4, 1967. After the lunar night, I do not wake again.\nIn 1969, Apollo 12 astronauts come for me. They cut away about 10 kilograms of my parts, my television camera among them, to be examined on Earth. The rest of me stays here, inactive. Look up: part of me is still there.",
@@ -526,7 +530,8 @@
     "location": {
       "siteName": "Ares Vallis, Mars (Mars Pathfinder landing site; Carl Sagan Memorial Station)",
       "lat": 19.33,
-      "lng": -33.55
+      "lng": -33.55,
+      "siteNameAr": "وادي آريس، المريخ (موقع هبوط مسبار المريخ؛ محطة كارل ساجان التذكارية)"
     },
     "story": {
       "en": "My wheels roll onto Mars — rocks and soil ahead, Pathfinder behind me. I am Sojourner, a small rover, and it is July 6, 1997. Mars Pathfinder carried me from Cape Canaveral on December 4, 1996, and landed in Ares Vallis on July 4. Two days later I leave the craft that brought me here.\nI work close to the ground: cameras read the scene, another instrument reads what the rocks and soil are made of. What do they hold? As I move beyond Pathfinder, everything I find has to travel back through the craft before it can reach Earth. I can explore on my own wheels. I cannot send my discoveries home alone.\nThe last Pathfinder data reaches Earth on September 27, 1997. For five months, people try to restore contact. NASA formally ends the wider Pathfinder mission on March 10, 1998. I stay on Mars with the mission hardware. There is no return journey. My discoveries travel home; I stay.",
@@ -651,7 +656,8 @@
     "location": {
       "siteName": "Columbia Memorial Station, Gusev Crater, Mars",
       "lat": -14.5692,
-      "lng": 175.4729
+      "lng": 175.4729,
+      "siteNameAr": "محطة كولومبيا التذكارية، فوهة جوسيف، المريخ"
     },
     "story": {
       "en": "My Rock Abrasion Tool grinds into the surface of a rock called Adirondack — the first operation of its kind on Mars. I am Spirit. My journey began at Cape Canaveral on June 10, 2003; I landed in Gusev Crater on January 4, 2004, at a site later named Columbia Memorial Station.\nI came to find rocks that water had changed. What traces do their surfaces hold? On September 29, 2005, I reach the summit of Husband Hill and take true-color pictures covering a full circle. The horizon surrounds me. Then, on May 1, 2009, soft soil holds my wheels. In November, my right-rear wheel stops working.\nMy mission becomes studying from one place. After March 22, 2010, controllers cannot regain contact. NASA ends recovery efforts on May 25, 2011. My mission is complete. I am still Spirit, on Mars: the rover that once pictured an entire horizon, now silent beneath it.",
@@ -788,7 +794,8 @@
     "location": {
       "siteName": "Challenger Memorial Station, within Eagle crater on Meridiani Planum",
       "lat": -1.9483,
-      "lng": 354.47417
+      "lng": 354.47417,
+      "siteNameAr": "محطة تشالنجر التذكارية، داخل فوهة إيجل على هضبة ميريديانى"
     },
     "story": {
       "en": "Rocks and soil surround me inside Eagle crater on Meridiani Planum. I am Opportunity — Oppy. I launch from Cape Canaveral, Florida, on July 7, 2003, and land here in January 2004, in an area later named Challenger Memorial Station. Before me lies a question written in stone: what did water leave behind?\nMy planned mission was ninety sols — ninety Martian days. I keep travelling. In 2005 sand traps me for about six weeks before controllers free me, and that same year I find an iron-and-nickel meteorite later called Heat Shield Rock. By 2015 I have covered a marathon on another world: 42.195 kilometers.\nThen dust darkens the sky. In 2018 a storm spreads across Mars and the sunlight my panels need falls away. Earth receives my last signal on June 10. On February 13, 2019, NASA declares my mission complete. My story ends with a signal crossing the distance to Earth. Look up — and think of the rocks that kept me searching.",
@@ -929,7 +936,8 @@
     "location": {
       "siteName": "Chryse Planitia (Golden Plain), Mars",
       "lat": 22.27,
-      "lng": 312.05
+      "lng": 312.05,
+      "siteNameAr": "سهل كريز (السهل الذهبي)، المريخ"
     },
     "story": {
       "en": "My sampling arm reaches into Martian soil. It is July 28, and these are my first samples from Chryse Planitia, the Golden Plain. I am Viking 1 Lander, the first spacecraft to work successfully on Mars. I left Cape Canaveral on August 20, 1975; after entering Mars orbit I separated from the spacecraft that carried me and landed on July 20, 1976.\nI send back pictures, but looking was never the whole job. I deliver the soil to experiments that test its chemistry and search for signs of life. The samples reveal complex chemistry — and no clear evidence of life. I can gather soil from another world. A clear answer stays out of reach.\nIn 1981 I become Thomas Mutch Memorial Station, for the leader of the Viking imaging team. A faulty command ends contact in November 1982. I stay on the Golden Plain, silent beside the soil I tested. My instruments fall quiet; the question does not.",
@@ -1058,7 +1066,8 @@
     "location": {
       "siteName": "Utopia Planitia, Mars (about 200 km west of Mie Crater)",
       "lat": 47.6673,
-      "lng": 134.2809
+      "lng": 134.2809,
+      "siteNameAr": "سهل يوتوبيا، المريخ (حوالي 200 كم غرب فوهة مي)"
     },
     "story": {
       "en": "The terrain of Utopia Planitia fills my photographs. I am Viking 2 Lander, on Mars, about 200 kilometers west of Mie Crater. I remember the journey: away from Cape Canaveral on September 9, 1975; into Mars orbit on August 7, 1976; separation, then landing on September 3. Now the ground is close enough to test.\nI hand soil to my experiments. Some read its chemistry; others look for living microorganisms too small to see without instruments. What lies in front of me is not scenery to photograph but material that might answer the question I was sent with. My biology experiments return no definitive evidence of those organisms. Searching is not proving.\nMy last data arrive on April 11, 1980. Battery failure ends my work and I am switched off. I stay here, inactive. In July 2001 I take another name: Gerald Soffen Memorial Station. My work ends; the question does not.",
@@ -1187,7 +1196,8 @@
     "location": {
       "siteName": "Green Valley of Vastitas Borealis, the arctic plains of Mars",
       "lat": 68.15,
-      "lng": -125.9
+      "lng": -125.9,
+      "siteNameAr": "الوادي الأخضر في فاستيتاس بوراليس، السهول القطبية للمريخ"
     },
     "story": {
       "en": "My robotic arm bites into Martian ground. Beneath the soil, ice waits out of sight. I gather soil and ice-rich material — a piece of the hidden ground. I am Phoenix, NASA’s lander on the icy northern plains. I launched from Cape Canaveral in 2007 on a Delta II and landed on May 25, 2008, in Green Valley, in the region called Vastitas Borealis.\nNow the buried material goes to the test. My TEGA instrument heats a sample and reads the gases it releases, turning what lies under the surface into evidence that helps confirm water ice. In 2008, NASA announced that I had found water on Mars. What I collected became proof. But every part of this work runs on solar power — and winter is coming.\nAs Martian winter arrives, my power falls. Earth receives my last signal on November 2, 2008. My mission ends. I stay on Mars with the evidence I gathered. Look up: the ground I touched is still there.",
@@ -1316,7 +1326,8 @@
     "location": {
       "siteName": "Elysium Planitia, Mars",
       "lat": 4.5,
-      "lng": 135.9
+      "lng": 135.9,
+      "siteNameAr": "سهل إليسيوم، المريخ"
     },
     "story": {
       "en": "The ground beneath me trembles. I hold still and record it. I am InSight, a lander that listens beneath the surface of Mars. In 2018 I launched from Vandenberg Air Force Base on an Atlas V-401 and, on November 26, landed in western Elysium Planitia. Here, my work is not to roam — it is to listen to what moves underground.\nMy instrument SEIS measures marsquakes and other ground vibrations, and through them I hear the planet’s interior, while HP3 studies heat and the physical properties of the soil. But the soil is clumpier than anyone expected. HP3 struggles. The ground I came to study becomes an obstacle. Even so, it gathers important information about heat and soil. Not every task goes to plan.\nMy original mission was meant to end after about two Earth years. NASA extended it. Earth received my final transmission on December 15, 2022; after two failed attempts to reach me, NASA declared the mission over on December 21. I stay where I listened. My listening days are finished — and beneath me lies the world I worked to understand.",
@@ -1445,7 +1456,8 @@
     "location": {
       "siteName": "Jezero Crater, Mars (representative Mars 2020 landing-site coordinates; NASA does not publish a separate precise Ingenuity surface coordinate)",
       "lat": 18.44,
-      "lng": 77.45
+      "lng": 77.45,
+      "siteNameAr": "فوهة جيزيرو، المريخ (تمثل إحداثيات موقع هبوط مارس 2020؛ ناسا لا تنشر إحداثيات سطحية دقيقة منفصلة للطائرة إنجنويتي)"
     },
     "story": {
       "en": "Above me is Perseverance; below me, Jezero Crater. I am Ingenuity — Ginny — arriving on Mars strapped beneath a rover. It is February 18, 2021. Our journey began on July 30, 2020, when Mars 2020 launched with both of us aboard. On April 4 I am set down on the surface. My travelling companion no longer carries me; the ground is mine now.\nCan an aircraft fly here on its own power and under control? On April 19 I answer with the first powered, controlled flight on another planet. That was the whole job: prove it can be done. Five test flights were planned. After the fifth, on May 7, my role changes and I begin scouting routes and features for Perseverance.\nFive planned flights become 72. On January 18, 2024, contact is lost near touchdown on my final flight and my rotor blades are damaged. I can no longer fly. NASA announces my mission complete on January 25. I stay on the ground on Mars, beneath the sky I once flew through.",
@@ -1582,7 +1594,8 @@
     "location": {
       "siteName": "Final orbit around dwarf planet Ceres; earlier orbital mission at asteroid Vesta (no surface landing)",
       "lat": null,
-      "lng": null
+      "lng": null,
+      "siteNameAr": "المدار النهائي حول الكوكب القزم سيريس؛ مهمة مدارية سابقة حول الكويكب فيستا (بدون هبوط سطحي)"
     },
     "story": {
       "en": "Bright deposits mark the landscape beneath my orbit. I am Dawn, a deep-space probe circling the dwarf planet Ceres without ever touching it. My memory goes back to Cape Canaveral in 2007; in 2009, the pull of Mars helps me along my route around the Sun, toward the asteroid Vesta.\nI reach Vesta in 2011 and begin to orbit. Another world waits ahead. I leave in 2012 and arrive at Ceres in 2015, where I study those bright deposits and its geology — the materials and features that make its landscape. I never land on either. My primary mission ends in 2016, but I keep working. How long can I hold my gaze steady?\nThen the hydrazine runs out and I can no longer point myself properly. My radio signal is lost on October 31, 2018; NASA ends the mission the next day. I stay inert, still circling Ceres. My voice is gone. My journey around this world is not.",
@@ -1723,7 +1736,8 @@
     "location": {
       "siteName": "Saddle region of asteroid 433 Eros, just south of Himeros",
       "lat": null,
-      "lng": null
+      "lng": null,
+      "siteNameAr": "منطقة السرج للكويكب 433 إيروس، جنوب هيميروس مباشرة"
     },
     "story": {
       "en": "The surface of asteroid 433 Eros meets me gently. It is February 12, 2001. I am NEAR Shoemaker, a deep-space probe, and I was never designed to land. Yet here I rest. My journey began on February 17, 1996, as the first mission of NASA’s Discovery program.\nBefore arriving I pass about 1,200 kilometers from asteroid 253 Mathilde, swing past Earth so its gravity can shape my path, and later pass Eros itself. On February 14, 2000, I begin to circle it. No spacecraft had orbited an asteroid before. My camera studies the surface; my other instruments probe its minerals and the elements that make it. Then comes the touchdown no one built me for — the first on an asteroid.\nFor about two weeks I keep sending images and measurements of gamma rays, a form of high-energy light. In the end the cold wins. My last contact is February 28, 2001. I stay in Eros’s saddle region, just south of Himeros. My journey ends with ground beneath me.",
@@ -1852,7 +1866,8 @@
     "location": {
       "siteName": "Deep-space heliocentric escape trajectories: Pioneer 10 generally toward Aldebaran in Taurus; Pioneer 11 generally toward Lambda Aquila in the direction of Aquila/Sagittarius",
       "lat": null,
-      "lng": null
+      "lng": null,
+      "siteNameAr": "مسارات هروب مركزية شمسية في الفضاء العميق: بايونير 10 باتجاه الدبران في برج الثور؛ بايونير 11 باتجاه لامبدا أكويلا في اتجاه العقاب/القوس"
     },
     "story": {
       "en": "The asteroid belt closes around my path. It is July, and I am passing through toward Jupiter. I am Pioneer 10, one of the Pioneer twins, launched from Cape Canaveral on March 2, 1972. Ahead lies a planet, not a landing place. On December 4, 1973, I reach my closest approach to Jupiter.\nMy sister, Pioneer 11, takes another road: Jupiter’s gravity bends her toward Saturn, where on September 1, 1979 she makes the first close exploration of the planet, returning 440 images. Neither of us lands. We pass close, gather what we can, radio it home, and keep going outward. How far can a journey carry us?\nOn June 13, 1983, I become the first human-made object to cross Neptune’s orbit. My sister crosses in 1990 and stops science operations in 1995. Earth receives my last weak signal on January 23, 2003. Our signals have ended. We still follow paths out of the Solar System. Look up: silence does not mean we have stopped.",
@@ -1993,7 +2008,8 @@
     "location": {
       "siteName": "Earth-trailing heliocentric solar orbit; approximately 0.97 × 1.041 AU with 0.5° inclination to the solar ecliptic",
       "lat": null,
-      "lng": null
+      "lng": null,
+      "siteNameAr": "مدار شمسي heliocentric خلف الأرض؛ تقريباً 0.97 × 1.041 وحدة فلكية مع ميل 0.5° إلى مستوى دائرة البروج الشمسية"
     },
     "story": {
       "en": "A star’s light dims, just a little. I watch for that dip — the trace of a planet crossing in front of its star. I am Kepler. In 2009 I launch from Cape Canaveral on a Delta II to hunt for worlds this way, and from those tiny changes in starlight my observations reveal thousands of possible worlds.\nThen the machinery that holds my gaze begins to fail. In 2013 a second reaction wheel — one of the devices that steers my pointing — gives out, and the precise pointing and new data collection of my original mission end. I can no longer watch as planned. Yet the work goes on through an extended mission called K2.\nEventually the fuel runs out. NASA retires me on October 30, 2018, and sends the final disconnect commands on November 15. I stay in orbit around the Sun, trailing Earth. My messages stop. Above you, my journey continues.",

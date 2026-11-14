@@ -1509,3 +1509,26 @@ body { color: var(--suit-white); }
 .app-rtl .entry-portal-button { font-family: var(--font-arabic); letter-spacing: 0; }
 .planet-pin-label.is-staggered { transform: translateY(-34px); }
 @media (max-width: 760px) { .planet-pin-label.is-staggered { transform: translateY(-30px); } }
+
+/* Explorer challenge: evidence + multiple choice */
+.explorer-clue { display: grid; gap: 6px; margin: 0 0 12px; padding: 12px 14px; border: 1px solid rgba(234,179,8,.22); border-radius: 12px; background: rgba(234,179,8,.06); }
+.explorer-clue b { color: var(--signal-gold); font-family: var(--font-mono); font-size: 8px; letter-spacing: .16em; }
+.explorer-clue span { color: #e8ecf1; font-size: 12px; line-height: 1.6; }
+.explorer-options { display: grid; gap: 7px; margin-bottom: 12px; }
+.explorer-option { display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 9px; width: 100%; padding: 9px 12px; border: 1px solid rgba(248,250,252,.12); border-radius: 11px; background: rgba(248,250,252,.03); color: var(--suit-white); cursor: pointer; text-align: start; transition: border-color 140ms ease, background 140ms ease, transform 140ms ease; }
+.explorer-option:hover:not(:disabled) { border-color: rgba(252,61,33,.4); background: rgba(252,61,33,.07); transform: translateX(2px); }
+.explorer-option:disabled { cursor: default; opacity: .72; }
+.explorer-option em { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; background: rgba(248,250,252,.08); color: #b9c3cf; font-family: var(--font-mono); font-size: 9px; font-style: normal; }
+.explorer-option span { font-size: 12px; line-height: 1.35; }
+.explorer-option small { color: #7f8b99; font-family: var(--font-mono); font-size: 8px; }
+.explorer-option.is-correct { border-color: rgba(52,211,153,.65); background: rgba(52,211,153,.12); }
+.explorer-option.is-correct em { background: rgba(52,211,153,.28); color: #d1fae5; }
+.explorer-option.is-wrong { border-color: rgba(252,61,33,.6); background: rgba(252,61,33,.12); }
+.app-rtl .explorer-clue span, .app-rtl .explorer-option span { font-family: var(--font-arabic); }
+
+/* Chapters settle under the chapter bar instead of stopping mid-paragraph */
+.mission-story-scroll { scroll-snap-type: y proximity; scroll-padding-top: 78px; }
+.story-chapter { scroll-snap-align: start; scroll-margin-top: 78px; }
+@media (prefers-reduced-motion: reduce) {
+  .mission-story-scroll { scroll-snap-type: none; }
+}

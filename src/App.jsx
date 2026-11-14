@@ -289,7 +289,24 @@ export default function App() {
         }}
         audioEnabled={audioEnabled}
         autoPilotOn={autoPilotOn}
-        onToggleAutoPilot={() => setAutoPilotOn((current) => !current)}
+        onToggleAutoPilot={() => {
+          if (autoPilotOn) {
+            setAutoPilotOn(false);
+            return;
+          }
+          if (!selectedRelic) {
+            const target = displayRelics.find((relic) => relic.id === selectedId) || displayRelics[0];
+            if (!target) return;
+            setCelestialView(target.body || 'Moon');
+            setHotspot(null);
+            setStoryProgress({ index: 0, total: 1 });
+            setSelectedId(target.id);
+            setBadgeModalOpen(false);
+            window.setTimeout(() => setAutoPilotOn(true), 420);
+            return;
+          }
+          setAutoPilotOn(true);
+        }}
         onToggleAudio={toggleAudio}
       />
       {badgeModalOpen && (

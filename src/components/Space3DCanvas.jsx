@@ -118,7 +118,7 @@ function Pin({ item, position, onSelect, onHoverChange, selected = false, langua
     return new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), outward);
   }, [position]);
   const title = missionPinLabel(item);
-  const site = item.location?.siteName;
+  const site = (language === 'ar' && item.location?.siteNameAr) || item.location?.siteName;
   const label = site ? `${title} · ${site}` : title;
 
   useFrame(({ clock }) => {
