@@ -1610,3 +1610,34 @@ body { color: var(--suit-white); }
   /* the model must not sit under the opening copy */
   .story-mode .viewport-panel .canvas-stage { opacity: .92; }
 }
+
+/* --- Opening screen: one screen, no stray chrome -------------------------- */
+.has-entry-portal .topbar,
+.has-entry-portal .whats-new-trigger,
+.has-entry-portal .archive-sync-note { display: none !important; }
+.entry-portal-eyebrow { flex-wrap: nowrap; }
+.entry-language-toggle { white-space: nowrap; }
+
+@media (min-width: 900px) and (max-height: 1100px) {
+  .entry-hero { padding-block: 14px 10px; }
+  .entry-hero-copy h1 { font-size: clamp(34px, 4.2vw, 56px); line-height: 1.06; }
+  .app-rtl .entry-hero-copy h1 { font-size: clamp(30px, 3.7vw, 48px); line-height: 1.22; }
+  .entry-hero-description { margin-top: 12px; font-size: 14px; line-height: 1.75; }
+  .entry-proof-line { margin-top: 12px; }
+  .entry-metrics { margin-top: 14px; }
+  .entry-portal-actions { margin-top: 16px; }
+  .entry-body-cards { margin-top: 16px; }
+  .entry-card-scene { height: 150px; }
+  .entry-feature-card { border-radius: 16px; }
+  .entry-card-topline { padding: 10px 14px 9px; }
+  .entry-body-card { min-height: 64px; }
+}
+
+/* The language switch belongs beside its label, not at the far end of the row */
+.entry-portal-eyebrow { display: inline-flex; align-items: center; gap: 8px; }
+.entry-language-toggle { margin-inline-start: 6px; }
+
+/* What's New is a desktop courtesy, not a mobile obstacle */
+@media (max-width: 760px) {
+  .whats-new-trigger { display: none !important; }
+}

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState , useRef } from 'react';
 import { ArrowUpRight, BadgeCheck, Crosshair, Database, Globe2, Info, Moon, Orbit, Play, RadioTower, Volume2, VolumeX } from 'lucide-react';
 import { fetchRelics, LOCAL_RELICS } from './services/api.js';
 import TopNav from './components/TopNav.jsx';
@@ -72,6 +72,37 @@ export default function App() {
   const [audioStarted, setAudioStarted] = useState(false);
   const [entryPortalOpen, setEntryPortalOpen] = useState(!launch.hasDestination);
   const [autoPilotOn, setAutoPilotOn] = useState(false);
+  const urlRelicRef = useRef(null);
+
+  // Keep the address bar honest: a relic you opened is a place you can refresh,
+  // bookmark, and walk back to with the browser's back button.
+  useEffect(() => {
+    if (entryPortalOpen) return;
+    const params = new URLSearchParams();
+    if (selectedId) params.set('mission', selectedId);
+    params.set('view', celestialView || 'Moon');
+    params.set('lang', language);
+    const next = `${window.location.pathname}?${params.toString()}`;
+    if (next === `${window.location.pathname}${window.location.search}`) return;
+    const relicChanged = urlRelicRef.current !== selectedId;
+    urlRelicRef.current = selectedId;
+    window.history[relicChanged ? 'pushState' : 'replaceState']({ mission: selectedId, view: celestialView, language }, '', next);
+  }, [selectedId, celestialView, language, entryPortalOpen]);
+
+  useEffect(() => {
+    const onPopState = () => {
+      const restored = readLaunchLocation(window.location.search, LOCAL_RELICS);
+      setSelectedId(restored.missionId);
+      setCelestialView(restored.view);
+      if (restored.language) setLanguage(restored.language);
+      setEntryPortalOpen(!restored.hasDestination);
+      setAutoPilotOn(false);
+      setHotspot(null);
+      setBadgeModalOpen(false);
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
   const [badges, setBadges] = useState(readBadges);
   const [storyProgress, setStoryProgress] = useState({ index: 0, total: 1 });
   const [badgeModalOpen, setBadgeModalOpen] = useState(false);
