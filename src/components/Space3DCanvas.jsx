@@ -662,19 +662,38 @@ function HardwareCallout({ position, rigRef, active }) {
 
   useFrame(() => {
     if (!active || !rigRef.current || !pathRef.current || !pulseRef.current) return;
-    const worldPoint = rigRef.current.localToWorld(new THREE.Vector3(...position));
-    const projected = worldPoint.project(camera);
-    const x1 = (projected.x * 0.5 + 0.5) * size.width;
-    const y1 = (-projected.y * 0.5 + 0.5) * size.height;
+    const svg = pathRef.current.ownerSVGElement;
+    const frame = svg?.getBoundingClientRect();
     const chapterText = document.querySelector('.hardware-chapter.is-current .hardware-copy');
-    if (!chapterText || projected.z > 1 || x1 < 0 || x1 > size.width || y1 < 0 || y1 > size.height) {
+    // Start the line exactly where the visible pin is drawn (same DOM node),
+    // so the dot and the line can never drift apart.
+    const pin = document.querySelector('.three-hotspot.is-selected');
+    let x1;
+    let y1;
+    let offscreen = false;
+    if (pin && frame) {
+      const pinRect = pin.getBoundingClientRect();
+      x1 = pinRect.left + pinRect.width / 2 - frame.left;
+      y1 = pinRect.top + pinRect.height / 2 - frame.top;
+      offscreen = pinRect.width === 0;
+    } else {
+      const worldPoint = rigRef.current.localToWorld(new THREE.Vector3(...position));
+      const projected = worldPoint.project(camera);
+      x1 = (projected.x * 0.5 + 0.5) * size.width;
+      y1 = (-projected.y * 0.5 + 0.5) * size.height;
+      offscreen = projected.z > 1;
+    }
+    if (!chapterText || !frame || offscreen || x1 < 0 || x1 > size.width || y1 < 0 || y1 > size.height) {
       pathRef.current.setAttribute('d', '');
       pulseRef.current.setAttribute('r', '0');
       return;
     }
-    const bounds = chapterText.getBoundingClientRect();
-    const x2 = x1 < bounds.left ? bounds.left : x1 > bounds.right ? bounds.right : bounds.left + bounds.width / 2;
-    const y2 = bounds.top + Math.min(bounds.height * 0.42, 110);
+    const textBox = chapterText.getBoundingClientRect();
+    const bounds = { left: textBox.left - frame.left, right: textBox.right - frame.left, top: textBox.top - frame.top, width: textBox.width, height: textBox.height };
+    const heading = chapterText.querySelector('h2')?.getBoundingClientRect();
+    const gap = 18;
+    const x2 = x1 < bounds.left ? bounds.left - gap : x1 > bounds.right ? bounds.right + gap : bounds.left + bounds.width / 2;
+    const y2 = heading ? heading.top - frame.top + Math.min(heading.height / 2, 40) : bounds.top + Math.min(bounds.height * 0.42, 110);
     const bend = Math.max(42, Math.abs(x2 - x1) * 0.34);
     const controlX = x2 > x1 ? x1 + bend : x1 - bend;
     pathRef.current.setAttribute('d', `M ${x1.toFixed(1)} ${y1.toFixed(1)} C ${controlX.toFixed(1)} ${y1.toFixed(1)}, ${controlX.toFixed(1)} ${y2.toFixed(1)}, ${x2.toFixed(1)} ${y2.toFixed(1)}`);

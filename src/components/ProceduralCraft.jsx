@@ -9,7 +9,8 @@ const ALU = { color: '#dbe1e6', metalness: 0.55, roughness: 0.34 };
 const FOIL = { color: '#d9b23a', metalness: 0.62, roughness: 0.38 };
 const DARK = { color: '#1b222b', metalness: 0.55, roughness: 0.4 };
 const WHITE = { color: '#e8ebef', metalness: 0.2, roughness: 0.58 };
-const CELL = { color: '#16233a', metalness: 0.62, roughness: 0.3 };
+// Solar cells read as deep blue glass (like NASA photos), never as black holes.
+const CELL = { color: '#2a5fc4', metalness: 0.3, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.12, emissive: '#0e3484', emissiveIntensity: 0.5 };
 
 function Strut({ start, end, radius = 0.02, color = '#c5ccd2', metalness = 0.82, roughness = 0.3 }) {
   const { position, quaternion, length } = useMemo(() => {
@@ -288,13 +289,24 @@ export function PhoenixModel() {
       </mesh>
       {[-1, 1].map((side) => (
         <group key={`array-${side}`} position={[side * 0.78, 0.4, 0]} rotation={[0, 0, side * -0.12]}>
+          {/* UltraFlex array: a ten-sided fan of blue cell gores with a bright frame. */}
           <mesh castShadow>
-            <cylinderGeometry args={[0.58, 0.58, 0.02, 36]} />
-            <meshPhysicalMaterial color="#8d959c" metalness={0.66} roughness={0.36} />
+            <cylinderGeometry args={[0.58, 0.58, 0.02, 10]} />
+            <meshPhysicalMaterial color="#c3cad1" metalness={0.6} roughness={0.32} />
           </mesh>
           <mesh position={[0, 0.014, 0]}>
-            <cylinderGeometry args={[0.52, 0.52, 0.008, 36]} />
+            <cylinderGeometry args={[0.54, 0.54, 0.008, 10]} />
             <meshPhysicalMaterial {...CELL} />
+          </mesh>
+          {Array.from({ length: 10 }).map((_, g) => (
+            <mesh key={`gore-${g}`} position={[Math.cos((g / 10) * Math.PI * 2 + Math.PI / 10) * 0.27, 0.02, Math.sin((g / 10) * Math.PI * 2 + Math.PI / 10) * 0.27]} rotation={[0, -((g / 10) * Math.PI * 2 + Math.PI / 10), 0]}>
+              <boxGeometry args={[0.54, 0.006, 0.012]} />
+              <meshStandardMaterial color="#d7dde3" metalness={0.5} roughness={0.35} />
+            </mesh>
+          ))}
+          <mesh position={[0, 0.024, 0]}>
+            <cylinderGeometry args={[0.07, 0.07, 0.02, 16]} />
+            <meshStandardMaterial color="#d7dde3" metalness={0.6} roughness={0.3} />
           </mesh>
         </group>
       ))}

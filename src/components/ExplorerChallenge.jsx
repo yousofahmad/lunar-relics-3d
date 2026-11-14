@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { Flame, Target, Timer, Trophy, X } from 'lucide-react';
 import { playChallengeFanfare, playDiscoveryChime, playMissThud } from '../utils/audioEngine.js';
+import { getRelicModelInfo } from '../utils/relicModelMap.js';
 import ModelPeek from './ModelPeek.jsx';
 
 const ROUND_SECONDS = 24;
@@ -124,10 +125,25 @@ function buildRound(relics, used) {
   };
 }
 
+function modelIdentity(item) {
+  const info = getRelicModelInfo(item);
+  return info?.modelPath ? `mesh:${info.modelPath}` : `archetype:${info?.archetype || item.id}`;
+}
+
 function buildModelRound(relics, used) {
   const pool = relics.filter((item) => !used.has(item.id));
   const source = pool.length >= OPTION_COUNT ? pool : relics;
-  const picked = shuffle(source).slice(0, OPTION_COUNT);
+  const unique = [];
+  const identities = new Set();
+  shuffle(source).forEach((item) => {
+    const identity = modelIdentity(item);
+    if (!identities.has(identity)) {
+      identities.add(identity);
+      unique.push(item);
+    }
+  });
+  const picked = unique.slice(0, OPTION_COUNT);
+  if (picked.length < OPTION_COUNT) return { target: picked[0] || source[0], options: shuffle(picked).map((item) => item.id) };
   return { target: picked[0], options: shuffle(picked).map((item) => item.id) };
 }
 
@@ -145,7 +161,15 @@ function buildTimelineRound(relics) {
 
 function buildEraRound(relics) {
   const pool = relics.filter((item) => item.launchYear);
-  const source = [...pool].sort(() => Math.random() - 0.5).slice(0, 4);
+  const source = [];
+  const years = new Set();
+  shuffle(pool).forEach((item) => {
+    const year = Number(item.launchYear);
+    if (Number.isFinite(year) && !years.has(year)) {
+      years.add(year);
+      source.push(item);
+    }
+  });
   const items = source
     .map((item) => ({
       key: item.id,
@@ -153,7 +177,7 @@ function buildEraRound(relics) {
       textAr: item.nicknameAr || item.nameAr || item.nickname || item.name,
       year: String(item.launchYear),
     }))
-    .sort((a, b) => String(a.year).localeCompare(String(b.year)));
+    .sort((a, b) => Number(a.year) - Number(b.year));
   return { kind: 'era', target: null, items, shuffled: shuffle(items.map((entry) => entry.key)) };
 }
 
@@ -214,6 +238,9 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
     }
     modelRoundsRef.current = fresh;
     setMode('model');
+    setRounds([]);
+    setSeq(null);
+    setRound(0);
     setModelRoundIndex(0);
     setPicked([]);
     setScore(0);
@@ -262,6 +289,9 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
     clearAdvance();
     const round = kind === 'era' ? buildEraRound(relics) : buildTimelineRound(relics);
     setMode(kind);
+    setRounds([]);
+    modelRoundsRef.current = [];
+    setModelRoundIndex(0);
     setSeq({ ...round, kind });
     setRound(0);
     setPicked([]);
@@ -318,6 +348,10 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
       fresh.push(next);
     }
     setRounds(fresh);
+    setMode('evidence');
+    setSeq(null);
+    modelRoundsRef.current = [];
+    setModelRoundIndex(0);
     setRound(0);
     setScore(0);
     setStreak(0);
@@ -332,18 +366,25 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
   };
 
   useEffect(() => {
-    if (phase !== 'playing' || !current) return undefined;
-    onViewChange(current.target.body || 'Moon');
+    if (phase !== 'playing') return undefined;
+    const target = mode === 'model' ? modelRoundsRef.current[modelRoundIndex]?.target : current?.target;
+    if (!target) return undefined;
+    onViewChange(target.body || 'Moon');
     const timer = window.setInterval(() => {
-      setTimeLeft((value) => Math.max(0, value - 0.1));
+      setTimeLeft((value) => {
+        const next = Math.max(0, value - 0.1);
+        timeLeftRef.current = next;
+        return next;
+      });
     }, 100);
     return () => window.clearInterval(timer);
-  }, [phase, round, current, onViewChange]);
+  }, [phase, mode, round, modelRoundIndex, current, onViewChange]);
 
   useEffect(() => {
     if (phase !== 'playing' || timeLeft > 0 || lockedRef.current) return undefined;
-    if (mode === 'model') { setFeedback('time'); setStreak(0); playMissThud(); advanceRef.current = window.setTimeout(() => { clearAdvance(); setChosen(null); setFeedback(''); setTimeLeft(ROUND_SECONDS); setModelRoundIndex((index) => { if (index + 1 >= TOTAL_ROUNDS) { setPhase('done'); return index; } return index + 1; }); }, 1500); return () => window.clearTimeout(advanceRef.current); }
-    if (mode === 'timeline' || mode === 'era') { setFeedback('time'); setStreak(0); playMissThud(); advanceRef.current = window.setTimeout(() => { clearAdvance(); setPicked([]); setFeedback(''); setTimeLeft(ROUND_SECONDS); setPhase('done'); }, 1500); return () => window.clearTimeout(advanceRef.current); }
+    lockedRef.current = true;
+    if (mode === 'model') { setFeedback('time'); setStreak(0); playMissThud(); advanceRef.current = window.setTimeout(() => { clearAdvance(); lockedRef.current = false; setChosen(null); setFeedback(''); setTimeLeft(ROUND_SECONDS); setModelRoundIndex((index) => { if (index + 1 >= TOTAL_ROUNDS) { setPhase('done'); return index; } return index + 1; }); }, 1500); return () => window.clearTimeout(advanceRef.current); }
+    if (mode === 'timeline' || mode === 'era') { setFeedback('time'); setStreak(0); playMissThud(); advanceRef.current = window.setTimeout(() => { clearAdvance(); lockedRef.current = false; setPicked([]); setFeedback(''); setTimeLeft(ROUND_SECONDS); setPhase('done'); }, 1500); return () => window.clearTimeout(advanceRef.current); }
     setFeedback('time');
     setStreak(0);
     playMissThud();
@@ -514,7 +555,7 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
               const isTarget = id === modelRoundsRef.current[modelRoundIndex].target.id;
               const state = feedback === 'hit' && isTarget ? 'is-correct' : isChosen && !isTarget ? 'is-wrong' : '';
               return (
-                <button key={id} type="button" className={`explorer-option ${state}`} onClick={() => answerModel(id)} disabled={lockedRef.current}>
+                <button key={id} type="button" className={`explorer-option ${state}`} onClick={() => answerModel(id)} disabled={lockedRef.current || feedback === 'time'}>
                   <em>{String.fromCharCode(65 + index)}</em>
                   <span dir="auto">{relicName(item, isArabic)}</span>
                   <small>{item.launchYear || ''}</small>

@@ -1,7 +1,7 @@
 {
   "src/data/relicsData.json": {
-    "sha256": "06dc19a1b258ac96dbc3b64798c5b0faad87696b4fd9182f128c17e57832c7ee",
-    "bytes": 172099
+    "sha256": "80f9530db8ccbfacb2b00925a0f8604113a1caf5a45b97e52b70569eb9663c58",
+    "bytes": 191509
   },
   "src/services/api.js": {
     "sha256": "555101c9106c1c82922b5242958e777e916cf463c5c9e6537aa7edd8a33a494e",

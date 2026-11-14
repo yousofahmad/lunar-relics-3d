@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { transmitText } from '../utils/radio.js';
 import { playNarration, stopNarration } from '../utils/audioEngine.js';
+import narrationClips from '../data/narrationClips.json';
 import { getModelHonestyLabel, has3DRepresentation } from '../utils/relicModelMap.js';
 import './story-archive-polish.css';
 
@@ -233,7 +234,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
   );
 }
 
-function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHotspot, onStoryProgress, audioEnabled = true, autoPilotOn = false, setAutoPilotOn = () => {} }) {
+function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHotspot, onStoryProgress, audioEnabled = true, onEnableAudio = () => {}, autoPilotOn = false, setAutoPilotOn = () => {} }) {
   const copy = COPY[language] || COPY.en;
   const [activeQuestion, setActiveQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -241,6 +242,8 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const [isTransmitting, setIsTransmitting] = useState(false);
   const [narrationOn, setNarrationOn] = useState(false);
   const [subtitleText, setSubtitleText] = useState('');
+  const [speakingChapter, setSpeakingChapter] = useState(null);
+  const followStoryRef = useRef(false);
   const [activeBeat, setActiveBeat] = useState(0);
   const [tourRestartToken, setTourRestartToken] = useState(0);
   const [shareFeedback, setShareFeedback] = useState('');
@@ -254,6 +257,10 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const storyLanguage = item.story?.[language] ? language : 'en';
   const storyText = item.story?.[storyLanguage] || '';
   const narrationUrl = item.narration?.[storyLanguage] || item.narration?.en || null;
+  const missionClips = narrationClips[item.id] || null;
+  const clipLanguage = isArabic ? 'ar' : 'en';
+  const introClipUrl = missionClips?.intro?.[clipLanguage] || null;
+  const hotspotClipUrls = (missionClips?.hotspots || []).map((clip) => clip?.[clipLanguage] || null);
   const narrationRatioRef = useRef(0);
   const advanceTimerRef = useRef(0);
   const storyBeats = splitStoryBeats(storyText);
@@ -497,11 +504,11 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   }, [hardwareHotspots, isArabic, item.launchYear, item.name, item.nickname, language, quiz.question, storyLanguage, storyText, timeline]);
 
   const tourDataRef = useRef(null);
-  tourDataRef.current = { tourSteps, storyChapters, storyText, narrationUrl };
+  tourDataRef.current = { tourSteps, storyChapters, storyText, narrationUrl, introClipUrl, hotspotClipUrls, hardwareHotspots, setHotspot };
 
   useEffect(() => {
     if (!autoPilotOn || tourSteps.length === 0) return undefined;
-    const { tourSteps: steps, storyChapters: chapters, storyText: text, narrationUrl: voice } = tourDataRef.current || {};
+    const { tourSteps: steps, storyChapters: chapters, storyText: text, narrationUrl: voice, introClipUrl: introClip, hotspotClipUrls: spotClips = [], hardwareHotspots: spots = [], setHotspot: focusSpot } = tourDataRef.current || {};
     if (!steps || !chapters) return undefined;
     const runId = ++tourRunRef.current;
     let active = true;
@@ -527,46 +534,62 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       // the clip runs start to finish and the camera/story advance with it,
       // so nobody sits through a silent step.
       if (voice) {
-        const words = String(text || '').split(/\s+/).filter(Boolean);
+        // Fully narrated journey: intro -> story -> every hardware point ->
+        // journey -> quiz. Each chapter is spoken by the recorded voice and
+        // the page moves to it by itself.
         const ids = new Set(chapters.map((chapter) => chapter.id));
-        const marks = [
-          [0, 'transmission'],
-          [0.4, 'hardware-0'],
-          [0.58, 'hardware-1'],
-          [0.74, 'hardware-2'],
-          [0.9, 'timeline'],
-        ].filter(([, id]) => ids.has(id));
-        scrollToChapter('hero');
-        await wait(900);
-        if (!isCurrentRun()) return;
-        let stage = -1;
-        setNarrationOn(true);
-        setIsTransmitting(true);
-        await new Promise((resolve) => {
-          playNarration(voice, {
+        const goTo = (id) => {
+          scrollToChapter(id);
+          setActiveBeat(chapters.findIndex((chapter) => chapter.id === id));
+        };
+        const playClip = (url, chapterId, { followStory = false, words = null } = {}) => new Promise((resolve) => {
+          if (!url || !isCurrentRun()) { resolve(); return; }
+          followStoryRef.current = followStory;
+          narrationRatioRef.current = 0;
+          setSpeakingChapter(chapterId);
+          playNarration(url, {
             onProgress: (time, duration) => {
               if (!duration || !isCurrentRun()) return;
-              const ratio = Math.min(1, time / duration);
-              narrationRatioRef.current = ratio;
-              const spoken = words.slice(0, Math.round(ratio * words.length)).join(' ');
-              setSubtitleText(spoken.length > 150 ? `… ${spoken.slice(-150)}` : spoken);
-              const nextStage = marks.reduce((acc, [, id], i) => (ratio >= marks[i][0] ? i : acc), -1);
-              if (nextStage > stage) {
-                stage = nextStage;
-                scrollToChapter(marks[stage][1]);
-                setActiveBeat(chapters.findIndex((chapter) => chapter.id === marks[stage][1]));
+              narrationRatioRef.current = Math.min(1, time / duration);
+              if (words) {
+                const spoken = words.slice(0, Math.round(narrationRatioRef.current * words.length)).join(' ');
+                setSubtitleText(spoken.length > 150 ? `… ${spoken.slice(-150)}` : spoken);
               }
             },
             onEnded: () => resolve(),
             onError: () => resolve(),
           });
         });
+        setNarrationOn(true);
+        setIsTransmitting(true);
+        goTo('hero');
+        await wait(700);
         if (!isCurrentRun()) return;
+        await playClip(introClip, 'hero');
+        if (!isCurrentRun()) return;
+        goTo('transmission');
+        await wait(900);
+        if (!isCurrentRun()) return;
+        await playClip(voice, 'transmission', { followStory: true });
+        followStoryRef.current = false;
+        for (let index = 0; index < spots.length; index += 1) {
+          const id = `hardware-${index}`;
+          if (!isCurrentRun() || !ids.has(id)) break;
+          goTo(id);
+          focusSpot?.(spots[index]);
+          await wait(1100);
+          if (!isCurrentRun()) return;
+          if (spotClips[index]) await playClip(spotClips[index], id);
+          else await wait(2500);
+        }
+        if (!isCurrentRun()) return;
+        setSpeakingChapter(null);
         setNarrationOn(false);
         setIsTransmitting(false);
-        setSubtitleText(text || '');
-        subtitleTimerRef.current = window.setTimeout(() => setSubtitleText(''), 2600);
-        if (ids.has('quiz')) scrollToChapter('quiz');
+        setSubtitleText('');
+        if (ids.has('timeline')) { goTo('timeline'); await wait(4200); }
+        if (!isCurrentRun()) return;
+        if (ids.has('quiz')) goTo('quiz');
         setAutoPilotOn(false);
         return;
       }
@@ -589,6 +612,8 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       if (tourRunRef.current === runId) tourRunRef.current += 1;
       tourDelayCancelRef.current?.();
       tourDelayCancelRef.current = null;
+      followStoryRef.current = false;
+      setSpeakingChapter(null);
       stopAudio(false);
     };
   }, [autoPilotOn, playAudio, playNarration, scrollToChapter, setAutoPilotOn, stopAudio, tourRestartToken]);
@@ -629,7 +654,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     const follow = () => {
       const pane = document.querySelector('.story-mode .mission-story-scroll');
       const chapter = document.getElementById('mission-chapter-transmission');
-      if (pane && chapter) {
+      if (pane && chapter && followStoryRef.current) {
         const ratio = Math.min(1, Math.max(0, narrationRatioRef.current));
         const paneRect = pane.getBoundingClientRect();
         const chapterTop = chapter.getBoundingClientRect().top - paneRect.top + pane.scrollTop;
@@ -647,6 +672,8 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const toggleNarration = () => {
     if (narrationOn) {
       stopNarration();
+      followStoryRef.current = false;
+      setSpeakingChapter(null);
       setNarrationOn(false);
       setIsTransmitting(false);
       setSubtitleText('');
@@ -655,6 +682,8 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     if (!narrationUrl) { playAudio(storyText); return; }
     const words = storyText.split(/\s+/).filter(Boolean);
     narrationRatioRef.current = 0;
+    followStoryRef.current = true;
+    setSpeakingChapter('transmission');
     scrollToChapter('transmission');
     setNarrationOn(true);
     setIsTransmitting(true);
@@ -667,6 +696,8 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         setSubtitleText(words.slice(0, index).join(' '));
       },
       onEnded: () => {
+        followStoryRef.current = false;
+        setSpeakingChapter(null);
         setNarrationOn(false);
         setIsTransmitting(false);
         setSubtitleText(storyText);
@@ -690,7 +721,27 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     });
   };
 
+  const playChapterClip = (chapterId, url) => {
+    if (!url) return;
+    if (speakingChapter === chapterId) {
+      stopNarration();
+      setSpeakingChapter(null);
+      setIsTransmitting(false);
+      return;
+    }
+    if (autoPilotOn) setAutoPilotOn(false);
+    followStoryRef.current = false;
+    setNarrationOn(false);
+    setSubtitleText('');
+    setSpeakingChapter(chapterId);
+    setIsTransmitting(true);
+    playNarration(url, {
+      onEnded: () => { setSpeakingChapter(null); setIsTransmitting(false); },
+      onError: () => { setSpeakingChapter(null); setIsTransmitting(false); },
+    });
+  };
   const handleGuidedMission = () => {
+    if (!autoPilotOn) onEnableAudio();
     if (isTransmitting) {
       stopAudio(true);
       return;
@@ -800,7 +851,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               </div>
             )}
             <div className="transmit-row">
-              <button type="button" className={`transmit-button ${narrationOn ? 'transmitting' : ''}`} onClick={toggleNarration} aria-pressed={narrationOn} disabled={!audioEnabled}>
+              <button type="button" className={`transmit-button ${narrationOn ? 'transmitting' : ''}`} onClick={() => { if (!narrationOn) onEnableAudio(); toggleNarration(); }} aria-pressed={narrationOn}>
                 {narrationOn ? <VolumeX size={15} /> : <Volume2 size={15} />}
                 <span>{narrationOn ? copy.stop : (isArabic ? 'اسمع الحكاية' : 'LISTEN TO THE STORY')}</span>
                 <span className="transmit-frequency" dir="auto">{narrationUrl ? (isArabic ? 'تعليق صوتي' : 'NARRATED') : (isArabic ? 'قراءة نصية' : 'TEXT ONLY')}</span>
@@ -841,7 +892,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         {hardwareHotspots.map((spot, index) => (
           <section
             id={`mission-chapter-hardware-${index}`}
-            className={`story-chapter hardware-chapter hardware-side-${index % 2 === 0 ? 'right' : 'left'} ${activeBeat === index + 2 ? 'is-current' : ''}`}
+            className={`story-chapter hardware-chapter hardware-side-${index % 2 === 0 ? 'right' : 'left'} ${activeBeat === index + 2 ? 'is-current' : ''} ${speakingChapter === `hardware-${index}` ? 'is-speaking' : ''}`}
             data-story-chapter={`hardware-${index}`}
             data-hotspot-index={index}
             key={`${item.id}-hardware-chapter-${index}`}
@@ -851,9 +902,18 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               <h2 dir="auto">{isArabic ? spot.partAr || spot.titleAr || spot.part || spot.title : spot.part || spot.title}</h2>
               <h3 dir="auto">{isArabic ? spot.titleAr || spot.title || spot.part : spot.title || spot.part}</h3>
               <p dir="auto">{isArabic ? spot.descriptionAr || spot.description : spot.description}</p>
-              <button type="button" className={`hardware-focus-button ${sameHotspot(hotspot, spot) ? 'is-active' : ''}`} onClick={() => setHotspot?.(spot)} aria-pressed={sameHotspot(hotspot, spot)}>
-                <span className="hardware-focus-dot" aria-hidden="true" />{isArabic ? 'قرّب لعرض هذا الجزء' : 'ZOOM IN ON THIS PART'}
-              </button>
+              <div className="hardware-actions">
+                <button type="button" className={`hardware-focus-button ${sameHotspot(hotspot, spot) ? 'is-active' : ''}`} onClick={() => setHotspot?.(spot)} aria-pressed={sameHotspot(hotspot, spot)}>
+                  <span className="hardware-focus-dot" aria-hidden="true" />{isArabic ? 'قرّب لعرض هذا الجزء' : 'ZOOM IN ON THIS PART'}
+                </button>
+                {hotspotClipUrls[index] && (
+                  <button type="button" className={`hardware-listen-button ${speakingChapter === `hardware-${index}` ? 'is-speaking' : ''}`} onClick={() => { onEnableAudio(); setHotspot?.(spot); playChapterClip(`hardware-${index}`, hotspotClipUrls[index]); }} aria-pressed={speakingChapter === `hardware-${index}`}>
+                    {speakingChapter === `hardware-${index}` ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                    <span>{speakingChapter === `hardware-${index}` ? (isArabic ? 'إيقاف' : 'STOP') : (isArabic ? 'اسمع الشرح' : 'LISTEN')}</span>
+                    <span className="speaking-bars" aria-hidden="true"><i /><i /><i /></span>
+                  </button>
+                )}
+              </div>
             </div>
           </section>
         ))}
@@ -909,7 +969,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         </section>
       </main>
 
-      {(isTransmitting || subtitleText) && storyChapters[activeBeat]?.id !== 'transmission' && createPortal(
+      {(isTransmitting || subtitleText) && !speakingChapter && !['transmission', 'hero'].includes(storyChapters[activeBeat]?.id) && !String(storyChapters[activeBeat]?.id || '').startsWith('hardware') && createPortal(
         <div className={`cinematic-subtitle-bar ${isTransmitting ? 'is-speaking' : ''}`} role="status" aria-live="polite" aria-atomic="false">
           <span className="subtitle-signal" aria-hidden="true"><i /><i /><i /><i /><i /></span>
           <p dir="auto">{subtitleText || copy.subtitleLoading}</p>
@@ -922,7 +982,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
 
 export default function StoryAndArchivePanel(props) {
   if (props.selectedRelic) {
-    return <MemoryRoom key={props.selectedRelic.id} item={props.selectedRelic} language={props.language} badges={props.badges} onBack={props.onBack} onUnlock={props.onUnlock} hotspot={props.hotspot} setHotspot={props.setHotspot} onStoryProgress={props.onStoryProgress} audioEnabled={props.audioEnabled} autoPilotOn={props.autoPilotOn} setAutoPilotOn={props.setAutoPilotOn} />;
+    return <MemoryRoom key={props.selectedRelic.id} item={props.selectedRelic} language={props.language} badges={props.badges} onBack={props.onBack} onUnlock={props.onUnlock} hotspot={props.hotspot} setHotspot={props.setHotspot} onStoryProgress={props.onStoryProgress} audioEnabled={props.audioEnabled} onEnableAudio={props.onEnableAudio} autoPilotOn={props.autoPilotOn} setAutoPilotOn={props.setAutoPilotOn} />;
   }
   return <ArchiveList relics={props.relics} language={props.language} onSelect={props.onSelect} archiveFilter={props.archiveFilter} setArchiveFilter={props.setArchiveFilter} />;
 }

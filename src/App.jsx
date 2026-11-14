@@ -33,19 +33,28 @@ const APOLLO_LM_PRESENTATION = {
   // with the narration audio. Do not re-add a hardcoded copy here.
   hotspots: [
     {
-      part: 'Descent stage',
-      title: 'Landing platform and descent propulsion',
-      description: 'The lower stage carried Eagle’s descent propulsion system, propellant tanks, and surface equipment. It brought Armstrong and Aldrin to Mare Tranquillitatis and remained on the Moon.',
+      part: "Descent stage",
+      title: "Landing platform and descent propulsion",
+      description: "The lower stage carried Eagle’s descent propulsion system, propellant tanks, and surface equipment. It brought Armstrong and Aldrin to Mare Tranquillitatis and remained on the Moon.",
+      partAr: "مرحلة الهبوط",
+      titleAr: "منصة الهبوط ومحرك النزول",
+      descriptionAr: "حملت المرحلة السفلية من «إيغل» نظام دفع الهبوط وخزانات الوقود ومعدات السطح. أوصلت آرمسترونغ وألدرين إلى بحر السكون، وبقيت على سطح القمر.",
     },
     {
-      part: 'Landing legs & footpads',
-      title: 'Lunar touchdown supports',
-      description: 'Four extendable legs and broad footpads supported the Lunar Module at touchdown and kept the crew cabin clear of the lunar surface.',
+      part: "Landing legs & footpads",
+      title: "Lunar touchdown supports",
+      description: "Four extendable legs and broad footpads supported the Lunar Module at touchdown and kept the crew cabin clear of the lunar surface.",
+      partAr: "أرجل الهبوط ووسائدها",
+      titleAr: "دعامات الملامسة القمرية",
+      descriptionAr: "أربع أرجل قابلة للتمدد بوسائد عريضة حملت الوحدة القمرية لحظة الملامسة، وأبقت مقصورة الطاقم بعيدة عن سطح القمر.",
     },
     {
-      part: 'Early Apollo Scientific Experiment Package (EASEP)',
-      title: 'Experiments deployed beside Eagle',
-      description: 'The Apollo 11 crew deployed EASEP beside the descent stage, including a passive seismometer and laser-ranging retroreflector. It sits next to the lander, not on its body.',
+      part: "Early Apollo Scientific Experiment Package (EASEP)",
+      title: "Experiments deployed beside Eagle",
+      description: "The Apollo 11 crew deployed EASEP beside the descent stage, including a passive seismometer and laser-ranging retroreflector. It sits next to the lander, not on its body.",
+      partAr: "حزمة التجارب العلمية المبكرة «إيسِب»",
+      titleAr: "تجارب نُشرت بجوار «إيغل»",
+      descriptionAr: "نشر طاقم أبولو 11 حزمة «إيسِب» بجوار مرحلة الهبوط، ومنها مقياس زلازل سلبي وعاكس لقياس المسافة بالليزر. تقع الحزمة بجانب المركبة، لا على جسمها.",
     },
   ],
 };
@@ -269,6 +278,11 @@ export default function App() {
     setWhatsNewOpen(false);
     if (audioEnabled) setAudioMuted(false, { startIfUnmuting: true });
   };
+  const enableAudio = () => {
+    if (audioEnabled) return;
+    setAudioEnabled(true);
+    setAudioMuted(false, { startIfUnmuting: true });
+  };
   const toggleAudio = () => {
     const nextEnabled = !audioEnabled;
     setAudioEnabled(nextEnabled);
@@ -325,6 +339,7 @@ export default function App() {
             setAutoPilotOn(false);
             return;
           }
+          enableAudio();
           if (!selectedRelic) {
             const target = displayRelics.find((relic) => relic.id === selectedId) || displayRelics[0];
             if (!target) return;
@@ -427,6 +442,7 @@ export default function App() {
             setHotspot={setHotspot}
             onStoryProgress={setStoryProgress}
             audioEnabled={audioEnabled}
+            onEnableAudio={enableAudio}
             autoPilotOn={autoPilotOn}
             setAutoPilotOn={setAutoPilotOn}
           />

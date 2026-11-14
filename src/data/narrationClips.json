@@ -1,0 +1,322 @@
+{
+ "apollo-11-eagle-descent-stage": {
+  "intro": {
+   "ar": "/audio/narration/apollo-11-eagle-descent-stage-ar-intro.mp3",
+   "en": "/audio/narration/apollo-11-eagle-descent-stage-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/apollo-11-eagle-descent-stage-ar-hs1.mp3",
+    "en": "/audio/narration/apollo-11-eagle-descent-stage-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/apollo-11-eagle-descent-stage-ar-hs2.mp3",
+    "en": "/audio/narration/apollo-11-eagle-descent-stage-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/apollo-11-eagle-descent-stage-ar-hs3.mp3",
+    "en": "/audio/narration/apollo-11-eagle-descent-stage-en-hs3.mp3"
+   }
+  ]
+ },
+ "apollo-15-lrv": {
+  "intro": {
+   "ar": "/audio/narration/apollo-15-lrv-ar-intro.mp3",
+   "en": "/audio/narration/apollo-15-lrv-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/apollo-15-lrv-ar-hs1.mp3",
+    "en": "/audio/narration/apollo-15-lrv-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/apollo-15-lrv-ar-hs2.mp3",
+    "en": "/audio/narration/apollo-15-lrv-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/apollo-15-lrv-ar-hs3.mp3",
+    "en": "/audio/narration/apollo-15-lrv-en-hs3.mp3"
+   }
+  ]
+ },
+ "alsep-scientific-packages": {
+  "intro": {
+   "ar": "/audio/narration/alsep-scientific-packages-ar-intro.mp3",
+   "en": "/audio/narration/alsep-scientific-packages-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/alsep-scientific-packages-ar-hs1.mp3",
+    "en": "/audio/narration/alsep-scientific-packages-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/alsep-scientific-packages-ar-hs2.mp3",
+    "en": "/audio/narration/alsep-scientific-packages-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/alsep-scientific-packages-ar-hs3.mp3",
+    "en": "/audio/narration/alsep-scientific-packages-en-hs3.mp3"
+   }
+  ]
+ },
+ "surveyor-3": {
+  "intro": {
+   "ar": "/audio/narration/surveyor-3-ar-intro.mp3",
+   "en": "/audio/narration/surveyor-3-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/surveyor-3-ar-hs1.mp3",
+    "en": "/audio/narration/surveyor-3-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/surveyor-3-ar-hs2.mp3",
+    "en": "/audio/narration/surveyor-3-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/surveyor-3-ar-hs3.mp3",
+    "en": "/audio/narration/surveyor-3-en-hs3.mp3"
+   }
+  ]
+ },
+ "sojourner-rover": {
+  "intro": {
+   "ar": "/audio/narration/sojourner-rover-ar-intro.mp3",
+   "en": "/audio/narration/sojourner-rover-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/sojourner-rover-ar-hs1.mp3",
+    "en": "/audio/narration/sojourner-rover-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/sojourner-rover-ar-hs2.mp3",
+    "en": "/audio/narration/sojourner-rover-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/sojourner-rover-ar-hs3.mp3",
+    "en": "/audio/narration/sojourner-rover-en-hs3.mp3"
+   }
+  ]
+ },
+ "spirit-rover": {
+  "intro": {
+   "ar": "/audio/narration/spirit-rover-ar-intro.mp3",
+   "en": "/audio/narration/spirit-rover-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/spirit-rover-ar-hs1.mp3",
+    "en": "/audio/narration/spirit-rover-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/spirit-rover-ar-hs2.mp3",
+    "en": "/audio/narration/spirit-rover-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/spirit-rover-ar-hs3.mp3",
+    "en": "/audio/narration/spirit-rover-en-hs3.mp3"
+   }
+  ]
+ },
+ "opportunity-rover": {
+  "intro": {
+   "ar": "/audio/narration/opportunity-rover-ar-intro.mp3",
+   "en": "/audio/narration/opportunity-rover-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/opportunity-rover-ar-hs1.mp3",
+    "en": "/audio/narration/opportunity-rover-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/opportunity-rover-ar-hs2.mp3",
+    "en": "/audio/narration/opportunity-rover-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/opportunity-rover-ar-hs3.mp3",
+    "en": "/audio/narration/opportunity-rover-en-hs3.mp3"
+   }
+  ]
+ },
+ "viking-1-lander": {
+  "intro": {
+   "ar": "/audio/narration/viking-1-lander-ar-intro.mp3",
+   "en": "/audio/narration/viking-1-lander-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/viking-1-lander-ar-hs1.mp3",
+    "en": "/audio/narration/viking-1-lander-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/viking-1-lander-ar-hs2.mp3",
+    "en": "/audio/narration/viking-1-lander-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/viking-1-lander-ar-hs3.mp3",
+    "en": "/audio/narration/viking-1-lander-en-hs3.mp3"
+   }
+  ]
+ },
+ "viking-2-lander": {
+  "intro": {
+   "ar": "/audio/narration/viking-2-lander-ar-intro.mp3",
+   "en": "/audio/narration/viking-2-lander-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/viking-2-lander-ar-hs1.mp3",
+    "en": "/audio/narration/viking-2-lander-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/viking-2-lander-ar-hs2.mp3",
+    "en": "/audio/narration/viking-2-lander-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/viking-2-lander-ar-hs3.mp3",
+    "en": "/audio/narration/viking-2-lander-en-hs3.mp3"
+   }
+  ]
+ },
+ "phoenix-lander": {
+  "intro": {
+   "ar": "/audio/narration/phoenix-lander-ar-intro.mp3",
+   "en": "/audio/narration/phoenix-lander-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/phoenix-lander-ar-hs1.mp3",
+    "en": "/audio/narration/phoenix-lander-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/phoenix-lander-ar-hs2.mp3",
+    "en": "/audio/narration/phoenix-lander-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/phoenix-lander-ar-hs3.mp3",
+    "en": "/audio/narration/phoenix-lander-en-hs3.mp3"
+   }
+  ]
+ },
+ "insight-lander": {
+  "intro": {
+   "ar": "/audio/narration/insight-lander-ar-intro.mp3",
+   "en": "/audio/narration/insight-lander-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/insight-lander-ar-hs1.mp3",
+    "en": "/audio/narration/insight-lander-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/insight-lander-ar-hs2.mp3",
+    "en": "/audio/narration/insight-lander-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/insight-lander-ar-hs3.mp3",
+    "en": "/audio/narration/insight-lander-en-hs3.mp3"
+   }
+  ]
+ },
+ "ingenuity-helicopter": {
+  "intro": {
+   "ar": "/audio/narration/ingenuity-helicopter-ar-intro.mp3",
+   "en": "/audio/narration/ingenuity-helicopter-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/ingenuity-helicopter-ar-hs1.mp3",
+    "en": "/audio/narration/ingenuity-helicopter-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/ingenuity-helicopter-ar-hs2.mp3",
+    "en": "/audio/narration/ingenuity-helicopter-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/ingenuity-helicopter-ar-hs3.mp3",
+    "en": "/audio/narration/ingenuity-helicopter-en-hs3.mp3"
+   }
+  ]
+ },
+ "dawn-spacecraft": {
+  "intro": {
+   "ar": "/audio/narration/dawn-spacecraft-ar-intro.mp3",
+   "en": "/audio/narration/dawn-spacecraft-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/dawn-spacecraft-ar-hs1.mp3",
+    "en": "/audio/narration/dawn-spacecraft-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/dawn-spacecraft-ar-hs2.mp3",
+    "en": "/audio/narration/dawn-spacecraft-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/dawn-spacecraft-ar-hs3.mp3",
+    "en": "/audio/narration/dawn-spacecraft-en-hs3.mp3"
+   }
+  ]
+ },
+ "near-shoemaker": {
+  "intro": {
+   "ar": "/audio/narration/near-shoemaker-ar-intro.mp3",
+   "en": "/audio/narration/near-shoemaker-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/near-shoemaker-ar-hs1.mp3",
+    "en": "/audio/narration/near-shoemaker-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/near-shoemaker-ar-hs2.mp3",
+    "en": "/audio/narration/near-shoemaker-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/near-shoemaker-ar-hs3.mp3",
+    "en": "/audio/narration/near-shoemaker-en-hs3.mp3"
+   }
+  ]
+ },
+ "pioneer-10-11": {
+  "intro": {
+   "ar": "/audio/narration/pioneer-10-11-ar-intro.mp3",
+   "en": "/audio/narration/pioneer-10-11-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/pioneer-10-11-ar-hs1.mp3",
+    "en": "/audio/narration/pioneer-10-11-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/pioneer-10-11-ar-hs2.mp3",
+    "en": "/audio/narration/pioneer-10-11-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/pioneer-10-11-ar-hs3.mp3",
+    "en": "/audio/narration/pioneer-10-11-en-hs3.mp3"
+   }
+  ]
+ },
+ "kepler-space-telescope": {
+  "intro": {
+   "ar": "/audio/narration/kepler-space-telescope-ar-intro.mp3",
+   "en": "/audio/narration/kepler-space-telescope-en-intro.mp3"
+  },
+  "hotspots": [
+   {
+    "ar": "/audio/narration/kepler-space-telescope-ar-hs1.mp3",
+    "en": "/audio/narration/kepler-space-telescope-en-hs1.mp3"
+   },
+   {
+    "ar": "/audio/narration/kepler-space-telescope-ar-hs2.mp3",
+    "en": "/audio/narration/kepler-space-telescope-en-hs2.mp3"
+   },
+   {
+    "ar": "/audio/narration/kepler-space-telescope-ar-hs3.mp3",
+    "en": "/audio/narration/kepler-space-telescope-en-hs3.mp3"
+   }
+  ]
+ }
+}
