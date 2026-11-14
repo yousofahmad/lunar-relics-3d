@@ -1280,3 +1280,56 @@ body { color: var(--suit-white); }
   .planet-tab .planet-label-full { display: none; }
   .planet-tab .planet-label-compact { display: block; }
 }
+
+/* Mobile interaction pass: comfortable touch targets and clearer scroll areas. */
+@media (max-width: 760px) {
+  .topbar {
+    grid-template-rows: 44px 42px;
+    min-height: 100px;
+  }
+  .topbar-actions { gap: 4px; }
+  .mission-drawer-toggle { min-height: 44px; height: 44px; }
+  .audio-global-toggle, .language-toggle {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+  .planet-tab { width: auto; min-width: 0; min-height: 42px; height: 42px; }
+
+  .archive-panel {
+    bottom: max(8px, env(safe-area-inset-bottom));
+    height: min(56svh, 430px);
+    max-height: calc(100svh - 116px - env(safe-area-inset-top));
+  }
+  .archive-filter-chip { min-height: 44px; padding-inline: 11px; }
+  .archive-search { min-height: 46px; }
+  .archive-search input { height: 44px; min-height: 44px; font-size: 16px; }
+  .archive-search button { width: 36px; height: 36px; }
+  .relic-card { min-height: 72px; }
+
+  .quick-mission-carousel {
+    height: 78px;
+    padding: 6px 9px;
+    gap: 5px;
+  }
+  .quick-mission-track { min-height: 44px; }
+  .quick-mission-pill { height: 44px; min-height: 44px; padding-inline: 12px; }
+
+  .story-chapter-nav {
+    top: 106px;
+    height: 52px;
+    min-height: 52px;
+    padding: 4px;
+  }
+  .story-chapter-nav button { min-height: 44px; padding-inline: 11px; }
+  .story-nav-back { min-height: 44px !important; }
+  .story-chapter { padding-block-start: 164px; }
+}
+
+@media (max-width: 380px) {
+  .brand-title { font-size: 7px; }
+  .brand-lockup { gap: 3px; }
+  .mission-drawer-toggle { min-width: 72px; padding-inline: 6px; }
+  .quick-mission-pill { max-width: min(230px, 75vw); }
+}
