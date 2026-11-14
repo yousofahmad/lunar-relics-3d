@@ -112,7 +112,7 @@ export default function BadgeModal({ relics, badges, language, onClose, onSelect
           {relics.map((item, index) => {
             const isUnlocked = badges.has(item.id);
             const relicName = item.nickname || item.name;
-            const badgeName = item.badgeName || relicName;
+            const badgeName = (isArabic && item.badgeNameAr) || item.badgeName || relicName;
             return (
               <button
                 className={`badge-modal-card ${isUnlocked ? 'is-unlocked' : 'is-locked'}`}
@@ -131,7 +131,7 @@ export default function BadgeModal({ relics, badges, language, onClose, onSelect
                   <strong className="badge-card-name" dir="auto">{badgeName}</strong>
                   <span className="badge-card-relic" dir="auto">{relicName}</span>
                   <span className="badge-card-hint" dir="auto">
-                    {isUnlocked ? copy.openHint : `${copy.unlockHint}: ${relicName}`}
+                    {isUnlocked ? copy.openHint : copy.unlockHint}
                   </span>
                 </span>
                 <span className={`badge-card-state ${isUnlocked ? 'state-unlocked' : 'state-locked'}`}>

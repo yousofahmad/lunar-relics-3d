@@ -123,7 +123,8 @@
     "narration": {
       "en": "/audio/narration/apollo-11-eagle-descent-stage-en.mp3",
       "ar": "/audio/narration/apollo-11-eagle-descent-stage-ar.mp3"
-    }
+    },
+    "badgeNameAr": "رائد بحر الهدوء"
   },
   {
     "id": "apollo-15-lrv",
@@ -253,7 +254,8 @@
     "narration": {
       "en": "/audio/narration/apollo-15-lrv-en.mp3",
       "ar": "/audio/narration/apollo-15-lrv-ar.mp3"
-    }
+    },
+    "badgeNameAr": "مستكشف هادلي-أبينين"
   },
   {
     "id": "alsep-scientific-packages",
@@ -383,7 +385,8 @@
     "narration": {
       "en": "/audio/narration/alsep-scientific-packages-en.mp3",
       "ar": "/audio/narration/alsep-scientific-packages-ar.mp3"
-    }
+    },
+    "badgeNameAr": "شبكة علوم القمر"
   },
   {
     "id": "surveyor-3",
@@ -513,7 +516,8 @@
     "narration": {
       "en": "/audio/narration/surveyor-3-en.mp3",
       "ar": "/audio/narration/surveyor-3-ar.mp3"
-    }
+    },
+    "badgeNameAr": "مختبر تربة القمر"
   },
   {
     "id": "sojourner-rover",
@@ -639,7 +643,8 @@
     "narration": {
       "en": "/audio/narration/sojourner-rover-en.mp3",
       "ar": "/audio/narration/sojourner-rover-ar.mp3"
-    }
+    },
+    "badgeNameAr": "مكتشف وادي آريس"
   },
   {
     "id": "spirit-rover",
@@ -777,7 +782,8 @@
     "narration": {
       "en": "/audio/narration/spirit-rover-en.mp3",
       "ar": "/audio/narration/spirit-rover-ar.mp3"
-    }
+    },
+    "badgeNameAr": "جيولوجي حفرة جوزيف"
   },
   {
     "id": "opportunity-rover",
@@ -919,7 +925,8 @@
     "narration": {
       "en": "/audio/narration/opportunity-rover-en.mp3",
       "ar": "/audio/narration/opportunity-rover-ar.mp3"
-    }
+    },
+    "badgeNameAr": "عداء ميريداني"
   },
   {
     "id": "viking-1-lander",
@@ -1049,7 +1056,8 @@
     "narration": {
       "en": "/audio/narration/viking-1-lander-en.mp3",
       "ar": "/audio/narration/viking-1-lander-ar.mp3"
-    }
+    },
+    "badgeNameAr": "رائد سهل كريز"
   },
   {
     "id": "viking-2-lander",
@@ -1179,7 +1187,8 @@
     "narration": {
       "en": "/audio/narration/viking-2-lander-en.mp3",
       "ar": "/audio/narration/viking-2-lander-ar.mp3"
-    }
+    },
+    "badgeNameAr": "مستكشف يوتوبيا"
   },
   {
     "id": "phoenix-lander",
@@ -1309,7 +1318,8 @@
     "narration": {
       "en": "/audio/narration/phoenix-lander-en.mp3",
       "ar": "/audio/narration/phoenix-lander-ar.mp3"
-    }
+    },
+    "badgeNameAr": "كاشف جليد القطب"
   },
   {
     "id": "insight-lander",
@@ -1439,7 +1449,8 @@
     "narration": {
       "en": "/audio/narration/insight-lander-en.mp3",
       "ar": "/audio/narration/insight-lander-ar.mp3"
-    }
+    },
+    "badgeNameAr": "مستمع زلازل المريخ"
   },
   {
     "id": "ingenuity-helicopter",
@@ -1577,7 +1588,8 @@
     "narration": {
       "en": "/audio/narration/ingenuity-helicopter-en.mp3",
       "ar": "/audio/narration/ingenuity-helicopter-ar.mp3"
-    }
+    },
+    "badgeNameAr": "أول طيران في المريخ"
   },
   {
     "id": "dawn-spacecraft",
@@ -1719,7 +1731,8 @@
     "narration": {
       "en": "/audio/narration/dawn-spacecraft-en.mp3",
       "ar": "/audio/narration/dawn-spacecraft-ar.mp3"
-    }
+    },
+    "badgeNameAr": "رحالة فيستا-سيريس"
   },
   {
     "id": "near-shoemaker",
@@ -1849,7 +1862,8 @@
     "narration": {
       "en": "/audio/narration/near-shoemaker-en.mp3",
       "ar": "/audio/narration/near-shoemaker-ar.mp3"
-    }
+    },
+    "badgeNameAr": "مراقب إيروس وهبوطه"
   },
   {
     "id": "pioneer-10-11",
@@ -1991,7 +2005,8 @@
     "narration": {
       "en": "/audio/narration/pioneer-10-11-en.mp3",
       "ar": "/audio/narration/pioneer-10-11-ar.mp3"
-    }
+    },
+    "badgeNameAr": "كشافة النظام الخارجي"
   },
   {
     "id": "kepler-space-telescope",
@@ -2125,6 +2140,7 @@
     "narration": {
       "en": "/audio/narration/kepler-space-telescope-en.mp3",
       "ar": "/audio/narration/kepler-space-telescope-ar.mp3"
-    }
+    },
+    "badgeNameAr": "كاشف عبور الكواكب"
   }
 ]
