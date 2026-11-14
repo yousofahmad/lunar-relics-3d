@@ -1,3 +1,4 @@
+import { PROCEDURAL_MODELS } from './ProceduralCraft.jsx';
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -511,8 +512,8 @@ function PioneerProbeModel() {
 }
 
 function ModelByType({ item }) {
-  if (item.id === 'apollo-15-lrv') return <LunarRovingVehicleModel />;
-  if (item.id === 'alsep-scientific-packages') return <AlsepModel />;
+  const Detailed = PROCEDURAL_MODELS[item.id];
+  if (Detailed) return <Detailed />;
   if (item.id === 'pioneer-10-11') return <PioneerProbeModel />;
   const type = (item.type || '').toLowerCase();
   if (type.includes('rover')) return <RoverModel />;

@@ -362,6 +362,7 @@ function fadeToSoundscape(target) {
   });
 }
 
+
 function buildSoundscapes(context) {
   if (soundscapeLayers) return;
   buildVoidDrone(context);
@@ -855,3 +856,156 @@ export function getAudioEngineStatus() {
 }
 
 export const soundscapeNames = SOUNDSCAPES;
+
+/* --------------------------------------------------------------------------
+   Sound-effects palette (no music): warm, short, and layered so the UI feels
+   physical instead of beeping.
+   -------------------------------------------------------------------------- */
+function toneBurst(frequency, { start = 0, duration = 0.16, level = 0.05, type = 'sine', sweepTo = 0, pan = 0 } = {}) {
+  const context = audioContext;
+  if (!context || isMuted || !cueBus) return;
+  const now = context.currentTime + start;
+  const oscillator = context.createOscillator();
+  const envelope = context.createGain();
+  const panner = makePanner(context, pan);
+  oscillator.type = type;
+  oscillator.frequency.setValueAtTime(frequency, now);
+  if (sweepTo) oscillator.frequency.exponentialRampToValueAtTime(sweepTo, now + duration);
+  envelope.gain.setValueAtTime(0.0001, now);
+  envelope.gain.linearRampToValueAtTime(level, now + Math.min(0.02, duration * 0.2));
+  envelope.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+  oscillator.connect(envelope);
+  envelope.connect(panner);
+  panner.connect(cueBus);
+  oscillator.start(now);
+  oscillator.stop(now + duration + 0.02);
+  oscillator.onended = () => { try { panner.disconnect(); } catch {} };
+}
+
+export function playHoverTick() {
+  if (!audioContext || !isStarted || isMuted) return;
+  toneBurst(1320, { duration: 0.055, level: 0.012, type: 'triangle', sweepTo: 1180, pan: (Math.random() - 0.5) * 0.3 });
+}
+
+export function playSelectSweep() {
+  if (!audioContext || !isStarted || isMuted) return;
+  toneBurst(520, { duration: 0.2, level: 0.05, type: 'sine', sweepTo: 1480, pan: 0.1 });
+  toneBurst(780, { start: 0.02, duration: 0.16, level: 0.028, type: 'triangle', sweepTo: 1960, pan: -0.12 });
+}
+
+export function playDiscoveryChime() {
+  if (!audioContext || !isStarted || isMuted) return;
+  const notes = [523.25, 659.25, 783.99, 1046.5];
+  notes.forEach((frequency, index) => {
+    toneBurst(frequency, { start: index * 0.075, duration: 0.34, level: 0.052, type: 'sine', pan: (index - 1.5) * 0.12 });
+    toneBurst(frequency * 2, { start: index * 0.075, duration: 0.22, level: 0.012, type: 'triangle', pan: (1.5 - index) * 0.1 });
+  });
+}
+
+export function playMissThud() {
+  if (!audioContext || !isStarted || isMuted) return;
+  toneBurst(196, { duration: 0.26, level: 0.06, type: 'sine', sweepTo: 96, pan: 0 });
+  toneBurst(392, { start: 0.02, duration: 0.12, level: 0.022, type: 'triangle', sweepTo: 240, pan: 0.08 });
+}
+
+export function playChallengeFanfare() {
+  if (!audioContext || !isStarted || isMuted) return;
+  [392, 523.25, 659.25, 783.99, 1046.5].forEach((frequency, index) => {
+    toneBurst(frequency, { start: index * 0.11, duration: 0.5, level: 0.05, type: 'sine', pan: (index - 2) * 0.14 });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   Recorded narration: a single reusable media element routed through the
+   master gain, so mute, ducking and volume all behave like the rest of the UI.
+   -------------------------------------------------------------------------- */
+let narrationBus = null;
+let narrationElement = null;
+let narrationSource = null;
+let narrationToken = 0;
+
+function ensureNarrationNode() {
+  const context = getContext();
+  if (!context || !masterGain) return null;
+  if (!narrationBus) {
+    narrationBus = context.createGain();
+    narrationBus.gain.value = 1;
+    narrationBus.connect(masterGain);
+  }
+  if (!narrationElement) {
+    narrationElement = new Audio();
+    narrationElement.preload = 'auto';
+    narrationElement.crossOrigin = 'anonymous';
+    try {
+      narrationSource = context.createMediaElementSource(narrationElement);
+      narrationSource.connect(narrationBus);
+    } catch {
+      return null;
+    }
+  }
+  return narrationElement;
+}
+
+export function playNarration(url, { onEnded = () => {}, onProgress = () => {}, onError = () => {} } = {}) {
+  const element = ensureNarrationNode();
+  if (!element || !url) { onError(); return () => {}; }
+  const token = ++narrationToken;
+  const context = getContext();
+  context?.resume?.().catch(() => {});
+  stopNarration(true);
+  narrationToken = token;
+  setAmbientDuck(true);
+  element.src = url;
+  element.currentTime = 0;
+  const handleTime = () => {
+    if (narrationToken !== token) return;
+    onProgress(element.currentTime, element.duration || 0);
+  };
+  const handleEnd = () => {
+    if (narrationToken !== token) return;
+    cleanup();
+    onEnded();
+  };
+  const handleError = () => {
+    if (narrationToken !== token) return;
+    cleanup();
+    onError();
+  };
+  const cleanup = () => {
+    element.removeEventListener('timeupdate', handleTime);
+    element.removeEventListener('ended', handleEnd);
+    element.removeEventListener('error', handleError);
+    setAmbientDuck(false);
+  };
+  element.addEventListener('timeupdate', handleTime);
+  element.addEventListener('ended', handleEnd);
+  element.addEventListener('error', handleError);
+  const playPromise = element.play();
+  if (playPromise?.catch) playPromise.catch(() => handleError());
+  return () => {
+    if (narrationToken !== token) return;
+    narrationToken += 1;
+    cleanup();
+    try { element.pause(); } catch {}
+  };
+}
+
+export function stopNarration(silent = false) {
+  narrationToken += 1;
+  if (narrationElement) {
+    try { narrationElement.pause(); } catch {}
+    if (!silent) narrationElement.currentTime = 0;
+  }
+  if (!silent) setAmbientDuck(false);
+}
+
+export function pauseNarration() {
+  if (narrationElement) { try { narrationElement.pause(); } catch {} }
+}
+
+export function resumeNarration() {
+  if (narrationElement?.src) {
+    const promise = narrationElement.play();
+    if (promise?.catch) promise.catch(() => {});
+  }
+}

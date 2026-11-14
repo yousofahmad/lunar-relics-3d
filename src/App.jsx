@@ -2,11 +2,12 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react
 import { BadgeCheck, Crosshair, Info, RadioTower } from 'lucide-react';
 import { fetchRelics, LOCAL_RELICS } from './services/api.js';
 import BadgeModal from './components/BadgeModal.jsx';
+import ExplorerChallenge from './components/ExplorerChallenge.jsx';
 import TopNav from './components/TopNav.jsx';
 import StoryAndArchivePanel from './components/StoryAndArchivePanel.jsx';
 import WhatsNewDialog from './components/WhatsNewDialog.jsx';
 import SpaceLoader from './components/SpaceLoader.jsx';
-import { initializeAudioEngine, playUiChirp, setAudioMuted, setSoundscape, subscribeAudioEngine } from './utils/audioEngine.js';
+import { initializeAudioEngine, playHoverTick, playSelectSweep, setAudioMuted, setSoundscape, subscribeAudioEngine } from './utils/audioEngine.js';
 import { getModelHonestyLabel, getRelicModelInfo } from './utils/relicModelMap.js';
 
 const Space3DCanvas = lazy(() => import('./components/Space3DCanvas.jsx'));
@@ -27,10 +28,8 @@ const APOLLO_LM_PRESENTATION = {
   has3DModel: true,
   model3dFile: '/models/apollo_lunar_module.glb',
   status: 'Eagle landed in Mare Tranquillitatis on July 20, 1969. Its descent stage remained on the Moon after the ascent stage lifted off the next day. After docking with Columbia, the Lunar Module was jettisoned in lunar orbit; NASA reports that its later fate is unknown.',
-  story: {
-    en: 'I am Eagle, the Apollo 11 Lunar Module. Launched from Earth on July 16, 1969, I carried Neil Armstrong and Buzz Aldrin down to Mare Tranquillitatis on July 20. My descent stage set us down and stayed behind on the Moon. The ascent stage carried the astronauts back to lunar orbit the next day. After rejoining Columbia, I was jettisoned; NASA does not know what happened to me afterward.',
-    ar: 'أنا Eagle، وحدة Apollo 11 القمرية. انطلقت من الأرض في 16 يوليو 1969 حاملةً نيل أرمسترونغ وباز ألدرن إلى Mare Tranquillitatis يوم 20 يوليو. أنزلتنا مرحلة الهبوط إلى السطح، ثم بقيت هناك. وفي اليوم التالي، حملت مرحلة الصعود الرائدين إلى المدار القمري. بعد الالتحام بمركبة Columbia، تخلّص الطاقم من الوحدة القمرية؛ ولا تعرف NASA ما حدث لها بعد ذلك.',
-  },
+  // The story lives in src/data/relicsData.json so both languages stay in sync
+  // with the narration audio. Do not re-add a hardcoded copy here.
   hotspots: [
     {
       part: 'Descent stage',
@@ -75,6 +74,12 @@ export default function App() {
   const [hotspot, setHotspot] = useState(null);
   const [apiState, setApiState] = useState('local');
   const [isInitialLoading, setIsInitialLoading] = useState(() => Boolean(import.meta.env.VITE_API_URL?.trim()));
+  const [challengeOpen, setChallengeOpen] = useState(false);
+  const [challengePick, setChallengePick] = useState(null);
+  const [xp, setXp] = useState(() => {
+    const saved = Number(localStorage.getItem('lunar-relics-xp') || 0);
+    return Number.isFinite(saved) ? saved : 0;
+  });
 
   useEffect(() => {
     let active = true;
@@ -102,6 +107,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('lunar-relics-badges', JSON.stringify([...badges]));
   }, [badges]);
+
+  useEffect(() => {
+    localStorage.setItem('lunar-relics-xp', String(xp));
+  }, [xp]);
 
   const displayRelics = useMemo(() => relics.map(presentRelic), [relics]);
   const selectedRelic = useMemo(() => displayRelics.find((item) => item.id === selectedId) || null, [displayRelics, selectedId]);
@@ -147,12 +156,31 @@ export default function App() {
 
   const openRelic = (item) => {
     setBadgeModalOpen(false);
+    if (challengeOpen) {
+      setChallengePick({ id: item.id, nonce: Date.now() });
+      return;
+    }
     setCelestialView(item.body || 'Moon');
-    setAutoPilotOn(true);
+    // Never auto-start the narrated tour: it used to fire a chapter every
+    // second and yanked the page down before anyone could read it.
+    setAutoPilotOn(false);
     setHotspot(null);
     setStoryProgress({ index: 0, total: 1 });
     setSelectedId(item.id);
   };
+
+  const openChallenge = () => {
+    setBadgeModalOpen(false);
+    setWhatsNewOpen(false);
+    setSelectedId(null);
+    setAutoPilotOn(false);
+    setArchiveOpen(false);
+    setChallengeOpen(true);
+  };
+
+  const addXp = useCallback((amount) => {
+    setXp((current) => current + Math.max(0, Math.round(amount)));
+  }, []);
 
   const backToMap = () => {
     setAutoPilotOn(false);
@@ -186,7 +214,8 @@ export default function App() {
     const control = target?.closest('button, a, [role="button"]');
     if (!control) return;
     if (hover && event.relatedTarget instanceof Node && control.contains(event.relatedTarget)) return;
-    playUiChirp();
+    if (hover) playHoverTick();
+    else playSelectSweep();
   };
 
   return (
@@ -204,6 +233,9 @@ export default function App() {
         badges={badges}
         onOpenBadges={() => setBadgeModalOpen(true)}
         badgesOpen={badgeModalOpen}
+        onOpenChallenge={openChallenge}
+        challengeOpen={challengeOpen}
+        xp={xp}
         onOpenWhatsNew={() => setWhatsNewOpen(true)}
         whatsNewOpen={whatsNewOpen}
         storyMode={storyMode}
@@ -323,6 +355,17 @@ export default function App() {
           />
         </aside>
       </main>
+
+      {challengeOpen && (
+        <ExplorerChallenge
+          relics={displayRelics}
+          language={language}
+          pick={challengePick}
+          onClose={() => setChallengeOpen(false)}
+          onXp={addXp}
+          onViewChange={changeCelestialView}
+        />
+      )}
 
       <footer className="app-footer">
         <span>SPACE APPS CAIRO 2026 <i /> LUNAR RELICS 3D</span>

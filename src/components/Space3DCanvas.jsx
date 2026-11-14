@@ -259,7 +259,7 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
   return (
     <group ref={group}>
       <mesh>
-        <sphereGeometry args={[radius, 128, 128]} />
+        <sphereGeometry args={[radius, 96, 96]} />
         <meshStandardMaterial
           map={colorMap}
           bumpMap={heightMap}
@@ -477,6 +477,16 @@ function DeepSpaceOrbit({ items, onSelect, selectedRelic, language, autoRotate, 
   );
 }
 
+
+/* Shared framing maths: how far the camera must sit so the planet fills the
+   viewport without being sliced by the edges. */
+function mapDistanceFor(width, height, radius = 2.6, fov = 40) {
+  const tan = Math.tan((fov * Math.PI) / 360);
+  const narrow = width < 620;
+  const targetPx = Math.min(width * (narrow ? 0.9 : 0.72), height * (narrow ? 0.72 : 0.78));
+  return Math.min(Math.max((radius * height) / Math.max(1, targetPx * tan), 6.2), 20);
+}
+
 function MapScene({ celestialView, relics, onSelect, selectedRelic, language, autoRotate, controlsRef, archiveOpen }) {
   const { size } = useThree();
   const orbitalView = celestialView === 'Deep Space';
@@ -484,12 +494,13 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
     <>
       <color attach="background" args={['#03060C']} />
       <fog attach="fog" args={['#03060C', 28, 70]} />
+      <FitMapCamera view={celestialView} archiveOpen={archiveOpen} />
       <ambientLight intensity={1.35} color="#e2e8f0" />
       <hemisphereLight args={['#ffffff', '#3b4252', 1.2]} />
       <directionalLight position={[5, 3.5, 7]} intensity={1.8} color="#ffffff" />
       <directionalLight position={[-6, -3, -5]} intensity={1.1} color="#60a5fa" />
       <pointLight position={[2.5, -1.5, 5]} intensity={0.09} color="#EAB308" distance={15} />
-      <Stars radius={orbitalView ? 110 : 90} depth={orbitalView ? 82 : 52} count={orbitalView ? 6200 : 1700} factor={orbitalView ? 4.8 : 3.2} saturation={0.12} fade speed={0.09} />
+      <Stars radius={orbitalView ? 110 : 90} depth={orbitalView ? 82 : 52} count={orbitalView ? (size.width < 620 ? 2600 : 5200) : (size.width < 620 ? 650 : 1600)} factor={orbitalView ? 4.8 : 3.2} saturation={0.12} fade speed={0.09} />
       {celestialView === 'Moon' && <Planet body="Moon" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
       {celestialView === 'Mars' && <Planet body="Mars" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
       {orbitalView && <DeepSpaceOrbit items={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} archiveOpen={archiveOpen} />}
@@ -499,7 +510,7 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
         enablePan={false}
         rotateSpeed={0.65}
         minDistance={orbitalView ? (size.width < 620 ? 5.2 : 5.7) : 4.7}
-        maxDistance={13}
+        maxDistance={22}
         enableDamping
         dampingFactor={0.075}
       />
@@ -507,6 +518,20 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
   );
 }
 
+/* Frames the planet so it always fits the viewport instead of being sliced by
+   the edges on portrait phones. */
+function FitMapCamera({ view, radius = 2.6, archiveOpen = false }) {
+  const { camera, size } = useThree();
+  useEffect(() => {
+    if (!camera || !size?.height) return;
+    const framed = mapDistanceFor(size.width, size.height, radius, camera.fov);
+    const shift = archiveOpen && size.width > 1100 ? -0.85 : 0;
+    camera.position.set(shift, 0.1, framed);
+    camera.lookAt(0, 0, 0);
+    camera.updateProjectionMatrix();
+  }, [camera, size?.width, size?.height, radius, view, archiveOpen]);
+  return null;
+}
 function getHotspotRegion(hotspot) {
   const text = `${hotspot?.part || ''} ${hotspot?.title || ''} ${hotspot?.description || ''}`.toLowerCase();
   if (/camera|pancam|navcam|mast|photometer|telescope|rotor|blade|antenna|dish|imager|sensor/.test(text)) return 'top';
@@ -635,7 +660,7 @@ function HardwareCallout({ position, rigRef, active }) {
 
   if (!active) return null;
   return (
-    <Html fullscreen zIndexRange={[4, 4]}>
+    <Html fullscreen zIndexRange={[9, 9]}>
       <svg className="hardware-callout-svg" width={size.width} height={size.height} viewBox={`0 0 ${size.width} ${size.height}`} aria-hidden="true">
         <path ref={pathRef} className="hardware-callout-line" d="" />
         <circle ref={pulseRef} className="hardware-callout-pulse" cx="0" cy="0" r="0" />
@@ -652,8 +677,11 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   const isRealModel = Boolean(modelPath);
   const storyRig = useRef(null);
   const [modelReadyId, setModelReadyId] = useState(null);
+  const [modelBounds, setModelBounds] = useState(null);
   const modelReady = modelReadyId === item.id;
   const onModelReady = useMemo(() => () => setModelReadyId(item.id), [item.id]);
+  const onBoundsReady = useMemo(() => (bounds) => setModelBounds(bounds), []);
+  useEffect(() => { setModelBounds(null); }, [item.id]);
   const dataHotspots = useMemo(() => (item.hotspots || []).slice(0, 3), [item.hotspots]);
   const hotspotPositions = useMemo(() => modelReady ? buildHotspotPositions(storyRig.current, dataHotspots) : [], [dataHotspots, item.id, modelReady]);
   const selectedIndex = dataHotspots.findIndex((spot) => selectedHotspot && ((selectedHotspot.part && selectedHotspot.part === spot.part) || (!selectedHotspot.part && selectedHotspot.title === spot.title)));
@@ -661,6 +689,15 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   const chapterIndex = storyProgress?.index ?? 0;
   const chapterHotspotIndex = chapterId.startsWith('hardware-') ? Number(chapterId.slice('hardware-'.length)) : -1;
   const focusIndex = chapterHotspotIndex >= 0 ? chapterHotspotIndex : selectedIndex;
+  const copySideRef = useRef('left');
+  useEffect(() => {
+    const chapter = document.getElementById(`mission-chapter-${chapterId}`);
+    const copy = chapter?.querySelector('.chapter-copy');
+    if (!copy) return;
+    const rect = copy.getBoundingClientRect();
+    if (!rect.width) return;
+    copySideRef.current = (rect.left + rect.width / 2) > window.innerWidth / 2 ? 'right' : 'left';
+  }, [chapterId, item.id]);
   const previousMotionRef = useRef({ chapterId, focusIndex, chapterIndex });
 
   useEffect(() => {
@@ -683,19 +720,34 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     const isHardwareChapter = chapterId.startsWith('hardware-');
     const hardwareOrdinal = chapterHotspotIndex >= 0 ? chapterHotspotIndex : Math.max(selectedIndex, 0);
     const compactLayout = size.width <= 760;
-    const slide = compactLayout ? 0.24 : 1.65;
-    let targetX = 0;
-    if (chapterId === 'hero') targetX = compactLayout ? 0 : size.width >= 1024 ? 1.35 : 0.72;
-    else if (chapterId === 'transmission') targetX = compactLayout ? 0.12 : slide;
-    else if (isHardwareChapter) targetX = compactLayout ? 0 : (hardwareOrdinal === 2 ? -1.4 : (hardwareOrdinal % 2 === 0 ? -slide : slide));
+    // Frame from the model's real footprint: a long tube (Kepler) and a wide
+    // lander (Apollo) must not share one hardcoded camera distance.
+    const modelSpan = modelBounds ? Math.max(modelBounds.size[0], modelBounds.size[1], modelBounds.size[2]) : 2.2;
+    const modelWidth = modelBounds ? Math.max(modelBounds.size[0], modelBounds.size[2]) : 2.2;
     const mobileLift = compactLayout ? 0.55 : 0;
     const focusPoint = focusIndex >= 0 && hotspotPositions[focusIndex] ? new THREE.Vector3(...hotspotPositions[focusIndex]) : new THREE.Vector3(0, 0, 0);
     const focusWorld = rig.localToWorld(focusPoint);
     const rigCenter = rig.getWorldPosition(new THREE.Vector3());
-    const cameraFocus = compactLayout ? rigCenter : focusWorld;
+    const cameraFocus = compactLayout ? rigCenter : new THREE.Vector3(0, focusWorld.y, 0);
     const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : -0.18;
     const targetTilt = focusIndex >= 0 ? [0.1, -0.08, 0.17][focusIndex] ?? 0 : 0.015;
-    const cameraDistance = compactLayout ? 6.8 : isHardwareChapter ? 2.75 : chapterId === 'hero' && size.width >= 1024 ? 5.25 : 4.7;
+    const fitDistance = (modelSpan / 2) / Math.tan((camera.fov * Math.PI) / 360);
+    const cameraDistance = compactLayout
+      ? Math.max(6.4, fitDistance * 2.1)
+      : isHardwareChapter
+        ? Math.max(4.6, fitDistance * 1.75)
+        : chapterId === 'hero' && size.width >= 1024
+          ? Math.max(5.25, fitDistance * 2.05)
+          : Math.max(4.7, fitDistance * 1.85);
+    // Park the hardware in the empty column next to the copy. The offset is
+    // solved in screen space, so the model can never drift under the text.
+    const halfWidth = Math.tan((camera.fov * Math.PI) / 360) * cameraDistance * (size.width / Math.max(1, size.height));
+    const modelHalf = Math.min(modelWidth, modelSpan) * 0.5;
+    const safeFraction = copySideRef.current === 'right' ? 0.27 : 0.73;
+    const ndcX = safeFraction * 2 - 1;
+    const limit = Math.max(0.2, halfWidth - modelHalf * 1.15 - 0.16);
+    let targetX = compactLayout ? 0 : Math.max(-limit, Math.min(limit, ndcX * halfWidth));
+    if (isHardwareChapter && !compactLayout) targetX *= 1.04;
     rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, targetYaw + (autoRotate ? Math.sin(state.clock.elapsedTime * 0.32) * 0.035 : 0), 1.8, delta);
     rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, targetTilt, 1.8, delta);
     rig.position.x = THREE.MathUtils.damp(rig.position.x, targetX, 1.8, delta);
@@ -735,7 +787,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
             fallback={<HoloRelic item={item} onModelReady={onModelReady} />}
           >
             <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} kind="model" compact /></Html>}>
-              <GltfModel modelPath={modelPath} item={item} onModelReady={onModelReady} descentStageOnly={isApolloLunarModule} />
+              <GltfModel modelPath={modelPath} item={item} onModelReady={onModelReady} onBoundsReady={onBoundsReady} descentStageOnly={isApolloLunarModule} />
             </Suspense>
           </ModelErrorBoundary>
         ) : <HoloRelic item={item} onModelReady={onModelReady} />}
@@ -756,7 +808,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
 }
 
 function CameraFlight({ selectedId, controlsRef }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const flight = useRef(null);
 
   useEffect(() => {
@@ -766,10 +818,12 @@ function CameraFlight({ selectedId, controlsRef }) {
       duration: 0.9,
       fromPosition: camera.position.clone(),
       fromTarget: controls?.target.clone() || new THREE.Vector3(0, 0, 0),
-      toPosition: selectedId ? new THREE.Vector3(0, 1.4, 4.5) : new THREE.Vector3(0, 0.1, 8.4),
+      toPosition: selectedId
+        ? new THREE.Vector3(0, 1.4, 4.5)
+        : new THREE.Vector3(0, 0.1, mapDistanceFor(size.width, size.height, 2.6, camera.fov)),
       toTarget: new THREE.Vector3(0, 0, 0),
     };
-  }, [camera, controlsRef, selectedId]);
+  }, [camera, controlsRef, selectedId, size.width, size.height]);
 
   useFrame((_, delta) => {
     if (!flight.current) return;
@@ -789,8 +843,20 @@ function CameraFlight({ selectedId, controlsRef }) {
   return null;
 }
 
+function useCompactViewport() {
+  const [compact, setCompact] = useState(() => (typeof window === 'undefined' ? false : window.innerWidth < 760));
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 760px)');
+    const update = () => setCompact(query.matches);
+    query.addEventListener?.('change', update);
+    return () => query.removeEventListener?.('change', update);
+  }, []);
+  return compact;
+}
+
 export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot, storyProgress, archiveOpen = true }) {
   const [autoRotate, setAutoRotate] = useState(true);
+  const compactView = useCompactViewport();
   const controlsRef = useRef(null);
   const viewFilter = selectedRelic?.body || filter;
   const isArabic = language === 'ar';
@@ -811,11 +877,11 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
   return (
     <div className="space-canvas-wrap" onPointerDownCapture={() => setAutoRotate(false)} onTouchStartCapture={() => setAutoRotate(false)}>
       <Canvas
-        shadows
-        dpr={[1, 1.75]}
+        shadows={!compactView}
+        dpr={compactView ? [1, 1.3] : [1, 1.75]}
         camera={{ position: [0, 0.1, 8.4], fov: 40, near: 0.1, far: 140 }}
-        gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
-        performance={{ min: 0.55, debounce: 350 }}
+        gl={{ antialias: !compactView, alpha: false, powerPreference: 'high-performance' }}
+        performance={{ min: compactView ? 0.4 : 0.55, debounce: 350 }}
         fallback={<div className="canvas-fallback">3D view is unavailable in this browser.</div>}
       >
         <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} compact /></Html>}>

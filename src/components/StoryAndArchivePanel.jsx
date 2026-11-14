@@ -8,6 +8,7 @@ import {
   Sparkles, Volume2, VolumeX, X,
 } from 'lucide-react';
 import { transmitText } from '../utils/radio.js';
+import { playNarration, stopNarration } from '../utils/audioEngine.js';
 import { has3DRepresentation } from '../utils/relicModelMap.js';
 
 const COPY = {
@@ -78,6 +79,17 @@ function dateLabel(value, language) {
 function splitStoryBeats(text) {
   const parts = text.match(/[^.!؟]+[.!؟]+|[^.!؟]+$/gu) || [text];
   return parts.map((part) => part.trim()).filter(Boolean);
+}
+
+/* Group sentences into short paragraphs so a long block of text becomes
+   something you can actually read on a phone. */
+function toParagraphs(text, perParagraph = 3) {
+  const beats = splitStoryBeats(text);
+  const groups = [];
+  for (let index = 0; index < beats.length; index += perParagraph) {
+    groups.push(beats.slice(index, index + perParagraph).join(' '));
+  }
+  return groups.length ? groups : [text];
 }
 
 function getHardwareChapterLabel(spot, index, language) {
@@ -223,6 +235,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [quizResult, setQuizResult] = useState('');
   const [isTransmitting, setIsTransmitting] = useState(false);
+  const [narrationOn, setNarrationOn] = useState(false);
   const [subtitleText, setSubtitleText] = useState('');
   const [activeBeat, setActiveBeat] = useState(0);
   const [tourRestartToken, setTourRestartToken] = useState(0);
@@ -235,7 +248,11 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const isArabic = language === 'ar';
   const storyLanguage = item.story?.[language] ? language : 'en';
   const storyText = item.story?.[storyLanguage] || '';
+  const narrationUrl = item.narration?.[storyLanguage] || item.narration?.en || null;
+  const narrationRatioRef = useRef(0);
+  const advanceTimerRef = useRef(0);
   const storyBeats = splitStoryBeats(storyText);
+  const storyParagraphs = useMemo(() => toParagraphs(storyText), [storyText]);
   const questions = item.interactiveQA || [];
   const timeline = useMemo(() => item.timeline || [], [item.timeline]);
   const quiz = item.quiz || {};
@@ -253,11 +270,13 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     setSubtitleText('');
     setActiveBeat(0);
     return () => {
+      stopNarration();
       tourRunRef.current += 1;
       tourDelayCancelRef.current?.();
       tourDelayCancelRef.current = null;
       playbackTokenRef.current += 1;
       window.clearTimeout(subtitleTimerRef.current);
+      window.clearTimeout(advanceTimerRef.current);
       transmissionRef.current?.();
       transmissionRef.current = null;
     };
@@ -389,7 +408,18 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     { id: 'quiz', label: isArabic ? 'سؤال سريع' : 'QUICK QUIZ' },
   ], [hardwareHotspots, isArabic, language]);
   const scrollToChapter = useCallback((chapterId) => {
-    document.getElementById(`mission-chapter-${chapterId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const chapter = document.getElementById(`mission-chapter-${chapterId}`);
+    if (!chapter) return;
+    // scrollIntoView also scrolls every ancestor (including the window), which
+    // made the whole page leap downwards. Scroll only the story pane instead.
+    const pane = chapter.closest('.mission-story-scroll');
+    if (!pane) return;
+    const paneRect = pane.getBoundingClientRect();
+    const chapterRect = chapter.getBoundingClientRect();
+    pane.scrollTo({
+      top: pane.scrollTop + (chapterRect.top - paneRect.top),
+      behavior: 'smooth',
+    });
   }, []);
 
   const tourSteps = useMemo(() => {
@@ -454,6 +484,52 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
 
     const runTour = async () => {
       const startIndex = Math.min(Math.max(0, activeBeatRef.current), tourSteps.length - 1);
+      // When the mission has a recorded voice, the whole journey is narrated:
+      // the clip runs start to finish and the camera/story advance with it,
+      // so nobody sits through a silent step.
+      if (narrationUrl && startIndex <= 1) {
+        const words = storyText.split(/\s+/).filter(Boolean);
+        const ids = new Set(storyChapters.map((chapter) => chapter.id));
+        const marks = [
+          [0, 'transmission'],
+          [0.4, 'hardware-0'],
+          [0.58, 'hardware-1'],
+          [0.74, 'hardware-2'],
+          [0.9, 'timeline'],
+        ].filter(([, id]) => ids.has(id));
+        scrollToChapter('hero');
+        await wait(900);
+        if (!isCurrentRun()) return;
+        let stage = -1;
+        setNarrationOn(true);
+        setIsTransmitting(true);
+        await new Promise((resolve) => {
+          playNarration(narrationUrl, {
+            onProgress: (time, duration) => {
+              if (!duration || !isCurrentRun()) return;
+              const ratio = Math.min(1, time / duration);
+              narrationRatioRef.current = ratio;
+              setSubtitleText(words.slice(0, Math.round(ratio * words.length)).join(' '));
+              const nextStage = marks.reduce((acc, [, id], i) => (ratio >= marks[i][0] ? i : acc), -1);
+              if (nextStage > stage) {
+                stage = nextStage;
+                scrollToChapter(marks[stage][1]);
+                setActiveBeat(storyChapters.findIndex((chapter) => chapter.id === marks[stage][1]));
+              }
+            },
+            onEnded: () => resolve(),
+            onError: () => resolve(),
+          });
+        });
+        if (!isCurrentRun()) return;
+        setNarrationOn(false);
+        setIsTransmitting(false);
+        setSubtitleText(storyText);
+        subtitleTimerRef.current = window.setTimeout(() => setSubtitleText(''), 2600);
+        if (ids.has('quiz')) scrollToChapter('quiz');
+        setAutoPilotOn(false);
+        return;
+      }
       for (let index = startIndex; index < tourSteps.length; index += 1) {
         if (!isCurrentRun()) return;
         const step = tourSteps[index];
@@ -475,7 +551,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
       tourDelayCancelRef.current = null;
       stopAudio(false);
     };
-  }, [autoPilotOn, language, playAudio, scrollToChapter, setAutoPilotOn, stopAudio, tourRestartToken, tourSteps]);
+  }, [autoPilotOn, language, playAudio, playNarration, scrollToChapter, setAutoPilotOn, stopAudio, tourRestartToken, tourSteps, narrationUrl, storyText, storyChapters]);
 
   useEffect(() => {
     if (!autoPilotOn) return undefined;
@@ -502,6 +578,76 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     scrollToChapter(chapterId);
     if (autoPilotOn) setTourRestartToken((token) => token + 1);
     else setAutoPilotOn(true);
+  };
+
+
+  // While the voice is talking, the page walks with it: the story pane keeps
+  // the spoken paragraph in view instead of making people scroll by hand.
+  useEffect(() => {
+    if (!narrationOn) return undefined;
+    let frame = 0;
+    const follow = () => {
+      const pane = document.querySelector('.story-mode .mission-story-scroll');
+      const chapter = document.getElementById('mission-chapter-transmission');
+      if (pane && chapter) {
+        const ratio = Math.min(1, Math.max(0, narrationRatioRef.current));
+        const paneRect = pane.getBoundingClientRect();
+        const chapterTop = chapter.getBoundingClientRect().top - paneRect.top + pane.scrollTop;
+        const target = chapterTop + chapter.offsetHeight * ratio - pane.clientHeight * 0.42;
+        const max = pane.scrollHeight - pane.clientHeight;
+        const clamped = Math.min(max, Math.max(0, target));
+        if (Math.abs(clamped - pane.scrollTop) > 2) pane.scrollTop += (clamped - pane.scrollTop) * 0.08;
+      }
+      frame = window.requestAnimationFrame(follow);
+    };
+    frame = window.requestAnimationFrame(follow);
+    return () => window.cancelAnimationFrame(frame);
+  }, [narrationOn]);
+
+  const toggleNarration = () => {
+    if (narrationOn) {
+      stopNarration();
+      setNarrationOn(false);
+      setIsTransmitting(false);
+      setSubtitleText('');
+      return;
+    }
+    if (!narrationUrl) { playAudio(storyText); return; }
+    const words = storyText.split(/\s+/).filter(Boolean);
+    narrationRatioRef.current = 0;
+    scrollToChapter('transmission');
+    setNarrationOn(true);
+    setIsTransmitting(true);
+    setSubtitleText('');
+    playNarration(narrationUrl, {
+      onProgress: (time, duration) => {
+        if (!duration) return;
+        narrationRatioRef.current = time / duration;
+        const index = Math.min(words.length, Math.round(narrationRatioRef.current * words.length));
+        setSubtitleText(words.slice(0, index).join(' '));
+      },
+      onEnded: () => {
+        setNarrationOn(false);
+        setIsTransmitting(false);
+        setSubtitleText(storyText);
+        subtitleTimerRef.current = window.setTimeout(() => setSubtitleText(''), 3200);
+        // Keep the visit moving: carry on to the next chapter by itself.
+        const index = storyChapters.findIndex((chapter) => chapter.id === 'transmission');
+        const next = storyChapters[index + 1];
+        if (next) {
+          window.clearTimeout(advanceTimerRef.current);
+          advanceTimerRef.current = window.setTimeout(() => {
+            scrollToChapter(next.id);
+            setActiveBeat(storyChapters.findIndex((chapter) => chapter.id === next.id));
+          }, 1400);
+        }
+      },
+      onError: () => {
+        setNarrationOn(false);
+        setIsTransmitting(false);
+        playAudio(storyText);
+      },
+    });
   };
 
   const handleGuidedMission = () => {
@@ -566,6 +712,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
             <span className="memory-classification">{getBodyLabel(item, language, copy)} <i /> {getTypeLabel(item.type, language, copy)}</span>
             <p className="story-eyebrow">{isArabic ? 'قصة من أرشيف ناسا' : 'A NASA MISSION STORY'}</p>
             <h1 dir="auto">{item.nickname || item.name}</h1>
+            {item.hook && <p className="story-hook" dir="auto">{item.hook[language] || item.hook.en}</p>}
             <p className="story-hero-location"><MapPin size={14} /><span dir="auto">{siteName}</span></p>
             <div className="mission-hero-meta">
               <span><small>{isArabic ? 'سنة الإطلاق' : 'LAUNCH YEAR'}</small><strong dir="ltr">{item.launchYear}</strong></span>
@@ -583,7 +730,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
                 <span className="immersive-play-icon" aria-hidden="true"><Play size={14} fill="currentColor" /></span>
                 <span className="immersive-button-copy">
                   <strong>{isArabic ? 'ابدأ القصة الغامرة' : 'START IMMERSIVE STORY'}</strong>
-                  <small>{isArabic ? 'تمرير تلقائي + تعليق صوتي' : 'AUTO-SCROLL + VOICE'}</small>
+                  <small>{isArabic ? 'تمرير تلقائي + ترجمة نصية' : 'AUTO-SCROLL + SUBTITLES'}</small>
                 </span>
                 <span className="immersive-soundwave" aria-hidden="true"><i /><i /><i /><i /><i /></span>
               </button>
@@ -606,15 +753,23 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
           <div className="chapter-copy transmission-copy">
             <span className="story-kicker"><span className="signal-bars"><i /><i /><i /><i /></span>{copy.fieldNote}</span>
             <h2>{isArabic ? 'قصة المهمة' : 'THE MISSION STORY'}</h2>
-            <p className="chapter-lede">{isArabic ? 'استمع إلى المركبة وهي تحكي رحلتها.' : 'Hear the spacecraft tell its journey.'}</p>
+            <p className="chapter-lede">{isArabic ? 'الحكاية كما روتها المركبة نفسها.' : 'The story exactly as the spacecraft tells it.'}</p>
             <div className="story-transcript" dir="auto">
-              {storyBeats.map((beat, index) => <p className="first-person-story" key={`${item.id}-transcript-${index}`}>“{beat}”</p>)}
+              {storyParagraphs.map((paragraph, index) => (
+                <p className="first-person-story" key={`${item.id}-transcript-${index}`}>{paragraph}</p>
+              ))}
             </div>
+            {item.funFact && (
+              <div className="story-fun-fact">
+                <span>{isArabic ? 'تفصيلة تستحق التذكّر' : 'ONE DETAIL TO KEEP'}</span>
+                <p dir="auto">{item.funFact[language] || item.funFact.en}</p>
+              </div>
+            )}
             <div className="transmit-row">
-              <button type="button" className={`transmit-button ${isTransmitting ? 'transmitting' : ''}`} onClick={handleGuidedMission} aria-pressed={autoPilotOn} disabled={!audioEnabled}>
-                {isTransmitting ? <VolumeX size={15} /> : <Volume2 size={15} />}
-                <span>{isTransmitting ? copy.stop : copy.transmit}</span>
-                <span className="transmit-frequency" dir="auto">{copy.voice}</span>
+              <button type="button" className={`transmit-button ${narrationOn ? 'transmitting' : ''}`} onClick={toggleNarration} aria-pressed={narrationOn} disabled={!audioEnabled}>
+                {narrationOn ? <VolumeX size={15} /> : <Volume2 size={15} />}
+                <span>{narrationOn ? copy.stop : (isArabic ? 'اسمع الحكاية' : 'LISTEN TO THE STORY')}</span>
+                <span className="transmit-frequency" dir="auto">{narrationUrl ? (isArabic ? 'تعليق صوتي' : 'NARRATED') : (isArabic ? 'قراءة نصية' : 'TEXT ONLY')}</span>
               </button>
               {isTransmitting && (
                 <span className="audio-visualizer" role="status" aria-live="polite" aria-label={copy.transmitting}>
