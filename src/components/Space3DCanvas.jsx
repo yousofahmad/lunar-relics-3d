@@ -618,7 +618,18 @@ function raycastHardwareSurface(rig, target, hotspot, index) {
     return rig.worldToLocal(point).toArray();
   }
 
-  return null;
+  // A thin antenna or a wire can make the ray miss, which used to drop the pin
+  // entirely. Fall back to the surface of the bounding box so every hotspot
+  // always gets a marker that sits on the machine.
+  const dir = direction.clone().normalize();
+  const half = size.clone().multiplyScalar(0.5);
+  const limit = Math.min(
+    half.x / Math.max(Math.abs(dir.x), 1e-4),
+    half.y / Math.max(Math.abs(dir.y), 1e-4),
+    half.z / Math.max(Math.abs(dir.z), 1e-4),
+  );
+  const fallback = center.clone().addScaledVector(dir, limit * 0.94);
+  return rig.worldToLocal(fallback).toArray();
 }
 
 function buildHotspotPositions(rig, hotspots) {
@@ -636,8 +647,8 @@ function HotspotNode({ hotspot, position, onClick, selected, language }) {
     : hotspot.part || hotspot.title;
   const accessibleLabel = language === 'ar' ? `تركيز على ${part}` : `Focus on ${part}`;
   return (
-    <Html position={position} center className="hotspot-html">
-      <button className={`three-hotspot ${selected ? 'is-selected' : ''}`} type="button" onClick={(event) => { event.stopPropagation(); onClick(hotspot); }} title={hotspot.title || part} aria-label={accessibleLabel} aria-pressed={selected}>
+    <Html position={position} center className="hotspot-html" occlude={false}>
+      <button className={`three-hotspot ${selected ? 'is-selected' : ''}`} type="button" data-step={hotspot.stepLabel || ''} onClick={(event) => { event.stopPropagation(); onClick(hotspot); }} title={hotspot.title || part} aria-label={accessibleLabel} aria-pressed={selected}>
         <i className="three-hotspot-dot" aria-hidden="true" />
       </button>
     </Html>

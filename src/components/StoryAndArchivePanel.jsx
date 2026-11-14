@@ -548,7 +548,8 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               if (!duration || !isCurrentRun()) return;
               const ratio = Math.min(1, time / duration);
               narrationRatioRef.current = ratio;
-              setSubtitleText(words.slice(0, Math.round(ratio * words.length)).join(' '));
+              const spoken = words.slice(0, Math.round(ratio * words.length)).join(' ');
+              setSubtitleText(spoken.length > 150 ? `… ${spoken.slice(-150)}` : spoken);
               const nextStage = marks.reduce((acc, [, id], i) => (ratio >= marks[i][0] ? i : acc), -1);
               if (nextStage > stage) {
                 stage = nextStage;
