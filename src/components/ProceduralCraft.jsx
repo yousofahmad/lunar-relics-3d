@@ -1,3 +1,4 @@
+// SI disclosure: this file was written with Super Intelligence (Manus AI) and reviewed by the Lunar Relics 3D team.
 import React, { useMemo } from 'react';
 import * as THREE from 'three';
 

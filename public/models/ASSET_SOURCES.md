@@ -18,3 +18,15 @@
 مجموع ملفات GLB العشرة المحفوظة في الشجرة الحالية 15,217,240 بايت. لا تُضمّن النسخة الأصلية الكبيرة `insight_lander_deployed.glb` ضمن ملفات الفرع الحالية أو أصول الإنتاج؛ ويظل رابط تنزيل NASA الأصلي والرصيد موثقين أعلاه. يستخدم سجل InSight النسخة المشتقة `insight_lander_deployed_optimized.glb` بعد ضغط الأنسجة إلى WebP بجودة 70 والهندسة بـDraco؛ احتُفظ بأبعاد الأنسجة الأصلية (512px و1024px) ولم يُطبّق تبسيط للمضلعات. انخفض حجم النموذج من 22,357,936 إلى 2,957,580 بايت (86.77%). عدد المثلثات 178,077 في النسخة المحسّنة مقابل 178,079 في المصدر. بقي أيضًا `insight_lander.glb` الأقدم كما هو. يصف موقع NASA نموذج Cruise Lander الآخر بأنه بوضع الهبوط مع الألواح الشمسية والذراع منشورين، قبل نشر مقياس الزلازل ومسبار الحرارة. تُستخدم النماذج الأصلية الثمانية الأخرى في تسعة سجلات لأن Viking 1 وViking 2 يتشاركان نموذج NASA العام. ملف Apollo الرسمي يصوّر وحدة الهبوط كاملة؛ وعند عرض سجل Eagle تُحذف أجزاء مرحلة الصعود برمجيًا بعد تحميل النموذج كيلا توحي بأن تلك المرحلة تُركت على القمر. تظهر EASEP كحزمة منفصلة بجوار مرحلة الهبوط. وبالمثل، سجلات Apollo 15 وALSEP وSurveyor 3 وSojourner وPhoenix بلا GLB مطابق مؤكد؛ أما ملف Spirit المتاح بصيغة Blender وحجمه نحو 12 MB وليس GLB. تستخدم السجلات غير المرتبطة بـGLB مجسمات إجرائية صلبة مصنوعة من أجزاء ثلاثية الأبعاد بحسب نوع المركبة (مثل الهيكل والعجلات والأرجل والأطباق والألواح الشمسية)، وليست كرات شبكية أو رسومات مسطحة.
 
 وفق [إرشادات استخدام صور ووسائط NASA](https://www.nasa.gov/nasa-brand-center/images-and-media/)، فإن مواد NASA، ومنها بيانات الملفات المستخدمة في النماذج ثلاثية الأبعاد، ليست عادةً خاضعة لحقوق نشر داخل الولايات المتحدة؛ ينبغي ذكر NASA كمصدر وعدم الإيحاء بتأييد NASA للموقع أو المنتج. صفحة النموذج تسند الرصيد إلى NASA/JPL-Caltech.
+
+## SI-generated models built to published specifications (NOT NASA models)
+
+The files in `public/models/generated/` were generated with Super Intelligence (Manus AI text-to-3D) from written descriptions of each spacecraft's published NASA specifications and photographs. They are **not** NASA-published meshes, contain no NASA logos or insignia, and are labelled in the app as "SI-generated model built to published specs · not from NASA".
+
+| File | Mission |
+|---|---|
+| `generated/apollo-15-lrv.glb` | Apollo 15 Lunar Roving Vehicle |
+| `generated/alsep.glb` | Apollo 12 ALSEP surface experiments |
+| `generated/surveyor-3.glb` | Surveyor 3 lander |
+| `generated/sojourner.glb` | Mars Pathfinder Sojourner rover |
+| `generated/phoenix.glb` | Phoenix Mars lander |

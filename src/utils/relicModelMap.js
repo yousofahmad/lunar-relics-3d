@@ -5,35 +5,35 @@ const RELIC_PRESENTATIONS = {
     modelLabel: 'NASA Apollo Lunar Module mesh · descent stage view',
   },
   'apollo-15-lrv': {
-    modelPath: null,
-    fidelity: 'archetype',
+    modelPath: '/models/generated/apollo-15-lrv.glb',
+    fidelity: 'generated',
     archetype: 'lunar-rover',
-    modelLabel: 'Apollo 15 LRV reconstruction · tubular chassis, wire wheels, seats, HGA',
-    modelLabelAr: 'إعادة بناء من صور مهمة أبولو ١٥ ومواصفات العربة · مش مجسم رسمي',
+    modelLabel: 'SI-generated 3D model built to NASA published specs · not a NASA model',
+    modelLabelAr: 'مجسم مولّد بالذكاء الاصطناعي حسب مواصفات ناسا المنشورة · مش مجسم من ناسا',
     modelBasis: 'NASA Apollo 15 photographs + published Lunar Roving Vehicle specifications',
   },
   'alsep-scientific-packages': {
-    modelPath: null,
-    fidelity: 'archetype',
+    modelPath: '/models/generated/alsep.glb',
+    fidelity: 'generated',
     archetype: 'ALSEP surface science package',
-    modelLabel: 'Apollo 12 ALSEP reconstruction · central station, SNAP-27 RTG, PSE, LSM, SWS, SIDE/CCIG, LDD',
-    modelLabelAr: 'إعادة بناء ALSEP لأبولو 12 · المحطة المركزية وSNAP-27 وPSE وLSM وSWS وSIDE/CCIG وLDD · ليس مجسماً رسمياً',
+    modelLabel: 'SI-generated 3D model built to NASA published specs · not a NASA model',
+    modelLabelAr: 'مجسم مولّد بالذكاء الاصطناعي حسب مواصفات ناسا المنشورة · مش مجسم من ناسا',
     modelBasis: 'NASA ALSEP photographs + published experiment package layout',
   },
   'surveyor-3': {
-    modelPath: null,
-    fidelity: 'archetype',
+    modelPath: '/models/generated/surveyor-3.glb',
+    fidelity: 'generated',
     archetype: 'Surveyor lunar lander',
-    modelLabel: 'Surveyor lander reconstruction · three-leg frame, solar panel, sampling arm',
-    modelLabelAr: 'إعادة بناء من صور Surveyor 3 المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelLabel: 'SI-generated 3D model built to NASA published specs · not a NASA model',
+    modelLabelAr: 'مجسم مولّد بالذكاء الاصطناعي حسب مواصفات ناسا المنشورة · مش مجسم من ناسا',
     modelBasis: 'NASA Surveyor 3 photographs + published lander specifications',
   },
   'sojourner-rover': {
-    modelPath: null,
-    fidelity: 'archetype',
+    modelPath: '/models/generated/sojourner.glb',
+    fidelity: 'generated',
     archetype: 'Sojourner microrover',
-    modelLabel: 'Sojourner reconstruction · solar deck, six cleated wheels, rocker-bogie',
-    modelLabelAr: 'إعادة بناء من صور Sojourner المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelLabel: 'SI-generated 3D model built to NASA published specs · not a NASA model',
+    modelLabelAr: 'مجسم مولّد بالذكاء الاصطناعي حسب مواصفات ناسا المنشورة · مش مجسم من ناسا',
     modelBasis: 'NASA Sojourner photographs + published microrover specifications',
   },
   'spirit-rover': {
@@ -61,11 +61,11 @@ const RELIC_PRESENTATIONS = {
     modelLabelAr: 'مجسم NASA لهبوط Viking · تصميم الهبوط المشترك للمركبتين التوأم',
   },
   'phoenix-lander': {
-    modelPath: null,
-    fidelity: 'archetype',
+    modelPath: '/models/generated/phoenix.glb',
+    fidelity: 'generated',
     archetype: 'Phoenix polar lander',
-    modelLabel: 'Phoenix reconstruction · circular deck, twin solar arrays, robotic arm',
-    modelLabelAr: 'إعادة بناء من صور Phoenix المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelLabel: 'SI-generated 3D model built to NASA published specs · not a NASA model',
+    modelLabelAr: 'مجسم مولّد بالذكاء الاصطناعي حسب مواصفات ناسا المنشورة · مش مجسم من ناسا',
     modelBasis: 'NASA Phoenix photographs + published lander specifications',
   },
   'insight-lander': {
@@ -125,13 +125,13 @@ export function has3DRepresentation(item) {
 }
 
 export function getModelHonestyLabel(item, language = 'en') {
-  const authentic = getRelicModelInfo(item).fidelity === 'authentic';
+  const fidelity = getRelicModelInfo(item).fidelity;
   if (language === 'ar') {
-    return authentic
-      ? 'مجسم ثلاثي الأبعاد منشور من NASA · راجع ملاحظة هذا السجل'
-      : 'إعادة بناء من صور ومواصفات NASA · مش مجسم رسمي';
+    if (fidelity === 'authentic') return 'مجسم ثلاثي الأبعاد منشور من NASA · راجع ملاحظة هذا السجل';
+    if (fidelity === 'generated') return 'مجسم مولّد بالذكاء الاصطناعي (SI) حسب المواصفات المنشورة · مش من ناسا';
+    return 'إعادة بناء بالذكاء الاصطناعي (SI) من صور ومواصفات NASA · مش مجسم رسمي';
   }
-  return authentic
-    ? 'NASA-PUBLISHED 3D MODEL · SEE MISSION-SPECIFIC NOTES'
-    : 'RECONSTRUCTION FROM NASA PHOTOS & SPECS · NOT AN OFFICIAL MESH';
+  if (fidelity === 'authentic') return 'NASA-PUBLISHED 3D MODEL · SEE MISSION-SPECIFIC NOTES';
+  if (fidelity === 'generated') return 'SI-GENERATED MODEL BUILT TO PUBLISHED SPECS · NOT FROM NASA';
+  return 'SI-BUILT RECONSTRUCTION FROM NASA PHOTOS & SPECS · NOT AN OFFICIAL MESH';
 }

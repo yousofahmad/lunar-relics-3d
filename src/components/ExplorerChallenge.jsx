@@ -1,3 +1,4 @@
+// SI disclosure: this file was written with Super Intelligence (Manus AI) and reviewed by the Lunar Relics 3D team.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { Flame, Target, Timer, Trophy, X } from 'lucide-react';

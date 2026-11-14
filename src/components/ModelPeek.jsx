@@ -81,7 +81,9 @@ export default function ModelPeek({ item, language = 'en' }) {
   const status = meshError
     ? (isAr ? 'تعذّر تحميل مجسم NASA · إعادة بناء إجرائية' : 'NASA MESH UNAVAILABLE · PROCEDURAL RECONSTRUCTION')
     : modelPath && !meshReady
-      ? (isAr ? 'جارٍ تحميل مجسم NASA…' : 'LOADING NASA MESH…')
+      ? (isAr ? 'جارٍ تحميل المجسم…' : 'LOADING 3D MODEL…')
+      : info?.fidelity === 'generated'
+        ? (isAr ? 'مجسم مولّد حسب المواصفات · مش من ناسا' : 'SI-GENERATED TO SPECS · NOT FROM NASA')
       : info?.fidelity === 'authentic'
         ? (isAr ? 'مجسم NASA أصلي' : 'AUTHENTIC NASA MESH')
         : (isAr ? 'إعادة بناء من صور ومواصفات NASA' : 'RECONSTRUCTION · NASA PHOTOS & SPECS');

@@ -1,3 +1,4 @@
+// SI disclosure: this file was written with Super Intelligence (Manus AI) and reviewed by the Lunar Relics 3D team.
 const AMBIENT_LEVEL = 0.2;
 const MASTER_LEVEL = 0.72;
 const CROSSFADE_SECONDS = 1.5;

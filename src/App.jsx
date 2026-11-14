@@ -582,7 +582,7 @@ export default function App() {
 
           <footer className="entry-footer">
             <span><i />{isArabic ? 'بيانات المهمات · قصص متعددة الفصول · استكشاف ثلاثي الأبعاد' : 'MISSION DATA · CHAPTERED STORIES · INTERACTIVE 3D'}</span>
-            <span>{isArabic ? 'مشروع فريق Cairo 2026' : 'A CAIRO 2026 TEAM PROJECT'}</span>
+            <span className="si-disclosure" title={isArabic ? 'الكود والتحليل والنصوص والترجمة والأصوات والمجسمات المُعاد بناؤها ومونتاج الفيديو أُنتجت بأداة الذكاء الفائق Manus (و Cue) بتوجيه ومراجعة الفريق. بيانات المهمات من مصادر NASA العامة، ولا نستخدم شعارات NASA.' : 'Code, analysis, writing, translation, narration voices, 3D reconstructions and the demo video were produced with the super intelligence tool Manus (and Cue), directed and reviewed by the team. Mission data comes from public NASA sources; no NASA logos or insignia are used.'}>{isArabic ? 'فريق Cairo 2026 · صُنع بأدوات الذكاء الفائق (SI): Manus AI · الأصوات مولّدة بالذكاء الاصطناعي' : 'CAIRO 2026 TEAM · BUILT WITH SUPER INTELLIGENCE (SI): MANUS AI · AI-GENERATED VOICES'}</span>
           </footer>
         </main>
       )}

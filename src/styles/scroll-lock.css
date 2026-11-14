@@ -1,0 +1,46 @@
+/* Story scroll geometry (lead-owned, loaded last).
+   Every chapter is exactly one screen tall and snaps to the very top of the
+   pane. The chapter's own top padding keeps copy clear of the floating bars,
+   so the snap position never needs an offset (an offset pushed the bottom of
+   each chapter, including its buttons, off-screen). */
+.story-mode .mission-story-scroll {
+  scroll-snap-type: y mandatory !important;
+  scroll-padding: 0 !important;
+  padding-bottom: 0 !important;
+}
+.story-mode .story-chapter {
+  box-sizing: border-box;
+  min-height: 100% !important;
+  scroll-snap-align: start !important;
+  scroll-snap-stop: always !important;
+  scroll-margin: 0 !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .story-mode .mission-story-scroll { scroll-snap-type: y proximity !important; }
+}
+
+/* Opening chapter of every mission: title, hook, site, facts AND both buttons
+   always fit inside one screen, also on short laptop/browser windows. */
+.story-mode .mission-hero-meta > span:nth-child(3) { display: none !important; } /* site is already shown on the line above */
+@media (min-width: 821px) {
+  .story-mode #mission-chapter-hero { align-items: center; padding-top: clamp(118px, 17vh, 154px) !important; padding-bottom: clamp(24px, 6vh, 72px) !important; }
+  .story-mode .story-hero-copy { width: min(660px, 46vw) !important; max-width: none !important; }
+  .story-mode .story-hero-copy h1 { font-size: clamp(40px, min(5.6vw, 10vh), 112px) !important; line-height: .96 !important; margin-block: clamp(6px, 1.4vh, 16px) !important; text-wrap: balance; }
+  .app-rtl.story-mode .story-hero-copy h1, .app-rtl .story-mode .story-hero-copy h1 { line-height: 1.12 !important; }
+  .story-mode .story-hero-copy .story-hook { font-size: clamp(15px, 2.5vh, 21px) !important; margin-top: clamp(6px, 1.4vh, 14px) !important; line-height: 1.4 !important; }
+  .story-mode .story-hero-copy .story-hero-location { margin-top: clamp(6px, 1.3vh, 14px) !important; }
+  .story-mode .story-hero-copy .mission-hero-meta { margin-top: clamp(8px, 2vh, 22px) !important; }
+  .story-mode .story-hero-copy .story-hero-actions { margin-top: clamp(12px, 2.6vh, 30px) !important; }
+}
+@media (min-width: 821px) and (max-height: 820px) {
+  .story-mode .story-hero-copy .memory-classification, .story-mode .story-hero-copy .story-eyebrow { margin-block: 0 4px !important; }
+  .story-mode .story-hero-copy .immersive-story-button { min-height: 50px !important; padding-block: 8px !important; }
+}
+@media (min-width: 821px) and (max-height: 700px) {
+  .story-mode .story-hero-copy .story-eyebrow { display: none !important; }
+}
+/* JS pages through the long story paragraph by paragraph on desktop; native
+   proximity snapping would fight it, so the tall story chapter opts out. */
+@media (min-width: 821px) {
+  .story-mode .transmission-chapter { scroll-snap-stop: normal !important; }
+}

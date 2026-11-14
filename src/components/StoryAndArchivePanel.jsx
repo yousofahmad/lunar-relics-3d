@@ -474,6 +474,117 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     });
   }, []);
 
+  // One wheel gesture or key press = one chapter. A chapter that is taller
+  // than the screen (the long story) scrolls normally until its edge, then
+  // the next gesture moves on. Phones keep native touch snapping.
+  useEffect(() => {
+    const pane = document.querySelector('.story-mode .mission-story-scroll');
+    if (!pane) return undefined;
+    let lockUntil = 0;
+    let accumulated = 0;
+    let resetTimer = 0;
+    const chapters = () => [...pane.querySelectorAll('.story-chapter[data-story-chapter]')];
+    const topOf = (chapter) => pane.scrollTop + chapter.getBoundingClientRect().top - pane.getBoundingClientRect().top;
+    const currentIndex = () => {
+      const middle = pane.scrollTop + pane.clientHeight * 0.5;
+      let index = 0;
+      chapters().forEach((chapter, i) => { if (topOf(chapter) <= middle) index = i; });
+      return index;
+    };
+    const goTo = (index) => {
+      const list = chapters();
+      const target = list[Math.max(0, Math.min(list.length - 1, index))];
+      if (!target) return;
+      lockUntil = performance.now() + 800;
+      pane.scrollTo({ top: Math.round(topOf(target)), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    };
+    const atEdge = (direction) => {
+      const chapter = chapters()[currentIndex()];
+      if (!chapter) return true;
+      const top = topOf(chapter);
+      const bottom = top + chapter.offsetHeight;
+      const viewTop = pane.scrollTop;
+      const viewBottom = viewTop + pane.clientHeight;
+      return direction > 0 ? bottom - viewBottom <= 6 : viewTop - top <= 6;
+    };
+    // Inside a chapter taller than the screen (the long story), each step
+    // shows the next "page" that starts exactly at a paragraph, right under
+    // the floating bars, so text is never cut in half at the top.
+    const pageInside = (direction) => {
+      const chapter = chapters()[currentIndex()];
+      if (!chapter) return false;
+      const chapterTop = topOf(chapter);
+      const maxTop = chapterTop + chapter.offsetHeight - pane.clientHeight;
+      if (maxTop <= chapterTop + 4) return false;
+      const readTop = Math.min(parseFloat(getComputedStyle(chapter).paddingTop) || 140, pane.clientHeight * 0.3);
+      const viewTop = pane.scrollTop;
+      const viewBottom = viewTop + pane.clientHeight;
+      const blocks = [...chapter.querySelectorAll('.chapter-copy > :not(.story-transcript), .story-transcript > *')]
+        .map((block) => ({ top: topOf(block), bottom: topOf(block) + block.offsetHeight }))
+        .filter((block) => block.bottom > block.top)
+        .sort((a, b) => a.top - b.top);
+      let target = null;
+      if (direction > 0) {
+        if (viewTop >= maxTop - 4) return false;
+        const next = blocks.find((block) => block.bottom > viewBottom - 24 && block.top - readTop > viewTop + 8);
+        target = next ? next.top - readTop : maxTop;
+        target = Math.min(target, maxTop);
+      } else {
+        if (viewTop <= chapterTop + 4) return false;
+        const pageHeight = pane.clientHeight - readTop - 40;
+        const previous = blocks.find((block) => block.top - readTop >= viewTop - pageHeight - 8 && block.top - readTop < viewTop - 8);
+        target = previous ? previous.top - readTop : chapterTop;
+        if (target < chapterTop + readTop) target = chapterTop;
+      }
+      lockUntil = performance.now() + 700;
+      pane.scrollTo({ top: Math.round(target), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      return true;
+    };
+    const blocked = (target) => !(target instanceof Element)
+      || !target.closest('.story-mode')
+      || Boolean(target.closest('.explorer-challenge, .badge-modal, .badge-gallery, [role="dialog"], .archive-drawer, textarea, input, select'));
+    const onWheel = (event) => {
+      if (event.ctrlKey || Math.abs(event.deltaY) < Math.abs(event.deltaX)) return;
+      if (window.matchMedia('(max-width: 820px)').matches || blocked(event.target)) return;
+      const direction = event.deltaY > 0 ? 1 : -1;
+      if (performance.now() < lockUntil) { event.preventDefault(); return; }
+      if (!atEdge(direction)) {
+        event.preventDefault();
+        accumulated += event.deltaY;
+        window.clearTimeout(resetTimer);
+        resetTimer = window.setTimeout(() => { accumulated = 0; }, 200);
+        if (Math.abs(accumulated) < 18) return;
+        accumulated = 0;
+        if (!pageInside(direction)) goTo(currentIndex() + direction);
+        return;
+      }
+      event.preventDefault();
+      accumulated += event.deltaY;
+      window.clearTimeout(resetTimer);
+      resetTimer = window.setTimeout(() => { accumulated = 0; }, 200);
+      if (Math.abs(accumulated) < 18) return;
+      accumulated = 0;
+      goTo(currentIndex() + direction);
+    };
+    const onKey = (event) => {
+      if (blocked(document.activeElement || event.target) && !(document.activeElement === document.body)) return;
+      const forward = ['ArrowDown', 'PageDown', ' '].includes(event.key) && !event.shiftKey;
+      const backward = ['ArrowUp', 'PageUp'].includes(event.key) || (event.key === ' ' && event.shiftKey);
+      if (!forward && !backward) return;
+      const direction = forward ? 1 : -1;
+      event.preventDefault();
+      if (performance.now() < lockUntil) return;
+      if (!atEdge(direction) && pageInside(direction)) return;
+      goTo(currentIndex() + direction);
+    };
+    window.addEventListener('wheel', onWheel, { passive: false });
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.clearTimeout(resetTimer);
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [item.id]);
   const tourSteps = useMemo(() => {
     const localized = (value, preferredLanguage = language) => typeof value === 'string' ? value : value?.[preferredLanguage] || value?.en || '';
     const missionName = item.nickname || item.name;
@@ -832,7 +943,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
                 <span className="immersive-play-icon" aria-hidden="true"><Play size={14} fill="currentColor" /></span>
                 <span className="immersive-button-copy">
                   <strong>{isArabic ? 'ابدأ القصة الغامرة' : 'START IMMERSIVE STORY'}</strong>
-                  <small>{isArabic ? (audioEnabled ? 'صوت + تمرير تلقائي + ترجمة نصية' : 'بدون صوت · فعّله من الشريط إن أحببت') : (audioEnabled ? 'VOICE + AUTO-SCROLL + SUBTITLES' : 'SILENT · ENABLE SOUND ABOVE IF YOU LIKE')}</small>
+                  <small>{isArabic ? (audioEnabled ? 'صوت مولّد بالذكاء الاصطناعي + تمرير تلقائي' : 'بدون صوت · فعّله من الشريط إن أحببت') : (audioEnabled ? 'AI VOICE (SI) + AUTO-SCROLL + SUBTITLES' : 'SILENT · ENABLE SOUND ABOVE IF YOU LIKE')}</small>
                 </span>
                 <span className="immersive-soundwave" aria-hidden="true"><i /><i /><i /><i /><i /></span>
               </button>
@@ -865,7 +976,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
               <button type="button" className={`transmit-button ${narrationOn ? 'transmitting' : ''}`} onClick={() => { if (!narrationOn) onEnableAudio(); toggleNarration(); }} aria-pressed={narrationOn}>
                 {narrationOn ? <VolumeX size={15} /> : <Volume2 size={15} />}
                 <span>{narrationOn ? copy.stop : (isArabic ? 'اسمع الحكاية' : 'LISTEN TO THE STORY')}</span>
-                <span className="transmit-frequency" dir="auto">{narrationUrl ? (isArabic ? 'تعليق صوتي' : 'NARRATED') : (isArabic ? 'قراءة نصية' : 'TEXT ONLY')}</span>
+                <span className="transmit-frequency" dir="auto">{narrationUrl ? (isArabic ? 'صوت مولّد بالذكاء الاصطناعي' : 'AI-GENERATED VOICE') : (isArabic ? 'قراءة نصية' : 'TEXT ONLY')}</span>
               </button>
               {isTransmitting && (
                 <span className="audio-visualizer" role="status" aria-live="polite" aria-label={copy.transmitting}>
@@ -918,7 +1029,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
                   <span className="hardware-focus-dot" aria-hidden="true" />{isArabic ? 'قرّب لعرض هذا الجزء' : 'ZOOM IN ON THIS PART'}
                 </button>
                 {hotspotClipUrls[index] && (
-                  <button type="button" className={`hardware-listen-button ${speakingChapter === `hardware-${index}` ? 'is-speaking' : ''}`} onClick={() => { onEnableAudio(); setHotspot?.(spot); playChapterClip(`hardware-${index}`, hotspotClipUrls[index]); }} aria-pressed={speakingChapter === `hardware-${index}`}>
+                  <button type="button" className={`hardware-listen-button ${speakingChapter === `hardware-${index}` ? 'is-speaking' : ''}`} title={isArabic ? 'صوت مولّد بالذكاء الاصطناعي (SI)' : 'AI-generated voice (SI)'} onClick={() => { onEnableAudio(); setHotspot?.(spot); playChapterClip(`hardware-${index}`, hotspotClipUrls[index]); }} aria-pressed={speakingChapter === `hardware-${index}`}>
                     {speakingChapter === `hardware-${index}` ? <VolumeX size={14} /> : <Volume2 size={14} />}
                     <span>{speakingChapter === `hardware-${index}` ? (isArabic ? 'إيقاف' : 'STOP') : (isArabic ? 'اسمع الشرح' : 'LISTEN')}</span>
                     <span className="speaking-bars" aria-hidden="true"><i /><i /><i /></span>

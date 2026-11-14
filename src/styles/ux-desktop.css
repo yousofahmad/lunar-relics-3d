@@ -1,0 +1,300 @@
+/* Desktop & large-tablet UX polish (>= 821px). Owned by the desktop UX pass. */
+
+@media (min-width: 821px) {
+  /* Keep the floating controls legible without letting the bar sprawl. */
+  .topbar {
+    width: min(1380px, calc(100vw - 32px));
+    min-height: 62px;
+    gap: clamp(8px, 1.1vw, 15px);
+    padding: 7px 11px 7px 15px;
+  }
+
+  .brand-lockup {
+    min-width: clamp(160px, 15vw, 205px);
+    gap: 10px;
+  }
+
+  .brand-title { font-size: 12px; }
+  .brand-subtitle { font-size: 8px; letter-spacing: .09em; }
+
+  .planet-tabs {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .planet-tab {
+    min-width: clamp(78px, 7.2vw, 108px);
+    min-height: 38px;
+    padding-inline: clamp(7px, .75vw, 11px);
+  }
+
+  .planet-tab span { font-size: 10px; }
+  .planet-tab small { font-size: 8px; }
+
+  .topbar-actions {
+    flex: 0 0 auto;
+    gap: 5px;
+  }
+
+  .mission-drawer-toggle,
+  .audio-global-toggle,
+  .language-toggle,
+  .badge-counter,
+  .auto-pilot-toggle,
+  .challenge-toggle {
+    min-height: 38px;
+  }
+
+  .mission-drawer-toggle,
+  .audio-global-toggle,
+  .language-toggle,
+  .badge-counter,
+  .challenge-toggle { padding-inline: 9px; }
+
+  .mission-drawer-toggle span,
+  .audio-global-toggle .audio-label,
+  .badge-label { font-size: 9px; }
+
+  .mission-drawer-toggle strong,
+  .badge-counter strong,
+  .challenge-toggle strong { font-size: 10px; }
+
+  .auto-pilot-toggle span { font-size: 8px; }
+  .challenge-toggle .challenge-label { font-size: 9px; }
+  .challenge-toggle small { font-size: 8px; }
+
+  /* A consistent keyboard affordance for the dense floating UI. */
+  .topbar button:focus-visible,
+  .story-chapter-nav button:focus-visible,
+  .memory-header button:focus-visible,
+  .archive-panel button:focus-visible,
+  .story-hero-actions button:focus-visible,
+  .hardware-actions button:focus-visible,
+  .explorer-challenge button:focus-visible,
+  .badge-modal-panel button:focus-visible {
+    outline: 2px solid var(--mission-red);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(252, 61, 33, .18);
+  }
+
+  /* Mission archive: give the 16-item list room while retaining a quiet edge. */
+  .archive-panel:not(.story-experience-panel) {
+    width: min(380px, calc(100vw - 36px));
+    top: 94px;
+    bottom: 18px;
+    border-radius: 19px;
+  }
+
+  .archive-filter-chip { min-height: 34px; font-size: 9px; }
+  .archive-filter-chip small { font-size: 8px; }
+  .relic-card { min-height: 72px; }
+  .relic-card-index { font-size: 9px; }
+  .relic-card-title { font-size: 13px; }
+  .relic-card-meta { font-size: 9px; }
+  .relic-card-model { font-size: 8px; }
+
+  /* Story chrome: reserve a real reading gutter below both floating bars. */
+  .story-mode .story-experience-panel::before {
+    height: 154px;
+    background: linear-gradient(to bottom, rgba(3, 6, 12, .98) 0%, rgba(3, 6, 12, .91) 58%, rgba(3, 6, 12, 0) 100%);
+  }
+
+  .story-mode .mission-story-scroll { padding-bottom: 176px; }
+
+  .story-chapter {
+    padding-block: 154px 72px;
+  }
+
+  .memory-header { top: 88px; }
+  .back-button { min-height: 38px; font-size: 9px; }
+  .memory-status { font-size: 8px; }
+
+  .story-chapter-nav {
+    top: 88px;
+    max-width: min(900px, calc(100vw - 430px));
+    min-height: 42px;
+    padding: 5px;
+    gap: 4px;
+  }
+
+  .story-chapter-nav button {
+    min-height: 31px;
+    padding-inline: 10px;
+    font-size: 9px;
+  }
+
+  .story-hero-copy { width: min(39rem, 45vw); }
+  .chapter-copy { width: min(530px, 41vw); }
+
+  /* Long names such as Alpha Particle X-ray Spectrometer stay within two lines. */
+  .hardware-copy { width: min(520px, 40vw); }
+  .hardware-copy h2 {
+    max-width: 34rem;
+    margin-top: 13px;
+    font-size: clamp(1.72rem, 2.15vw, 2.35rem);
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+
+  .hardware-copy h3 {
+    margin-block: 9px 8px;
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  .hardware-copy p {
+    max-width: 470px;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .hardware-actions {
+    gap: 9px;
+    margin-top: 16px;
+  }
+
+  .hardware-focus-button,
+  .hardware-listen-button {
+    min-height: 42px;
+    font-size: 9px;
+  }
+
+  .hardware-listen-button { font-size: 10px; }
+
+  /* Keep the red pin/leader line above the model but below copy and chrome. */
+  .hardware-callout-svg { z-index: 3; }
+  .hardware-callout-line { stroke-width: 1.25; stroke-dasharray: 6 5; }
+  .hardware-callout-pulse { r: 5; }
+
+  /* Provenance is a readable compact label, not a tiny footnote. */
+  .model-honesty-badge {
+    top: 148px;
+    right: 18px;
+    width: min(330px, calc(100vw - 36px));
+    padding: 10px 12px;
+    gap: 9px;
+  }
+
+  .app-rtl .model-honesty-badge { right: auto; left: 18px; }
+  .model-honesty-badge strong { font-size: 9px; line-height: 1.35; }
+  .model-honesty-badge small { font-size: 10px; line-height: 1.45; }
+
+  .cinematic-subtitle-bar {
+    bottom: 22px;
+    width: min(900px, calc(100vw - 64px));
+    min-height: 52px;
+    padding: 11px 17px;
+  }
+
+  .cinematic-subtitle-bar p { font-size: 13px; line-height: 1.5; }
+
+  /* Challenge overlay: keep the evidence panel clear of the lower map hint. */
+  .explorer-challenge {
+    left: 24px;
+    bottom: 86px;
+    width: min(360px, calc(100vw - 48px));
+    padding: 19px 18px 17px;
+    border-radius: 19px;
+  }
+
+  .explorer-challenge h2 { font-size: 19px; }
+  .explorer-challenge p { font-size: 13px; line-height: 1.55; }
+  .explorer-kicker { font-size: 10px; }
+  .explorer-stats span { min-height: 30px; font-size: 10px; }
+  .explorer-primary { min-height: 46px; }
+  .explorer-secondary { min-height: 40px; }
+  .explorer-close { width: 30px; height: 30px; }
+
+  /* Gallery modal: more breathing room and a readable four-column scan. */
+  .badge-modal-backdrop { padding: 22px; }
+  .badge-modal-panel {
+    width: min(1020px, 100%);
+    max-height: calc(100svh - 44px);
+    border-radius: 20px;
+  }
+
+  .badge-modal-header { padding: 16px 19px; }
+  .badge-modal-emblem { width: 40px; height: 40px; }
+  .badge-modal-kicker { font-size: 8px; }
+  .badge-modal-heading h2 { font-size: 19px; }
+  .badge-modal-progress { padding: 13px 19px; }
+  .badge-progress-label { font-size: 8px; }
+  .badge-progress-label strong { font-size: 10px; }
+
+  .badge-modal-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 11px;
+    padding: 16px 18px 18px;
+  }
+
+  .badge-modal-card {
+    min-height: 158px;
+    padding: 13px;
+    border-radius: 14px;
+  }
+
+  .badge-card-index { font-size: 9px; }
+  .badge-card-body { font-size: 9px; }
+  .badge-card-name { font-size: 13px; line-height: 1.28; }
+  .badge-card-relic { font-size: 10px; }
+  .badge-card-hint { font-size: 9px; line-height: 1.45; }
+  .badge-card-state { font-size: 8px; }
+
+  /* Desktop landing remains intentionally unchanged to preserve one-screen fit. */
+
+  @media (min-width: 821px) and (max-width: 1279px) {
+    .topbar {
+      width: calc(100vw - 24px);
+      gap: 6px;
+      padding-inline: 10px;
+    }
+
+    .brand-lockup { min-width: 145px; }
+    .brand-subtitle { display: none; }
+    .planet-tab { min-width: 70px; padding-inline: 7px; }
+    .planet-tab span { font-size: 9px; }
+    .planet-tab small { display: none; }
+    .topbar-actions { gap: 4px; }
+    .topbar-actions > button { padding-inline: 8px; }
+    .audio-global-toggle .soundscape-full,
+    .audio-global-toggle .audio-action-full { display: none; }
+    .audio-global-toggle .soundscape-compact,
+    .audio-global-toggle .audio-action-compact { display: inline; }
+    .story-chapter-nav { max-width: calc(100vw - 330px); }
+    .model-honesty-badge { width: min(300px, calc(100vw - 30px)); }
+    .badge-modal-grid { grid-template-columns: repeat(4, minmax(150px, 1fr)); }
+  }
+
+  @media (min-width: 821px) and (max-width: 1100px) {
+    .topbar { gap: 4px; }
+    .brand-lockup { min-width: 128px; }
+    .brand-title { font-size: 10px; }
+    .planet-tab { min-width: 62px; }
+    .planet-tab span { font-size: 8px; }
+    .mission-drawer-toggle span { font-size: 8px; }
+    .story-chapter-nav { max-width: calc(100vw - 270px); }
+  }
+
+  @media (min-width: 821px) and (max-height: 820px) {
+    .story-chapter { padding-block: 136px 48px; }
+    .story-chapter-nav { top: 84px; min-height: 38px; }
+    .story-chapter-nav button { min-height: 28px; }
+    .model-honesty-badge { top: 136px; }
+    .story-hero-copy { max-height: calc(100svh - 184px); }
+    .story-hero h1 { font-size: clamp(2.1rem, 4.4vw, 3.8rem); }
+    .story-hook { margin-top: 12px; font-size: clamp(13px, 1.25vw, 16px); }
+    .story-hero-location { margin-top: 10px; font-size: 11px; }
+    .mission-hero-meta { gap: 12px 18px; margin-top: 16px; }
+    .story-hero-actions { gap: 8px; margin-top: 20px; }
+    .immersive-story-button { min-height: 48px; }
+    .hardware-copy h2 { font-size: clamp(1.65rem, 2vw, 2.15rem); }
+    .hardware-copy p { font-size: 12px; }
+    .explorer-challenge { bottom: 74px; }
+  }
+
+  @media (min-width: 1600px) {
+    .story-hero-copy { width: min(43rem, 43vw); }
+    .chapter-copy { width: min(570px, 38vw); }
+    .hardware-copy { width: min(550px, 37vw); }
+  }
+}
