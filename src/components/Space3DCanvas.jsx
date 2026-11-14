@@ -676,6 +676,7 @@ function HardwareCallout({ position, rigRef, active }) {
 function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef, storyProgress }) {
   const { camera, size } = useThree();
   const isApolloLunarModule = item.id === APOLLO_LM_ID;
+  const isInsightLander = item.id === 'insight-lander';
   const modelInfo = getRelicModelInfo(item);
   const modelPath = modelInfo.modelPath;
   const isRealModel = Boolean(modelPath);
@@ -733,16 +734,26 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     const focusWorld = rig.localToWorld(focusPoint);
     const rigCenter = rig.getWorldPosition(new THREE.Vector3());
     const cameraFocus = compactLayout ? rigCenter : new THREE.Vector3(0, focusWorld.y, 0);
-    const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : -0.18;
+    // Show InSight's array surfaces and deployed instruments, not just their edges.
+    // This presentation change leaves the source model and the other missions intact.
+    const defaultYaw = isInsightLander ? -0.38 : -0.18;
+    const targetYaw = focusIndex >= 0 ? [0.48, -0.72, 1.08][focusIndex] ?? 0.2 : chapterId === 'transmission' ? 0.12 : defaultYaw;
     const targetTilt = focusIndex >= 0 ? [0.1, -0.08, 0.17][focusIndex] ?? 0 : 0.015;
-    const fitDistance = (modelSpan / 2) / Math.tan((camera.fov * Math.PI) / 360);
+    const halfFovTangent = Math.tan((camera.fov * Math.PI) / 360);
+    const fitDistance = (modelSpan / 2) / halfFovTangent;
+    const horizontalFitDistance = (modelWidth / 2) / (halfFovTangent * Math.max(size.width / Math.max(1, size.height), 0.2));
     const cameraDistance = compactLayout
-      ? Math.max(6.4, fitDistance * 2.1)
+      ? isInsightLander
+        ? Math.max(5.2, fitDistance * 1.8, horizontalFitDistance * 1.12)
+        : Math.max(6.4, fitDistance * 2.1)
       : isHardwareChapter
         ? Math.max(4.6, fitDistance * 1.75)
         : chapterId === 'hero' && size.width >= 1024
-          ? Math.max(5.25, fitDistance * 2.05)
+          ? isInsightLander
+            ? Math.max(4.15, fitDistance * 1.58)
+            : Math.max(5.25, fitDistance * 2.05)
           : Math.max(4.7, fitDistance * 1.85);
+    const cameraElevation = isInsightLander ? cameraDistance * (compactLayout ? 0.28 : 0.38) : 0.14;
     // Park the hardware in the empty column next to the copy. The offset is
     // solved in screen space, so the model can never drift under the text.
     const halfWidth = Math.tan((camera.fov * Math.PI) / 360) * cameraDistance * (size.width / Math.max(1, size.height));
@@ -757,7 +768,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     rig.position.x = THREE.MathUtils.damp(rig.position.x, targetX, 1.8, delta);
     rig.position.y = THREE.MathUtils.damp(rig.position.y, mobileLift + (isHardwareChapter ? 0 : Math.sin(state.clock.elapsedTime * 0.42) * 0.035), 1.8, delta);
     camera.position.x = THREE.MathUtils.damp(camera.position.x, cameraFocus.x + (compactLayout ? 0 : state.pointer.x * 0.09), 1.4, delta);
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, cameraFocus.y + 0.14 + (compactLayout ? 0 : state.pointer.y * 0.07), 1.4, delta);
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, cameraFocus.y + cameraElevation + (compactLayout ? 0 : state.pointer.y * 0.07), 1.4, delta);
     camera.position.z = THREE.MathUtils.damp(camera.position.z, cameraFocus.z + cameraDistance, 1.4, delta);
     const controls = controlsRef.current;
     if (controls) {
@@ -778,6 +789,13 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
       <directionalLight position={[-6, -3, -5]} intensity={0.58} color="#60a5fa" />
       <pointLight position={[0, 4, -5]} intensity={0.18} color="#EAB308" distance={18} />
       <pointLight position={[0, 4, 4]} intensity={0.48} color="#dbe5ee" distance={18} />
+      {isInsightLander && (
+        <>
+          <ambientLight intensity={0.22} color="#e7efff" />
+          <directionalLight position={[2.5, 3, 5]} intensity={0.9} color="#fff0d2" />
+          <directionalLight position={[-4, 1.5, 2]} intensity={0.65} color="#91bdff" />
+        </>
+      )}
       <Stars radius={80} depth={50} count={3500} factor={3} saturation={0.1} fade speed={0.6} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.52, 0]}>
         <circleGeometry args={[2.25, 80]} />
@@ -806,7 +824,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
         )}
       </group>
       {focusIndex >= 0 && hotspotPositions[focusIndex] && <HardwareCallout position={hotspotPositions[focusIndex]} rigRef={storyRig} active />}
-      <OrbitControls ref={controlsRef} makeDefault target={[0, 0, 0]} enablePan={false} rotateSpeed={0.65} minDistance={2.05} maxDistance={9} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.34} />
+      <OrbitControls ref={controlsRef} makeDefault target={[0, 0, 0]} enablePan={false} rotateSpeed={0.65} minDistance={2.05} maxDistance={isInsightLander ? Math.max(9, (size.height / Math.max(size.width, 1)) * 4.5) : 9} enableDamping dampingFactor={0.08} autoRotate={autoRotate} autoRotateSpeed={0.34} />
     </>
   );
 }
