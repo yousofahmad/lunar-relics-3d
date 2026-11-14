@@ -55,8 +55,9 @@ function getSources(nasaSource = '') {
   return { idText, urls };
 }
 
-function getTelemetryPosition(item, copy) {
-  const { lat, lng, siteName } = item.location || {};
+function getTelemetryPosition(item, copy, isArabic = false) {
+  const { lat, lng } = item.location || {};
+  const siteName = (isArabic && item.location?.siteNameAr) || item.location?.siteName;
   if (Number.isFinite(lat) && Number.isFinite(lng)) {
     const latitude = `${Math.abs(lat)}° ${lat < 0 ? 'S' : 'N'}`;
     const longitude = `${Math.abs(lng)}° ${lng < 0 ? 'W' : 'E'}`;
@@ -262,8 +263,8 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const quiz = item.quiz || {};
   const options = quiz.options?.[language] || quiz.options?.en || [];
   const { idText, urls } = getSources(item.nasaSource);
-  const siteName = item.location?.siteName || copy.noLocation;
-  const position = getTelemetryPosition(item, copy);
+  const siteName = (isArabic && item.location?.siteNameAr) || item.location?.siteName || copy.noLocation;
+  const position = getTelemetryPosition(item, copy, isArabic);
   const hardwareHotspots = useMemo(() => (item.hotspots || []).slice(0, 3), [item.hotspots]);
   const activeHotspot = hardwareHotspots.find((spot) => sameHotspot(hotspot, spot));
 
