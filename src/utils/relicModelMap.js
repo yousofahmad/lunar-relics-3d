@@ -8,13 +8,17 @@ const RELIC_PRESENTATIONS = {
     modelPath: null,
     fidelity: 'archetype',
     archetype: 'lunar-rover',
-    modelLabel: 'Four-wheel lunar rover archetype',
+    modelLabel: 'Apollo 15 LRV reconstruction · tubular chassis, wire wheels, seats, HGA',
+    modelLabelAr: 'إعادة بناء من صور مهمة أبولو ١٥ ومواصفات العربة · مش مجسم رسمي',
+    modelBasis: 'NASA Apollo 15 photographs + published Lunar Roving Vehicle specifications',
   },
   'alsep-scientific-packages': {
     modelPath: null,
     fidelity: 'archetype',
     archetype: 'ALSEP surface science package',
-    modelLabel: 'Apollo surface science package archetype',
+    modelLabel: 'ALSEP reconstruction · central station, RTG, seismometer, magnetometer',
+    modelLabelAr: 'إعادة بناء من صور ALSEP المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelBasis: 'NASA ALSEP photographs + published experiment package layout',
   },
   'surveyor-3': {
     modelPath: '/models/viking_lander.glb',
@@ -22,6 +26,8 @@ const RELIC_PRESENTATIONS = {
     archetype: 'three-leg planetary lander',
     addOns: 'surveyor',
     modelLabel: 'Three-leg lander class mesh · Surveyor hardware details added',
+    modelLabelAr: 'إعادة بناء من صور Surveyor 3 المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelBasis: 'NASA Surveyor 3 photographs + published lander specifications',
   },
   'sojourner-rover': {
     modelPath: '/models/opportunity.glb',
@@ -29,6 +35,8 @@ const RELIC_PRESENTATIONS = {
     archetype: 'six-wheel planetary rover',
     addOns: 'sojourner',
     modelLabel: 'Six-wheel rover class mesh · Sojourner details added',
+    modelLabelAr: 'إعادة بناء من صور Sojourner المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelBasis: 'NASA Sojourner photographs + published microrover specifications',
   },
   'spirit-rover': {
     modelPath: '/models/opportunity.glb',
@@ -57,6 +65,8 @@ const RELIC_PRESENTATIONS = {
     archetype: 'three-leg Mars lander',
     addOns: 'phoenix',
     modelLabel: 'Three-leg lander class mesh · Phoenix solar wings added',
+    modelLabelAr: 'إعادة بناء من صور Phoenix المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelBasis: 'NASA Phoenix photographs + published lander specifications',
   },
   'insight-lander': {
     modelPath: '/models/insight_lander.glb',
@@ -113,8 +123,14 @@ export function has3DRepresentation(item) {
   return Boolean(item && (getRelicModelInfo(item).modelPath || item.has3DModel || item.type));
 }
 
-export function getModelHonestyLabel(item) {
-  return getRelicModelInfo(item).fidelity === 'authentic'
+export function getModelHonestyLabel(item, language = 'en') {
+  const authentic = getRelicModelInfo(item).fidelity === 'authentic';
+  if (language === 'ar') {
+    return authentic
+      ? 'مجسم NASA أصلي · نسخة مطابقة'
+      : 'إعادة بناء من صور ومواصفات NASA · مش مجسم رسمي';
+  }
+  return authentic
     ? 'AUTHENTIC NASA 3D MESH'
-    : '3D ARCHETYPE MODEL (CLASS REPRESENTATION)';
+    : 'RECONSTRUCTION FROM NASA PHOTOS & SPECS · NOT AN OFFICIAL MESH';
 }
