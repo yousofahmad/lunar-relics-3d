@@ -1576,3 +1576,12 @@ body { color: var(--suit-white); }
   .badge-modal-card { min-height: 150px; padding: 11px; }
   .badge-card-name { font-size: 11px; }
 }
+
+/* Name-the-machine mode: the model is the question */
+.model-peek { position: relative; height: 205px; margin: 0 0 12px; overflow: hidden; border: 1px solid rgba(248,250,252,.1); border-radius: 14px; background: #05080d; }
+.model-peek canvas { display: block; width: 100% !important; height: 100% !important; }
+.model-peek-tag { unicode-bidi: isolate; position: absolute; inset-inline-start: 10px; bottom: 8px; padding: 3px 8px; border-radius: 999px; background: rgba(4,8,14,.78); border: 1px solid rgba(248,250,252,.12); color: #9fabb8; font-family: var(--font-mono); font-size: 7.5px; letter-spacing: .08em; }
+.explorer-options-compact { gap: 5px; }
+.explorer-options-compact .explorer-option { padding: 7px 10px; }
+.explorer-modes { display: grid; gap: 7px; }
+@media (max-height: 720px) { .model-peek { height: 150px; } }

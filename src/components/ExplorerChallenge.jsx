@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { Flame, Target, Timer, Trophy, X } from 'lucide-react';
 import { playChallengeFanfare, playDiscoveryChime, playMissThud } from '../utils/audioEngine.js';
+import ModelPeek from './ModelPeek.jsx';
 
 const ROUND_SECONDS = 24;
 const TOTAL_ROUNDS = 5;
@@ -31,6 +32,9 @@ const COPY = {
     modeEvidence: 'EVIDENCE QUIZ',
     modeSequence: 'ORDER THE MISSION',
     modeEra: 'ORDER BY YEAR',
+    modeModel: 'NAME THE MACHINE',
+    modelAsk: 'Which mission does this hardware belong to?',
+    modelRound: 'HARDWARE',
     eraAsk: 'Tap the missions from the oldest launch to the newest.',
     eraRound: 'SPACE RACE',
     seqIntro: 'Four moments from one mission, shuffled. Tap them in the order they happened.',
@@ -63,6 +67,9 @@ const COPY = {
     modeEvidence: 'تحدي الأدلة',
     modeSequence: 'رتّب الرحلة',
     modeEra: 'رتّب حسب السنة',
+    modeModel: 'اعرف المركبة',
+    modelAsk: 'أي مهمة ينتمي إليها هذا المجسم؟',
+    modelRound: 'المجسمات',
     eraAsk: 'اضغط المهام من الأقدم إطلاقًا للأحدث.',
     eraRound: 'سباق الفضاء',
     seqIntro: 'أربع لحظات من مهمة واحدة، مبعثرة. اضغطها بالترتيب اللي حصلت بيه.',
@@ -117,6 +124,13 @@ function buildRound(relics, used) {
   };
 }
 
+function buildModelRound(relics, used) {
+  const pool = relics.filter((item) => !used.has(item.id));
+  const source = pool.length >= OPTION_COUNT ? pool : relics;
+  const picked = shuffle(source).slice(0, OPTION_COUNT);
+  return { target: picked[0], options: shuffle(picked).map((item) => item.id) };
+}
+
 function buildTimelineRound(relics) {
   const pool = relics.filter((item) => (item.timeline || []).length >= 4);
   const source = pool.length ? pool : relics;
@@ -147,6 +161,8 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
   const copy = COPY[language] || COPY.en;
   const isArabic = language === 'ar';
   const [mode, setMode] = useState('evidence');
+  const modelRoundsRef = useRef([]);
+  const [modelRoundIndex, setModelRoundIndex] = useState(0);
   const [seq, setSeq] = useState(null);
   const [picked, setPicked] = useState([]);
   const [phase, setPhase] = useState('intro');
@@ -186,6 +202,61 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
       return index + 1;
     });
   }, []);
+
+  const startModelGame = () => {
+    clearAdvance();
+    const used = new Set();
+    const fresh = [];
+    for (let i = 0; i < TOTAL_ROUNDS; i += 1) {
+      const round = buildModelRound(relics, used);
+      used.add(round.target.id);
+      fresh.push(round);
+    }
+    modelRoundsRef.current = fresh;
+    setMode('model');
+    setModelRoundIndex(0);
+    setPicked([]);
+    setScore(0);
+    setStreak(0);
+    setBestStreak(0);
+    setFeedback('');
+    setChosen(null);
+    setTimeLeft(ROUND_SECONDS);
+    timeLeftRef.current = ROUND_SECONDS;
+    lockedRef.current = false;
+    setPhase('playing');
+  };
+
+  const answerModel = (id) => {
+    const round = modelRoundsRef.current[modelRoundIndex];
+    if (!round || lockedRef.current) return;
+    setChosen(id);
+    if (id === round.target.id) {
+      lockedRef.current = true;
+      const gained = 100 + Math.round(timeLeftRef.current * 3) + streak * 20;
+      setScore((value) => value + gained);
+      onXp(gained);
+      setStreak((value) => { const n = value + 1; setBestStreak((b) => Math.max(b, n)); return n; });
+      setFeedback('hit');
+      playDiscoveryChime();
+      advanceRef.current = window.setTimeout(() => {
+        clearAdvance();
+        lockedRef.current = false;
+        setChosen(null);
+        setFeedback('');
+        setTimeLeft(ROUND_SECONDS);
+        setModelRoundIndex((index) => {
+          if (index + 1 >= TOTAL_ROUNDS) { setPhase('done'); return index; }
+          return index + 1;
+        });
+      }, 1500);
+      return;
+    }
+    setStreak(0);
+    setFeedback('miss');
+    playMissThud();
+    setTimeLeft((value) => Math.max(0, value - 2));
+  };
 
   const startOrdering = (kind) => {
     clearAdvance();
@@ -271,6 +342,7 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
 
   useEffect(() => {
     if (phase !== 'playing' || timeLeft > 0 || lockedRef.current) return undefined;
+    if (mode === 'model') { setFeedback('time'); setStreak(0); playMissThud(); advanceRef.current = window.setTimeout(() => { clearAdvance(); setChosen(null); setFeedback(''); setTimeLeft(ROUND_SECONDS); setModelRoundIndex((index) => { if (index + 1 >= TOTAL_ROUNDS) { setPhase('done'); return index; } return index + 1; }); }, 1500); return () => window.clearTimeout(advanceRef.current); }
     if (mode === 'timeline' || mode === 'era') { setFeedback('time'); setStreak(0); playMissThud(); advanceRef.current = window.setTimeout(() => { clearAdvance(); setPicked([]); setFeedback(''); setTimeLeft(ROUND_SECONDS); setPhase('done'); }, 1500); return () => window.clearTimeout(advanceRef.current); }
     setFeedback('time');
     setStreak(0);
@@ -331,6 +403,7 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
             <button type="button" className="explorer-primary" onClick={startGame}>{copy.modeEvidence}</button>
             <button type="button" className="explorer-secondary" onClick={() => startOrdering('timeline')}>{copy.modeSequence}</button>
             <button type="button" className="explorer-secondary" onClick={() => startOrdering('era')}>{copy.modeEra}</button>
+            <button type="button" className="explorer-secondary" onClick={startModelGame}>{copy.modeModel}</button>
           </div>
         </div>
       )}
@@ -425,6 +498,42 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
         </>
       )}
 
+      {phase === 'playing' && mode === 'model' && modelRoundsRef.current[modelRoundIndex] && (
+        <>
+          <div className="explorer-head">
+            <span className="explorer-kicker"><Target size={12} /> {copy.modelRound} · {modelRoundIndex + 1}/{TOTAL_ROUNDS}</span>
+            <span className="explorer-score"><Trophy size={12} /> {score} {copy.points}</span>
+          </div>
+          <p className="explorer-ask">{copy.modelAsk}</p>
+          <ModelPeek item={modelRoundsRef.current[modelRoundIndex].target} language={language} />
+          <div className="explorer-options explorer-options-compact">
+            {modelRoundsRef.current[modelRoundIndex].options.map((id, index) => {
+              const item = byId.get(id);
+              if (!item) return null;
+              const isChosen = chosen === id;
+              const isTarget = id === modelRoundsRef.current[modelRoundIndex].target.id;
+              const state = feedback === 'hit' && isTarget ? 'is-correct' : isChosen && !isTarget ? 'is-wrong' : '';
+              return (
+                <button key={id} type="button" className={`explorer-option ${state}`} onClick={() => answerModel(id)} disabled={lockedRef.current}>
+                  <em>{String.fromCharCode(65 + index)}</em>
+                  <span dir="auto">{relicName(item, isArabic)}</span>
+                  <small>{item.launchYear || ''}</small>
+                </button>
+              );
+            })}
+          </div>
+          <div className="explorer-timer" role="progressbar" aria-valuemin={0} aria-valuemax={ROUND_SECONDS} aria-valuenow={Math.ceil(timeLeft)}>
+            <i style={{ width: `${progress * 100}%` }} />
+            <span>{Math.ceil(timeLeft)}{copy.seconds}</span>
+          </div>
+          <div className="explorer-foot">
+            <span className={streak > 1 ? 'is-hot' : ''}><Flame size={12} /> {copy.streak} {streak}</span>
+            {feedback === 'hit' && <strong className="explorer-flash is-good">{copy.hit}</strong>}
+            {feedback === 'miss' && <strong className="explorer-flash is-bad">{copy.miss}</strong>}
+          </div>
+        </>
+      )}
+
       {phase === 'done' && (
         <div className="explorer-intro">
           <span className="explorer-kicker"><Trophy size={13} /> {copy.title}</span>
@@ -434,7 +543,7 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
             <span><Trophy size={13} /> {score} {copy.points}</span>
             <span><Flame size={13} /> {bestStreak} {copy.streak}</span>
           </div>
-          <button type="button" className="explorer-primary" onClick={() => (mode === 'evidence' ? startGame() : startOrdering(mode))}>{copy.again}</button>
+          <button type="button" className="explorer-primary" onClick={() => (mode === 'evidence' ? startGame() : mode === 'model' ? startModelGame() : startOrdering(mode))}>{copy.again}</button>
           <button type="button" className="explorer-secondary" onClick={onClose}>{copy.exit}</button>
         </div>
       )}
