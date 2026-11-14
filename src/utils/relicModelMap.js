@@ -69,9 +69,10 @@ const RELIC_PRESENTATIONS = {
     modelBasis: 'NASA Phoenix photographs + published lander specifications',
   },
   'insight-lander': {
-    modelPath: '/models/insight_lander.glb',
+    modelPath: '/models/insight_lander_deployed.glb',
     fidelity: 'authentic',
-    modelLabel: 'NASA InSight lander mesh',
+    modelLabel: 'NASA/JPL-Caltech InSight lander · deployed configuration',
+    modelLabelAr: 'مجسم ناسا/JPL-Caltech لمسبار InSight · وضع الهبوط المنشور',
   },
   'ingenuity-helicopter': {
     modelPath: '/models/ingenuity.glb',
