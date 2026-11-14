@@ -44,9 +44,12 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
             onClick={() => setCelestialView(id)}
             type="button"
             aria-pressed={celestialView === id}
+            aria-label={language === 'ar' ? ar : en}
+            title={language === 'ar' ? ar : en}
           >
             <Icon size={17} strokeWidth={1.8} />
-            <span>{language === 'ar' ? ar : en}</span>
+            <span className="planet-label-full">{language === 'ar' ? ar : en}</span>
+            <span className="planet-label-compact">{id === 'Deep Space' ? (language === 'ar' ? 'مدار' : 'ORBIT') : language === 'ar' ? ar : en}</span>
             <small>{language === 'ar' ? subAr : subEn}</small>
           </button>
         ))}
