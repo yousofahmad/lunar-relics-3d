@@ -411,7 +411,7 @@ function OrbitalCraft({ item, position, onSelect, selectedRelic, language, autoR
         {presentation.modelPath ? (
           <ModelErrorBoundary fallback={<HoloRelic item={item} />}>
             <Suspense fallback={<HoloRelic item={item} />}>
-              <GltfModel modelPath={presentation.modelPath} item={item} />
+              <GltfModel modelPath={presentation.modelPath} item={item} preserveMaterials />
             </Suspense>
           </ModelErrorBoundary>
         ) : <HoloRelic item={item} />}
@@ -791,7 +791,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
             fallback={<HoloRelic item={item} onModelReady={onModelReady} />}
           >
             <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} kind="model" compact /></Html>}>
-              <GltfModel modelPath={modelPath} item={item} onModelReady={onModelReady} onBoundsReady={onBoundsReady} descentStageOnly={isApolloLunarModule} />
+              <GltfModel modelPath={modelPath} item={item} onModelReady={onModelReady} onBoundsReady={onBoundsReady} descentStageOnly={isApolloLunarModule} preserveMaterials />
             </Suspense>
           </ModelErrorBoundary>
         ) : <HoloRelic item={item} onModelReady={onModelReady} />}
