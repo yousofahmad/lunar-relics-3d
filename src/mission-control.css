@@ -922,3 +922,103 @@ body { color: var(--suit-white); }
   .entry-portal-eyebrow { margin-top: 16px; font-size: 8px; }
   .entry-portal-card > p:not(.entry-portal-eyebrow) { margin: 9px 0 16px; font-size: 12px; }
 }
+
+
+/* Mobile-first navigation and readable archive controls. */
+@media (max-width: 760px) {
+  .topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 33px 32px;
+    gap: 3px 6px;
+    height: auto;
+    min-height: 76px;
+    padding: 5px 8px;
+    border-radius: 17px;
+  }
+  .brand-lockup { grid-column: 1; grid-row: 1; gap: 6px; min-width: 0; }
+  .brand-emblem { width: 24px; height: 24px; flex-basis: 24px; }
+  .brand-emblem::before, .brand-emblem::after { width: 16px; height: 9px; }
+  .brand-title { font-size: 9px; letter-spacing: .04em; }
+  .brand-subtitle { display: none; }
+  .topbar-actions { grid-column: 2; grid-row: 1; gap: 5px; }
+  .mission-drawer-toggle {
+    width: auto;
+    min-width: 76px;
+    height: 34px;
+    min-height: 34px;
+    gap: 5px;
+    padding-inline: 8px;
+    border-radius: 10px;
+  }
+  .mission-drawer-toggle span { display: inline-flex !important; font-size: 10px !important; letter-spacing: 0; }
+  .mission-drawer-toggle strong { display: inline-flex !important; font-size: 10px !important; }
+  .audio-global-toggle, .language-toggle { width: 34px; min-width: 34px; height: 34px; min-height: 34px; padding: 0; border-radius: 10px; }
+  .audio-global-toggle .soundscape-label, .audio-global-toggle .audio-label { display: none !important; }
+  .audio-global-toggle svg, .language-toggle svg { display: block !important; width: 15px; height: 15px; }
+  .language-toggle span, .language-toggle i { display: none !important; }
+  .badge-counter, .whats-new-trigger, .auto-pilot-toggle { display: none !important; }
+  .planet-tabs {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    max-width: none;
+    gap: 2px;
+    padding: 2px;
+  }
+  .planet-tab { grid-template-columns: 15px minmax(0, 1fr); grid-template-rows: 1fr; min-width: 0; min-height: 32px; gap: 0 5px; padding: 3px 7px; border-radius: 9px; }
+  .planet-tab svg { grid-row: auto; width: 14px; height: 14px; }
+  .planet-tab span { display: block; font-size: 10px; letter-spacing: 0; }
+  .planet-tab small { display: none; }
+  .story-chapter-nav { top: 86px; }
+  .archive-panel { height: min(50svh, 380px); min-height: 230px; }
+  .archive-summary p { color: #d0d9e2; font-size: 12px; line-height: 1.55; }
+  .archive-category-filters { gap: 6px; }
+  .archive-filter-chip { min-height: 36px; padding-inline: 10px; color: #d5dde5; font-size: 10px; }
+  .archive-filter-chip small { color: #bdc9d5; font-size: 9px; }
+  .archive-search input { font-size: 15px; }
+  .archive-search input::placeholder { color: #b5c1cd; }
+  .relic-card-index { color: #bdc8d3; font-size: 9px; }
+  .relic-card-title { color: #f0f3f6; font-size: 12px; }
+  .relic-card-meta { color: #c2ccd6; font-size: 9px; }
+  .relic-card-model { color: #d0d9e2; font-size: 9px; }
+  .archive-footnote { color: #bdc8d3; font-size: 9px; }
+  .archive-empty { color: #d0d9e2; font-size: 12px; }
+  .quick-mission-heading { color: #bec9d4; font-size: 9px; }
+  .entry-portal-eyebrow { color: #c1ccd7; font-size: 10px; }
+  .entry-portal-card > p:not(.entry-portal-eyebrow) { color: #d5dde5; font-size: 14px; line-height: 1.55; }
+  .entry-portal-button { width: min(100%, 320px); min-height: 56px; font-size: 12px; }
+  .entry-portal-button small { color: #f0b9b1; font-size: 9px; letter-spacing: .04em; }
+  .entry-portal-note { color: #c1ccd7; font-size: 11px; }
+  .whats-new-eyebrow { color: #bdc8d3; font-size: 10px; }
+  .whats-new-heading p { color: #d1dae3; font-size: 14px; }
+  .whats-new-list strong { font-size: 13px; }
+  .whats-new-list small { color: #c5cfd9; font-size: 12px; line-height: 1.55; }
+  .whats-new-footer > span { color: #bac5d0; font-size: 9px; }
+  .whats-new-footer button { min-height: 42px; font-size: 12px; }
+  .chapter-lede, .first-person-story, .hardware-copy p, .timeline-item p { color: #d6dee6; font-size: 12px; line-height: 1.65; }
+  .story-eyebrow { color: #c3ced8; font-size: 9px; }
+  .mission-hero-meta small { color: #bdc8d2; font-size: 9px; }
+  .mission-hero-meta strong { font-size: 12px; }
+  .mission-facts span { color: #bdc8d2; font-size: 9px; }
+  .mission-facts strong { font-size: 12px; }
+}
+
+@media (max-width: 380px) {
+  .topbar { gap: 2px 4px; padding-inline: 5px; }
+  .brand-lockup { gap: 4px; }
+  .brand-emblem { width: 22px; height: 22px; flex-basis: 22px; }
+  .brand-title { font-size: 8px; }
+  .topbar-actions { gap: 3px; }
+  .mission-drawer-toggle { min-width: 72px; padding-inline: 6px; }
+  .planet-tab { grid-template-columns: 13px minmax(0, 1fr); gap: 0 3px; padding-inline: 4px; }
+  .planet-tab span { font-size: 9px; }
+}
+
+.planet-label-compact { display: none; }
+@media (max-width: 760px) {
+  .planet-tab .planet-label-full { display: none; }
+  .planet-tab .planet-label-compact { display: block; }
+}

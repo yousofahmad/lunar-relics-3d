@@ -89,6 +89,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (window.matchMedia('(max-width: 760px)').matches) return;
     if (localStorage.getItem(WHATS_NEW_STORAGE_KEY) !== WHATS_NEW_VERSION) setWhatsNewOpen(true);
   }, []);
 
@@ -176,6 +177,7 @@ export default function App() {
     : '';
   const enterArchive = () => {
     setEntryPortalOpen(false);
+    setArchiveOpen(true);
     setAudioEnabled(true);
     setAudioMuted(false, { startIfUnmuting: true });
   };
@@ -316,21 +318,31 @@ export default function App() {
         <span>SPACE APPS CAIRO 2026 <i /> LUNAR RELICS 3D</span>
         <span className={`api-indicator ${apiState === 'online' ? 'is-online' : ''}`}><span />{apiState === 'online' ? (isArabic ? 'بيانات متصلة' : 'REMOTE DATA SYNCED') : (isArabic ? 'أرشيف محلي' : 'LOCAL ARCHIVE READY')}</span>
       </footer>
-      {whatsNewOpen && <WhatsNewDialog language={language} onClose={closeWhatsNew} />}
+      {whatsNewOpen && (
+        <WhatsNewDialog
+          language={language}
+          onClose={closeWhatsNew}
+          onExplore={() => {
+            closeWhatsNew();
+            if (storyMode) backToMap();
+            setArchiveOpen(true);
+          }}
+        />
+      )}
       {isInitialLoading && <SpaceLoader language={language} overlay />}
       {entryPortalOpen && (
         <div className="entry-portal" dir={isArabic ? 'rtl' : 'ltr'}>
           <div className="entry-portal-card">
             <span className="entry-portal-mark" aria-hidden="true">✦</span>
             <p className="entry-portal-eyebrow">{isArabic ? 'أرشيف المهمات · NASA' : 'MISSION ARCHIVE · NASA'}</p>
-            <h1>{isArabic ? 'الأثر الباقي في الفضاء' : 'THE RELICS LEFT BEHIND'}</h1>
-            <p>{isArabic ? 'ادخل إلى الرحلة ثلاثية الأبعاد مع الأجواء الصوتية الفضائية.' : 'Enter the 3D mission archive with its continuous cosmic soundscape.'}</p>
+            <h1>{isArabic ? 'استكشف المهمات' : 'EXPLORE SPACE MISSIONS'}</h1>
+            <p>{isArabic ? 'اختر مهمة وافتح قصتها ثلاثية الأبعاد.' : 'Choose a mission to open its 3D story.'}</p>
             <button type="button" className="entry-portal-button" onClick={enterArchive}>
               <span aria-hidden="true">🚀</span>
-              {isArabic ? 'المس للدخول إلى الأرشيف' : 'TAP TO ENTER ARCHIVE'}
-              <small>{isArabic ? 'مشهد ثلاثي الأبعاد + صوت مكاني' : '3D · SPATIAL AUDIO'}</small>
+              {isArabic ? 'ابدأ الاستكشاف' : 'START EXPLORING'}
+              <small>{isArabic ? 'قائمة المهمات ستُفتح مباشرة' : 'MISSION LIST OPENS RIGHT AWAY'}</small>
             </button>
-            <span className="entry-portal-note">{isArabic ? 'يمكنك كتم الصوت في أي وقت من الشريط العلوي.' : 'Mute any time from the top bar.'}</span>
+            <span className="entry-portal-note">{isArabic ? 'الصوت اختياري ويمكن كتمه.' : 'Sound is optional and can be muted.'}</span>
           </div>
         </div>
       )}
