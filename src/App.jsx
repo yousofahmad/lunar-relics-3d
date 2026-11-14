@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { BadgeCheck, Crosshair, Info, RadioTower } from 'lucide-react';
+import { ArrowUpRight, BadgeCheck, Crosshair, Database, Info, Play, RadioTower } from 'lucide-react';
 import { fetchRelics, LOCAL_RELICS } from './services/api.js';
 import BadgeModal from './components/BadgeModal.jsx';
 import ExplorerChallenge from './components/ExplorerChallenge.jsx';
@@ -62,7 +62,10 @@ export default function App() {
   const [archiveFilter, setArchiveFilter] = useState('All');
   const [archiveOpen, setArchiveOpen] = useState(() => typeof window === 'undefined' || !window.matchMedia('(max-width: 760px)').matches);
   const [selectedId, setSelectedId] = useState(null);
-  const [language, setLanguage] = useState(() => localStorage.getItem('lunar-relics-language') || 'en');
+  const [language, setLanguage] = useState(() => {
+    const savedLanguage = localStorage.getItem('lunar-relics-language');
+    return savedLanguage === 'en' || savedLanguage === 'ar' ? savedLanguage : 'ar';
+  });
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [audioStarted, setAudioStarted] = useState(false);
   const [entryPortalOpen, setEntryPortalOpen] = useState(true);
@@ -80,6 +83,7 @@ export default function App() {
     const saved = Number(localStorage.getItem('lunar-relics-xp') || 0);
     return Number.isFinite(saved) ? saved : 0;
   });
+  const isArabic = language === 'ar';
 
   useEffect(() => {
     let active = true;
@@ -113,6 +117,31 @@ export default function App() {
   }, [xp]);
 
   const displayRelics = useMemo(() => relics.map(presentRelic), [relics]);
+  const featuredRelic = useMemo(
+    () => displayRelics.find((item) => item.id === APOLLO_LM_ID) || displayRelics.find((item) => item.body === 'Moon') || displayRelics[0] || null,
+    [displayRelics],
+  );
+  const featuredSource = typeof featuredRelic?.nasaSource === 'string' ? featuredRelic.nasaSource : '';
+  const featuredNssdcaId = featuredSource.match(/NSSDCA\)?\s+IDs?:\s*([^.]+)/i)?.[1]?.trim() || '';
+  const featuredNssdcaUrl = featuredSource.match(/https:\/\/nssdc\.gsfc\.nasa\.gov\/nmc\/spacecraft\/display\.action\?id=[^;\s]+/i)?.[0] || '';
+  const featuredLat = featuredRelic?.location?.lat;
+  const featuredLng = featuredRelic?.location?.lng;
+  const featuredCoordinates = Number.isFinite(featuredLat) && Number.isFinite(featuredLng)
+    ? `${Math.abs(featuredLat).toFixed(3)}° ${featuredLat < 0 ? 'S' : 'N'}  ·  ${Math.abs(featuredLng).toFixed(3)}° ${featuredLng < 0 ? 'W' : 'E'}`
+    : '';
+  const featuredIsApollo = featuredRelic?.id === APOLLO_LM_ID;
+  const featuredBodyLabel = featuredRelic?.body === 'Moon'
+    ? (isArabic ? 'القمر' : 'MOON')
+    : featuredRelic?.body === 'Mars'
+      ? (isArabic ? 'المريخ' : 'MARS')
+      : (isArabic ? 'الفضاء العميق' : 'DEEP SPACE');
+  const featuredTitle = featuredIsApollo && isArabic
+    ? 'مرحلة هبوط «إيغل»'
+    : (featuredRelic?.nickname || featuredRelic?.name || (isArabic ? 'أثر من أرشيف ناسا' : 'NASA mission relic'));
+  const featuredSiteName = featuredIsApollo && isArabic
+    ? 'ماري ترانكويليتاتيس · بحر السكون'
+    : (featuredRelic?.location?.siteName || (isArabic ? 'الموقع موثق في سجل المهمة' : 'Location recorded in mission archive'));
+  const featuredModelIsAuthentic = getRelicModelInfo(featuredRelic).fidelity === 'authentic';
   const selectedRelic = useMemo(() => displayRelics.find((item) => item.id === selectedId) || null, [displayRelics, selectedId]);
   const storyMode = Boolean(selectedRelic);
   const visibleRelics = useMemo(
@@ -196,7 +225,6 @@ export default function App() {
     setSelectedId(null);
   };
 
-  const isArabic = language === 'ar';
   const hotspotTitle = hotspot
     ? isArabic ? hotspot.titleAr || hotspot.partAr || hotspot.title || hotspot.part : hotspot.title || hotspot.part
     : '';
@@ -206,6 +234,7 @@ export default function App() {
   const enterArchive = () => {
     setEntryPortalOpen(false);
     setArchiveOpen(true);
+    setWhatsNewOpen(false);
     setAudioEnabled(true);
     setAudioMuted(false, { startIfUnmuting: true });
   };
@@ -219,7 +248,7 @@ export default function App() {
   };
 
   return (
-    <div className={`app-shell ${storyMode ? 'story-mode' : ''} ${isArabic ? 'app-rtl' : ''}`} dir={isArabic ? 'rtl' : 'ltr'} onClickCapture={(event) => emitUiCue(event)} onPointerOverCapture={(event) => emitUiCue(event, true)}>
+    <div className={`app-shell ${storyMode ? 'story-mode' : ''} ${isArabic ? 'app-rtl' : ''} ${entryPortalOpen ? 'has-entry-portal' : ''}`} dir={isArabic ? 'rtl' : 'ltr'} onClickCapture={(event) => emitUiCue(event)} onPointerOverCapture={(event) => emitUiCue(event, true)}>
       <div className="ambient-grid" aria-hidden="true" />
       <div className="ambient-glow glow-one" aria-hidden="true" />
       <div className="ambient-glow glow-two" aria-hidden="true" />
@@ -384,20 +413,97 @@ export default function App() {
       )}
       {isInitialLoading && <SpaceLoader language={language} overlay />}
       {entryPortalOpen && (
-        <div className="entry-portal" dir={isArabic ? 'rtl' : 'ltr'}>
-          <div className="entry-portal-card">
-            <span className="entry-portal-mark" aria-hidden="true">✦</span>
-            <p className="entry-portal-eyebrow">{isArabic ? 'أرشيف المهمات · NASA' : 'MISSION ARCHIVE · NASA'}</p>
-            <h1>{isArabic ? 'استكشف المهمات' : 'EXPLORE SPACE MISSIONS'}</h1>
-            <p>{isArabic ? 'اختر مهمة وافتح قصتها ثلاثية الأبعاد.' : 'Choose a mission to open its 3D story.'}</p>
-            <button type="button" className="entry-portal-button" onClick={enterArchive}>
-              <span aria-hidden="true">🚀</span>
-              {isArabic ? 'ابدأ الاستكشاف' : 'START EXPLORING'}
-              <small>{isArabic ? 'قائمة المهمات ستُفتح مباشرة' : 'MISSION LIST OPENS RIGHT AWAY'}</small>
-            </button>
-            <span className="entry-portal-note">{isArabic ? 'الصوت اختياري ويمكن كتمه.' : 'Sound is optional and can be muted.'}</span>
+        <section className="entry-portal" dir={isArabic ? 'rtl' : 'ltr'} aria-labelledby="entry-portal-title">
+          <div className="entry-portal-shade" aria-hidden="true" />
+          <header className="entry-masthead">
+            <div className="entry-brand-lockup">
+              <span className="entry-brand-mark" aria-hidden="true"><i /><i /><i /></span>
+              <span className="entry-brand-copy"><strong>LUNAR RELICS <b>3D</b></strong><small>{isArabic ? 'أرشيف حيّ لآثار استكشاف الفضاء' : 'A LIVING ARCHIVE OF SPACE EXPLORATION'}</small></span>
+            </div>
+            <div className="entry-event-mark"><span className="entry-event-dot" />{isArabic ? 'تحدّي ناسا لتطبيقات الفضاء · القاهرة ٢٠٢٦' : 'NASA SPACE APPS CHALLENGE · CAIRO 2026'}</div>
+          </header>
+
+          <div className="entry-content-grid">
+            <div className="entry-hero-copy">
+              <p className="entry-portal-eyebrow">
+                <Database size={14} />
+                <span>{isArabic ? 'من أرشيف ناسا إلى تجربة تفاعلية' : 'NASA DATA · REIMAGINED AS AN INTERACTIVE EXPERIENCE'}</span>
+                <button type="button" className="entry-language-toggle" onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')} aria-label={isArabic ? 'Switch to English' : 'التبديل إلى العربية'}>{isArabic ? 'EN' : 'عربي'}</button>
+              </p>
+              <h1 id="entry-portal-title">
+                {isArabic ? <>الأثرُ باقٍ.<br /><span>والحكايةُ تبدأ الآن.</span></> : <>The footprints remain.<br /><span>The story is still unfolding.</span></>}
+              </h1>
+              <p className="entry-hero-description">
+                {isArabic
+                  ? 'نقرّب علم استكشاف الفضاء بالعربية: اكتشف آثار المهمات على القمر والمريخ وفي الفضاء العميق، عبر نماذج ثلاثية الأبعاد وقصص موثقة ومروية بالعربية والإنجليزية.'
+                  : 'Bring planetary exploration closer through interactive 3D mission relics, sourced stories, and Arabic–English narration.'}
+              </p>
+
+              <div className="entry-proof-line" aria-label={isArabic ? 'مصادر علمية موثقة من أرشيف ناسا' : 'Documented science from NASA archives'}>
+                <span className="entry-proof-icon"><Database size={14} /></span>
+                <span>{isArabic ? 'كل أثر مرتبط ببياناته ومصادره من أرشيف ناسا NSSDCA' : 'Every relic links back to its NASA NSSDCA record and sources'}</span>
+              </div>
+
+              <div className="entry-metrics" aria-label={isArabic ? 'ملخص التجربة' : 'Experience at a glance'}>
+                <div><strong>{new Intl.NumberFormat(isArabic ? 'ar-EG' : 'en').format(displayRelics.length)}</strong><span>{isArabic ? 'سجلًا للمهمات' : 'MISSION RECORDS'}</span></div>
+                <i aria-hidden="true" />
+                <div><strong>{new Intl.NumberFormat(isArabic ? 'ar-EG' : 'en').format(3)}</strong><span>{isArabic ? 'عوالم للاستكشاف' : 'WORLDS TO EXPLORE'}</span></div>
+                <i aria-hidden="true" />
+                <div><strong>AR <b>·</b> EN</strong><span>{isArabic ? 'قصة بلغتين' : 'STORIES IN TWO LANGUAGES'}</span></div>
+              </div>
+
+              <div className="entry-portal-actions">
+                <button type="button" className="entry-portal-button" onClick={() => {
+                  enterArchive();
+                  if (featuredRelic) openRelic(featuredRelic);
+                }}>
+                  <span className="entry-primary-icon"><Play size={15} fill="currentColor" /></span>
+                  <span>{featuredIsApollo
+                    ? (isArabic ? 'ابدأ من أثر إيغل' : 'START WITH THE EAGLE')
+                    : (isArabic ? 'اكتشف القصة المميزة' : 'OPEN THE FEATURED STORY')}</span>
+                  <ArrowUpRight size={17} aria-hidden="true" />
+                </button>
+                <button type="button" className="entry-archive-link" onClick={enterArchive}>
+                  {isArabic ? 'تصفّح أرشيف المهمات' : 'BROWSE THE MISSION ARCHIVE'}
+                  <ArrowUpRight size={14} aria-hidden="true" />
+                </button>
+              </div>
+              <p className="entry-portal-note">{isArabic ? 'السرد الصوتي اختياري · النماذج تُحمّل عند اختيارها' : 'Audio is optional · 3D models load when selected'}</p>
+            </div>
+
+            {featuredRelic && (
+              <article className="entry-feature-card" aria-label={isArabic ? 'مثال من أرشيف المهمات' : 'Featured mission from the archive'}>
+                <div className="entry-card-topline"><span>{isArabic ? 'قصة من الأرشيف' : 'FROM THE ARCHIVE'}</span><span>{String(displayRelics.indexOf(featuredRelic) + 1).padStart(2, '0')} / {String(displayRelics.length).padStart(2, '0')}</span></div>
+                <div className="entry-card-scene" aria-hidden="true">
+                  <span className="entry-card-orbit entry-card-orbit-one" /><span className="entry-card-orbit entry-card-orbit-two" />
+                  <span className="entry-card-moon" /><span className="entry-card-crosshair">+</span>
+                  <span className="entry-card-coord-label">{featuredCoordinates || (isArabic ? 'موقع موثّق' : 'DOCUMENTED SITE')}</span>
+                  <span className="entry-card-scene-caption">{isArabic ? `موقع المهمة · ${featuredBodyLabel}` : `MISSION SITE · ${featuredBodyLabel}`}</span>
+                </div>
+                <div className="entry-feature-copy">
+                  <p className="entry-feature-kicker">{featuredIsApollo
+                    ? (isArabic ? 'أبولو ١١ · ٢٠ يوليو ١٩٦٩' : 'APOLLO 11 · 20 JULY 1969')
+                    : (isArabic ? `مهمة فضائية · ${featuredRelic.launchYear || ''}` : `MISSION · ${featuredRelic.launchYear || ''}`)}</p>
+                  <h2 dir="auto">{featuredTitle}</h2>
+                  <p className="entry-feature-location" dir="auto">{featuredSiteName}</p>
+                  <div className="entry-feature-source">
+                    <span><BadgeCheck size={14} />{featuredModelIsAuthentic
+                      ? (isArabic ? 'مجسم ثلاثي الأبعاد منشور من ناسا' : 'NASA-PUBLISHED 3D MODEL')
+                      : (isArabic ? 'إعادة بناء من صور ومواصفات ناسا' : 'NASA PHOTOS & SPECS RECONSTRUCTION')}</span>
+                    {featuredNssdcaUrl
+                      ? <a href={featuredNssdcaUrl} target="_blank" rel="noreferrer">NSSDCA {featuredNssdcaId || ''}<ArrowUpRight size={12} /></a>
+                      : <span className="entry-feature-id">{featuredNssdcaId ? `NSSDCA · ${featuredNssdcaId}` : (isArabic ? 'مصدر ناسا موثق' : 'NASA SOURCE DOCUMENTED')}</span>}
+                  </div>
+                </div>
+              </article>
+            )}
           </div>
-        </div>
+
+          <footer className="entry-footer">
+            <span><i />{isArabic ? 'بيانات المهمات · قصص متعددة الفصول · استكشاف ثلاثي الأبعاد' : 'MISSION DATA · CHAPTERED STORIES · INTERACTIVE 3D'}</span>
+            <span>{isArabic ? 'مشروع فريق Cairo 2026' : 'A CAIRO 2026 TEAM PROJECT'}</span>
+          </footer>
+        </section>
       )}
     </div>
   );
