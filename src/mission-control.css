@@ -1134,8 +1134,12 @@ body { color: var(--suit-white); }
   .planet-tab small { display: none; }
   .planet-tab { grid-template-rows: 1fr; }
 }
-.story-mode .challenge-toggle,
 .story-mode .whats-new-trigger { display: none; }
+/* The challenge must stay reachable while reading: only drop it when the bar
+   runs out of room. */
+@media (max-width: 1180px) {
+  .story-mode .challenge-toggle { display: none; }
+}
 
 /* Mobile top bar: two clean rows (brand + actions, then the planet tabs) */
 @media (max-width: 760px) {
