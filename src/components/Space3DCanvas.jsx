@@ -228,29 +228,30 @@ function Pin({ item, position, onSelect, onHoverChange, selected = false, langua
 function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, autoRotate, showCaption = true }) {
   const group = useRef();
   const [hoveredPin, setHoveredPin] = useState(false);
+  const { gl, size } = useThree();
   const assets = PLANET_ASSETS[body];
   const [colorMap, heightMap] = useLoader(THREE.TextureLoader, [assets.color, assets.height]);
   const rimColor = useMemo(() => new THREE.Color(body === 'Mars' ? '#f2aa77' : '#60a5fa'), [body]);
-  const bumpScale = body === 'Moon' ? 0.06 : 0.025;
+  const bumpScale = 0.012;
 
   useEffect(() => {
     colorMap.colorSpace = THREE.SRGBColorSpace;
-    colorMap.anisotropy = 8;
+    colorMap.anisotropy = Math.min(12, gl.capabilities.getMaxAnisotropy());
     colorMap.wrapS = THREE.RepeatWrapping;
     colorMap.wrapT = THREE.ClampToEdgeWrapping;
-    colorMap.generateMipmaps = false;
-    colorMap.minFilter = THREE.LinearFilter;
+    colorMap.generateMipmaps = true;
+    colorMap.minFilter = THREE.LinearMipmapLinearFilter;
     colorMap.magFilter = THREE.LinearFilter;
     colorMap.needsUpdate = true;
     heightMap.colorSpace = THREE.NoColorSpace;
-    heightMap.anisotropy = 8;
+    heightMap.anisotropy = Math.min(12, gl.capabilities.getMaxAnisotropy());
     heightMap.wrapS = THREE.RepeatWrapping;
     heightMap.wrapT = THREE.ClampToEdgeWrapping;
-    heightMap.generateMipmaps = false;
-    heightMap.minFilter = THREE.LinearFilter;
+    heightMap.generateMipmaps = true;
+    heightMap.minFilter = THREE.LinearMipmapLinearFilter;
     heightMap.magFilter = THREE.LinearFilter;
     heightMap.needsUpdate = true;
-  }, [colorMap, heightMap]);
+  }, [colorMap, gl, heightMap]);
 
   useFrame((_, delta) => {
     if (autoRotate && !hoveredPin && group.current) group.current.rotation.y += delta * 0.018;
@@ -259,20 +260,23 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
   return (
     <group ref={group}>
       <mesh>
-        <sphereGeometry args={[radius, 96, 96]} />
+        <sphereGeometry args={[radius, size.width < 620 ? 128 : 256, size.width < 620 ? 96 : 160]} />
         <meshStandardMaterial
           map={colorMap}
-          bumpMap={heightMap}
+          bumpMap={body === 'Moon' ? heightMap : undefined}
           bumpScale={bumpScale}
-          roughness={0.96}
-          metalness={0.015}
-          color={body === 'Moon' ? '#d7d9dc' : '#f1d0b5'}
+          displacementMap={body === 'Moon' ? heightMap : undefined}
+          displacementScale={body === 'Moon' ? radius * 0.006 : 0}
+          roughness={body === 'Moon' ? 0.94 : 0.9}
+          metalness={0}
+          envMapIntensity={0.08}
+          color="#ffffff"
         />
       </mesh>
-      <mesh scale={1.018}>
+      <mesh scale={1.012}>
         <sphereGeometry args={[radius, 96, 96]} />
         <shaderMaterial
-          uniforms={{ rimColor: { value: rimColor }, rimStrength: { value: body === 'Mars' ? 0.28 : 0.22 } }}
+          uniforms={{ rimColor: { value: rimColor }, rimStrength: { value: body === 'Mars' ? 0.2 : 0.025 } }}
           vertexShader={RIM_VERTEX_SHADER}
           fragmentShader={RIM_FRAGMENT_SHADER}
           transparent
@@ -495,11 +499,11 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
       <color attach="background" args={['#03060C']} />
       <fog attach="fog" args={['#03060C', 28, 70]} />
       <FitMapCamera view={celestialView} archiveOpen={archiveOpen} />
-      <ambientLight intensity={1.35} color="#e2e8f0" />
-      <hemisphereLight args={['#ffffff', '#3b4252', 1.2]} />
-      <directionalLight position={[5, 3.5, 7]} intensity={1.8} color="#ffffff" />
-      <directionalLight position={[-6, -3, -5]} intensity={1.1} color="#60a5fa" />
-      <pointLight position={[2.5, -1.5, 5]} intensity={0.09} color="#EAB308" distance={15} />
+      <ambientLight intensity={0.08} color="#a6b4c8" />
+      <hemisphereLight args={['#dbeafe', '#111827', 0.12]} />
+      <directionalLight position={[7, 4, 6]} intensity={2.4} color="#fff5e7" />
+      <directionalLight position={[-6, -2, -5]} intensity={0.12} color="#60a5fa" />
+      <pointLight position={[2.5, -1.5, 5]} intensity={0.01} color="#EAB308" distance={15} />
       <Stars radius={orbitalView ? 110 : 90} depth={orbitalView ? 82 : 52} count={orbitalView ? (size.width < 620 ? 2600 : 5200) : (size.width < 620 ? 650 : 1600)} factor={orbitalView ? 4.8 : 3.2} saturation={0.12} fade speed={0.09} />
       {celestialView === 'Moon' && <Planet body="Moon" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
       {celestialView === 'Mars' && <Planet body="Mars" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
@@ -768,12 +772,12 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     <>
       <color attach="background" args={['#03060C']} />
       <fog attach="fog" args={['#03060C', 20, 64]} />
-      <ambientLight intensity={1.35} color="#e2e8f0" />
-      <hemisphereLight args={['#ffffff', '#3b4252', 1.2]} />
-      <directionalLight position={[4, 6, 5]} intensity={1.9} color="#ffffff" />
-      <directionalLight position={[-6, -3, -5]} intensity={1.1} color="#60a5fa" />
-      <pointLight position={[0, 4, -5]} intensity={0.32} color="#EAB308" distance={18} />
-      <pointLight position={[0, 4, 4]} intensity={0.34} color="#dbe5ee" distance={18} />
+      <ambientLight intensity={0.55} color="#cbd5e1" />
+      <hemisphereLight args={['#dbeafe', '#1b2736', 0.42]} />
+      <directionalLight position={[4, 6, 5]} intensity={2.3} color="#fff7ed" />
+      <directionalLight position={[-6, -3, -5]} intensity={0.58} color="#60a5fa" />
+      <pointLight position={[0, 4, -5]} intensity={0.18} color="#EAB308" distance={18} />
+      <pointLight position={[0, 4, 4]} intensity={0.48} color="#dbe5ee" distance={18} />
       <Stars radius={80} depth={50} count={3500} factor={3} saturation={0.1} fade speed={0.6} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.52, 0]}>
         <circleGeometry args={[2.25, 80]} />
