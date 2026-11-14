@@ -27,7 +27,7 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
       : { full: language === 'ar' ? 'تشغيل' : 'Unmute', compact: language === 'ar' ? 'تشغيل' : 'Unmute' };
 
   return (
-    <header className="topbar glass-panel">
+    <header className="topbar glass-panel lunar-polish-topnav">
       <div className="brand-lockup">
         <div className="brand-emblem" aria-hidden="true"><span /><span /><span /></div>
         <div>

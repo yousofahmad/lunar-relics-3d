@@ -4,18 +4,19 @@ import confetti from 'canvas-confetti';
 import {
   Activity, ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, Box, CalendarDays, Clapperboard,
   CarFront, Check, CircleHelp, Clock3, Crosshair, Globe2, ListFilter, MapPin,
-  Moon, Orbit, Play, Radio, RadioTower, Rocket, RotateCcw, Satellite, Search,
+  Moon, Orbit, Play, Radio, RadioTower, Rocket, RotateCcw, Satellite, Search, Link2,
   Sparkles, Volume2, VolumeX, X,
 } from 'lucide-react';
 import { transmitText } from '../utils/radio.js';
 import { playNarration, stopNarration } from '../utils/audioEngine.js';
-import { has3DRepresentation } from '../utils/relicModelMap.js';
+import { getModelHonestyLabel, has3DRepresentation } from '../utils/relicModelMap.js';
+import './story-archive-polish.css';
 
 const COPY = {
   en: {
     archive: 'MISSIONS TO EXPLORE', count: 'MISSIONS IN THE ARCHIVE', hint: 'Choose a mission to explore its story.',
     search: 'Search missions by name or year', noMatches: 'No missions found. Try another word.', clearSearch: 'Clear search',
-    interactiveModel: '3D INTERACTIVE MODEL',
+    interactiveModel: '3D INTERACTIVE MODEL', modelAuthentic: 'NASA-PUBLISHED MODEL', modelReconstruction: 'NASA-BASED RECONSTRUCTION',
     noLocation: 'Location not listed', memory: 'MISSION STORY', back: 'BACK TO MISSIONS',
     telemetry: 'MISSION FACTS', record: 'NASA MISSION ID', coordinates: 'WHERE IT LANDED', orbit: 'LOCATION', positionUnavailable: 'Location not listed',
     hotspots: 'PARTS TO EXPLORE', hotspotHint: 'Tap a glowing point to learn what that part does.', hotspotDetail: 'ABOUT THIS PART', locked: 'NOT EARNED', unlocked: 'EARNED',
@@ -27,12 +28,12 @@ const COPY = {
     badge: 'EXPLORER BADGE', citation: 'NASA SOURCES', nssdca: 'NASA MISSION ID', nasa: 'NASA SOURCE', sources: 'MORE NASA SOURCES',
     launch: 'LAUNCH', landing: 'LANDED', end: 'MISSION ENDED', site: 'MISSION PLACE',
     category: 'MISSION TYPE', details: 'MISSION DETAILS', time: 'MISSION JOURNEY', quizHint: 'Choose an answer below.',
-    open: 'OPEN MISSION STORY', deep: 'ORBIT', moon: 'MOON', mars: 'MARS', lander: 'LANDING CRAFT', rover: 'ROVER', scientific: 'SCIENCE TOOLS', probe: 'SPACE PROBE', rotorcraft: 'HELICOPTER', orbiter: 'ORBITER', impact: 'IMPACT PROBE',
+    open: 'OPEN MISSION STORY', deep: 'ORBIT', moon: 'MOON', mars: 'MARS', lander: 'LANDING CRAFT', rover: 'ROVER', scientific: 'SCIENCE TOOLS', probe: 'SPACE PROBE', rotorcraft: 'HELICOPTER', orbiter: 'ORBITER', impact: 'IMPACT PROBE', explorePath: 'EXPLORE → STORY → QUICK QUIZ', share: 'Copy mission link', copied: 'Mission link copied', copyFailed: 'Copy unavailable — link selected', modelNote: 'Model note',
   },
   ar: {
     archive: 'مهمات لاستكشافها', count: 'المهمات في الأرشيف', hint: 'اختر مهمة لتشاهد قصتها.',
     search: 'ابحث عن مهمة بالاسم أو السنة', noMatches: 'لم نجد مهمة بهذا البحث. جرّب كلمة أخرى.', clearSearch: 'مسح البحث',
-    interactiveModel: 'نموذج تفاعلي ثلاثي الأبعاد',
+    interactiveModel: 'نموذج تفاعلي ثلاثي الأبعاد', modelAuthentic: 'مجسم منشور من NASA', modelReconstruction: 'إعادة بناء مستندة إلى NASA',
     noLocation: 'الموقع غير مذكور', memory: 'قصة المهمة', back: 'العودة للمهمات',
     telemetry: 'معلومات المهمة', record: 'رقم المهمة', coordinates: 'مكان الهبوط', orbit: 'الموقع', positionUnavailable: 'الموقع غير مذكور',
     hotspots: 'أجزاء لاستكشافها', hotspotHint: 'اضغط على نقطة مضيئة لتعرف وظيفة هذا الجزء.', hotspotDetail: 'عن هذا الجزء', locked: 'لم تحصل عليها', unlocked: 'حصلت عليها',
@@ -44,7 +45,7 @@ const COPY = {
     badge: 'شارة المستكشف', citation: 'مصادر ناسا', nssdca: 'رقم المهمة', nasa: 'مصدر ناسا', sources: 'مصادر أخرى',
     launch: 'الإطلاق', landing: 'الهبوط', end: 'نهاية المهمة', site: 'مكان المهمة',
     category: 'نوع المهمة', details: 'معلومات المهمة', time: 'رحلة المهمة', quizHint: 'اختر إجابة بالأسفل.',
-    open: 'افتح قصة المهمة', deep: 'مداري', moon: 'القمر', mars: 'المريخ', lander: 'مركبة هبوط', rover: 'عربة استكشاف', scientific: 'أدوات علمية', probe: 'مسبار فضائي', rotorcraft: 'مروحية', orbiter: 'مركبة مدارية', impact: 'مسبار اصطدام',
+    open: 'افتح قصة المهمة', deep: 'مداري', moon: 'القمر', mars: 'المريخ', lander: 'مركبة هبوط', rover: 'عربة استكشاف', scientific: 'أدوات علمية', probe: 'مسبار فضائي', rotorcraft: 'مروحية', orbiter: 'مركبة مدارية', impact: 'مسبار اصطدام', explorePath: 'استكشف ← القصة ← السؤال السريع', share: 'انسخ رابط المهمة', copied: 'تم نسخ رابط المهمة', copyFailed: 'تعذر النسخ — تم تحديد الرابط', modelNote: 'ملاحظة النموذج',
   },
 };
 
@@ -139,15 +140,17 @@ function RelicCard({ item, language, onSelect }) {
   const AssetIcon = Box;
   const TypeIcon = getTypeIcon(item.type);
   const assetLabel = copy.interactiveModel;
+  const modelLabel = getModelHonestyLabel(item, language);
+  const authenticModel = modelLabel.includes(language === 'ar' ? 'منشور' : 'PUBLISHED');
   return (
-    <button type="button" className="relic-card" onClick={() => onSelect(item)} aria-label={`${item.nickname || item.name} — ${assetLabel}`}>
+    <button type="button" className="relic-card" onClick={() => onSelect(item)} aria-label={`${item.nickname || item.name} — ${assetLabel}. ${modelLabel}`}>
       <span className="relic-card-art has-model" aria-hidden="true"><TypeIcon size={22} strokeWidth={1.6} /></span>
       <span className="relic-card-copy">
         <span className="relic-card-index">{item.launchYear} <i /> {getTypeLabel(item.type, language, copy)}</span>
         <span className="relic-card-title">{item.nickname || item.name}</span>
         <span className="relic-card-meta">
           <span>{getBodyLabel(item, language, copy)} · {item.landingDate ? dateLabel(item.landingDate, language) : item.launchYear}</span>
-          <span className="relic-card-model has-model"><AssetIcon size={10} />{assetLabel}</span>
+          <span className={`relic-card-model has-model ${authenticModel ? 'is-authentic' : 'is-reconstruction'}`} title={modelLabel}><AssetIcon size={10} />{authenticModel ? copy.modelAuthentic : copy.modelReconstruction}</span>
         </span>
       </span>
       <span className="relic-card-arrow"><ArrowUpRight size={15} /></span>
@@ -182,7 +185,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
     })
     : scopedRelics;
   return (
-    <div className="archive-list-view">
+    <div className="archive-list-view lunar-polish">
       <div className="panel-title-row">
         <div>
           <span className="eyebrow">{copy.archive}</span>
@@ -192,7 +195,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
       </div>
       <div className="archive-summary">
         <span className="summary-line" />
-        <p>{copy.hint}</p>
+        <p>{copy.hint} <strong>{copy.explorePath}</strong></p>
       </div>
       <div className="archive-category-filters" role="group" aria-label={language === 'ar' ? 'تصفية أرشيف المهمات' : 'Filter mission archive'}>
         {ARCHIVE_FILTERS.map(({ id, icon: Icon, en, ar }) => {
@@ -222,7 +225,7 @@ function ArchiveList({ relics, language, onSelect, archiveFilter = 'All', setArc
       </div>
       <div className="relic-list" role="list" aria-label={copy.archive}>
         {filteredRelics.map((item) => <div role="listitem" key={item.id}><RelicCard item={item} language={language} onSelect={onSelect} /></div>)}
-        {filteredRelics.length === 0 && <div className="archive-empty"><Search size={18} /><span>{copy.noMatches}</span></div>}
+        {filteredRelics.length === 0 && <div className="archive-empty"><Search size={18} /><strong>{copy.noMatches}</strong><button type="button" onClick={() => { setQuery(''); setArchiveFilter?.('All'); }}>{copy.clearSearch} · {language === 'ar' ? 'عرض الكل' : 'Show all'}</button></div>}
       </div>
       <div className="archive-footnote"><span className="live-dot" />{copy.count}</div>
     </div>
@@ -239,6 +242,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const [subtitleText, setSubtitleText] = useState('');
   const [activeBeat, setActiveBeat] = useState(0);
   const [tourRestartToken, setTourRestartToken] = useState(0);
+  const [shareFeedback, setShareFeedback] = useState('');
   const transmissionRef = useRef(null);
   const playbackTokenRef = useRef(0);
   const subtitleTimerRef = useRef(0);
@@ -262,6 +266,35 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const position = getTelemetryPosition(item, copy);
   const hardwareHotspots = useMemo(() => (item.hotspots || []).slice(0, 3), [item.hotspots]);
   const activeHotspot = hardwareHotspots.find((spot) => sameHotspot(hotspot, spot));
+
+  const copyMissionLink = useCallback(async () => {
+    const url = new URL(window.location.href);
+    url.search = '';
+    url.hash = '';
+    url.searchParams.set('mission', item.id);
+    url.searchParams.set('lang', language);
+    const value = url.toString();
+    let copied = false;
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        copied = true;
+      }
+    } catch { copied = false; }
+    if (!copied) {
+      const input = document.createElement('textarea');
+      input.value = value;
+      input.setAttribute('readonly', '');
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      try { copied = document.execCommand('copy'); } catch { copied = false; }
+      input.remove();
+    }
+    setShareFeedback(copied ? copy.copied : copy.copyFailed);
+    window.setTimeout(() => setShareFeedback(''), 2800);
+  }, [copy.copyFailed, copy.copied, item.id, language]);
 
   useEffect(() => {
     setActiveQuestion(null);
@@ -418,7 +451,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
     const chapterRect = chapter.getBoundingClientRect();
     pane.scrollTo({
       top: pane.scrollTop + (chapterRect.top - paneRect.top),
-      behavior: 'smooth',
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
     });
   }, []);
 
@@ -660,7 +693,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   };
 
   return (
-    <div className="memory-room">
+    <div className="memory-room lunar-polish">
       <div className="memory-header">
         <button type="button" className="back-button" onClick={onBack}>
           {isArabic ? <ArrowRight size={15} /> : <ArrowLeft size={15} />}<span>{copy.back}</span>
@@ -724,26 +757,20 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
                 type="button"
                 className={`story-scroll-cue immersive-story-button ${autoPilotOn ? 'is-active' : ''}`}
                 onClick={() => startTourFrom('hero')}
-                aria-label={isArabic ? 'ابدأ القصة الغامرة مع التمرير التلقائي والصوت' : 'Start immersive story with auto-scroll and voice'}
+                aria-label={isArabic ? `ابدأ القصة الغامرة مع التمرير التلقائي ${audioEnabled ? 'والصوت' : 'بدون صوت'}` : `Start immersive story with auto-scroll ${audioEnabled ? 'and voice' : 'without sound'}`}
                 aria-pressed={autoPilotOn}
               >
                 <span className="immersive-play-icon" aria-hidden="true"><Play size={14} fill="currentColor" /></span>
                 <span className="immersive-button-copy">
                   <strong>{isArabic ? 'ابدأ القصة الغامرة' : 'START IMMERSIVE STORY'}</strong>
-                  <small>{isArabic ? 'تمرير تلقائي + ترجمة نصية' : 'AUTO-SCROLL + SUBTITLES'}</small>
+                  <small>{isArabic ? (audioEnabled ? 'صوت + تمرير تلقائي + ترجمة نصية' : 'بدون صوت · فعّله من الشريط إن أحببت') : (audioEnabled ? 'VOICE + AUTO-SCROLL + SUBTITLES' : 'SILENT · ENABLE SOUND ABOVE IF YOU LIKE')}</small>
                 </span>
                 <span className="immersive-soundwave" aria-hidden="true"><i /><i /><i /><i /><i /></span>
               </button>
-              <button
-                type="button"
-                className={`auto-pilot-hero-button ${autoPilotOn ? 'is-active' : ''}`}
-                onClick={() => startTourFrom('hero')}
-                aria-label={isArabic ? 'تشغيل جولة الطيار الآلي من البداية' : 'Start the auto-pilot tour from the beginning'}
-                aria-pressed={autoPilotOn}
-              >
-                <Clapperboard size={14} aria-hidden="true" />
-                <span>{isArabic ? 'جولة الطيار الآلي' : 'AUTO-PILOT TOUR'}</span>
+              <button type="button" className="mission-share-button" onClick={copyMissionLink} aria-label={copy.share}>
+                <Link2 size={14} aria-hidden="true" /><span>{copy.share}</span>
               </button>
+              {shareFeedback && <span className="share-feedback" role="status" aria-live="polite">{shareFeedback}</span>}
             </div>
           </div>
           <span className="story-hero-record" dir="ltr">NASA ID / {idText}</span>

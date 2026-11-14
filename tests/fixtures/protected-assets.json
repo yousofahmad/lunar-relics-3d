@@ -1,0 +1,54 @@
+{
+  "src/data/relicsData.json": {
+    "sha256": "06dc19a1b258ac96dbc3b64798c5b0faad87696b4fd9182f128c17e57832c7ee",
+    "bytes": 172099
+  },
+  "src/services/api.js": {
+    "sha256": "555101c9106c1c82922b5242958e777e916cf463c5c9e6537aa7edd8a33a494e",
+    "bytes": 1608
+  },
+  "src/components/GltfModel.jsx": {
+    "sha256": "933755adca768074894408a021286fc6926e8596524d1c948f60a254238730c2",
+    "bytes": 7821
+  },
+  "public/models/apollo_lunar_module.glb": {
+    "sha256": "379101dfcee399267addf771709107c35e826b0b9e5233272f123e4c8a585c4e",
+    "bytes": 716840
+  },
+  "public/models/dawn.glb": {
+    "sha256": "411249aed791994b6a2014894ad6bd7ca0445dbcf6d5342af9edc5df988f04b7",
+    "bytes": 927020
+  },
+  "public/models/ingenuity.glb": {
+    "sha256": "9e5a5398ab335eae7d46335085301ce46fb7de052300b645debe8bac6d39f2b5",
+    "bytes": 2019408
+  },
+  "public/models/insight_lander.glb": {
+    "sha256": "298434c885069f49b9e4f1d178e019c7ec2771fe1a9ce21278c70521eb9caac5",
+    "bytes": 3949036
+  },
+  "public/models/insight_lander_deployed_optimized.glb": {
+    "sha256": "6a96249153c0e718b90632871bc67846e07940d80464ecaab6d7f785ea9a543c",
+    "bytes": 2957580
+  },
+  "public/models/kepler_b.glb": {
+    "sha256": "d561d795d407f5d9015bec847c70f5bf5e42e7623eb2e3fc6e55bfc67a2bea1c",
+    "bytes": 9656
+  },
+  "public/models/near_shoemaker.glb": {
+    "sha256": "f3de2f87c97685b207be97e80d7cdca37d1567dd68204e1feb2d85f90e3adb0c",
+    "bytes": 701808
+  },
+  "public/models/opportunity.glb": {
+    "sha256": "95c852efb385b55bea3104a0fca2730cd2ef25353af4d38273d3f0bda5c68c31",
+    "bytes": 36668
+  },
+  "public/models/pioneer10.glb": {
+    "sha256": "81443a7fa01cca0dda878cd27692b3307f9c332c4eb8e55a844499d7b350573c",
+    "bytes": 2049840
+  },
+  "public/models/viking_lander.glb": {
+    "sha256": "1233dc2c96a1c0b08ca9a20f7ed9c09e0223f06f14f6ae6371349504c1929149",
+    "bytes": 1849384
+  }
+}

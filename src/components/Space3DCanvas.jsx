@@ -7,6 +7,7 @@ import SpaceLoader from './SpaceLoader.jsx';
 import HoloRelic from './HoloRelic.jsx';
 import { playScrollWhoosh, playSonarLock } from '../utils/audioEngine.js';
 import { getRelicModelInfo } from '../utils/relicModelMap.js';
+import { AdaptiveRenderBudget, useRenderBudget } from './spacePerformance.jsx';
 
 const GltfModel = lazy(() => import('./GltfModel.jsx'));
 
@@ -108,7 +109,9 @@ function Pin({ item, position, onSelect, onHoverChange, selected = false, langua
   }), []);
   const [hovered, setHovered] = useState(false);
   const [frontVisible, setFrontVisible] = useState(true);
+  const frontVisibleRef = useRef(true);
   const { camera, size } = useThree();
+  const budget = useRenderBudget();
   const beaconColor = selected ? '#FC3D21' : '#EAB308';
   const orientation = useMemo(() => {
     const outward = new THREE.Vector3(...position).normalize();
@@ -120,7 +123,7 @@ function Pin({ item, position, onSelect, onHoverChange, selected = false, langua
 
   useFrame(({ clock }) => {
     if (beacon.current) {
-      const pulse = 1 + Math.sin(clock.elapsedTime * 2.6 + item.id.length) * 0.12;
+      const pulse = budget.current.reducedMotion ? 1 : 1 + Math.sin(clock.elapsedTime * 2.6 + item.id.length) * 0.12;
       beacon.current.scale.setScalar(pulse);
     }
     if (pinGroup.current && planetRef?.current) {
@@ -136,7 +139,10 @@ function Pin({ item, position, onSelect, onHoverChange, selected = false, langua
         && Math.abs(projected.x) < 1 - insetX
         && Math.abs(projected.y) < 1 - insetY;
       const isFrontFacing = normal.dot(cameraDirection) > 0.15 && insideViewport;
-      setFrontVisible((current) => current === isFrontFacing ? current : isFrontFacing);
+      if (frontVisibleRef.current !== isFrontFacing) {
+        frontVisibleRef.current = isFrontFacing;
+        setFrontVisible(isFrontFacing);
+      }
     }
   });
 
@@ -214,7 +220,7 @@ function Pin({ item, position, onSelect, onHoverChange, selected = false, langua
               title={label}
               {...pinButtonProps}
             />
-            <button className="planet-pin-label" type="button" {...pinButtonProps}>
+            <button className={`planet-pin-label ${item.id === 'alsep-scientific-packages' ? 'is-staggered' : ''}`} type="button" {...pinButtonProps}>
               <span className="planet-pin-glow" aria-hidden="true" />
               <span dir="auto">{title}</span>
             </button>
@@ -229,6 +235,7 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
   const group = useRef();
   const [hoveredPin, setHoveredPin] = useState(false);
   const { gl, size } = useThree();
+  const budget = useRenderBudget();
   const assets = PLANET_ASSETS[body];
   const [colorMap, heightMap] = useLoader(THREE.TextureLoader, [assets.color, assets.height]);
   const rimColor = useMemo(() => new THREE.Color(body === 'Mars' ? '#f2aa77' : '#60a5fa'), [body]);
@@ -254,13 +261,15 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
   }, [colorMap, gl, heightMap]);
 
   useFrame((_, delta) => {
-    if (autoRotate && !hoveredPin && group.current) group.current.rotation.y += delta * 0.018;
+    if (autoRotate && !budget.current.paused && !budget.current.reducedMotion && !hoveredPin && group.current) group.current.rotation.y += delta * 0.018;
   }, [autoRotate, hoveredPin]);
+
+  const compactGeometry = size.width < 620 || budget.current.level < 2;
 
   return (
     <group ref={group}>
       <mesh>
-        <sphereGeometry args={[radius, size.width < 620 ? 128 : 256, size.width < 620 ? 96 : 160]} />
+        <sphereGeometry args={[radius, compactGeometry ? 72 : 192, compactGeometry ? 54 : 128]} />
         <meshStandardMaterial
           map={colorMap}
           bumpMap={body === 'Moon' ? heightMap : undefined}
@@ -273,8 +282,8 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
           color="#ffffff"
         />
       </mesh>
-      <mesh scale={1.012}>
-        <sphereGeometry args={[radius, 96, 96]} />
+      {body === 'Mars' && <mesh scale={1.012}>
+        <sphereGeometry args={[radius, compactGeometry ? 48 : 80, compactGeometry ? 48 : 80]} />
         <shaderMaterial
           uniforms={{ rimColor: { value: rimColor }, rimStrength: { value: body === 'Mars' ? 0.2 : 0.025 } }}
           vertexShader={RIM_VERTEX_SHADER}
@@ -284,7 +293,7 @@ function Planet({ body, items, radius = 2.6, onSelect, selectedRelic, language, 
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
-      </mesh>
+      </mesh>}
       {items.map((item) => {
         if (item.location?.lat == null || item.location?.lng == null) return null;
         return (
@@ -493,6 +502,7 @@ function mapDistanceFor(width, height, radius = 2.6, fov = 40) {
 
 function MapScene({ celestialView, relics, onSelect, selectedRelic, language, autoRotate, controlsRef, archiveOpen }) {
   const { size } = useThree();
+  const budget = useRenderBudget();
   const orbitalView = celestialView === 'Deep Space';
   return (
     <>
@@ -504,7 +514,7 @@ function MapScene({ celestialView, relics, onSelect, selectedRelic, language, au
       <directionalLight position={[7, 4, 6]} intensity={2.4} color="#fff5e7" />
       <directionalLight position={[-6, -2, -5]} intensity={0.12} color="#60a5fa" />
       <pointLight position={[2.5, -1.5, 5]} intensity={0.01} color="#EAB308" distance={15} />
-      <Stars radius={orbitalView ? 110 : 90} depth={orbitalView ? 82 : 52} count={orbitalView ? (size.width < 620 ? 2600 : 5200) : (size.width < 620 ? 650 : 1600)} factor={orbitalView ? 4.8 : 3.2} saturation={0.12} fade speed={0.09} />
+      <Stars radius={orbitalView ? 110 : 90} depth={orbitalView ? 82 : 52} count={orbitalView ? (size.width < 620 || budget.current.level < 2 ? 1400 : 3600) : (size.width < 620 || budget.current.level < 2 ? 420 : 1100)} factor={orbitalView ? 4.8 : 3.2} saturation={0.12} fade speed={budget.current.reducedMotion ? 0 : 0.09} />
       {celestialView === 'Moon' && <Planet body="Moon" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
       {celestialView === 'Mars' && <Planet body="Mars" items={relics} radius={2.6} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} />}
       {orbitalView && <DeepSpaceOrbit items={relics} onSelect={onSelect} selectedRelic={selectedRelic} language={language} autoRotate={autoRotate} archiveOpen={archiveOpen} />}
@@ -675,6 +685,7 @@ function HardwareCallout({ position, rigRef, active }) {
 
 function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRotate, controlsRef, storyProgress }) {
   const { camera, size } = useThree();
+  const budget = useRenderBudget();
   const isApolloLunarModule = item.id === APOLLO_LM_ID;
   const isInsightLander = item.id === 'insight-lander';
   const modelInfo = getRelicModelInfo(item);
@@ -694,15 +705,20 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   const chapterIndex = storyProgress?.index ?? 0;
   const chapterHotspotIndex = chapterId.startsWith('hardware-') ? Number(chapterId.slice('hardware-'.length)) : -1;
   const focusIndex = chapterHotspotIndex >= 0 ? chapterHotspotIndex : selectedIndex;
-  const copySideRef = useRef('left');
+  const frameVectors = useMemo(() => ({ focus: new THREE.Vector3(), center: new THREE.Vector3(), cameraFocus: new THREE.Vector3() }), []);
+  const copySideRef = useRef(language === 'ar' ? 'right' : 'left');
   useEffect(() => {
-    const chapter = document.getElementById(`mission-chapter-${chapterId}`);
-    const copy = chapter?.querySelector('.chapter-copy');
-    if (!copy) return;
-    const rect = copy.getBoundingClientRect();
-    if (!rect.width) return;
-    copySideRef.current = (rect.left + rect.width / 2) > window.innerWidth / 2 ? 'right' : 'left';
-  }, [chapterId, item.id]);
+    const update = () => {
+      const chapter = document.getElementById(`mission-chapter-${chapterId}`);
+      const copy = chapter?.querySelector('.story-hero-copy, .chapter-copy');
+      if (!copy) return;
+      const rect = copy.getBoundingClientRect();
+      if (rect.width) copySideRef.current = (rect.left + rect.width / 2) > window.innerWidth / 2 ? 'right' : 'left';
+    };
+    update();
+    const frame = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(frame);
+  }, [chapterId, item.id, language, size.width, size.height]);
   const previousMotionRef = useRef({ chapterId, focusIndex, chapterIndex });
 
   useEffect(() => {
@@ -720,6 +736,7 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
   }, [chapterId, chapterIndex, focusIndex]);
 
   useFrame((state, delta) => {
+    if (budget.current.paused) return;
     const rig = storyRig.current;
     if (!rig) return;
     const isHardwareChapter = chapterId.startsWith('hardware-');
@@ -730,10 +747,10 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     const modelSpan = modelBounds ? Math.max(modelBounds.size[0], modelBounds.size[1], modelBounds.size[2]) : 2.2;
     const modelWidth = modelBounds ? Math.max(modelBounds.size[0], modelBounds.size[2]) : 2.2;
     const mobileLift = compactLayout ? 0.55 : 0;
-    const focusPoint = focusIndex >= 0 && hotspotPositions[focusIndex] ? new THREE.Vector3(...hotspotPositions[focusIndex]) : new THREE.Vector3(0, 0, 0);
+    const focusPoint = focusIndex >= 0 && hotspotPositions[focusIndex] ? frameVectors.focus.fromArray(hotspotPositions[focusIndex]) : frameVectors.focus.set(0, 0, 0);
     const focusWorld = rig.localToWorld(focusPoint);
-    const rigCenter = rig.getWorldPosition(new THREE.Vector3());
-    const cameraFocus = compactLayout ? rigCenter : new THREE.Vector3(0, focusWorld.y, 0);
+    const rigCenter = rig.getWorldPosition(frameVectors.center);
+    const cameraFocus = compactLayout ? rigCenter : frameVectors.cameraFocus.set(0, focusWorld.y, 0);
     // Show InSight's array surfaces and deployed instruments, not just their edges.
     // This presentation change leaves the source model and the other missions intact.
     const defaultYaw = isInsightLander ? -0.38 : -0.18;
@@ -763,10 +780,10 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
     const limit = Math.max(0.2, halfWidth - modelHalf * 1.15 - 0.16);
     let targetX = compactLayout ? 0 : Math.max(-limit, Math.min(limit, ndcX * halfWidth));
     if (isHardwareChapter && !compactLayout) targetX *= 1.04;
-    rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, targetYaw + (autoRotate ? Math.sin(state.clock.elapsedTime * 0.32) * 0.035 : 0), 1.8, delta);
+    rig.rotation.y = THREE.MathUtils.damp(rig.rotation.y, targetYaw + (autoRotate && !budget.current.reducedMotion ? Math.sin(state.clock.elapsedTime * 0.32) * 0.035 : 0), 1.8, delta);
     rig.rotation.x = THREE.MathUtils.damp(rig.rotation.x, targetTilt, 1.8, delta);
     rig.position.x = THREE.MathUtils.damp(rig.position.x, targetX, 1.8, delta);
-    rig.position.y = THREE.MathUtils.damp(rig.position.y, mobileLift + (isHardwareChapter ? 0 : Math.sin(state.clock.elapsedTime * 0.42) * 0.035), 1.8, delta);
+    rig.position.y = THREE.MathUtils.damp(rig.position.y, mobileLift + (isHardwareChapter || budget.current.reducedMotion ? 0 : Math.sin(state.clock.elapsedTime * 0.42) * 0.035), 1.8, delta);
     camera.position.x = THREE.MathUtils.damp(camera.position.x, cameraFocus.x + (compactLayout ? 0 : state.pointer.x * 0.09), 1.4, delta);
     camera.position.y = THREE.MathUtils.damp(camera.position.y, cameraFocus.y + cameraElevation + (compactLayout ? 0 : state.pointer.y * 0.07), 1.4, delta);
     camera.position.z = THREE.MathUtils.damp(camera.position.z, cameraFocus.z + cameraDistance, 1.4, delta);
@@ -796,12 +813,12 @@ function InspectionScene({ item, language, setHotspot, selectedHotspot, autoRota
           <directionalLight position={[-4, 1.5, 2]} intensity={0.65} color="#91bdff" />
         </>
       )}
-      <Stars radius={80} depth={50} count={3500} factor={3} saturation={0.1} fade speed={0.6} />
+      <Stars radius={80} depth={50} count={budget.current.level < 2 || size.width < 620 ? 1200 : 2600} factor={3} saturation={0.1} fade speed={budget.current.reducedMotion ? 0 : 0.6} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.52, 0]}>
         <circleGeometry args={[2.25, 80]} />
         <meshBasicMaterial color="#0B3D91" transparent opacity={0.12} />
       </mesh>
-      <ContactShadows position={[0, -1.35, 0]} opacity={0.65} scale={8} blur={2.4} far={4} color="#000000" />
+      {size.width >= 620 && budget.current.level > 0 && <ContactShadows position={[0, -1.35, 0]} opacity={0.65} scale={8} blur={2.4} far={4} color="#000000" />}
       <group ref={storyRig}>
         {isRealModel ? (
           <ModelErrorBoundary
@@ -878,10 +895,21 @@ function useCompactViewport() {
 
 export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect, language, hotspot, setHotspot, storyProgress, archiveOpen = true }) {
   const [autoRotate, setAutoRotate] = useState(true);
+  const [sceneVisible, setSceneVisible] = useState(() => !document.hidden);
+  const [reducedMotion, setReducedMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const compactView = useCompactViewport();
   const controlsRef = useRef(null);
   const viewFilter = selectedRelic?.body || filter;
   const isArabic = language === 'ar';
+
+  useEffect(() => {
+    const visibility = () => setSceneVisible(!document.hidden);
+    const motion = (event) => setReducedMotion(event.matches);
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    document.addEventListener('visibilitychange', visibility);
+    query.addEventListener('change', motion);
+    return () => { document.removeEventListener('visibilitychange', visibility); query.removeEventListener('change', motion); };
+  }, []);
 
   const selectFromBeacon = (item) => onSelect(item);
 
@@ -899,17 +927,19 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
   return (
     <div className="space-canvas-wrap" onPointerDownCapture={() => setAutoRotate(false)} onTouchStartCapture={() => setAutoRotate(false)}>
       <Canvas
+        frameloop={sceneVisible ? 'always' : 'never'}
         shadows={!compactView}
         dpr={compactView ? [1, 1.3] : [1, 1.75]}
         camera={{ position: [0, 0.1, 8.4], fov: 40, near: 0.1, far: 140 }}
         gl={{ antialias: !compactView, alpha: false, powerPreference: 'high-performance' }}
         performance={{ min: compactView ? 0.4 : 0.55, debounce: 350 }}
-        fallback={<div className="canvas-fallback">3D view is unavailable in this browser.</div>}
+        fallback={<div className="canvas-fallback">{isArabic ? 'العرض ثلاثي الأبعاد غير متاح هنا. يمكنك استكشاف القصص والمصادر من قائمة المهمات.' : '3D is unavailable here. Mission stories and sources remain available in the archive.'}</div>}
       >
         <Suspense fallback={<Html center transform={false} className="loader-html"><SpaceLoader language={language} compact /></Html>}>
+          <AdaptiveRenderBudget compact={compactView}>
           <SpaceStudioEnvironment />
           {selectedRelic ? (
-            <InspectionScene item={selectedRelic} language={language} setHotspot={setHotspot} selectedHotspot={hotspot} autoRotate={autoRotate} controlsRef={controlsRef} storyProgress={storyProgress} />
+            <InspectionScene item={selectedRelic} language={language} setHotspot={setHotspot} selectedHotspot={hotspot} autoRotate={autoRotate && !reducedMotion} controlsRef={controlsRef} storyProgress={storyProgress} />
           ) : (
             <MapScene
               celestialView={celestialView}
@@ -917,12 +947,13 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
               onSelect={selectFromBeacon}
               selectedRelic={selectedRelic}
               language={language}
-              autoRotate={autoRotate}
+              autoRotate={autoRotate && !reducedMotion}
               controlsRef={controlsRef}
               archiveOpen={archiveOpen}
             />
           )}
           <CameraFlight selectedId={selectedRelic?.id || null} controlsRef={controlsRef} />
+          </AdaptiveRenderBudget>
         </Suspense>
       </Canvas>
       {!selectedRelic && !archiveOpen && relics.length > 0 && (

@@ -1,0 +1,100 @@
+/* Scoped polish for the archive and mission-story surfaces. */
+.lunar-polish .archive-summary strong {
+  display: block;
+  margin-top: 3px;
+  color: #d7e7f0;
+  font-family: var(--font-mono);
+  font-size: .82em;
+  letter-spacing: .04em;
+}
+
+.lunar-polish .archive-category-filters { padding-block-end: 10px; }
+.lunar-polish .archive-filter-chip,
+.lunar-polish .archive-search button,
+.lunar-polish .story-chapter-nav button,
+.lunar-polish .mission-share-button {
+  min-height: 44px;
+}
+.lunar-polish .archive-filter-chip { padding-inline: 12px; }
+.lunar-polish .archive-search button { width: 36px; height: 36px; }
+.lunar-polish .relic-card {
+  min-height: 82px;
+  margin-block-end: 8px;
+  padding: 11px;
+  border-color: rgba(248,250,252,.06);
+}
+.lunar-polish .relic-card-art { width: 48px; height: 48px; }
+.lunar-polish .relic-card-title { font-size: clamp(12px, 1.3vw, 14px); }
+.lunar-polish .relic-card-meta { font-size: 7px; line-height: 1.4; }
+.lunar-polish .relic-card-model { min-height: 24px; padding-inline: 7px; font-size: 7px; }
+.lunar-polish .relic-card-model.is-authentic { border-color: rgba(103, 211, 190, .35); color: #b8eadf; }
+.lunar-polish .relic-card-model.is-reconstruction { border-color: rgba(234, 179, 8, .32); color: #ead28b; }
+.lunar-polish .archive-empty { gap: 12px; min-height: 190px; padding: 24px; }
+.lunar-polish .archive-empty strong { color: #e2e8ee; font-size: 12px; }
+.lunar-polish .archive-empty button {
+  min-height: 44px;
+  padding: 0 15px;
+  border: 1px solid rgba(148,163,184,.28);
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  color: #d7e7f0;
+  cursor: pointer;
+}
+.lunar-polish .archive-empty button:hover,
+.lunar-polish .archive-empty button:focus-visible { border-color: #67d3be; background: rgba(103,211,190,.12); }
+
+.lunar-polish .story-chapter-nav button { padding-inline: 12px; }
+.lunar-polish .story-chapter-nav button:focus-visible,
+.lunar-polish .mission-share-button:focus-visible,
+.lunar-polish .archive-filter-chip:focus-visible,
+.lunar-polish .relic-card:focus-visible { outline: 2px solid #67d3be; outline-offset: 2px; }
+.lunar-polish .story-hero-actions { align-items: center; flex-wrap: wrap; gap: 9px; }
+.lunar-polish .mission-share-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 13px;
+  border: 1px solid rgba(103,211,190,.3);
+  border-radius: 8px;
+  background: rgba(103,211,190,.08);
+  color: #c5eee6;
+  font: 650 9px/1 var(--font-mono);
+  letter-spacing: .04em;
+  cursor: pointer;
+}
+.lunar-polish .mission-share-button:hover { background: rgba(103,211,190,.16); }
+.lunar-polish .share-feedback {
+  flex: 1 1 100%;
+  color: #c5eee6;
+  font: 600 10px/1.4 var(--font-mono);
+}
+.lunar-polish .citation-links a { min-height: 44px; align-items: center; }
+.lunar-polish-topnav button { min-height: 44px; }
+.lunar-polish-topnav .planet-tab { min-height: 44px; }
+
+@media (max-width: 720px) {
+  .lunar-polish .archive-summary { align-items: flex-start; }
+  .lunar-polish .archive-summary p { font-size: 11px; line-height: 1.55; }
+  .lunar-polish .archive-summary strong { font-size: 9px; }
+  .lunar-polish .relic-card { grid-template-columns: 48px minmax(0,1fr) 20px; }
+  .lunar-polish .relic-card-meta { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .lunar-polish .mission-share-button { flex: 1 1 auto; }
+  .lunar-polish .story-chapter-nav button { min-height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lunar-polish *, .lunar-polish-topnav * { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
+@media (max-width: 760px) {
+  .lunar-polish .story-hero-copy,
+  .lunar-polish .chapter-copy {
+    pointer-events: auto;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148,163,184,.4) transparent;
+  }
+  .lunar-polish .story-hero-copy { max-height: 46svh; }
+}
