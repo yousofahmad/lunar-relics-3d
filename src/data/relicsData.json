@@ -42,27 +42,33 @@
     "timeline": [
       {
         "year": "1969",
-        "event": "Apollo 11 launched from Cape Kennedy at 13:32:00 UT on a Saturn V; Eagle was the Lunar Module payload."
+        "event": "Apollo 11 launched from Cape Kennedy at 13:32:00 UT on a Saturn V; Eagle was the Lunar Module payload.",
+        "eventAr": "أُطلقت أبولو 11 من كيب كينيدي في 13:32:00 بالتوقيت العالمي على صاروخ ساتورن 5؛ وكان إيجل هو وحدة الهبوط القمرية."
       },
       {
         "year": "1969",
-        "event": "Eagle landed at 20:17:40 UT in Mare Tranquillitatis (Sea of Tranquility)."
+        "event": "Eagle landed at 20:17:40 UT in Mare Tranquillitatis (Sea of Tranquility).",
+        "eventAr": "هبط إيجل في 20:17:40 بالتوقيت العالمي في بحر الهدوء."
       },
       {
         "year": "1969",
-        "event": "The ascent stage lifted off the Moon at 17:54:01 UT after 21 hours 36 minutes on the surface, leaving the descent stage behind."
+        "event": "The ascent stage lifted off the Moon at 17:54:01 UT after 21 hours 36 minutes on the surface, leaving the descent stage behind.",
+        "eventAr": "انطلقت مرحلة الصعود من القمر في 17:54:01 بالتوقيت العالمي بعد 21 ساعة و36 دقيقة على السطح، تاركة مرحلة الهبوط خلفها."
       },
       {
         "year": "1969",
-        "event": "After docking with Columbia, the LM was jettisoned into lunar orbit at 00:01:01 UT; NSSDCA states that the LM's later fate is not known."
+        "event": "After docking with Columbia, the LM was jettisoned into lunar orbit at 00:01:01 UT; NSSDCA states that the LM's later fate is not known.",
+        "eventAr": "بعد الالتحام مع كولومبيا، تم التخلص من وحدة الهبوط في مدار القمر عند 00:01:01 بالتوقيت العالمي؛ ولم يُعرف مصيرها لاحقًا حسب NSSDCA."
       },
       {
         "year": "1969",
-        "event": "The Apollo 11 crew splashed down in the Pacific Ocean at 16:50:35 UT, the official end date used here for the parent Apollo 11 mission."
+        "event": "The Apollo 11 crew splashed down in the Pacific Ocean at 16:50:35 UT, the official end date used here for the parent Apollo 11 mission.",
+        "eventAr": "هبط طاقم أبولو 11 في المحيط الهادئ عند 16:50:35 بالتوقيت العالمي، وهو تاريخ النهاية الرسمي لمهمة أبولو 11."
       },
       {
         "year": "2009",
-        "event": "NASA's Lunar Reconnaissance Orbiter imaged the Apollo 11 landing site and the descent stage."
+        "event": "NASA's Lunar Reconnaissance Orbiter imaged the Apollo 11 landing site and the descent stage.",
+        "eventAr": "صوّر مسبار الاستطلاع القمري التابع لناسا موقع هبوط أبولو 11 ومرحلة الهبوط."
       }
     ],
     "interactiveQA": [
@@ -177,23 +183,28 @@
     "timeline": [
       {
         "year": "1971",
-        "event": "Apollo 15 launched from Launch Pad 39A at Cape Canaveral on Saturn V AS-510 at 9:34:00 a.m. EDT."
+        "event": "Apollo 15 launched from Launch Pad 39A at Cape Canaveral on Saturn V AS-510 at 9:34:00 a.m. EDT.",
+        "eventAr": "أُطلقت أبولو 15 من منصة الإطلاق 39A في كيب كانافيرال على صاروخ ساتورن V AS-510 في الساعة 9:34 صباحًا بتوقيت شرق الولايات المتحدة."
       },
       {
         "year": "1971",
-        "event": "Apollo 15 Falcon lunar module landed at 22:16:29 UT at the Hadley-Apennine site; the LRV was carried in the lunar module."
+        "event": "Apollo 15 Falcon lunar module landed at 22:16:29 UT at the Hadley-Apennine site; the LRV was carried in the lunar module.",
+        "eventAr": "هبطت وحدة الهبوط القمرية فالكون لأبولو 15 في 22:16:29 بالتوقيت العالمي في موقع هادلي-أبينين؛ وكان مركبة التنقل القمرية محمولة داخل الوحدة."
       },
       {
         "year": "1971",
-        "event": "The LRV made its lunar debut, was unloaded and deployed during the first surface EVA, and began its traverses."
+        "event": "The LRV made its lunar debut, was unloaded and deployed during the first surface EVA, and began its traverses.",
+        "eventAr": "ظهرت مركبة التنقل القمرية لأول مرة، حيث تم تفريغها ونشرها خلال أول نشاط خارج المركبة على السطح وبدأت جولاتها."
       },
       {
         "year": "1971",
-        "event": "The second EVA included a 12.5 km LRV traverse southeast along the Apennine Mountains and back to the ALSEP site."
+        "event": "The second EVA included a 12.5 km LRV traverse southeast along the Apennine Mountains and back to the ALSEP site.",
+        "eventAr": "شمل النشاط الثاني خارج المركبة جولة بمركبة التنقل القمرية بطول 12.5 كم جنوب شرق على طول جبال الأبينين والعودة إلى موقع ALSEP."
       },
       {
         "year": "1971",
-        "event": "The third EVA included a 5.1 km LRV traverse; the lunar module then lifted off the Moon at 17:11:22 UT."
+        "event": "The third EVA included a 5.1 km LRV traverse; the lunar module then lifted off the Moon at 17:11:22 UT.",
+        "eventAr": "شمل النشاط الثالث خارج المركبة جولة بمركبة التنقل القمرية بطول 5.1 كم؛ ثم أقلعت وحدة الهبوط من القمر في 17:11:22 بالتوقيت العالمي."
       }
     ],
     "interactiveQA": [
@@ -308,23 +319,28 @@
     "timeline": [
       {
         "year": "1963",
-        "event": "NASA conceived the Apollo Lunar Surface Experiments Package to maximize scientific return while limiting weight and complexity."
+        "event": "NASA conceived the Apollo Lunar Surface Experiments Package to maximize scientific return while limiting weight and complexity.",
+        "eventAr": "صممت ناسا حزمة تجارب سطح القمر أبولو لتعظيم العائد العلمي مع تقليل الوزن والتعقيد."
       },
       {
         "year": "1968",
-        "event": "NASA formally accepted the first flight ALSEP system from Bendix on July 23."
+        "event": "NASA formally accepted the first flight ALSEP system from Bendix on July 23.",
+        "eventAr": "قبلت ناسا رسميًا أول نظام ALSEP للطيران من بنديكس في 23 يوليو."
       },
       {
         "year": "1969",
-        "event": "Apollo 12 launched on November 14; Intrepid landed and the ALSEP central station was deployed at Oceanus Procellarum on November 19."
+        "event": "Apollo 12 launched on November 14; Intrepid landed and the ALSEP central station was deployed at Oceanus Procellarum on November 19.",
+        "eventAr": "أُطلقت أبولو 12 في 14 نوفمبر؛ وهبطت وحدة إنتربريد ونُشرت محطة ALSEP المركزية في أوشنوس بروسيلاروم في 19 نوفمبر."
       },
       {
         "year": "1972",
-        "event": "Apollo 17 carried the final ALSEP deployment; it landed on December 11."
+        "event": "Apollo 17 carried the final ALSEP deployment; it landed on December 11.",
+        "eventAr": "حملت أبولو 17 آخر نشر لحزمة ALSEP؛ وهبطت في 11 ديسمبر."
       },
       {
         "year": "1977",
-        "event": "NASA shut down the ALSEP stations on September 30; the hardware remained on the Moon."
+        "event": "NASA shut down the ALSEP stations on September 30; the hardware remained on the Moon.",
+        "eventAr": "أوقفت ناسا تشغيل محطات ALSEP في 30 سبتمبر؛ وبقيت الأجهزة على سطح القمر."
       }
     ],
     "interactiveQA": [
@@ -439,23 +455,28 @@
     "timeline": [
       {
         "year": "1967",
-        "event": "Launch at 07:05:01 UT from Cape Canaveral Launch Complex 36B on Atlas-Centaur."
+        "event": "Launch at 07:05:01 UT from Cape Canaveral Launch Complex 36B on Atlas-Centaur.",
+        "eventAr": "أُطلقت في 07:05:01 بالتوقيت العالمي من مجمع الإطلاق 36B في كيب كانافيرال على صاروخ أطلس-سنتور."
       },
       {
         "year": "1967",
-        "event": "Initial lunar touchdown at 00:04:17 UT; final touchdown after two bounces at 00:04:53 UT in southeast Oceanus Procellarum."
+        "event": "Initial lunar touchdown at 00:04:17 UT; final touchdown after two bounces at 00:04:53 UT in southeast Oceanus Procellarum.",
+        "eventAr": "تم الهبوط الأولي على القمر في 00:04:17 بالتوقيت العالمي؛ والهبوط النهائي بعد ارتدادين في 00:04:53 بالتوقيت العالمي في جنوب شرق أوشنوس بروسيلاروم."
       },
       {
         "year": "1967",
-        "event": "Operations continued through the lunar day until after local sunset."
+        "event": "Operations continued through the lunar day until after local sunset.",
+        "eventAr": "استمرت العمليات خلال النهار القمري حتى بعد غروب الشمس المحلي."
       },
       {
         "year": "1967",
-        "event": "Last contact/data returned at 00:04 UT; the spacecraft did not resume operation after lunar night."
+        "event": "Last contact/data returned at 00:04 UT; the spacecraft did not resume operation after lunar night.",
+        "eventAr": "تم آخر اتصال/استلام بيانات في 00:04 بالتوقيت العالمي؛ ولم تستأنف المركبة عملها بعد الليل القمري."
       },
       {
         "year": "1969",
-        "event": "Apollo 12 astronauts visited Surveyor 3 and removed about 10 kg of parts, including the television camera, for terrestrial examination."
+        "event": "Apollo 12 astronauts visited Surveyor 3 and removed about 10 kg of parts, including the television camera, for terrestrial examination.",
+        "eventAr": "زار رواد أبولو 12 جهاز Surveyor 3 وأزالوا حوالي 10 كجم من الأجزاء، بما في ذلك كاميرا التلفزيون، للفحص الأرضي."
       }
     ],
     "interactiveQA": [
@@ -570,19 +591,23 @@
     "timeline": [
       {
         "year": "1996",
-        "event": "Mars Pathfinder carrying Sojourner launched from Cape Canaveral on December 4 at 06:58 UTC."
+        "event": "Mars Pathfinder carrying Sojourner launched from Cape Canaveral on December 4 at 06:58 UTC.",
+        "eventAr": "أُطلقت مركبة مارس باثفايندر حاملة سو جورنر من كيب كانافيرال في 4 ديسمبر الساعة 06:58 بالتوقيت العالمي."
       },
       {
         "year": "1997",
-        "event": "Pathfinder landed at Ares Vallis on July 4; Sojourner rolled onto the Martian surface on July 6 at about 05:40 UTC."
+        "event": "Pathfinder landed at Ares Vallis on July 4; Sojourner rolled onto the Martian surface on July 6 at about 05:40 UTC.",
+        "eventAr": "هبطت باثفايندر في وادي آريس في 4 يوليو؛ وبدأت سو جورنر التحرك على سطح المريخ في 6 يوليو حوالي 05:40 بالتوقيت العالمي."
       },
       {
         "year": "1997",
-        "event": "The final received Pathfinder data transmission was at 10:23 UTC on September 27."
+        "event": "The final received Pathfinder data transmission was at 10:23 UTC on September 27.",
+        "eventAr": "كان آخر إرسال بيانات مستلم من باثفايندر في 10:23 بالتوقيت العالمي في 27 سبتمبر."
       },
       {
         "year": "1998",
-        "event": "NASA states that the successful mission was terminated on March 10 after five months of attempted communications recovery."
+        "event": "NASA states that the successful mission was terminated on March 10 after five months of attempted communications recovery.",
+        "eventAr": "تعلن ناسا أن المهمة الناجحة انتهت في 10 مارس بعد خمسة أشهر من محاولات استعادة الاتصال."
       }
     ],
     "interactiveQA": [
@@ -697,31 +722,38 @@
     "timeline": [
       {
         "year": "2003",
-        "event": "Spirit launched from Cape Canaveral SLC-17A on June 10 at 17:58:47 UTC."
+        "event": "Spirit launched from Cape Canaveral SLC-17A on June 10 at 17:58:47 UTC.",
+        "eventAr": "أُطلقت مركبة سبيريت من كيب كانافيرال SLC-17A في 10 يونيو الساعة 17:58:47 بالتوقيت العالمي."
       },
       {
         "year": "2004",
-        "event": "Spirit landed in Gusev Crater on January 4 at 04:35 UTC (20:35 PST on January 3); the site was later named Columbia Memorial Station."
+        "event": "Spirit landed in Gusev Crater on January 4 at 04:35 UTC (20:35 PST on January 3); the site was later named Columbia Memorial Station.",
+        "eventAr": "هبطت سبيريت في فوهة جوسيف في 4 يناير الساعة 04:35 بالتوقيت العالمي (20:35 بتوقيت المحيط الهادئ في 3 يناير)؛ وسُمي الموقع لاحقًا محطة كولومبيا التذكارية."
       },
       {
         "year": "2004",
-        "event": "Spirit used its Rock Abrasion Tool on Adirondack, the first such rock abrasion operation on Mars, according to NASA's mission history."
+        "event": "Spirit used its Rock Abrasion Tool on Adirondack, the first such rock abrasion operation on Mars, according to NASA's mission history.",
+        "eventAr": "استخدمت سبيريت أداة تآكل الصخور على صخرة أدي رونداك، وهي أول عملية تآكل صخور من نوعها على المريخ حسب تاريخ المهمة."
       },
       {
         "year": "2005",
-        "event": "Spirit reached the summit of Husband Hill on September 29 and acquired 360-degree true-color panoramas."
+        "event": "Spirit reached the summit of Husband Hill on September 29 and acquired 360-degree true-color panoramas.",
+        "eventAr": "وصلت سبيريت إلى قمة تل هازباند في 29 سبتمبر والتقطت بانورامات ملونة بزاوية 360 درجة."
       },
       {
         "year": "2009",
-        "event": "Spirit became stuck in soft soil on May 1; its right-rear wheel stopped working on November 28."
+        "event": "Spirit became stuck in soft soil on May 1; its right-rear wheel stopped working on November 28.",
+        "eventAr": "علقت سبيريت في تربة ناعمة في 1 مايو؛ وتوقفت عجلة الخلف اليمنى عن العمل في 28 نوفمبر."
       },
       {
         "year": "2010",
-        "event": "After March 22, NASA mission controllers could not regain contact; the mission was reformulated as a stationary science platform before final recovery efforts."
+        "event": "After March 22, NASA mission controllers could not regain contact; the mission was reformulated as a stationary science platform before final recovery efforts.",
+        "eventAr": "بعد 22 مارس، لم يتمكن مراقبو المهمة من استعادة الاتصال؛ وأُعيد تصنيف المهمة كمنصة علمية ثابتة قبل محاولات الاسترداد النهائية."
       },
       {
         "year": "2011",
-        "event": "NASA officially concluded recovery efforts and declared the mission complete on May 25."
+        "event": "NASA officially concluded recovery efforts and declared the mission complete on May 25.",
+        "eventAr": "أعلنت ناسا رسميًا انتهاء جهود الاسترداد واكتمال المهمة في 25 مايو."
       }
     ],
     "interactiveQA": [
@@ -836,35 +868,43 @@
     "timeline": [
       {
         "year": "2003",
-        "event": "Opportunity launched on July 7 aboard a Delta II 7925H from Cape Canaveral, Florida."
+        "event": "Opportunity launched on July 7 aboard a Delta II 7925H from Cape Canaveral, Florida.",
+        "eventAr": "أُطلقت مركبة أوبورتونيتي في 7 يوليو على متن دلتا II 7925H من كيب كانافيرال، فلوريدا."
       },
       {
         "year": "2004",
-        "event": "Opportunity landed in Meridiani Planum on January 24 local mission date, came to rest in Eagle crater, and the landing area was later named Challenger Memorial Station."
+        "event": "Opportunity landed in Meridiani Planum on January 24 local mission date, came to rest in Eagle crater, and the landing area was later named Challenger Memorial Station.",
+        "eventAr": "هبطت أوبورتونيتي في ميريديان بلانوم في 24 يناير بالتاريخ المحلي للمهمة، واستقرت في فوهة إيجل، وسُمي موقع الهبوط لاحقًا محطة تشالنجر التذكارية."
       },
       {
         "year": "2005",
-        "event": "NASA controllers freed Opportunity after a sand entrapment that lasted about six weeks; the rover also discovered the iron-nickel meteorite later called Heat Shield Rock."
+        "event": "NASA controllers freed Opportunity after a sand entrapment that lasted about six weeks; the rover also discovered the iron-nickel meteorite later called Heat Shield Rock.",
+        "eventAr": "حرر مراقبو ناسا أوبورتونيتي بعد احتجازها في الرمال لمدة حوالي ستة أسابيع؛ كما اكتشفت النيزك الحديدي النيكيلي المسمى لاحقًا صخرة درع الحرارة."
       },
       {
         "year": "2006",
-        "event": "Opportunity reached Victoria Crater in September after a 21-month journey."
+        "event": "Opportunity reached Victoria Crater in September after a 21-month journey.",
+        "eventAr": "وصلت أوبورتونيتي إلى فوهة فيكتوريا في سبتمبر بعد رحلة استمرت 21 شهرًا."
       },
       {
         "year": "2011",
-        "event": "Opportunity arrived at Endeavour Crater on August 9 after traveling nearly three years from its previous major target."
+        "event": "Opportunity arrived at Endeavour Crater on August 9 after traveling nearly three years from its previous major target.",
+        "eventAr": "وصلت أوبورتونيتي إلى فوهة إنديفور في 9 أغسطس بعد رحلة استمرت ما يقرب من ثلاث سنوات من هدفها السابق الكبير."
       },
       {
         "year": "2015",
-        "event": "Opportunity became the first human enterprise to exceed a marathon distance on another world, reaching 26.219 miles (42.195 kilometers)."
+        "event": "Opportunity became the first human enterprise to exceed a marathon distance on another world, reaching 26.219 miles (42.195 kilometers).",
+        "eventAr": "أصبحت أوبورتونيتي أول مشروع بشري يتجاوز مسافة الماراثون على عالم آخر، حيث وصلت إلى 26.219 ميل (42.195 كيلومتر)."
       },
       {
         "year": "2018",
-        "event": "A Mars-wide dust storm reduced available solar energy; the last signal from Opportunity was received on June 10."
+        "event": "A Mars-wide dust storm reduced available solar energy; the last signal from Opportunity was received on June 10.",
+        "eventAr": "خفضت عاصفة غبار شاملة على المريخ الطاقة الشمسية المتاحة؛ وتم استقبال آخر إشارة من أوبورتونيتي في 10 يونيو."
       },
       {
         "year": "2019",
-        "event": "NASA declared the Opportunity mission complete on February 13."
+        "event": "NASA declared the Opportunity mission complete on February 13.",
+        "eventAr": "أعلنت ناسا اكتمال مهمة أوبورتونيتي في 13 فبراير."
       }
     ],
     "interactiveQA": [
@@ -979,23 +1019,28 @@
     "timeline": [
       {
         "year": "1975",
-        "event": "Viking 1 launched from Cape Canaveral on August 20 aboard Titan IIIE-Centaur."
+        "event": "Viking 1 launched from Cape Canaveral on August 20 aboard Titan IIIE-Centaur.",
+        "eventAr": "أُطلق فايكنغ 1 من كيب كانافيرال في 20 أغسطس على متن تايتان IIIE-سنتور."
       },
       {
         "year": "1976",
-        "event": "The spacecraft entered Mars orbit on June 19; the lander separated and landed in Chryse Planitia on July 20 at 11:53:06 UT."
+        "event": "The spacecraft entered Mars orbit on June 19; the lander separated and landed in Chryse Planitia on July 20 at 11:53:06 UT.",
+        "eventAr": "دخلت المركبة مدار المريخ في 19 يونيو؛ انفصل المهبط وهبط في سهل كريز في 20 يوليو الساعة 11:53:06 بالتوقيت العالمي."
       },
       {
         "year": "1976",
-        "event": "The sampler arm collected the first soil samples on July 28 and delivered them for biological and chemical analysis."
+        "event": "The sampler arm collected the first soil samples on July 28 and delivered them for biological and chemical analysis.",
+        "eventAr": "جمع ذراع العينة أول عينات تربة في 28 يوليو وسلمها للتحليل البيولوجي والكيميائي."
       },
       {
         "year": "1981",
-        "event": "The lander was named Thomas Mutch Memorial Station in honor of the Viking imaging-team leader."
+        "event": "The lander was named Thomas Mutch Memorial Station in honor of the Viking imaging-team leader.",
+        "eventAr": "سُمي المهبط محطة توماس موتش التذكارية تكريماً لقائد فريق التصوير في فايكنغ."
       },
       {
         "year": "1982",
-        "event": "The final transmission was reported by NASA as November 11; the NSSDCA record dates loss of contact after a faulty command to November 13."
+        "event": "The final transmission was reported by NASA as November 11; the NSSDCA record dates loss of contact after a faulty command to November 13.",
+        "eventAr": "أبلغت ناسا عن آخر إرسال في 11 نوفمبر؛ وسجل NSSDCA فقد الاتصال بعد أمر خاطئ في 13 نوفمبر."
       }
     ],
     "interactiveQA": [
@@ -1110,23 +1155,28 @@
     "timeline": [
       {
         "year": "1975",
-        "event": "Viking 2 launched toward Mars on September 9 from Cape Canaveral; NASA's mission page records 18:39:00 UT."
+        "event": "Viking 2 launched toward Mars on September 9 from Cape Canaveral; NASA's mission page records 18:39:00 UT.",
+        "eventAr": "أُطلق فايكنغ 2 نحو المريخ في 9 سبتمبر من كيب كانافيرال؛ تسجل صفحة مهمة ناسا الساعة 18:39:00 بالتوقيت العالمي."
       },
       {
         "year": "1976",
-        "event": "Viking 2 entered Mars orbit on August 7; the lander separated on September 3 and landed at Utopia Planitia."
+        "event": "Viking 2 entered Mars orbit on August 7; the lander separated on September 3 and landed at Utopia Planitia.",
+        "eventAr": "دخل فايكنغ 2 مدار المريخ في 7 أغسطس؛ انفصل المهبط في 3 سبتمبر وهبط في سهل اليوتوبيا."
       },
       {
         "year": "1976",
-        "event": "The lander began surface imaging and science operations; its biology experiments later provided no definitive evidence of life."
+        "event": "The lander began surface imaging and science operations; its biology experiments later provided no definitive evidence of life.",
+        "eventAr": "بدأ المهبط تصوير السطح والعمليات العلمية؛ ولم تقدم تجاربه البيولوجية دليلاً قاطعاً على وجود حياة."
       },
       {
         "year": "1980",
-        "event": "NASA records the last Viking 2 lander data on April 11; NSSDCA says the lander was turned off after battery failure."
+        "event": "NASA records the last Viking 2 lander data on April 11; NSSDCA says the lander was turned off after battery failure.",
+        "eventAr": "تسجل ناسا آخر بيانات من مهبط فايكنغ 2 في 11 أبريل؛ ويذكر NSSDCA أن المهبط أُغلق بعد فشل البطارية."
       },
       {
         "year": "2001",
-        "event": "NASA's Viking 2 mission page says the lander was renamed Gerald Soffen Memorial Station in July 2001."
+        "event": "NASA's Viking 2 mission page says the lander was renamed Gerald Soffen Memorial Station in July 2001.",
+        "eventAr": "تقول صفحة مهمة فايكنغ 2 في ناسا إن المهبط سُمي محطة جيرالد سوفن التذكارية في يوليو 2001."
       }
     ],
     "interactiveQA": [
@@ -1241,23 +1291,28 @@
     "timeline": [
       {
         "year": "2007",
-        "event": "Phoenix launched at 09:26:34 UT from Cape Canaveral Air Force Station on a Delta II 7925."
+        "event": "Phoenix launched at 09:26:34 UT from Cape Canaveral Air Force Station on a Delta II 7925.",
+        "eventAr": "أُطلق فينيكس في 09:26:34 بالتوقيت العالمي من قاعدة كيب كانافيرال الجوية على متن دلتا II 7925."
       },
       {
         "year": "2008",
-        "event": "Phoenix entered the Martian atmosphere and landed in Green Valley of Vastitas Borealis; NASA's mission page gives touchdown as 23:38:38 UT."
+        "event": "Phoenix entered the Martian atmosphere and landed in Green Valley of Vastitas Borealis; NASA's mission page gives touchdown as 23:38:38 UT.",
+        "eventAr": "دخل فينيكس الغلاف الجوي للمريخ وهبط في وادي الأخضر في فاستيتاس بوراليز؛ تسجل صفحة ناسا الهبوط في 23:38:38 بالتوقيت العالمي."
       },
       {
         "year": "2008",
-        "event": "NASA officially announced that Phoenix had found water on Mars from a TEGA-analyzed sample."
+        "event": "NASA officially announced that Phoenix had found water on Mars from a TEGA-analyzed sample.",
+        "eventAr": "أعلنت ناسا رسمياً أن فينيكس وجد ماءً على المريخ من عينة محللة بواسطة TEGA."
       },
       {
         "year": "2008",
-        "event": "The Phoenix team announced detection of perchlorates in Martian soil."
+        "event": "The Phoenix team announced detection of perchlorates in Martian soil.",
+        "eventAr": "أعلن فريق فينيكس اكتشاف البيركلورات في تربة المريخ."
       },
       {
         "year": "2008",
-        "event": "NSSDCA records the last received signal and marks the Phoenix mission officially ended."
+        "event": "NSSDCA records the last received signal and marks the Phoenix mission officially ended.",
+        "eventAr": "يسجل NSSDCA آخر إشارة مستلمة ويعلن انتهاء مهمة فينيكس رسمياً."
       }
     ],
     "interactiveQA": [
@@ -1372,23 +1427,28 @@
     "timeline": [
       {
         "year": "2018",
-        "event": "Launch from Vandenberg Air Force Base on an Atlas V-401."
+        "event": "Launch from Vandenberg Air Force Base on an Atlas V-401.",
+        "eventAr": "أُطلق من قاعدة فاندنبرغ الجوية على متن أطلس V-401."
       },
       {
         "year": "2018",
-        "event": "Landing in western Elysium Planitia, Mars; NASA records 11:52:59 a.m. Pacific Time."
+        "event": "Landing in western Elysium Planitia, Mars; NASA records 11:52:59 a.m. Pacific Time.",
+        "eventAr": "هبوط في سهل إليسيوم الغربي على المريخ؛ تسجل ناسا الساعة 11:52:59 صباحاً بتوقيت المحيط الهادئ."
       },
       {
         "year": "2020",
-        "event": "The original primary mission was scheduled to end after about two Earth years, but NASA extended the mission."
+        "event": "The original primary mission was scheduled to end after about two Earth years, but NASA extended the mission.",
+        "eventAr": "كانت المهمة الأساسية الأصلية مقررة لتنتهي بعد حوالي عامين أرضيين، لكن ناسا مددت المهمة."
       },
       {
         "year": "2022",
-        "event": "Last transmission from InSight was received on Earth."
+        "event": "Last transmission from InSight was received on Earth.",
+        "eventAr": "تم استقبال آخر إرسال من إنسايت على الأرض."
       },
       {
         "year": "2022",
-        "event": "After two unsuccessful communication attempts, NASA declared the mission over."
+        "event": "After two unsuccessful communication attempts, NASA declared the mission over.",
+        "eventAr": "بعد محاولتين فاشلتين للاتصال، أعلنت ناسا انتهاء المهمة."
       }
     ],
     "interactiveQA": [
@@ -1503,31 +1563,38 @@
     "timeline": [
       {
         "year": "2020",
-        "event": "July 30: Mars 2020 launched from Cape Canaveral Air Force Station on an Atlas V-541, carrying Perseverance and Ingenuity."
+        "event": "July 30: Mars 2020 launched from Cape Canaveral Air Force Station on an Atlas V-541, carrying Perseverance and Ingenuity.",
+        "eventAr": "30 يوليو: أُطلق مارس 2020 من قاعدة كيب كانافيرال الجوية على متن أطلس V-541، حاملاً بيرسيفيرانس وإنجنويتي."
       },
       {
         "year": "2021",
-        "event": "February 18: Mars 2020 landed in Jezero Crater; Ingenuity arrived attached beneath Perseverance."
+        "event": "February 18: Mars 2020 landed in Jezero Crater; Ingenuity arrived attached beneath Perseverance.",
+        "eventAr": "18 فبراير: هبط مارس 2020 في حفرة جازيرو؛ وصل إنجنويتي مثبتاً تحت بيرسيفيرانس."
       },
       {
         "year": "2021",
-        "event": "April 4: Ingenuity was deployed to the Martian surface."
+        "event": "April 4: Ingenuity was deployed to the Martian surface.",
+        "eventAr": "4 أبريل: نُشر إنجنويتي على سطح المريخ."
       },
       {
         "year": "2021",
-        "event": "April 19: Ingenuity made the first powered, controlled flight by an aircraft on another planet."
+        "event": "April 19: Ingenuity made the first powered, controlled flight by an aircraft on another planet.",
+        "eventAr": "19 أبريل: أجرى إنجنويتي أول طيران موجه ومُتحكم به بواسطة طائرة على كوكب آخر."
       },
       {
         "year": "2021",
-        "event": "May 7: After its fifth test flight, Ingenuity transitioned from the original technology demonstration to an operations-demonstration role."
+        "event": "May 7: After its fifth test flight, Ingenuity transitioned from the original technology demonstration to an operations-demonstration role.",
+        "eventAr": "7 مايو: بعد الرحلة التجريبية الخامسة، انتقل إنجنويتي من عرض تكنولوجي إلى دور عرض عملياتي."
       },
       {
         "year": "2024",
-        "event": "January 18: The final flight ended with loss of contact near touchdown and subsequent rotor-blade damage."
+        "event": "January 18: The final flight ended with loss of contact near touchdown and subsequent rotor-blade damage.",
+        "eventAr": "18 يناير: انتهى الرحلة الأخيرة بفقدان الاتصال قرب الهبوط وتلف شفرات الدوار."
       },
       {
         "year": "2024",
-        "event": "January 25: NASA announced that the Ingenuity mission was complete."
+        "event": "January 25: NASA announced that the Ingenuity mission was complete.",
+        "eventAr": "25 يناير: أعلنت ناسا انتهاء مهمة إنجنويتي."
       }
     ],
     "interactiveQA": [
@@ -1642,35 +1709,43 @@
     "timeline": [
       {
         "year": "2007",
-        "event": "Launch from Cape Canaveral, Florida, at 11:34 UTC on a Delta II 7925."
+        "event": "Launch from Cape Canaveral, Florida, at 11:34 UTC on a Delta II 7925.",
+        "eventAr": "أُطلق من كيب كانافيرال، فلوريدا، الساعة 11:34 بالتوقيت العالمي على متن دلتا II 7925."
       },
       {
         "year": "2009",
-        "event": "Mars gravity assist during the heliocentric cruise."
+        "event": "Mars gravity assist during the heliocentric cruise.",
+        "eventAr": "مساعدة جاذبية المريخ خلال الرحلة حول الشمس."
       },
       {
         "year": "2011",
-        "event": "Arrival at and orbital insertion around asteroid Vesta."
+        "event": "Arrival at and orbital insertion around asteroid Vesta.",
+        "eventAr": "الوصول إلى الكويكب فيستا والدخول في مداره."
       },
       {
         "year": "2012",
-        "event": "Departure from Vesta."
+        "event": "Departure from Vesta.",
+        "eventAr": "المغادرة من فيستا."
       },
       {
         "year": "2015",
-        "event": "Arrival at and orbital insertion around dwarf planet Ceres."
+        "event": "Arrival at and orbital insertion around dwarf planet Ceres.",
+        "eventAr": "الوصول إلى الكوكب القزم سيريس والدخول في مداره."
       },
       {
         "year": "2016",
-        "event": "End of the primary mission."
+        "event": "End of the primary mission.",
+        "eventAr": "نهاية المهمة الأساسية."
       },
       {
         "year": "2018",
-        "event": "Hydrazine depleted; the spacecraft's radio signal was lost as it could no longer maintain orientation."
+        "event": "Hydrazine depleted; the spacecraft's radio signal was lost as it could no longer maintain orientation.",
+        "eventAr": "انفدت الهيدرازين؛ فقدت المركبة إشارة الراديو لأنها لم تعد قادرة على الحفاظ على الاتجاه."
       },
       {
         "year": "2018",
-        "event": "NASA officially announced the end of the Dawn mission."
+        "event": "NASA officially announced the end of the Dawn mission.",
+        "eventAr": "أعلنت ناسا رسمياً نهاية مهمة داون."
       }
     ],
     "interactiveQA": [
@@ -1785,23 +1860,28 @@
     "timeline": [
       {
         "year": "1996",
-        "event": "NEAR launched on February 17 as the first mission in NASA’s Discovery program."
+        "event": "NEAR launched on February 17 as the first mission in NASA’s Discovery program.",
+        "eventAr": "أُطلق NEAR في 17 فبراير كأول مهمة في برنامج ديسكفري التابع لناسا."
       },
       {
         "year": "1997",
-        "event": "NEAR flew within about 1,200 km of asteroid 253 Mathilde on June 27."
+        "event": "NEAR flew within about 1,200 km of asteroid 253 Mathilde on June 27.",
+        "eventAr": "طار NEAR على بعد حوالي 1200 كم من الكويكب 253 ماثيلد في 27 يونيو."
       },
       {
         "year": "1998",
-        "event": "NEAR performed an Earth gravity-assist flyby on January 23 and later flew past Eros on December 23."
+        "event": "NEAR performed an Earth gravity-assist flyby on January 23 and later flew past Eros on December 23.",
+        "eventAr": "أجرى NEAR مروراً مساعداً بجاذبية الأرض في 23 يناير وطار لاحقاً بجانب إيروس في 23 ديسمبر."
       },
       {
         "year": "2000",
-        "event": "NEAR entered orbit around 433 Eros on February 14, becoming the first spacecraft to orbit an asteroid."
+        "event": "NEAR entered orbit around 433 Eros on February 14, becoming the first spacecraft to orbit an asteroid.",
+        "eventAr": "دخل NEAR مدار 433 إيروس في 14 فبراير، ليصبح أول مركبة تدور حول كويكب."
       },
       {
         "year": "2001",
-        "event": "NEAR made the first asteroid touchdown on February 12 in Eros’ saddle region and maintained contact until February 28."
+        "event": "NEAR made the first asteroid touchdown on February 12 in Eros’ saddle region and maintained contact until February 28.",
+        "eventAr": "أجرى NEAR أول هبوط على كويكب في 12 فبراير في منطقة سرج إيروس وحافظ على الاتصال حتى 28 فبراير."
       }
     ],
     "interactiveQA": [
@@ -1916,35 +1996,43 @@
     "timeline": [
       {
         "year": "1972",
-        "event": "Pioneer 10 launched from Cape Canaveral on March 2 and entered the asteroid belt on July 15."
+        "event": "Pioneer 10 launched from Cape Canaveral on March 2 and entered the asteroid belt on July 15.",
+        "eventAr": "أُطلق بايونير 10 من كيب كانافيرال في 2 مارس ودخل حزام الكويكبات في 15 يوليو."
       },
       {
         "year": "1973",
-        "event": "Pioneer 10 made its closest Jupiter approach on December 4; Pioneer 11 launched on April 6."
+        "event": "Pioneer 10 made its closest Jupiter approach on December 4; Pioneer 11 launched on April 6.",
+        "eventAr": "اقترب بايونير 10 من المشتري في أقرب نقطة في 4 ديسمبر؛ وأُطلق بايونير 11 في 6 أبريل."
       },
       {
         "year": "1974",
-        "event": "Pioneer 11 made its closest Jupiter approach on December 3 after using Jupiter's gravity to redirect toward Saturn."
+        "event": "Pioneer 11 made its closest Jupiter approach on December 3 after using Jupiter's gravity to redirect toward Saturn.",
+        "eventAr": "اقترب بايونير 11 من المشتري في أقرب نقطة في 3 ديسمبر بعد استخدام جاذبية المشتري لتوجيهه نحو زحل."
       },
       {
         "year": "1979",
-        "event": "Pioneer 11 made the first close exploration of Saturn on September 1, passing about 13,000 miles from the cloud tops and returning 440 images."
+        "event": "Pioneer 11 made the first close exploration of Saturn on September 1, passing about 13,000 miles from the cloud tops and returning 440 images.",
+        "eventAr": "قام بايونير 11 بأول استكشاف قريب لزحل في 1 سبتمبر، مرورًا على بعد حوالي 13,000 ميل من قمم السحب وأرسل 440 صورة."
       },
       {
         "year": "1983",
-        "event": "Pioneer 10 crossed Neptune's orbit on June 13, the first human-made object to do so."
+        "event": "Pioneer 10 crossed Neptune's orbit on June 13, the first human-made object to do so.",
+        "eventAr": "عبر بايونير 10 مدار نبتون في 13 يونيو، ليصبح أول جسم صنعه الإنسان يعبره."
       },
       {
         "year": "1990",
-        "event": "Pioneer 11 crossed Neptune's orbit on February 23."
+        "event": "Pioneer 11 crossed Neptune's orbit on February 23.",
+        "eventAr": "عبر بايونير 11 مدار نبتون في 23 فبراير."
       },
       {
         "year": "1995",
-        "event": "NASA Ames made last contact with Pioneer 11 on September 30; final engineering data were received on November 24."
+        "event": "NASA Ames made last contact with Pioneer 11 on September 30; final engineering data were received on November 24.",
+        "eventAr": "أجرى مركز ناسا إيمز آخر اتصال مع بايونير 11 في 30 سبتمبر؛ وتم استقبال البيانات الهندسية النهائية في 24 نوفمبر."
       },
       {
         "year": "2003",
-        "event": "Pioneer 10's last weak signal was received on January 23; NASA later reported no further detectable response."
+        "event": "Pioneer 10's last weak signal was received on January 23; NASA later reported no further detectable response.",
+        "eventAr": "تم استقبال آخر إشارة ضعيفة من بايونير 10 في 23 يناير؛ وأعلنت ناسا لاحقًا عدم وجود استجابة قابلة للكشف."
       }
     ],
     "interactiveQA": [
@@ -2059,27 +2147,33 @@
     "timeline": [
       {
         "year": "2009",
-        "event": "Kepler launched from Cape Canaveral at 03:49:57 UTC on a Delta II rocket, according to NASA's exact UTC time and the NSSDCA record."
+        "event": "Kepler launched from Cape Canaveral at 03:49:57 UTC on a Delta II rocket, according to NASA's exact UTC time and the NSSDCA record.",
+        "eventAr": "أُطلق كيبلر من كيب كانافيرال في 03:49:57 بالتوقيت العالمي على صاروخ دلتا II، حسب وقت ناسا الدقيق وسجل NSSDCA."
       },
       {
         "year": "2009",
-        "event": "NASA's in-depth mission page says Kepler began its operational mission after commissioning."
+        "event": "NASA's in-depth mission page says Kepler began its operational mission after commissioning.",
+        "eventAr": "تقول صفحة المهمة التفصيلية لناسا إن كيبلر بدأ مهمته التشغيلية بعد فترة التكليف."
       },
       {
         "year": "2012",
-        "event": "The extended K2 mission began after the prime mission was formally extended."
+        "event": "The extended K2 mission began after the prime mission was formally extended.",
+        "eventAr": "بدأت مهمة K2 الممتدة بعد التمديد الرسمي للمهمة الأساسية."
       },
       {
         "year": "2013",
-        "event": "A second reaction-wheel failure ended the original mission's planned precise pointing and new data collection."
+        "event": "A second reaction-wheel failure ended the original mission's planned precise pointing and new data collection.",
+        "eventAr": "أنهى فشل العجلة التفاعلية الثانية المهمة الأصلية المخططة للتوجيه الدقيق وجمع البيانات الجديدة."
       },
       {
         "year": "2018",
-        "event": "NASA announced that Kepler had run out of fuel and would be retired in its current safe orbit."
+        "event": "NASA announced that Kepler had run out of fuel and would be retired in its current safe orbit.",
+        "eventAr": "أعلنت ناسا أن كيبلر نفد وقوده وسيتم تقاعده في مداره الآمن الحالي."
       },
       {
         "year": "2018",
-        "event": "NASA transmitted the final goodnight commands to disconnect communications with Earth."
+        "event": "NASA transmitted the final goodnight commands to disconnect communications with Earth.",
+        "eventAr": "أرسلت ناسا أوامر الوداع النهائية لقطع الاتصالات مع الأرض."
       }
     ],
     "interactiveQA": [
