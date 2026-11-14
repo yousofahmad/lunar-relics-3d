@@ -837,7 +837,7 @@ export default function Space3DCanvas({ relics, filter, selectedRelic, onSelect,
           <CameraFlight selectedId={selectedRelic?.id || null} controlsRef={controlsRef} />
         </Suspense>
       </Canvas>
-      {!selectedRelic && relics.length > 0 && (
+      {!selectedRelic && !archiveOpen && relics.length > 0 && (
         <div className="quick-mission-carousel" role="group" aria-label={isArabic ? 'مهمات سريعة لهذا المشهد' : 'Quick missions for this view'}>
           <span className="quick-mission-heading">{isArabic ? 'مهمات سريعة' : 'QUICK MISSIONS'}</span>
           <div className="quick-mission-track">
