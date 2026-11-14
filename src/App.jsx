@@ -306,7 +306,7 @@ export default function App() {
                   <strong>{getModelHonestyLabel(selectedRelic, language)}</strong>
                   <small dir="auto">{isArabic
                     ? (getRelicModelInfo(selectedRelic).fidelity === 'authentic'
-                      ? 'مجسم NASA للمهمة نفسها'
+                      ? (getRelicModelInfo(selectedRelic).modelLabelAr || 'نموذج ثلاثي الأبعاد منشور من NASA')
                       : (getRelicModelInfo(selectedRelic).modelLabelAr || 'إعادة بناء من صور ومواصفات NASA'))
                     : getRelicModelInfo(selectedRelic).modelLabel}</small>
                 </span>

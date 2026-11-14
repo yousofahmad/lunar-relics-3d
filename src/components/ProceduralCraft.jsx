@@ -321,11 +321,16 @@ export function PhoenixModel() {
   );
 }
 
-/* ---------- ALSEP (central station plus surface instruments) ---------- */
+/* ---------- Apollo 12 ALSEP (central station and mission-specific instruments) ---------- */
 export function AlsepModel() {
+  const swsSensors = Array.from({ length: 7 }, (_, i) => {
+    const angle = (i / 7) * Math.PI * 2;
+    return [Math.cos(angle) * 0.072, Math.sin(angle) * 0.072];
+  });
   return (
-    <group name="alsep">
-      <group position={[0, 0.16, 0]}>
+    <group name="apollo-12-alsep">
+      {/* Central station, axial-helical antenna, and the three-cell dust detector. */}
+      <group name="alsep-central-station" position={[0, 0.16, 0]}>
         <mesh castShadow>
           <boxGeometry args={[0.34, 0.3, 0.3]} />
           <meshPhysicalMaterial {...ALU} />
@@ -334,49 +339,128 @@ export function AlsepModel() {
           <boxGeometry args={[0.36, 0.02, 0.32]} />
           <meshPhysicalMaterial {...FOIL} />
         </mesh>
-        <Strut start={[0, 0.17, 0]} end={[0, 0.66, 0]} radius={0.012} color="#b8c0c7" />
-        <Dish position={[0, 0.7, 0]} rotation={[0.6, 0, 0]} radius={0.17} />
-        <Strut start={[0.14, 0.17, 0.1]} end={[0.3, 0.52, 0.2]} radius={0.006} color="#b8c0c7" />
-      </group>
-      {/* RTG with fins */}
-      <group position={[-0.5, 0.16, 0.16]} rotation={[0, 0, Math.PI / 2]}>
-        <mesh castShadow>
-          <cylinderGeometry args={[0.1, 0.1, 0.34, 20]} />
-          <meshStandardMaterial color="#2f353b" metalness={0.5} roughness={0.5} />
-        </mesh>
-        {Array.from({ length: 8 }).map((_, i) => (
-          <mesh key={`fin-${i}`} rotation={[0, (i / 8) * Math.PI * 2, 0]}>
-            <boxGeometry args={[0.2, 0.3, 0.008]} />
-            <meshStandardMaterial color="#454c53" metalness={0.55} roughness={0.45} />
+        <Strut start={[0, 0.17, 0]} end={[0, 0.71, 0]} radius={0.012} color="#b8c0c7" />
+        {Array.from({ length: 6 }, (_, i) => (
+          <mesh key={`helix-${i}`} position={[0, 0.43 + i * 0.045, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <torusGeometry args={[0.035, 0.004, 6, 16]} />
+            <meshStandardMaterial color="#b8c0c7" metalness={0.7} roughness={0.32} />
           </mesh>
         ))}
+        <mesh position={[0, 0.73, 0]}>
+          <sphereGeometry args={[0.022, 10, 8]} />
+          <meshStandardMaterial color="#b8c0c7" metalness={0.7} roughness={0.32} />
+        </mesh>
+        <group name="lunar-dust-detector" position={[0, 0.145, 0.105]}>
+          {[-1, 0, 1].map((i) => (
+            <mesh key={`dust-cell-${i}`} position={[i * 0.07, 0.012, 0]}>
+              <boxGeometry args={[0.05, 0.009, 0.07]} />
+              <meshPhysicalMaterial {...CELL} />
+            </mesh>
+          ))}
+        </group>
       </group>
-      {/* seismometer on its levelling base */}
-      <group position={[0.42, 0.03, -0.28]}>
+
+      {/* SNAP-27 RTG beside the station, shown as a dark finned cylinder. */}
+      <group name="snap-27-rtg" position={[-0.52, 0.15, 0.08]} rotation={[0, 0, Math.PI / 2]}>
         <mesh castShadow>
-          <cylinderGeometry args={[0.16, 0.16, 0.03, 24]} />
+          <cylinderGeometry args={[0.085, 0.095, 0.3, 20]} />
+          <meshStandardMaterial color="#343a3e" metalness={0.48} roughness={0.5} />
+        </mesh>
+        {Array.from({ length: 8 }, (_, i) => {
+          const angle = (i / 8) * Math.PI * 2;
+          return (
+            <mesh key={`rtg-fin-${i}`} position={[Math.cos(angle) * 0.09, 0, Math.sin(angle) * 0.09]} rotation={[0, angle, 0]}>
+              <boxGeometry args={[0.07, 0.25, 0.008]} />
+              <meshStandardMaterial color="#4a5054" metalness={0.5} roughness={0.46} />
+            </mesh>
+          );
+        })}
+      </group>
+
+      {/* Passive seismic experiment, deployed as a separate instrument. */}
+      <group name="passive-seismic-experiment" position={[0.49, 0.015, -0.28]}>
+        <mesh position={[0, 0.025, 0]} castShadow>
+          <cylinderGeometry args={[0.15, 0.16, 0.04, 24]} />
           <meshPhysicalMaterial {...ALU} />
         </mesh>
-        <mesh position={[0, 0.07, 0]}>
-          <cylinderGeometry args={[0.1, 0.1, 0.1, 20]} />
+        <mesh position={[0, 0.09, 0]}>
+          <cylinderGeometry args={[0.1, 0.12, 0.1, 20]} />
           <meshStandardMaterial color="#3a424a" metalness={0.6} roughness={0.4} />
         </mesh>
+        <mesh position={[0, 0.15, 0]}>
+          <sphereGeometry args={[0.075, 18, 12]} />
+          <meshPhysicalMaterial {...ALU} />
+        </mesh>
       </group>
-      {/* magnetometer on a small tripod */}
-      <group position={[0.4, 0.02, 0.42]}>
+
+      {/* Lunar Surface Magnetometer on its tripod. */}
+      <group name="lunar-surface-magnetometer" position={[0.35, 0.02, 0.42]}>
         {[0, 1, 2].map((i) => (
           <Strut key={`mt-${i}`} start={[0, 0, 0]} end={[Math.cos((i / 3) * Math.PI * 2) * 0.16, 0.26, Math.sin((i / 3) * Math.PI * 2) * 0.16]} radius={0.006} color="#b8c0c7" />
         ))}
         <mesh position={[0, 0.28, 0]}>
-          <boxGeometry args={[0.06, 0.06, 0.06]} />
+          <boxGeometry args={[0.08, 0.055, 0.08]} />
           <meshStandardMaterial {...DARK} />
         </mesh>
+        <Strut start={[-0.12, 0.28, 0]} end={[0.12, 0.28, 0]} radius={0.005} color="#b8c0c7" />
       </group>
-      {/* heat-flow probe cable run */}
-      <mesh position={[-0.1, 0.01, -0.42]} rotation={[0, 0.4, 0]}>
-        <boxGeometry args={[0.5, 0.006, 0.03]} />
-        <meshStandardMaterial color="#8b939a" metalness={0.4} roughness={0.6} />
-      </mesh>
+
+      {/* Seven exposed sensor apertures of the Solar Wind Spectrometer. */}
+      <group name="solar-wind-spectrometer" position={[0.48, 0.025, 0.12]}>
+        <mesh position={[0, 0.025, 0]} castShadow>
+          <boxGeometry args={[0.28, 0.05, 0.24]} />
+          <meshPhysicalMaterial {...ALU} />
+        </mesh>
+        {swsSensors.map(([x, z], i) => (
+          <group key={`sws-sensor-${i}`} position={[x, 0.06, z]}>
+            <mesh>
+              <cylinderGeometry args={[0.025, 0.03, 0.022, 12]} />
+              <meshStandardMaterial color="#454c53" metalness={0.45} roughness={0.48} />
+            </mesh>
+            <mesh position={[0, 0.014, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+              <circleGeometry args={[0.015, 12]} />
+              <meshStandardMaterial color="#aeb8bf" metalness={0.6} roughness={0.32} side={THREE.DoubleSide} />
+            </mesh>
+          </group>
+        ))}
+      </group>
+
+      {/* Separate low ion-detector packages: SIDE and CCIG. */}
+      <group name="side-instrument" position={[-0.45, 0.02, -0.38]}>
+        <mesh position={[0, 0.065, 0]} castShadow>
+          <boxGeometry args={[0.2, 0.12, 0.18]} />
+          <meshPhysicalMaterial {...ALU} />
+        </mesh>
+        <Strut start={[0, 0.12, 0]} end={[0.04, 0.3, 0.04]} radius={0.012} color="#b8c0c7" />
+        <mesh position={[0.04, 0.31, 0.04]} rotation={[0.25, 0, 0]}>
+          <cylinderGeometry args={[0.055, 0.07, 0.08, 14]} />
+          <meshStandardMaterial color="#343a3e" metalness={0.5} roughness={0.42} />
+        </mesh>
+      </group>
+      <group name="cold-cathode-ion-gauge" position={[-0.55, 0.015, -0.1]}>
+        <mesh position={[0, 0.045, 0]} castShadow>
+          <boxGeometry args={[0.12, 0.08, 0.14]} />
+          <meshPhysicalMaterial {...ALU} />
+        </mesh>
+        <mesh position={[0, 0.11, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.035, 0.035, 0.11, 12]} />
+          <meshStandardMaterial color="#68727a" metalness={0.58} roughness={0.38} />
+        </mesh>
+      </group>
+
+      {/* Instrument leads run out from the central station; no Apollo-12 heat-flow probe is shown. */}
+      <group name="instrument-leads">
+        <Strut start={[0.13, 0.025, -0.08]} end={[0.32, 0.012, -0.2]} radius={0.006} color="#8b939a" />
+        <Strut start={[0.32, 0.012, -0.2]} end={[0.49, 0.012, -0.28]} radius={0.006} color="#8b939a" />
+        <Strut start={[0.14, 0.025, 0.04]} end={[0.32, 0.012, 0.1]} radius={0.006} color="#8b939a" />
+        <Strut start={[0.32, 0.012, 0.1]} end={[0.48, 0.012, 0.12]} radius={0.006} color="#8b939a" />
+        <Strut start={[0.08, 0.025, 0.11]} end={[0.2, 0.012, 0.3]} radius={0.006} color="#8b939a" />
+        <Strut start={[0.2, 0.012, 0.3]} end={[0.35, 0.012, 0.42]} radius={0.006} color="#8b939a" />
+        <Strut start={[-0.15, 0.025, -0.08]} end={[-0.32, 0.012, -0.25]} radius={0.006} color="#8b939a" />
+        <Strut start={[-0.32, 0.012, -0.25]} end={[-0.45, 0.012, -0.38]} radius={0.006} color="#8b939a" />
+        <Strut start={[-0.16, 0.025, 0]} end={[-0.4, 0.012, -0.08]} radius={0.006} color="#8b939a" />
+        <Strut start={[-0.4, 0.012, -0.08]} end={[-0.55, 0.012, -0.1]} radius={0.006} color="#8b939a" />
+      </group>
     </group>
   );
 }

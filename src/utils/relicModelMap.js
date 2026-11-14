@@ -16,8 +16,8 @@ const RELIC_PRESENTATIONS = {
     modelPath: null,
     fidelity: 'archetype',
     archetype: 'ALSEP surface science package',
-    modelLabel: 'ALSEP reconstruction · central station, RTG, seismometer, magnetometer',
-    modelLabelAr: 'إعادة بناء من صور ALSEP المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelLabel: 'Apollo 12 ALSEP reconstruction · central station, SNAP-27 RTG, PSE, LSM, SWS, SIDE/CCIG, LDD',
+    modelLabelAr: 'إعادة بناء ALSEP لأبولو 12 · المحطة المركزية وSNAP-27 وPSE وLSM وSWS وSIDE/CCIG وLDD · ليس مجسماً رسمياً',
     modelBasis: 'NASA ALSEP photographs + published experiment package layout',
   },
   'surveyor-3': {
@@ -39,22 +39,26 @@ const RELIC_PRESENTATIONS = {
   'spirit-rover': {
     modelPath: '/models/opportunity.glb',
     fidelity: 'authentic',
-    modelLabel: 'NASA Mars Exploration Rover mesh · Spirit twin',
+    modelLabel: 'NASA Opportunity 3D model · representative of the identical Spirit/Opportunity rover design',
+    modelLabelAr: 'مجسم NASA لعربة Opportunity · تمثيل لتصميم توأم Spirit/Opportunity المتطابق',
   },
   'opportunity-rover': {
     modelPath: '/models/opportunity.glb',
     fidelity: 'authentic',
-    modelLabel: 'NASA Mars Exploration Rover Opportunity mesh',
+    modelLabel: 'NASA Opportunity (MER-B) 3D model',
+    modelLabelAr: 'نموذج NASA ثلاثي الأبعاد لعربة Opportunity (MER-B)',
   },
   'viking-1-lander': {
     modelPath: '/models/viking_lander.glb',
     fidelity: 'authentic',
-    modelLabel: 'NASA Viking lander mesh',
+    modelLabel: 'NASA Viking lander 3D model · lander configuration shared by the identical Viking spacecraft',
+    modelLabelAr: 'مجسم NASA لهبوط Viking · تصميم الهبوط المشترك للمركبتين التوأم',
   },
   'viking-2-lander': {
     modelPath: '/models/viking_lander.glb',
     fidelity: 'authentic',
-    modelLabel: 'NASA Viking lander mesh',
+    modelLabel: 'NASA Viking lander 3D model · lander configuration shared by the identical Viking spacecraft',
+    modelLabelAr: 'مجسم NASA لهبوط Viking · تصميم الهبوط المشترك للمركبتين التوأم',
   },
   'phoenix-lander': {
     modelPath: null,
@@ -87,7 +91,8 @@ const RELIC_PRESENTATIONS = {
   'pioneer-10-11': {
     modelPath: '/models/pioneer10.glb',
     fidelity: 'authentic',
-    modelLabel: 'NASA Pioneer 10 mesh',
+    modelLabel: 'NASA Pioneer 10 3D model · Pioneer 11 is not a separate model here and carried an additional triaxial fluxgate magnetometer',
+    modelLabelAr: 'مجسم NASA لـPioneer 10 · لا يوجد هنا مجسم مستقل لـPioneer 11، التي حملت مقياس مغناطيسية إضافياً ثلاثي المحاور',
   },
   'kepler-space-telescope': {
     modelPath: '/models/kepler_b.glb',
@@ -122,10 +127,10 @@ export function getModelHonestyLabel(item, language = 'en') {
   const authentic = getRelicModelInfo(item).fidelity === 'authentic';
   if (language === 'ar') {
     return authentic
-      ? 'مجسم NASA أصلي · نسخة مطابقة'
+      ? 'مجسم ثلاثي الأبعاد منشور من NASA · راجع ملاحظة هذا السجل'
       : 'إعادة بناء من صور ومواصفات NASA · مش مجسم رسمي';
   }
   return authentic
-    ? 'AUTHENTIC NASA 3D MESH'
+    ? 'NASA-PUBLISHED 3D MODEL · SEE MISSION-SPECIFIC NOTES'
     : 'RECONSTRUCTION FROM NASA PHOTOS & SPECS · NOT AN OFFICIAL MESH';
 }
