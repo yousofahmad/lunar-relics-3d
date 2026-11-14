@@ -32,7 +32,7 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
         <div className="brand-emblem" aria-hidden="true"><span /><span /><span /></div>
         <div>
           <div className="brand-title">LUNAR <b>RELICS</b> <span>3D</span></div>
-          <div className="brand-subtitle">EXPLORE SPACE MISSIONS</div>
+          <div className="brand-subtitle">{language === 'ar' ? 'أرشيف ذاكرة المهمات' : 'EXPLORE SPACE MISSIONS'}</div>
         </div>
       </div>
 
