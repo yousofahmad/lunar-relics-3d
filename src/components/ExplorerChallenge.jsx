@@ -11,7 +11,7 @@ const COPY = {
   en: {
     title: 'EXPLORER CHALLENGE',
     kicker: 'READ THE EVIDENCE',
-    intro: 'Five clues, four missions each. The names are hidden — you have to recognise the mission from the evidence.',
+    intro: 'Three ways to prove you know the missions: read the evidence, order a mission, or sort the space race by launch year.',
     start: 'START THE HUNT',
     ask: 'Which mission does this describe?',
     round: 'ROUND',
@@ -30,6 +30,9 @@ const COPY = {
     answer: 'Answer',
     modeEvidence: 'EVIDENCE QUIZ',
     modeSequence: 'ORDER THE MISSION',
+    modeEra: 'ORDER BY YEAR',
+    eraAsk: 'Tap the missions from the oldest launch to the newest.',
+    eraRound: 'SPACE RACE',
     seqIntro: 'Four moments from one mission, shuffled. Tap them in the order they happened.',
     seqAsk: 'Tap the moments in order — earliest first.',
     seqDone: 'SEQUENCE COMPLETE',
@@ -40,7 +43,7 @@ const COPY = {
   ar: {
     title: 'تحدي المستكشف',
     kicker: 'اقرأ الدليل',
-    intro: 'خمسة أدلة، وأربع مهمات لكل دليل. الأسماء مخفية — لازم تعرف المهمة من الدليل نفسه.',
+    intro: 'ثلاث طرق تثبت بها معرفتك: اقرأ الدليل، رتّب أحداث مهمة، أو رتّب المهام حسب سنة الإطلاق.',
     start: 'ابدأ البحث',
     ask: 'أي مهمة يوصفها هذا الدليل؟',
     round: 'الجولة',
@@ -59,6 +62,9 @@ const COPY = {
     answer: 'إجابة',
     modeEvidence: 'تحدي الأدلة',
     modeSequence: 'رتّب الرحلة',
+    modeEra: 'رتّب حسب السنة',
+    eraAsk: 'اضغط المهام من الأقدم إطلاقًا للأحدث.',
+    eraRound: 'سباق الفضاء',
     seqIntro: 'أربع لحظات من مهمة واحدة، مبعثرة. اضغطها بالترتيب اللي حصلت بيه.',
     seqAsk: 'اضغط اللحظات بالترتيب — الأقدم أولًا.',
     seqDone: 'تم الترتيب',
@@ -111,16 +117,30 @@ function buildRound(relics, used) {
   };
 }
 
-function buildSequenceRound(relics, used) {
-  const pool = relics.filter((item) => !used.has(item.id) && (item.timeline || []).length >= 4);
-  const source = pool.length ? pool : relics.filter((item) => (item.timeline || []).length >= 4);
-  if (!source.length) return null;
+function buildTimelineRound(relics) {
+  const pool = relics.filter((item) => (item.timeline || []).length >= 4);
+  const source = pool.length ? pool : relics;
   const item = source[Math.floor(Math.random() * source.length)];
-  const events = [...item.timeline]
-    .map((entry, index) => ({ ...entry, index }))
-    .sort((a, b) => String(a.year).localeCompare(String(b.year)) || a.index - b.index)
-    .slice(0, 4);
-  return { target: item, events, shuffled: shuffle(events.map((entry) => entry.index)) };
+  const items = [...(item.timeline || [])]
+    .map((entry, index) => ({ ...entry, key: index }))
+    .sort((a, b) => String(a.year).localeCompare(String(b.year)) || a.key - b.key)
+    .slice(0, 4)
+    .map((entry) => ({ key: entry.key, text: entry.event, textAr: entry.eventAr || entry.event, year: entry.year }));
+  return { kind: 'timeline', target: item, items, shuffled: shuffle(items.map((entry) => entry.key)) };
+}
+
+function buildEraRound(relics) {
+  const pool = relics.filter((item) => item.launchYear);
+  const source = [...pool].sort(() => Math.random() - 0.5).slice(0, 4);
+  const items = source
+    .map((item) => ({
+      key: item.id,
+      text: item.nickname || item.name,
+      textAr: item.nicknameAr || item.nameAr || item.nickname || item.name,
+      year: String(item.launchYear),
+    }))
+    .sort((a, b) => String(a.year).localeCompare(String(b.year)));
+  return { kind: 'era', target: null, items, shuffled: shuffle(items.map((entry) => entry.key)) };
 }
 
 export default function ExplorerChallenge({ relics, language = 'en', onClose, onXp = () => {}, onViewChange = () => {} }) {
@@ -167,15 +187,12 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
     });
   }, []);
 
-  const startSequence = () => {
+  const startOrdering = (kind) => {
     clearAdvance();
-    let next;
-    let guard = 0;
-    const used = new Set();
-    do { next = buildSequenceRound(relics, used); guard += 1; } while (!next && guard < 6);
-    if (!next) { setMode('evidence'); startGame(); return; }
-    setMode('sequence');
-    setSeq(next);
+    const round = kind === 'era' ? buildEraRound(relics) : buildTimelineRound(relics);
+    setMode(kind);
+    setSeq({ ...round, kind });
+    setRound(0);
     setPicked([]);
     setScore(0);
     setStreak(0);
@@ -185,15 +202,15 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
     timeLeftRef.current = ROUND_SECONDS;
     lockedRef.current = false;
     setPhase('playing');
-    onViewChange(next.target.body || 'Moon');
+    if (round.target) onViewChange(round.target.body || 'Moon');
   };
 
-  const pickSequenceEvent = (index) => {
+  const pickSequenceEvent = (key) => {
     if (!seq || lockedRef.current || feedback === 'time') return;
-    if (picked.includes(index)) return;
-    const next = [...picked, index];
-    const expected = seq.events[next.length - 1].index;
-    if (index !== expected) {
+    if (picked.includes(key)) return;
+    const next = [...picked, key];
+    const expected = seq.items[next.length - 1].key;
+    if (key !== expected) {
       setStreak(0);
       setFeedback('miss');
       playMissThud();
@@ -206,7 +223,7 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
     const gained = 60 + streak * 15;
     setScore((value) => value + gained);
     onXp(gained);
-    if (next.length === seq.events.length) {
+    if (next.length === seq.items.length) {
       lockedRef.current = true;
       setStreak((value) => { const n = value + 1; setBestStreak((b) => Math.max(b, n)); return n; });
       advanceRef.current = window.setTimeout(() => {
@@ -254,7 +271,7 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
 
   useEffect(() => {
     if (phase !== 'playing' || timeLeft > 0 || lockedRef.current) return undefined;
-    if (mode === 'sequence') { setFeedback('time'); setStreak(0); playMissThud(); advanceRef.current = window.setTimeout(() => { clearAdvance(); setPicked([]); setFeedback(''); setTimeLeft(ROUND_SECONDS); setPhase('done'); }, 1500); return () => window.clearTimeout(advanceRef.current); }
+    if (mode === 'timeline' || mode === 'era') { setFeedback('time'); setStreak(0); playMissThud(); advanceRef.current = window.setTimeout(() => { clearAdvance(); setPicked([]); setFeedback(''); setTimeLeft(ROUND_SECONDS); setPhase('done'); }, 1500); return () => window.clearTimeout(advanceRef.current); }
     setFeedback('time');
     setStreak(0);
     playMissThud();
@@ -310,10 +327,10 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
             <span><Trophy size={13} /> {TOTAL_ROUNDS} {isArabic ? 'جولات' : 'ROUNDS'}</span>
             <span><Timer size={13} /> {ROUND_SECONDS}{copy.seconds}</span>
           </div>
-          <p className="explorer-mode-note">{copy.seqIntro}</p>
           <div className="explorer-modes">
             <button type="button" className="explorer-primary" onClick={startGame}>{copy.modeEvidence}</button>
-            <button type="button" className="explorer-secondary" onClick={startSequence}>{copy.modeSequence}</button>
+            <button type="button" className="explorer-secondary" onClick={() => startOrdering('timeline')}>{copy.modeSequence}</button>
+            <button type="button" className="explorer-secondary" onClick={() => startOrdering('era')}>{copy.modeEra}</button>
           </div>
         </div>
       )}
@@ -364,28 +381,31 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
         </>
       )}
 
-      {phase === 'playing' && mode === 'sequence' && seq && (
+      {phase === 'playing' && (mode === 'timeline' || mode === 'era') && seq && (
         <>
           <div className="explorer-head">
-            <span className="explorer-kicker"><Target size={12} /> {copy.seqRound} · {seq.target.nickname || seq.target.name}</span>
+            <span className="explorer-kicker">
+              <Target size={12} /> {mode === 'era' ? copy.eraRound : `${copy.seqRound} · ${relicName(seq.target, isArabic)}`}
+            </span>
             <span className="explorer-score"><Trophy size={12} /> {score} {copy.points}</span>
           </div>
-          <p className="explorer-ask">{copy.seqAsk}</p>
+          <p className="explorer-ask">{mode === 'era' ? copy.eraAsk : copy.seqAsk}</p>
           <div className="explorer-options">
-            {seq.shuffled.map((eventIndex) => {
-              const entry = seq.events.find((event) => event.index === eventIndex);
-              const isPicked = picked.includes(eventIndex);
-              const position = picked.indexOf(eventIndex) + 1;
+            {seq.shuffled.map((key) => {
+              const entry = seq.items.find((item) => item.key === key);
+              if (!entry) return null;
+              const isPicked = picked.includes(key);
+              const position = picked.indexOf(key) + 1;
               return (
                 <button
-                  key={eventIndex}
+                  key={String(key)}
                   type="button"
                   className={`explorer-option ${isPicked ? 'is-correct' : ''}`}
-                  onClick={() => pickSequenceEvent(eventIndex)}
+                  onClick={() => pickSequenceEvent(key)}
                   disabled={isPicked || feedback === 'time'}
                 >
                   <em>{isPicked ? position : '·'}</em>
-                  <span dir="auto">{isArabic ? entry.eventAr || entry.event : entry.event}</span>
+                  <span dir="auto">{isArabic ? entry.textAr : entry.text}</span>
                   <small>{isPicked ? entry.year : copy.year}</small>
                 </button>
               );
@@ -414,7 +434,7 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
             <span><Trophy size={13} /> {score} {copy.points}</span>
             <span><Flame size={13} /> {bestStreak} {copy.streak}</span>
           </div>
-          <button type="button" className="explorer-primary" onClick={mode === 'sequence' ? startSequence : startGame}>{copy.again}</button>
+          <button type="button" className="explorer-primary" onClick={() => (mode === 'evidence' ? startGame() : startOrdering(mode))}>{copy.again}</button>
           <button type="button" className="explorer-secondary" onClick={onClose}>{copy.exit}</button>
         </div>
       )}
