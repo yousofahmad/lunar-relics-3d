@@ -1,4 +1,5 @@
-import { Clapperboard, Globe2, Languages, List, Moon, Orbit, Pause, Sparkles, Target, Trophy, Volume2, VolumeX } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Clapperboard, Ellipsis, Globe2, Languages, List, Moon, Orbit, Pause, Sparkles, Target, Trophy, Volume2, VolumeX } from 'lucide-react';
 
 const CELESTIAL_VIEWS = [
   { id: 'Moon', icon: Moon, en: 'MOON', ar: 'القمر', subEn: 'OUR MOON', subAr: 'قمرنا' },
@@ -15,6 +16,30 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
       : xp >= 300
         ? { en: 'EXPLORER', ar: 'مستكشف' }
         : { en: 'CADET', ar: 'مبتدئ' };
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+  const topbarRef = useRef(null);
+  const mobileMoreTriggerRef = useRef(null);
+  useEffect(() => {
+    if (!mobileMoreOpen) return undefined;
+    const closeOnOutsidePointer = (event) => {
+      if (!topbarRef.current?.contains(event.target)) setMobileMoreOpen(false);
+    };
+    const closeOnEscape = (event) => {
+      if (event.key !== 'Escape') return;
+      setMobileMoreOpen(false);
+      mobileMoreTriggerRef.current?.focus();
+    };
+    document.addEventListener('pointerdown', closeOnOutsidePointer);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('pointerdown', closeOnOutsidePointer);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [mobileMoreOpen]);
+  const runMobileAction = (action) => {
+    setMobileMoreOpen(false);
+    action();
+  };
   const soundscapeLabels = soundscape === 'Mars'
     ? { full: language === 'ar' ? 'رياح المريخ' : 'Mars wind', compact: language === 'ar' ? 'المريخ' : 'Mars' }
     : soundscape === 'Deep Space'
@@ -27,7 +52,7 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
       : { full: language === 'ar' ? 'تشغيل' : 'Unmute', compact: language === 'ar' ? 'تشغيل' : 'Unmute' };
 
   return (
-    <header className="topbar glass-panel lunar-polish-topnav">
+    <header ref={topbarRef} className="topbar glass-panel lunar-polish-topnav">
       <div className="brand-lockup">
         <div className="brand-emblem" aria-hidden="true"><span /><span /><span /></div>
         <div>
@@ -41,7 +66,7 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
           <button
             className={`planet-tab ${celestialView === id ? 'active' : ''} view-${id === 'Deep Space' ? 'deep-space' : id.toLowerCase()}`}
             key={id}
-            onClick={() => setCelestialView(id)}
+            onClick={() => { setMobileMoreOpen(false); setCelestialView(id); }}
             type="button"
             aria-pressed={celestialView === id}
             aria-label={language === 'ar' ? ar : en}
@@ -59,7 +84,7 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
         <button
           type="button"
           className={`mission-drawer-toggle ${archiveOpen && !storyMode ? 'is-open' : ''}`}
-          onClick={onOpenMissions}
+          onClick={() => { setMobileMoreOpen(false); onOpenMissions(); }}
           aria-expanded={Boolean(archiveOpen && !storyMode)}
           aria-label={language === 'ar' ? `${storyMode ? 'العودة إلى' : archiveOpen ? 'إغلاق' : 'فتح'} أرشيف المهمات، ${relics.length} مهمة` : `${storyMode ? 'Return to' : archiveOpen ? 'Close' : 'Open'} ${relics.length}-mission archive`}
           title={language === 'ar' ? 'أرشيف المهمات' : 'Mission archive'}
@@ -85,7 +110,7 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
         <button
           type="button"
           className="audio-global-toggle"
-          onClick={onToggleAudio}
+          onClick={() => { setMobileMoreOpen(false); onToggleAudio(); }}
           aria-pressed={audioEnabled}
           aria-label={!audioStarted && audioEnabled
             ? (language === 'ar' ? `المس لبدء ${soundscapeLabels.full}` : `Tap to start ${soundscapeLabels.full}`)
@@ -101,7 +126,7 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
         <button
           type="button"
           className="language-toggle"
-          onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
+          onClick={() => { setMobileMoreOpen(false); setLanguage(language === 'en' ? 'ar' : 'en'); }}
           aria-label={language === 'ar' ? 'Switch to English' : 'التبديل إلى العربية'}
         >
           <Languages size={15} />
@@ -147,7 +172,44 @@ export default function TopNav({ celestialView, setCelestialView, language, setL
         >
           <Sparkles size={15} />
         </button>
+        <button
+          ref={mobileMoreTriggerRef}
+          type="button"
+          id="mobile-more-toggle"
+          className="mobile-more-toggle"
+          onClick={() => setMobileMoreOpen((open) => !open)}
+          aria-label={language === 'ar' ? 'المزيد من خيارات الاستكشاف' : 'More exploration options'}
+          aria-expanded={mobileMoreOpen}
+          aria-controls={mobileMoreOpen ? 'mobile-more-menu' : undefined}
+        >
+          <Ellipsis size={19} aria-hidden="true" />
+        </button>
       </div>
+      {mobileMoreOpen && (
+        <div id="mobile-more-menu" className="mobile-more-menu" role="group" aria-label={language === 'ar' ? 'خيارات إضافية' : 'Additional options'}>
+          {storyMode && (
+            <button type="button" className="mobile-more-action" onClick={() => runMobileAction(onToggleAutoPilot)} aria-pressed={autoPilotOn}>
+              {autoPilotOn ? <Pause size={16} /> : <Clapperboard size={16} />}
+              <span>{language === 'ar' ? 'الجولة الموجّهة' : 'Guided tour'}</span>
+              <small>{language === 'ar' ? (autoPilotOn ? 'تعمل' : 'ابدأ') : (autoPilotOn ? 'ON' : 'START')}</small>
+            </button>
+          )}
+          <button type="button" className="mobile-more-action" onClick={() => runMobileAction(onOpenChallenge)}>
+            <Target size={16} />
+            <span>{language === 'ar' ? 'تحدي المستكشف' : 'Explorer challenge'}</span>
+            <small>{xp} XP</small>
+          </button>
+          <button type="button" className="mobile-more-action" onClick={() => runMobileAction(onOpenBadges)}>
+            <Trophy size={16} />
+            <span>{language === 'ar' ? 'الشارات' : 'Badges'}</span>
+            <small>{unlockedCount}/{relics.length}</small>
+          </button>
+          <button type="button" className="mobile-more-action" onClick={() => runMobileAction(onOpenWhatsNew)}>
+            <Sparkles size={16} />
+            <span>{language === 'ar' ? 'ما الجديد' : 'What’s new'}</span>
+          </button>
+        </div>
+      )}
     </header>
   );
 }

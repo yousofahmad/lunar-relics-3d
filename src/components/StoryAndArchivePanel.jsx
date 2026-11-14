@@ -253,6 +253,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
   const tourRunRef = useRef(0);
   const tourDelayCancelRef = useRef(null);
   const activeBeatRef = useRef(0);
+  const chapterNavRef = useRef(null);
   const isArabic = language === 'ar';
   const storyLanguage = item.story?.[language] ? language : 'en';
   const storyText = item.story?.[storyLanguage] || '';
@@ -325,6 +326,16 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
 
   useEffect(() => {
     activeBeatRef.current = activeBeat;
+  }, [activeBeat]);
+
+  useEffect(() => {
+    const activeChapterButton = chapterNavRef.current?.querySelector('[aria-current="step"]');
+    if (!activeChapterButton) return;
+    activeChapterButton.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'nearest',
+    });
   }, [activeBeat]);
 
   useEffect(() => {
@@ -759,7 +770,7 @@ function MemoryRoom({ item, language, badges, onBack, onUnlock, hotspot, setHots
         <span className="memory-status"><span />{copy.active}</span>
       </div>
 
-      <nav className="story-chapter-nav" aria-label={isArabic ? 'فصول قصة المهمة' : 'Mission story chapters'}>
+      <nav ref={chapterNavRef} className="story-chapter-nav" aria-label={isArabic ? 'فصول قصة المهمة' : 'Mission story chapters'}>
         <button type="button" className="story-nav-back" onClick={onBack} aria-label={copy.back}>
           {isArabic ? <ArrowRight size={13} /> : <ArrowLeft size={13} />}
           <span>{isArabic ? 'رجوع' : 'BACK'}</span>

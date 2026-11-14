@@ -209,6 +209,7 @@ export default function App() {
   };
 
   const closeBadgeModal = useCallback(() => setBadgeModalOpen(false), []);
+  const closeChallenge = useCallback(() => setChallengeOpen(false), []);
   const closeWhatsNew = useCallback(() => {
     savePreference(WHATS_NEW_STORAGE_KEY, WHATS_NEW_VERSION);
     setWhatsNewOpen(false);
@@ -378,7 +379,7 @@ export default function App() {
             {!selectedRelic && (
               <div className="map-instructions">
                 <Crosshair size={14} />
-                <span>{isArabic ? 'اضغط على نقطة مضيئة أو مهمة لتستكشفها' : 'Tap a glowing dot or mission to explore it'}</span>
+                <span>{isArabic ? 'المس مهمة لفتح قصتها · اسحب الكوكب لتدويره' : 'Tap a mission to open its story · drag to rotate'}</span>
               </div>
             )}
             <div className="canvas-meta">
@@ -454,7 +455,7 @@ export default function App() {
           relics={displayRelics}
           language={language}
           pick={challengePick}
-          onClose={() => setChallengeOpen(false)}
+          onClose={closeChallenge}
           onXp={addXp}
           onViewChange={changeCelestialView}
         />

@@ -13,7 +13,7 @@ const COPY = {
   en: {
     title: 'EXPLORER CHALLENGE',
     kicker: 'READ THE EVIDENCE',
-    intro: 'Three ways to prove you know the missions: read the evidence, order a mission, or sort the space race by launch year.',
+    intro: 'Choose how to explore: read mission evidence, order a mission journey, sort launches by year, or identify spacecraft from a 3D model.',
     start: 'START THE HUNT',
     ask: 'Which mission does this describe?',
     round: 'ROUND',
@@ -48,7 +48,7 @@ const COPY = {
   ar: {
     title: 'تحدي المستكشف',
     kicker: 'اقرأ الدليل',
-    intro: 'ثلاث طرق تثبت بها معرفتك: اقرأ الدليل، رتّب أحداث مهمة، أو رتّب المهام حسب سنة الإطلاق.',
+    intro: 'اختار طريقة للاستكشاف: اقرأ دليل المهمة، رتّب رحلتها، رتّب الإطلاقات حسب السنة، أو تعرّف على المركبة من نموذجها ثلاثي الأبعاد.',
     start: 'ابدأ البحث',
     ask: 'أي مهمة يوصفها هذا الدليل؟',
     round: 'الجولة',
@@ -202,8 +202,27 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
   const timeLeftRef = useRef(ROUND_SECONDS);
   const lockedRef = useRef(false);
   const advanceRef = useRef(0);
+  const closeButtonRef = useRef(null);
   const byId = useMemo(() => new Map(relics.map((item) => [item.id, item])), [relics]);
   const current = rounds[round] || null;
+
+  useEffect(() => {
+    const previousFocus = document.activeElement;
+    closeButtonRef.current?.focus({ preventScroll: true });
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape);
+      const returnTarget = [
+        document.getElementById('mobile-more-toggle'),
+        document.querySelector('.challenge-toggle'),
+      ].find((element) => element && element.getClientRects().length > 0);
+      if (returnTarget) returnTarget.focus({ preventScroll: true });
+      else if (previousFocus?.isConnected) previousFocus.focus?.({ preventScroll: true });
+    };
+  }, [onClose]);
 
   useEffect(() => { timeLeftRef.current = timeLeft; }, [timeLeft]);
 
@@ -428,14 +447,24 @@ export default function ExplorerChallenge({ relics, language = 'en', onClose, on
   const progress = Math.max(0, Math.min(1, timeLeft / ROUND_SECONDS));
 
   return (
-    <section className={`explorer-challenge ${feedback ? `is-${feedback}` : ''}`} aria-live="polite" dir={isArabic ? 'rtl' : 'ltr'}>
-      <button type="button" className="explorer-close" onClick={onClose} aria-label={copy.quit}><X size={16} /></button>
+    <section
+      className={`explorer-challenge ${feedback ? `is-${feedback}` : ''}`}
+      role="dialog"
+      aria-label={copy.title}
+      aria-describedby={phase === 'intro' ? 'explorer-challenge-description' : undefined}
+      tabIndex={-1}
+      dir={isArabic ? 'rtl' : 'ltr'}
+    >
+      <button ref={closeButtonRef} type="button" className="explorer-close" onClick={onClose} aria-label={copy.quit}><X size={16} /></button>
+      <span className="explorer-sr-status" role="status" aria-live="polite" aria-atomic="true">
+        {feedback === 'hit' ? copy.hit : feedback === 'miss' ? copy.miss : feedback === 'time' ? copy.timeUp : ''}
+      </span>
 
       {phase === 'intro' && (
         <div className="explorer-intro">
           <span className="explorer-kicker"><Target size={13} /> {copy.kicker}</span>
-          <h2>{copy.title}</h2>
-          <p>{copy.intro}</p>
+          <h2 id="explorer-challenge-title">{copy.title}</h2>
+          <p id="explorer-challenge-description">{copy.intro}</p>
           <div className="explorer-stats">
             <span><Trophy size={13} /> {TOTAL_ROUNDS} {isArabic ? 'جولات' : 'ROUNDS'}</span>
             <span><Timer size={13} /> {ROUND_SECONDS}{copy.seconds}</span>
