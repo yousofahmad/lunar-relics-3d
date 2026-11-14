@@ -8,25 +8,33 @@ const RELIC_PRESENTATIONS = {
     modelPath: null,
     fidelity: 'archetype',
     archetype: 'lunar-rover',
-    modelLabel: 'Four-wheel lunar rover archetype',
+    modelLabel: 'Apollo 15 LRV reconstruction · tubular chassis, wire wheels, seats, HGA',
+    modelLabelAr: 'إعادة بناء من صور مهمة أبولو ١٥ ومواصفات العربة · مش مجسم رسمي',
+    modelBasis: 'NASA Apollo 15 photographs + published Lunar Roving Vehicle specifications',
   },
   'alsep-scientific-packages': {
     modelPath: null,
     fidelity: 'archetype',
     archetype: 'ALSEP surface science package',
-    modelLabel: 'Apollo surface science package archetype',
+    modelLabel: 'ALSEP reconstruction · central station, RTG, seismometer, magnetometer',
+    modelLabelAr: 'إعادة بناء من صور ALSEP المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelBasis: 'NASA ALSEP photographs + published experiment package layout',
   },
   'surveyor-3': {
     modelPath: null,
     fidelity: 'archetype',
     archetype: 'Surveyor lunar lander',
     modelLabel: 'Surveyor lander reconstruction · three-leg frame, solar panel, sampling arm',
+    modelLabelAr: 'إعادة بناء من صور Surveyor 3 المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelBasis: 'NASA Surveyor 3 photographs + published lander specifications',
   },
   'sojourner-rover': {
     modelPath: null,
     fidelity: 'archetype',
     archetype: 'Sojourner microrover',
     modelLabel: 'Sojourner reconstruction · solar deck, six cleated wheels, rocker-bogie',
+    modelLabelAr: 'إعادة بناء من صور Sojourner المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelBasis: 'NASA Sojourner photographs + published microrover specifications',
   },
   'spirit-rover': {
     modelPath: '/models/opportunity.glb',
@@ -53,6 +61,8 @@ const RELIC_PRESENTATIONS = {
     fidelity: 'archetype',
     archetype: 'Phoenix polar lander',
     modelLabel: 'Phoenix reconstruction · circular deck, twin solar arrays, robotic arm',
+    modelLabelAr: 'إعادة بناء من صور Phoenix المنشورة ومواصفات ناسا · مش مجسم رسمي',
+    modelBasis: 'NASA Phoenix photographs + published lander specifications',
   },
   'insight-lander': {
     modelPath: '/models/insight_lander.glb',
@@ -113,9 +123,9 @@ export function getModelHonestyLabel(item, language = 'en') {
   if (language === 'ar') {
     return authentic
       ? 'مجسم NASA أصلي · نسخة مطابقة'
-      : 'إعادة بناء توضيحية · مش مجسم NASA أصلي';
+      : 'إعادة بناء من صور ومواصفات NASA · مش مجسم رسمي';
   }
   return authentic
     ? 'AUTHENTIC NASA 3D MESH'
-    : 'ILLUSTRATIVE RECONSTRUCTION · NOT A NASA MESH';
+    : 'RECONSTRUCTION FROM NASA PHOTOS & SPECS · NOT AN OFFICIAL MESH';
 }

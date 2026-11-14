@@ -292,11 +292,21 @@ export default function App() {
               <span>{celestialView === 'Deep Space' ? (isArabic ? 'الفضاء العميق · المدار' : 'DEEP SPACE / ORBIT') : celestialView.toUpperCase()}</span>
             </div>
             {selectedRelic && (
-              <div className={`model-honesty-badge ${getRelicModelInfo(selectedRelic).fidelity === 'authentic' ? 'is-authentic' : 'is-archetype'}`} role="status">
+              <div
+                className={`model-honesty-badge ${getRelicModelInfo(selectedRelic).fidelity === 'authentic' ? 'is-authentic' : 'is-archetype'}`}
+                role="status"
+                title={getRelicModelInfo(selectedRelic).modelBasis
+                  ? (isArabic ? `أساس المجسم: ${getRelicModelInfo(selectedRelic).modelBasis}` : `Model basis: ${getRelicModelInfo(selectedRelic).modelBasis}`)
+                  : undefined}
+              >
                 <BadgeCheck size={15} aria-hidden="true" />
                 <span>
                   <strong>{getModelHonestyLabel(selectedRelic, language)}</strong>
-                  <small dir="auto">{isArabic ? (getRelicModelInfo(selectedRelic).fidelity === 'authentic' ? 'مجسم NASA للمهمة نفسها' : 'تمثيل هندسي شفاف للفئة') : getRelicModelInfo(selectedRelic).modelLabel}</small>
+                  <small dir="auto">{isArabic
+                    ? (getRelicModelInfo(selectedRelic).fidelity === 'authentic'
+                      ? 'مجسم NASA للمهمة نفسها'
+                      : (getRelicModelInfo(selectedRelic).modelLabelAr || 'إعادة بناء من صور ومواصفات NASA'))
+                    : getRelicModelInfo(selectedRelic).modelLabel}</small>
                 </span>
               </div>
             )}
